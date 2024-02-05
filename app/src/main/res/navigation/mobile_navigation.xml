@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.myapplication.presentation.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_queue"
+        android:name="com.example.myapplication.presentation.queue.main.QueueFragment"
+        android:label="@string/title_queue"
+        tools:layout="@layout/fragment_queue" >
+        <action
+            android:id="@+id/action_navigation_queue_to_queueDetailsFragment"
+            app:destination="@id/queueDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.myapplication.presentation.profile.profileLogin.ProfileNavigationFragment"
+        android:label="@string/sign_in"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_createAccount"
+            app:destination="@id/createAccount" />
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_profile_to_profileLoggedFragment"
+            app:destination="@id/profileLoggedFragment" />
+        <action
+            android:id="@+id/action_navigation_profile_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccount"
+        android:name="com.example.myapplication.presentation.profile.createAccount.CreateAccountFragment"
+        android:label="@string/create_account"
+        tools:layout="@layout/fragment_create_account" >
+        <action
+            android:id="@+id/action_signFragment_to_profileLoggedFragment"
+            app:destination="@id/profileLoggedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileLoggedFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.ProfileLoggedFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile_logged" >
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
+            app:destination="@id/navigation_queue" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.myapplication.presentation.profile.historyProfile.HistoryFragment"
+        android:label="@string/history"
+        tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.myapplication.presentation.profile.profileSettings.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_settingsFragment_to_profileLoggedFragment"
+            app:destination="@id/profileLoggedFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_navigation_queue"
+            app:destination="@id/navigation_queue" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.myapplication.presentation.queue.createQueue.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+
+        <action
+            android:id="@+id/action_mapFragment_to_createQueueFragment"
+            app:destination="@id/createQueueFragment" />
+    </fragment>
+
+    <!--    <fragment-->
+<!--        android:id="@+id/waitingRoomFragment"-->
+<!--        android:name="com.example.myapplication.presentation.queue.waitingRoom.WaitingRoomFragment"-->
+<!--        android:label="waiting room"-->
+<!--        tools:layout="@layout/fragment_waiting_room">-->
+
+<!--    </fragment>-->
+    <fragment
+        android:id="@+id/queueDetailsFragment"
+        android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
+        android:label="fragment_queue_details"
+        tools:layout="@layout/fragment_queue_details" />
+
+</navigation>

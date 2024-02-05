@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_queue_navigation"
+    app:startDestination="@id/createQueueFragment">
+
+    <fragment
+        android:id="@+id/createQueueFragment"
+        android:name="com.example.myapplication.presentation.queue.createQueue.mainFragment.CreateQueueFragment"
+        android:label="fragment_create_queue"
+        tools:layout="@layout/fragment_create_queue">
+
+        <action
+            android:id="@+id/action_createQueueFragment_self"
+            app:nullable="true"
+            android:defaultValue="@null"
+            app:destination="@id/createQueueFragment" />
+        <action
+            android:id="@+id/action_createQueueFragment_to_finishedQueueCreationFragment"
+            android:defaultValue="@null"
+            app:destination="@id/finishedQueueCreationFragment" />
+        <argument
+            android:name="page"
+            app:nullable="true"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishedQueueCreationFragment"
+        android:name="com.example.myapplication.presentation.queue.createQueue.finishedQueueCreation.FinishedQueueCreationFragment"
+        android:label="fragment_finished_queue_creation"
+        tools:layout="@layout/fragment_finished_queue_creation" />
+</navigation>

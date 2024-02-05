@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/queue_details_navigation"
+    app:startDestination="@id/queueDetailsFragment">
+
+    <fragment
+        android:id="@+id/queueDetailsFragment"
+        android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
+        android:label="fragment_queue_details"
+        tools:layout="@layout/fragment_queue_details" >
+        <action
+            android:id="@+id/action_queueDetailsFragment_to_participantsListFragment"
+            app:destination="@id/participantsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/participantsListFragment"
+        android:name="com.example.myapplication.presentation.queue.participantList.ParticipantsListFragment"
+        android:label="fragment_participants_list"
+        tools:layout="@layout/fragment_participants_list" >
+        <action
+            android:id="@+id/action_participantsListFragment_to_queueDetailsFragment"
+            app:destination="@id/queueDetailsFragment" />
+    </fragment>
+</navigation>

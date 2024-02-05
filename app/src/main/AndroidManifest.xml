@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Smart Queue"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApplication"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".presentation.queue.queueDetails.QueueDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.queue.ParticipateInQueueFragment.ParticipatingInQueueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.queue.createQueue.CreateQueueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.historyProfile.HistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.editProfile.EditProfileActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDqX8ootFCoJ2iQsEsYvBUAhFZgyV_bmsw" />
+
+        <activity
+            android:name=".presentation.MainActivity"
+            android:configChanges="uiMode"
+            android:exported="true"
+            android:label="@string/smart_queue">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".presentation.queue.main.ScanCode"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme" />
+    </application>
+
+</manifest>

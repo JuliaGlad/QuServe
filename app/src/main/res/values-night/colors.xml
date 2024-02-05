@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="iconDialogColor">@color/background</color>
+    <color name="background">#38314C</color>
+    <color name="background_darker">#494260</color>
+    <color name="transparent">#00573A88</color>
+    <color name="strokeColor">@color/white</color>
+    <color name="successColor">#71FF78</color>
+    <color name="successStrokeColor">#71FE78</color>
+    <color name="successColor_50">#BF71FE78</color>
+    <color name="stroke_75">@color/white</color>
+    <color name="stroke_50">#80573A88</color>
+    <color name="failureColor">#FF3636</color>
+    <color name="FailureStroke">#AF1515</color>
+    <color name="failureColor_50">#BFFF3636</color>
+    <color name="purple">#9183B5</color>
+    <color name="iconColor">#AE9BCF</color>
+    <color name="iconColor_50">#80AE9BCF</color>
+    <color name="iconColorEditText">#AE9BCF</color>
+    <color name="bottomNavColor">#544C6A</color>
+    <color name="lightestPurple_25">#544C6A</color>
+    <color name="purple_50">#80C9B2FF</color>
+    <color name="textHelperColor">#80FFFFFF</color>
+    <color name="iconDark">#AC93EC</color>
+    <color name="strokeBoxColor">@color/strokeColor</color>
+    <color name="hintColor">@color/textHelperColor</color>
+</resources>

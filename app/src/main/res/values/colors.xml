@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="iconDialogColor">@color/background</color>
+    <color name="button_secondary_color">#C9B2FF</color>
+    <color name="background">@color/white</color>
+    <color name="background_darker">#F4EDFF</color>
+    <color name="transparent">#00573A88</color>
+    <color name="failureColor">#FF3636</color>
+    <color name="FailureStroke">#AF1515</color>
+    <color name="failureColor_50">#80FF3636</color>
+    <color name="successColor">#71FF78</color>
+    <color name="successStrokeColor">#1F5322</color>
+    <color name="successColor_50">#8071FF78</color>
+    <color name="strokeColor">#573A88</color>
+    <color name="stroke_75">#BF573A88</color>
+    <color name="purple">#9778E6</color>
+    <color name="iconDark">@color/purple</color>
+    <color name="iconColor">#7C60C5</color>
+    <color name="black">#000000</color>
+    <color name="disabled">#7D7887</color>
+    <color name="white">#FFFFFFFF</color>>
+    <color name="lightestPurple_25">#F4F0FF</color>
+    <color name="bottomNavColor">#F4F0FF</color>
+    <color name="strokeBoxColor">@color/strokeColor</color>
+    <color name="iconColor_50">#807C60C5</color>
+    <color name="iconColorEditText">#807C60C5</color>
+    <color name="purple_50">#9B8AC6</color>
+    <color name="stroke_50">#8073599E</color>
+    <color name="textHelperColor">#8073599E</color>
+    <color name="hintColor">@color/stroke_50</color>
+    <color name="progress_bar_background">#DCD8EC</color>
+    <color name="map_blue">#007CFF</color>
+</resources>
