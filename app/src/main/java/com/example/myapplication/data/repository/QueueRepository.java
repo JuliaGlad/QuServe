@@ -9,6 +9,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
+import static com.example.myapplication.presentation.utils.Utils.auth;
 import static com.example.myapplication.presentation.utils.Utils.storageReference;
 
 import android.net.Uri;
@@ -120,19 +121,10 @@ public class QueueRepository {
     public Completable addToParticipantsList(String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            docRef.get().addOnSuccessListener(documentSnapshot -> {
-                List<String> participants = new ArrayList<>(Arrays.asList(documentSnapshot.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
-                int queueLength;
-                if (participants.get(0).equals("[]")) {
-                    queueLength = 0;
-                } else {
-                    queueLength = participants.size();
-                }
-                docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayUnion(queueLength + 1 + "_" + ANONYMOUS_ID))
-                        .addOnCompleteListener(task -> {
-                            emitter.onComplete();
-                        });
-            });
+            docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayUnion(service.auth.getCurrentUser().getUid()))
+                    .addOnCompleteListener(task -> {
+                        emitter.onComplete();
+                    });
         });
     }
 
