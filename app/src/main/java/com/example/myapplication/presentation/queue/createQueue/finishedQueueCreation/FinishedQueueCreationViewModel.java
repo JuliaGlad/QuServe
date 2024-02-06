@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.JpgImageModel;
+import com.example.myapplication.domain.model.ImageModel;
 import com.google.android.gms.tasks.Task;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -21,17 +21,17 @@ public class FinishedQueueCreationViewModel extends ViewModel {
     public LiveData<Task<Uri>> image = _image;
 
     public void getQrCode(String queueID) {
-        DI.getQrCodeJpgUseCase.invoke(queueID)
+        DI.getQrCodeImageUseCase.invoke(queueID)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<JpgImageModel>() {
+                .subscribe(new SingleObserver<ImageModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull JpgImageModel jpgImageModel) {
-                        _image.postValue(jpgImageModel.getImageUri());
+                    public void onSuccess(@NonNull ImageModel imageModel) {
+                        _image.postValue(imageModel.getImageUri());
                     }
 
                     @Override

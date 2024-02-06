@@ -4,14 +4,14 @@ import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
 
-public class JpgImageDto {
+public class ImageDto {
     private Task<Uri> imageUri;
 
     public Task<Uri> getImageUri() {
         return imageUri;
     }
 
-    public JpgImageDto(Task<Uri> imageUri) {
+    public ImageDto(Task<Uri> imageUri) {
         this.imageUri = imageUri;
     }
 }

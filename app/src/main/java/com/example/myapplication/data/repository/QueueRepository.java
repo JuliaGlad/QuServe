@@ -3,7 +3,6 @@ package com.example.myapplication.data.repository;
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS_ID;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
-import static com.example.myapplication.presentation.utils.Utils.PDF;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME_KEY;
@@ -15,12 +14,8 @@ import static com.example.myapplication.presentation.utils.Utils.storageReferenc
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.example.myapplication.data.dto.JpgImageDto;
+import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -32,11 +27,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class QueueRepository {
 
@@ -47,6 +44,7 @@ public class QueueRepository {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         emitter.onSuccess(documents.stream().map(
                                 document -> new QueueDto(
+                                        (Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(","))),
                                         document.getId(),
                                         document.getString(QUEUE_NAME_KEY),
                                         document.getString(QUEUE_LIFE_TIME_KEY),
@@ -56,19 +54,26 @@ public class QueueRepository {
         });
     }
 
+    public Observable<Integer> addDocumentSnapshot(String queueId, List<String> participants) {
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        return Observable.create(emitter -> {
+            docRef.addSnapshotListener((value, error) -> {
+                List<String> newParticipants;
+                if (value != null) {
+                    newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
+                    if (newParticipants != null) {
+                        if (!newParticipants.equals(participants)) {
+                            if (participants.size() < newParticipants.size()) {
+                                emitter.onNext(newParticipants.size());
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    }
+
     public void createQrCodeDocument(String queueID, String queueName, String queueTime) {
-//        DocumentReference docRef = fireStore.collection(QUEUE_LIST).document(queueID);
-//
-//        ArrayList<String> arrayList = new ArrayList<>();
-//
-//        Map<String, Object> userQueue = new HashMap<>();
-//
-//        userQueue.put(QUEUE_AUTHOR_KEY, userID);
-//        userQueue.put(QUEUE_NAME_KEY, queueName);
-//        userQueue.put(QUEUE_LIFE_TIME_KEY, queueLifeTime);
-//        userQueue.put(QUEUE_PARTICIPANTS_LIST, arrayList);
-//
-//        docRef.set(userQueue);
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
         ArrayList<String> arrayList = new ArrayList<>();
 
@@ -101,12 +106,12 @@ public class QueueRepository {
         });
     }
 
-    public Single<JpgImageDto> getQrCodeJpg(String queueID) {
+    public Single<ImageDto> getQrCodeJpg(String queueID) {
         return Single.create(emitter -> {
             StorageReference local = storageReference.child(QR_CODES).child(queueID + "/" + queueID + ".jpg");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    emitter.onSuccess(new JpgImageDto(local.getDownloadUrl()));
+                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
                 }
             });
         });
@@ -118,7 +123,7 @@ public class QueueRepository {
             docRef.get().addOnSuccessListener(documentSnapshot -> {
                 List<String> participants = new ArrayList<>(Arrays.asList(documentSnapshot.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
                 int queueLength;
-                if (participants.get(0).equals("[]")){
+                if (participants.get(0).equals("[]")) {
                     queueLength = 0;
                 } else {
                     queueLength = participants.size();
@@ -127,6 +132,17 @@ public class QueueRepository {
                         .addOnCompleteListener(task -> {
                             emitter.onComplete();
                         });
+            });
+        });
+    }
+
+    public Single<ImageDto> getQrCodePdf(String queueId) {
+        return Single.create(emitter -> {
+            StorageReference local = storageReference.child(QR_CODES).child(queueId + "/" + "QR-CODE.pdf");
+            local.getDownloadUrl().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
+                }
             });
         });
     }

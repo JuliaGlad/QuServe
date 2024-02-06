@@ -15,9 +15,12 @@ import com.example.myapplication.domain.usecase.profile.SendVerificationEmailUse
 import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateEmailFieldUseCase;
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.AddDocumentSnapShot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddToParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CreateQueueDocumentUseCase;
-import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodeJpgUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsList;
+import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodeImageUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodePdfUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByAuthorUseCase;
 import com.example.myapplication.domain.usecase.profile.GetUserEmailAndPasswordDataUseCase;
 import com.example.myapplication.domain.usecase.profile.SendResetPasswordEmailUseCase;
@@ -59,8 +62,11 @@ public class DI {
     public static CreateQueueDocumentUseCase createQueueDocumentUseCase = new CreateQueueDocumentUseCase();
     public static UploadBytesToFireStorageUseCase uploadBytesToFireStorageUseCase = new UploadBytesToFireStorageUseCase();
     public static UploadFileToFireStorageUseCase uploadFileToFireStorageUseCase = new UploadFileToFireStorageUseCase();
-    public static GetQrCodeJpgUseCase getQrCodeJpgUseCase = new GetQrCodeJpgUseCase();
+    public static GetQrCodeImageUseCase getQrCodeImageUseCase = new GetQrCodeImageUseCase();
     public static AddToParticipantsListUseCase addToParticipantsListUseCase = new AddToParticipantsListUseCase();
     public static SignInAnonymouslyUseCase signInAnonymouslyUseCase = new SignInAnonymouslyUseCase();
     public static CheckUserIdUseCase checkUserIdUseCase = new CheckUserIdUseCase();
+    public static GetQrCodePdfUseCase getQrCodePdfUseCase = new GetQrCodePdfUseCase();
+    public static GetParticipantsList getParticipantsList = new GetParticipantsList();
+    public static AddDocumentSnapShot addDocumentSnapShot = new AddDocumentSnapShot();
 }

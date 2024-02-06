@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.domain.model.ImageModel;
 import com.example.myapplication.domain.model.QueueIdAndNameModel;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegateItem;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonModel;
@@ -24,6 +25,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.VoidListener;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 
@@ -47,10 +49,6 @@ public class QueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
-    private final MutableLiveData<Boolean> _showDialog = new MutableLiveData<>();
-    public LiveData<Boolean> showDialog = _showDialog;
-
-
     public void getQueueRecycler(VoidListener onButtonListener) {
         DI.getQueueByAuthorUseCase.invoke()
                 .subscribeOn(Schedulers.io())
@@ -62,9 +60,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
-                        getQrCodeImage(queueIdAndNameModel.getId()).addOnCompleteListener(task1 -> {
-                            initRecyclerView(queueIdAndNameModel.getId(), queueIdAndNameModel.getName(), onButtonListener);
-                        });
+                        getQrCodeImage(queueIdAndNameModel.getId(), queueIdAndNameModel.getName(), onButtonListener);
                     }
 
                     @Override
@@ -74,26 +70,31 @@ public class QueueDetailsViewModel extends ViewModel {
                 });
     }
 
-//    new SingleSubscriber<QueueIdAndNameModel>() {
-//        @Override
-//        public void onSuccess(QueueIdAndNameModel queueModel) {
-//            getQrCodeImage(queueModel.getId()).addOnCompleteListener(task1 -> {
-//                initRecyclerView(queueModel.getId(), queueModel.getName(), onButtonListener);
-//            });
-//        }
-//
-//        @Override
-//        public void onError(Throwable error) {
-//        }
-//    }
+    private void getQrCodeImage(String queueId, String name, VoidListener voidListener) {
+       DI.getQrCodeImageUseCase.invoke(queueId)
+               .subscribeOn(Schedulers.io())
+               .subscribe(new SingleObserver<ImageModel>() {
+                   @Override
+                   public void onSubscribe(@NonNull Disposable d) {
 
-    private Task<Uri> getQrCodeImage(String queueId) {
-        StorageReference local = storageReference.child("qr-codes/").child(queueId + "/" + queueId + ".jpg");
-        return (local.getDownloadUrl().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                imageUri = task.getResult();
-            }
-        }));
+                   }
+
+                   @Override
+                   public void onSuccess(@NonNull ImageModel imageModel) {
+                      imageModel.getImageUri().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                          @Override
+                          public void onComplete(@androidx.annotation.NonNull Task<Uri> task) {
+                              imageUri = task.getResult();
+                              initRecyclerView(queueId, name, voidListener);
+                          }
+                      });
+                   }
+
+                   @Override
+                   public void onError(@NonNull Throwable e) {
+
+                   }
+               });
     }
 
     private void initRecyclerView(String queueId, String queueName, VoidListener onButtonListener) {
@@ -114,8 +115,24 @@ public class QueueDetailsViewModel extends ViewModel {
     }
 
     private void getQrCodePdf(String queueId) {
-        StorageReference local = storageReference.child("qr-codes/").child(queueId + "/" + "QR-CODE.pdf");
-        _pdfUri.postValue(local.getDownloadUrl());
+        DI.getQrCodePdfUseCase.invoke(queueId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<ImageModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull ImageModel imageModel) {
+                        _pdfUri.postValue(imageModel.getImageUri());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
     private void buildList(DelegateItem[] items) {

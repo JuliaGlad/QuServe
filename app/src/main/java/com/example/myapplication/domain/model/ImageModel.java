@@ -4,11 +4,11 @@ import android.net.Uri;
 
 import com.google.android.gms.tasks.Task;
 
-public class JpgImageModel {
+public class ImageModel {
 
     private Task<Uri> imageUri;
 
-    public JpgImageModel(Task<Uri> imageUri) {
+    public ImageModel(Task<Uri> imageUri) {
         this.imageUri = imageUri;
     }
 

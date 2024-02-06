@@ -170,6 +170,7 @@ public class CreateQueueViewModel extends ViewModel {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         try {
+
             BitMatrix bitMatrix = multiFormatWriter.encode(queueID, BarcodeFormat.QR_CODE, 300, 300);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);

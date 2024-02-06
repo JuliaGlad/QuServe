@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.JpgImageModel;
+import com.example.myapplication.domain.model.ImageModel;
 import com.example.myapplication.domain.model.UserEmailAndNameModel;
 import com.google.android.gms.tasks.Task;
 
@@ -199,15 +199,15 @@ public class SettingsViewModel extends ViewModel {
     public void getProfileImage() {
         DI.getProfileImageUseCase.invoke()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<JpgImageModel>() {
+                .subscribe(new SingleObserver<ImageModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull JpgImageModel jpgImageModel) {
-                        _image.postValue(jpgImageModel.getImageUri());
+                    public void onSuccess(@NonNull ImageModel imageModel) {
+                        _image.postValue(imageModel.getImageUri());
                     }
 
                     @Override

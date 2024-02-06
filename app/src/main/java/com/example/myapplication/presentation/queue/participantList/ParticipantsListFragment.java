@@ -16,6 +16,7 @@ import com.example.myapplication.databinding.FragmentParticipantsListBinding;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListDelegate;
 
 import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
 
 public class ParticipantsListFragment extends Fragment {
 
@@ -53,7 +54,7 @@ public class ParticipantsListFragment extends Fragment {
 
     private void setMainAdapter(){
         mainAdapter.addDelegate(new ParticipantListDelegate());
-
+        mainAdapter.addDelegate(new StringTextViewDelegate());
         binding.recyclerView.setAdapter(mainAdapter);
     }
 

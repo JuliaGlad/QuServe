@@ -13,7 +13,7 @@ import static com.example.myapplication.presentation.utils.Utils.storageReferenc
 
 import android.net.Uri;
 
-import com.example.myapplication.data.dto.JpgImageDto;
+import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -164,10 +164,10 @@ public class ProfileRepository {
         });
     }
 
-    public Single<JpgImageDto> getProfileImage() {
+    public Single<ImageDto> getProfileImage() {
         return Single.create(emitter -> {
             StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-            emitter.onSuccess(new JpgImageDto(local.getDownloadUrl()));
+            emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
         });
     }
 }

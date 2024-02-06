@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.queue.ParticipateInQueueFragment;
+package com.example.myapplication.presentation.queue.ParticipateInQueueFragment.joinQueue;
 
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
