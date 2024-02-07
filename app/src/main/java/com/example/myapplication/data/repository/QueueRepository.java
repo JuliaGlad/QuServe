@@ -1,8 +1,6 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS_ID;
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS_LIST;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
@@ -10,24 +8,15 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
-import static com.example.myapplication.presentation.utils.Utils.auth;
 import static com.example.myapplication.presentation.utils.Utils.storageReference;
 
 import android.net.Uri;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -41,8 +30,6 @@ import java.util.stream.Collectors;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.disposables.Disposable;
 
 public class QueueRepository {
 
@@ -54,7 +41,7 @@ public class QueueRepository {
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();
                             emitter.onSuccess(documents.stream().map(
                                     document -> new QueueDto(
-                                            new ArrayList<>(Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(","))),
+                                            Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")),
                                             document.getId(),
                                             document.getString(QUEUE_NAME_KEY),
                                             document.getString(QUEUE_LIFE_TIME_KEY),
@@ -81,6 +68,12 @@ public class QueueRepository {
                         }
                     });
         });
+    }
+
+    public void removeUserFromParticipantList(String queueId, String name){
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name));
+
     }
 
     public Observable<Integer> addDocumentSnapshot(String queueId, List<String> participants) {

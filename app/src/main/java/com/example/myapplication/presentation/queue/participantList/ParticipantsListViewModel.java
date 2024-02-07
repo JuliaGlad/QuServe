@@ -1,9 +1,5 @@
 package com.example.myapplication.presentation.queue.participantList;
 
-import static com.example.myapplication.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
-
 import android.util.Log;
 import android.view.View;
 
@@ -18,9 +14,6 @@ import com.example.myapplication.domain.model.QueueParticipantsListModel;
 import com.example.myapplication.domain.model.QueueSizeModel;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListDelegateItem;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListModel;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +41,9 @@ public class ParticipantsListViewModel extends ViewModel {
 
     private void addParticipantListDelegateItems(Fragment fragment, int queueLength, List<String> list, String queueID) {
         if (queueLength != 0) {
-            for (int i = 0; i < queueLength - 1; i++) {
+            for (int i = 0; i < queueLength; i++) {
                 int number = i + 1;
-                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(2, queueID, list,fragment.getString(R.string.participant) + " " + "#" + number)));
+                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(2, queueID, list, fragment.getString(R.string.participant) + " " + "#" + number)));
             }
         } else {
             Log.d("Participant List", "No users yet :)");
@@ -70,10 +63,12 @@ public class ParticipantsListViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
                         int queueLength;
-                        if (queueParticipantsListModel.getParticipants().get(0).equals("[]")){
+                        if (queueParticipantsListModel.getParticipants().size() == 0) {
                             queueLength = 0;
+//                            queueParticipantsListModel.getParticipants().get(0).equals("[]")
                         } else {
                             queueLength = queueParticipantsListModel.getParticipants().size();
+                            Log.i("QueueLength", String.valueOf(queueLength));
                         }
                         initRecyclerView(fragment, queueLength, queueParticipantsListModel.getParticipants(), queueParticipantsListModel.getId());
                         addDocumentSnapshot(queueParticipantsListModel.getId(), fragment, queueParticipantsListModel.getParticipants());
@@ -98,7 +93,7 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     @Override
                     public void onNext(@NonNull QueueSizeModel queueSizeModel) {
-                        if (participants.size() < queueSizeModel.getSize() || participants.size() == queueSizeModel.getSize()) {
+                        if (participants.size() < queueSizeModel.getSize()) {
                             List<DelegateItem> newItems = new ArrayList<>();
                             newItems.addAll(_items.getValue());
                             newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(3, queueID, participants, fragment.getString(R.string.participant) + "#" + queueSizeModel.getSize())));
@@ -119,8 +114,26 @@ public class ParticipantsListViewModel extends ViewModel {
 
     }
 
-    public void next(){
+    public void nextParticipant() {
+        DI.getParticipantsList.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<QueueParticipantsListModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
+                        String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
+                        DI.removeUserFromParticipantsList.invoke(queueParticipantsListModel.getId(), name);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 }
 

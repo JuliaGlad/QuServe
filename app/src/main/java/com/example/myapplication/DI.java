@@ -30,6 +30,7 @@ import com.example.myapplication.domain.usecase.profile.UpdateUserDataUseCase;
 import com.example.myapplication.domain.usecase.profile.UploadToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByParticipantIdUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByQueueIdUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.RemoveUserFromParticipantsList;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadBytesToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadFileToFireStorageUseCase;
 
@@ -71,4 +72,5 @@ public class DI {
     public static GetParticipantsList getParticipantsList = new GetParticipantsList();
     public static AddDocumentSnapShot addDocumentSnapShot = new AddDocumentSnapShot();
     public static GetQueueByParticipantIdUseCase getQueueByParticipantIdUseCase = new GetQueueByParticipantIdUseCase();
+    public static RemoveUserFromParticipantsList removeUserFromParticipantsList = new RemoveUserFromParticipantsList();
 }
