@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.queue.waitingFragment.fragment;
 
+import static com.example.myapplication.presentation.utils.Utils.EDIT_ESTIMATED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.EDIT_PEOPLE_BEFORE_YOU;
+
 import android.util.Log;
 import android.view.View;
 
@@ -35,13 +38,12 @@ public class WaitingViewModel extends ViewModel {
     private MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
-   private void initRecycler(String queueName, String time, String queueLength, Fragment fragment){
+   private void initRecycler(String queueId, List<String> list, String queueName, String time, String queueLength, Fragment fragment){
        buildList(new DelegateItem[]{
                new StringTextViewDelegateItem(new StringTextViewModel(1, queueName, 28, View.TEXT_ALIGNMENT_CENTER)),
-               new WaitingItemDelegateItem(new WaitingItemModel(2, fragment.getString(R.string.estimated_waiting_time), time)),
-               new WaitingItemDelegateItem(new WaitingItemModel(3, fragment.getString(R.string.people_before_you), queueLength)),
-               new WaitingItemDelegateItem(new WaitingItemModel(4, fragment.getString(R.string.useful_tips),
-                      fragment.getString(R.string.tips_description))),
+               new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, list, fragment.getString(R.string.estimated_waiting_time), time, true, EDIT_ESTIMATED_TIME)),
+               new WaitingItemDelegateItem(new WaitingItemModel(3,queueId, list, fragment.getString(R.string.people_before_you), queueLength, true, EDIT_PEOPLE_BEFORE_YOU)),
+               new WaitingItemDelegateItem(new WaitingItemModel(4,queueId, list, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), false, null)),
                new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> {
 
                }))
@@ -60,8 +62,8 @@ public class WaitingViewModel extends ViewModel {
                    @Override
                    public void onSuccess(@NonNull QueueModel queueModel) {
                        List<String> participants = Arrays.asList(queueModel.getParticipants().toString().split(","));
-
-                       initRecycler(queueModel.getName(), "12 minutes", String.valueOf(participants.size()), fragment);
+                       initRecycler(queueModel.getId(), participants, queueModel.getName(),  "12 minutes", String.valueOf(participants.size()), fragment);
+//                       addDocumentSnapshot(queueModel.getId(), participants, queueModel.getName(), fragment);
                    }
 
                    @Override
@@ -70,6 +72,33 @@ public class WaitingViewModel extends ViewModel {
                    }
                });
    }
+
+//   private void addDocumentSnapshot(String queueId, List<String> participants, String name, Fragment fragment){
+//       DI.addDocumentSnapShot.invoke(queueId, participants)
+//               .subscribeOn(Schedulers.io())
+//               .subscribe(new Observer<QueueSizeModel>() {
+//                   @Override
+//                   public void onSubscribe(@NonNull Disposable d) {
+//
+//                   }
+//
+//                   @Override
+//                   public void onNext(@NonNull QueueSizeModel queueSizeModel) {
+//                       Log.d("Change", "Size changed");
+//                       initRecycler(name, "12 minutes", String.valueOf(queueSizeModel.getSize()),fragment);
+//                   }
+//
+//                   @Override
+//                   public void onError(@NonNull Throwable e) {
+//
+//                   }
+//
+//                   @Override
+//                   public void onComplete() {
+//
+//                   }
+//               });
+//   }
 
    private void buildList(DelegateItem[] items){
        List<DelegateItem> list = new ArrayList<>(Arrays.asList(items));
