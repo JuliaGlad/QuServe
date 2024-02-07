@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/participate_in_queue_navigation"
-    app:startDestination="@id/joinQueueFragment">
+<navigation xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:id="@+id/participate_in_queue_navigation"-->
+<!--    app:startDestination="@id/joinQueueFragment">-->
 
-    <fragment
-        android:id="@+id/joinQueueFragment"
-        android:name="com.example.myapplication.presentation.queue.ParticipateInQueueFragment.joinQueue.JoinQueueFragment"
-        android:label="fragment_join_queue"
-        tools:layout="@layout/fragment_join_queue" >
-        <action
-            android:id="@+id/action_joinQueueFragment2_to_waitingFragment"
-            app:destination="@id/waitingFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/waitingFragment"
-        android:name="com.example.myapplication.presentation.queue.ParticipateInQueueFragment.waiting.WaitingFragment"
-        android:label="fragment_waiting"
-        tools:layout="@layout/fragment_waiting" />
+<!--    <fragment-->
+<!--        android:id="@+id/joinQueueFragment"-->
+<!--        android:name="com.example.myapplication.presentation.queue.JoinQueueFragment.joinQueue.JoinQueueFragment"-->
+<!--        android:label="fragment_join_queue"-->
+<!--        tools:layout="@layout/fragment_join_queue" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_joinQueueFragment2_to_waitingFragment"-->
+<!--            app:destination="@id/waitingFragment" />-->
+<!--    </fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/waitingFragment"-->
+<!--        android:name="com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingFragment"-->
+<!--        android:label="fragment_waiting"-->
+<!--        tools:layout="@layout/fragment_waiting" />-->
 </navigation>

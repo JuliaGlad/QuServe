@@ -16,7 +16,6 @@ import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase
 import com.example.myapplication.domain.usecase.profile.UpdateEmailFieldUseCase;
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddDocumentSnapShot;
-import com.example.myapplication.domain.usecase.queue.usecase.AddRemoveDocumentsSnapShotUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddToParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CreateQueueDocumentUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsList;
@@ -72,5 +71,4 @@ public class DI {
     public static GetParticipantsList getParticipantsList = new GetParticipantsList();
     public static AddDocumentSnapShot addDocumentSnapShot = new AddDocumentSnapShot();
     public static GetQueueByParticipantIdUseCase getQueueByParticipantIdUseCase = new GetQueueByParticipantIdUseCase();
-    public static AddRemoveDocumentsSnapShotUseCase addRemoveDocumentsSnapShotUseCase = new AddRemoveDocumentsSnapShotUseCase();
 }
