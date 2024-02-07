@@ -85,9 +85,9 @@
     <string name="enter_name">Enter name</string>
     <string name="name">Name</string>
     <string name="next">Next</string>
-    <string name="set_queue_life_time">Set lifetime</string>
-    <string name="no_set_lifetime">No set lifetime</string>
-    <string name="choose_lifetime">Choose lifetime:</string>
+    <string name="set_queue_life_time">Disable queue in:</string>
+    <string name="no_set_lifetime">No time</string>
+    <string name="choose_lifetime">Time:</string>
     <string name="select_item">Select item</string>
     <string name="lifetime">LifeTime</string>
     <string name="invite_users_to_your_queue">Invite users to your queue</string>
