@@ -91,12 +91,10 @@ public class QueueRepository {
                 if (value != null) {
                     newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
                     if (newParticipants != null) {
-                        if (!newParticipants.equals(participants)) {
-                            if (participants.size() < newParticipants.size()) {
-                                emitter.onNext(newParticipants.size());
-                            } else if (participants.size() > newParticipants.size()) {
-                                emitter.onNext(newParticipants.size());
-                            }
+                        if (participants.size() < newParticipants.size()) {
+                            emitter.onNext(newParticipants.size());
+                        } else if (participants.size() > newParticipants.size()) {
+                            emitter.onNext(newParticipants.size());
                         }
                     }
                 }

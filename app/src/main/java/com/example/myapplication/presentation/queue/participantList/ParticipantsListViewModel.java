@@ -34,16 +34,16 @@ public class ParticipantsListViewModel extends ViewModel {
 
     private final List<DelegateItem> participantList = new ArrayList<>();
 
-    private void initRecyclerView(Fragment fragment, int queueLength) {
-        addParticipantListDelegateItems(fragment, queueLength);
+    private void initRecyclerView(Fragment fragment, int queueLength, List<String> list, String queueID) {
+        addParticipantListDelegateItems(fragment, queueLength, list, queueID);
         _items.postValue(participantList);
     }
 
-    private void addParticipantListDelegateItems(Fragment fragment, int queueLength) {
+    private void addParticipantListDelegateItems(Fragment fragment, int queueLength, List<String> list, String queueID) {
         if (queueLength != 0) {
             for (int i = 0; i < queueLength; i++) {
                 int number = i + 1;
-                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(2, fragment.getString(R.string.participant) + " " + "#" + number)));
+                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(2, queueID, list,fragment.getString(R.string.participant) + " " + "#" + number)));
             }
         } else {
             Log.d("Participant List", "No users yet :)");
@@ -68,7 +68,7 @@ public class ParticipantsListViewModel extends ViewModel {
                         } else {
                             queueLength = queueParticipantsListModel.getParticipants().size();
                         }
-                        initRecyclerView(fragment, queueLength);
+                        initRecyclerView(fragment, queueLength, queueParticipantsListModel.getParticipants(), queueParticipantsListModel.getId());
                         addDocumentSnapshot(queueParticipantsListModel.getId(), fragment, queueParticipantsListModel.getParticipants());
                     }
 
@@ -91,10 +91,12 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     @Override
                     public void onNext(@NonNull QueueSizeModel queueSizeModel) {
-                        List<DelegateItem> newItems = new ArrayList<>();
-                        newItems.addAll(_items.getValue());
-                        newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(3, fragment.getString(R.string.participant) + "#" + queueSizeModel.getSize())));
-                        _items.setValue(newItems);
+                        if (participants.size() < queueSizeModel.getSize()) {
+                            List<DelegateItem> newItems = new ArrayList<>();
+                            newItems.addAll(_items.getValue());
+                            newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(3, queueID, participants, fragment.getString(R.string.participant) + "#" + queueSizeModel.getSize())));
+                            _items.setValue(newItems);
+                        }
                     }
 
                     @Override
