@@ -47,7 +47,13 @@ public class ParticipantsListFragment extends Fragment {
         setupObserves();
         setMainAdapter();
         initBackButton();
+        initNextParticipanButton();
+    }
 
+    private void initNextParticipanButton() {
+        binding.nextButton.setOnClickListener(v -> {
+            viewModel.next();
+        });
     }
 
     private void initBackButton() {

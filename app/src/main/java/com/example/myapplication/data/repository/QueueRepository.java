@@ -91,9 +91,26 @@ public class QueueRepository {
                 if (value != null) {
                     newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
                     if (newParticipants != null) {
-                        if (participants.size() < newParticipants.size()) {
+                        if (participants.size() < newParticipants.size() || participants.size() == newParticipants.size()) {
                             emitter.onNext(newParticipants.size());
                         } else if (participants.size() > newParticipants.size()) {
+                            emitter.onNext(newParticipants.size());
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    public Observable<Integer> addRemoveDocumentSnapShot(String queueId, List<String> participants){
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        return Observable.create(emitter -> {
+            docRef.addSnapshotListener((value, error) -> {
+                List<String> newParticipants;
+                if (value != null) {
+                    newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
+                    if (newParticipants != null) {
+                     if (participants.size() > newParticipants.size() || participants.size() == newParticipants.size()) {
                             emitter.onNext(newParticipants.size());
                         }
                     }
