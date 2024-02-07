@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.queue.participantList;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentParticipantsListBinding;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListDelegate;
 
+import java.util.List;
+
+import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
 

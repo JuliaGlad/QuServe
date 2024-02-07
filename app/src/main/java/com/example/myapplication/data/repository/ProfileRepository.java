@@ -72,7 +72,7 @@ public class ProfileRepository {
     }
 
     public boolean checkAuthentification() {
-        return service.auth.getCurrentUser() != null;
+        return service.auth.getCurrentUser() != null && !service.auth.getCurrentUser().isAnonymous();
     }
 
     public void deleteAccount() {

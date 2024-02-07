@@ -13,6 +13,8 @@ public class Utils {
     public static final int FINE_PERMISSION_CODE = 1;
     public static final String JPG = ".jpg";
     public static final String PDF = ".pdf";
+    public static final String ANONYMOUS_LIST="AnonymousList";
+    public static final String PARTICIPANT_NUMBER = "ParticipantNumber";
     public static final String QR_CODES = "qr-codes/";
     public static final String QUEUE_LIST = "QueueList"; //Collection
     public static final String ANONYMOUS_ID = "Anonymous";

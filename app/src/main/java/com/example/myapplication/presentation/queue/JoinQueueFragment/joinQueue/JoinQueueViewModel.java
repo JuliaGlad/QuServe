@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.queue.ParticipateInQueueFragment.joinQueue;
+package com.example.myapplication.presentation.queue.JoinQueueFragment.joinQueue;
 
 import android.net.Uri;
 

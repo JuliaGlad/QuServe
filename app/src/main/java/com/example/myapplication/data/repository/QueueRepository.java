@@ -2,6 +2,7 @@ package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS_ID;
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS_LIST;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
@@ -15,11 +16,18 @@ import static com.example.myapplication.presentation.utils.Utils.storageReferenc
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -42,15 +50,35 @@ public class QueueRepository {
         return Single.create(emitter -> {
             service.fireStore.collection(QUEUE_LIST).get()
                     .addOnCompleteListener(task -> {
-                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                        emitter.onSuccess(documents.stream().map(
-                                document -> new QueueDto(
-                                        (Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(","))),
-                                        document.getId(),
-                                        document.getString(QUEUE_NAME_KEY),
-                                        document.getString(QUEUE_LIFE_TIME_KEY),
-                                        document.getString(QUEUE_AUTHOR_KEY))
-                        ).collect(Collectors.toList()));
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                            emitter.onSuccess(documents.stream().map(
+                                    document -> new QueueDto(
+                                            new ArrayList<>(Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(","))),
+                                            document.getId(),
+                                            document.getString(QUEUE_NAME_KEY),
+                                            document.getString(QUEUE_LIFE_TIME_KEY),
+                                            document.getString(QUEUE_AUTHOR_KEY))
+                            ).collect(Collectors.toList()));
+                        }
+                    });
+        });
+    }
+
+    public Single<QueueDto> getParticipantsList() {
+        return Single.create(emitter -> {
+            service.fireStore.collection(QUEUE_LIST)
+                    .whereArrayContains(QUEUE_PARTICIPANTS_LIST, service.auth.getCurrentUser().getUid())
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot documents = task.getResult().getDocuments().get(0);
+                            emitter.onSuccess(new QueueDto(new ArrayList<>(Arrays.asList(documents.get(QUEUE_PARTICIPANTS_LIST).toString())),
+                                    documents.getId(),
+                                    documents.getString(QUEUE_NAME_KEY),
+                                    documents.getString(QUEUE_LIFE_TIME_KEY),
+                                    documents.getString(QUEUE_AUTHOR_KEY)));
+                        }
                     });
         });
     }
@@ -65,6 +93,8 @@ public class QueueRepository {
                     if (newParticipants != null) {
                         if (!newParticipants.equals(participants)) {
                             if (participants.size() < newParticipants.size()) {
+                                emitter.onNext(newParticipants.size());
+                            } else if (participants.size() > newParticipants.size()) {
                                 emitter.onNext(newParticipants.size());
                             }
                         }

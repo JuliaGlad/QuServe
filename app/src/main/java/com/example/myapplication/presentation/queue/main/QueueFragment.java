@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.databinding.FragmentQueueBinding;
-import com.example.myapplication.presentation.queue.ParticipateInQueueFragment.ParticipatingInQueueActivity;
+import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.MainActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -42,9 +42,12 @@ public class QueueFragment extends Fragment {
         initEnterButton();
         initLauncher();
 
-        binding.button3.setOnClickListener(v -> {
+        binding.testQueueOwner.setOnClickListener(v -> {
             ((MainActivity)requireActivity()).openQueueDetailsActivity();
         });
+
+        binding.testQueueParticipant.setOnClickListener(v ->
+                ((MainActivity)requireActivity()).openQueueWaitingActivity());
     }
 
     @Override
@@ -56,7 +59,7 @@ public class QueueFragment extends Fragment {
     private void initLauncher(){
         launcher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
-                Intent intent = new Intent(requireContext(), ParticipatingInQueueActivity.class);
+                Intent intent = new Intent(requireContext(), JoinQueueActivity.class);
                 intent.putExtra(QUEUE_DATA, result.getContents());
                 requireActivity().startActivity(intent);
             }

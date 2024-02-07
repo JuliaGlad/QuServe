@@ -21,7 +21,6 @@ public class QueueDto {
     public List getParticipants(){
         return participants;
     }
-
     public String getTime(){return time;}
 
     public String getId() {

@@ -13,6 +13,7 @@ import com.example.myapplication.presentation.profile.editProfile.EditProfileAct
 import com.example.myapplication.presentation.profile.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.queue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,6 +79,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openQueueDetailsActivity() {
         Intent intent = new Intent(this, QueueDetailsActivity.class);
+        startActivity(intent);
+    }
+
+    public void openQueueWaitingActivity() {
+        Intent intent = new Intent(this, WaitingActivity.class);
         startActivity(intent);
     }
 

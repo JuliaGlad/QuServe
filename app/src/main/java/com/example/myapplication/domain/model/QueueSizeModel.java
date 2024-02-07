@@ -1,7 +1,7 @@
 package com.example.myapplication.domain.model;
 
 public class QueueSizeModel {
-    int size;
+    private int size;
 
     public int getSize() {
         return size;

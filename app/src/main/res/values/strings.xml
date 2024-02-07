@@ -119,6 +119,11 @@
     <string name="you_want_to_download_qr_code_pdf_file">you want to download qr-code pdf file?</string>
     <string name="participant">Participant</string>
     <string name="next_participant">Next Participant</string>
+    <string name="leave_queue">Leave queue</string>
+    <string name="estimated_waiting_time">Estimated waiting time:</string>
+    <string name="people_before_you">People before you:</string>
+    <string name="useful_tips">Useful tips:</string>
+    <string name="tips_description">Enjoy your time waiting in the queue and our app will always inform when your turn is near </string>
 
     <string-array name="lifetime">
         <item>No set LifeTime</item>

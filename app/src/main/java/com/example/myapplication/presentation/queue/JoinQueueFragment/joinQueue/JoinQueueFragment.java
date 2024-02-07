@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.queue.ParticipateInQueueFragment.joinQueue;
+package com.example.myapplication.presentation.queue.JoinQueueFragment.joinQueue;
 
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
@@ -17,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentJoinQueueBinding;
+import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -87,8 +88,7 @@ public class JoinQueueFragment extends Fragment {
 
                         @Override
                         public void onComplete() {
-                            NavHostFragment.findNavController(JoinQueueFragment.this)
-                                    .navigate(R.id.action_joinQueueFragment2_to_waitingFragment);
+                            ((JoinQueueActivity)requireActivity()).openWaitingActivity();
                         }
 
                         @Override
