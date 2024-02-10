@@ -29,21 +29,21 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 
 public class ParticipantsListViewModel extends ViewModel {
 
+    private int participantsSize;
+
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> item = _items;
-
     private final List<DelegateItem> participantList = new ArrayList<>();
 
-    private void initRecyclerView(Fragment fragment, int queueLength, List<String> list, String queueID) {
-        addParticipantListDelegateItems(fragment, queueLength, list, queueID);
+    private void initRecyclerView(Fragment fragment, String queueID) {
+        addParticipantListDelegateItems(fragment, participantsSize, queueID);
         _items.postValue(participantList);
     }
 
-    private void addParticipantListDelegateItems(Fragment fragment, int queueLength, List<String> list, String queueID) {
+    private void addParticipantListDelegateItems(Fragment fragment, int queueLength, String queueID) {
         if (queueLength != 0) {
             for (int i = 0; i < queueLength; i++) {
-                int number = i + 1;
-                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(2, queueID, list, fragment.getString(R.string.participant) + " " + "#" + number)));
+                participantList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, fragment.getString(R.string.participant))));
             }
         } else {
             Log.d("Participant List", "No users yet :)");
@@ -57,21 +57,17 @@ public class ParticipantsListViewModel extends ViewModel {
                 .subscribe(new SingleObserver<QueueParticipantsListModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
                     }
 
                     @Override
                     public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
-                        int queueLength;
                         if (queueParticipantsListModel.getParticipants().size() == 0) {
-                            queueLength = 0;
-//                            queueParticipantsListModel.getParticipants().get(0).equals("[]")
+                            participantsSize = 0;
                         } else {
-                            queueLength = queueParticipantsListModel.getParticipants().size();
-                            Log.i("QueueLength", String.valueOf(queueLength));
+                            participantsSize = queueParticipantsListModel.getParticipants().size();
                         }
-                        initRecyclerView(fragment, queueLength, queueParticipantsListModel.getParticipants(), queueParticipantsListModel.getId());
-                        addDocumentSnapshot(queueParticipantsListModel.getId(), fragment, queueParticipantsListModel.getParticipants());
+                        initRecyclerView(fragment, queueParticipantsListModel.getId());
+                        addDocumentSnapshot(fragment, queueParticipantsListModel.getId());
                     }
 
                     @Override
@@ -82,8 +78,8 @@ public class ParticipantsListViewModel extends ViewModel {
 
     }
 
-    private void addDocumentSnapshot(String queueID, Fragment fragment, List<String> participants) {
-        DI.addDocumentSnapShot.invoke(queueID, participants)
+    public void addDocumentSnapshot(Fragment fragment, String queueID) {
+        DI.addDocumentSnapShot.invoke(queueID)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {
                     @Override
@@ -93,11 +89,12 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     @Override
                     public void onNext(@NonNull QueueSizeModel queueSizeModel) {
-                        if (participants.size() < queueSizeModel.getSize()) {
+                        if (participantsSize < queueSizeModel.getSize()) {
                             List<DelegateItem> newItems = new ArrayList<>();
-                            newItems.addAll(_items.getValue());
-                            newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(3, queueID, participants, fragment.getString(R.string.participant) + "#" + queueSizeModel.getSize())));
-                            _items.setValue(newItems);
+                                newItems.addAll(_items.getValue());
+                                participantsSize = queueSizeModel.getSize();
+                                newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(participantsSize + 1, fragment.getString(R.string.participant))));
+                                _items.setValue(newItems);
                         }
                     }
 
@@ -127,6 +124,11 @@ public class ParticipantsListViewModel extends ViewModel {
                     public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
                         String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
                         DI.removeUserFromParticipantsList.invoke(queueParticipantsListModel.getId(), name);
+                        List<DelegateItem> newItems = new ArrayList<>();
+                        newItems.addAll(_items.getValue());
+                        newItems.remove(0);
+                        participantsSize = newItems.size();
+                        _items.postValue(newItems);
                     }
 
                     @Override

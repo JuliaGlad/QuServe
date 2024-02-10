@@ -51,7 +51,7 @@ public class WaitingItemDelegate implements AdapterDelegate {
             binding.description.setText(model.descriptionText);
 
             if (model.editable && model.flag.equals(EDIT_PEOPLE_BEFORE_YOU)) {
-                DI.addDocumentSnapShot.invoke(model.queueID, model.list)
+                DI.addDocumentSnapShot.invoke(model.queueID)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new Observer<QueueSizeModel>() {
                             @Override

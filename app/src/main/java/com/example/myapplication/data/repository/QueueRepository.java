@@ -70,13 +70,13 @@ public class QueueRepository {
         });
     }
 
-    public void removeUserFromParticipantList(String queueId, String name){
+    public void removeUserFromParticipantList(String queueId, String name) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name));
 
     }
 
-    public Observable<Integer> addDocumentSnapshot(String queueId, List<String> participants) {
+    public Observable<Integer> addDocumentSnapshot(String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
@@ -84,11 +84,7 @@ public class QueueRepository {
                 if (value != null) {
                     newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
                     if (newParticipants != null) {
-                        if (participants.size() < newParticipants.size() || participants.size() == newParticipants.size()) {
-                            emitter.onNext(newParticipants.size());
-                        } else if (participants.size() > newParticipants.size()) {
-                            emitter.onNext(newParticipants.size());
-                        }
+                        emitter.onNext(newParticipants.size());
                     }
                 }
             });

@@ -9,8 +9,8 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class AddDocumentSnapShot {
-    public Observable<QueueSizeModel> invoke(String queueId, List<String> participants){
-       return DI.queueRepository.addDocumentSnapshot(queueId, participants).flatMap(integer ->
+    public Observable<QueueSizeModel> invoke(String queueId){
+       return DI.queueRepository.addDocumentSnapshot(queueId).flatMap(integer ->
                Observable.just(new QueueSizeModel(integer)));
     }
 }

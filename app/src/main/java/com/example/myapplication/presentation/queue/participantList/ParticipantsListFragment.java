@@ -44,6 +44,7 @@ public class ParticipantsListFragment extends Fragment {
         setMainAdapter();
         initBackButton();
         initNextParticipantButton();
+
     }
 
     private void initNextParticipantButton() {

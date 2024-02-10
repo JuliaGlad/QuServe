@@ -2,16 +2,15 @@ package com.example.myapplication.presentation.queue.participantList.participant
 
 import java.util.List;
 
+
+import myapplication.android.ui.recycler.delegate.DelegateItem;
+
 public class ParticipantListModel {
     int id;
-    String queueID;
-    List<String> list;
     String text;
 
-    public ParticipantListModel(int id, String queueID, List<String> list, String text){
+    public ParticipantListModel(int id, String text){
         this.id = id;
-        this.queueID = queueID;
-        this.list = list;
         this.text = text;
     }
 }
