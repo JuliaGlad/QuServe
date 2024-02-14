@@ -123,7 +123,7 @@ public class ParticipantsListViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
                         String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
-                        DI.removeUserFromParticipantsList.invoke(queueParticipantsListModel.getId(), name);
+                        DI.nextParticipantUseCase.invoke(queueParticipantsListModel.getId(), name);
                         List<DelegateItem> newItems = new ArrayList<>();
                         newItems.addAll(_items.getValue());
                         newItems.remove(0);

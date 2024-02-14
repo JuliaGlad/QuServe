@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.queue.queueDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.storageReference;
-
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -18,21 +16,18 @@ import com.example.myapplication.presentation.queue.queueDetails.finishQueueButt
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailsButtonDelegateItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.VoidListener;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;

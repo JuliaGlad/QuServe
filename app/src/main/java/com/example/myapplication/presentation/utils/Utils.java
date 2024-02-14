@@ -7,22 +7,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class Utils {
-    public static FirebaseAuth auth = FirebaseAuth.getInstance();
-    public static FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
-    public static StorageReference storageReference = FirebaseStorage.getInstance().getReference();
     public static final int FINE_PERMISSION_CODE = 1;
     public static final String JPG = ".jpg";
     public static final String PDF = ".pdf";
-    public static final String ANONYMOUS_LIST="AnonymousList";
-    public static final String PARTICIPANT_NUMBER = "ParticipantNumber";
     public static final String QR_CODES = "qr-codes/";
     public static final String QUEUE_LIST = "QueueList"; //Collection
-    public static final String ANONYMOUS_ID = "Anonymous";
     public static final String PROFILE_IMAGES = "profileImages/";
     public static final String PROFILE_PHOTO = "profilePhoto_";
     public static final String QUEUE_AUTHOR_KEY = "QueueAuthor";
     public static final String QUEUE_PARTICIPANTS_LIST = "ParticipantsList";
-    public static final String QUEUE_DESCRIPTION_KEY = "QueueDescription";
     public static final String QUEUE_NAME_KEY = "QueueName";
     public static final String QUEUE_LIFE_TIME_KEY = "QueueLifeTime";
     public static final String PAGE_KEY = "Page";
@@ -40,7 +33,8 @@ public class Utils {
     public static final String EDIT_ESTIMATED_TIME = "Edit estimated time";
     public static final String EDIT_PEOPLE_BEFORE_YOU = "Edit people before you";
     public static final String QUEUE_DATA = "QueueData";
-
+    public static final String NOTIFICATION_CHANNEL_ID = "NOTE_ID";
+    public static final String NOTIFICATION_CHANNEL_NAME = "Notification channel";
 }
 
 

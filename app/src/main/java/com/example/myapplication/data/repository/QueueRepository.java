@@ -8,9 +8,9 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
-import static com.example.myapplication.presentation.utils.Utils.storageReference;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
@@ -70,13 +70,39 @@ public class QueueRepository {
         });
     }
 
-    public void removeUserFromParticipantList(String queueId, String name) {
+    public void nextParticipant(String queueId, String name) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name));
-
     }
 
-    public Observable<Integer> addDocumentSnapshot(String queueId) {
+
+    public Completable removeParticipantById(String queueId) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+            docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(service.auth.getCurrentUser().getUid()))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            service.auth.getCurrentUser().delete().addOnCompleteListener(task1 -> emitter.onComplete());
+                        }
+                    });
+        });
+    }
+
+    public Completable addContainParticipantIdDocumentsSnapshot(String queueId) {
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        return Completable.create(emitter -> {
+            docRef.addSnapshotListener(((value, error) -> {
+                if (value != null) {
+                    if (!value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(service.auth.getCurrentUser().getUid())) {
+                        Log.d("NOT CONTAIN", "NOT CONTAIN" + " " + service.auth.getCurrentUser().getUid());
+                        emitter.onComplete();
+                    }
+                }
+            }));
+        });
+    }
+
+    public Observable<Integer> addParticipantsSizeDocumentSnapshot(String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
@@ -106,7 +132,7 @@ public class QueueRepository {
     }
 
     public Completable uploadBytesToFireStorage(String queueID, byte[] data) {
-        StorageReference reference = storageReference.child(QR_CODES).child(queueID + "/" + queueID + JPG);
+        StorageReference reference = service.storageReference.child(QR_CODES).child(queueID + "/" + queueID + JPG);
         return Completable.create(emitter -> {
             reference.putBytes(data).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -118,7 +144,7 @@ public class QueueRepository {
 
     public Completable uploadFileToFireStorage(File file, String queueID) {
         return Completable.create(emitter -> {
-            StorageReference reference = storageReference.child(QR_CODES).child(queueID + "/" + "QR-CODE.pdf");
+            StorageReference reference = service.storageReference.child(QR_CODES).child(queueID + "/" + "QR-CODE.pdf");
             reference.putFile(Uri.fromFile(file)).addOnCompleteListener(task -> emitter.onComplete())
                     .addOnFailureListener(e -> emitter.onError(new Throwable(e.getMessage())));
         });
@@ -126,7 +152,7 @@ public class QueueRepository {
 
     public Single<ImageDto> getQrCodeJpg(String queueID) {
         return Single.create(emitter -> {
-            StorageReference local = storageReference.child(QR_CODES).child(queueID + "/" + queueID + ".jpg");
+            StorageReference local = service.storageReference.child(QR_CODES).child(queueID + "/" + queueID + ".jpg");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
@@ -147,7 +173,7 @@ public class QueueRepository {
 
     public Single<ImageDto> getQrCodePdf(String queueId) {
         return Single.create(emitter -> {
-            StorageReference local = storageReference.child(QR_CODES).child(queueId + "/" + "QR-CODE.pdf");
+            StorageReference local = service.storageReference.child(QR_CODES).child(queueId + "/" + "QR-CODE.pdf");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(local.getDownloadUrl()));

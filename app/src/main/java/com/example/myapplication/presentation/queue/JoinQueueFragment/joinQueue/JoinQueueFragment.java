@@ -88,6 +88,7 @@ public class JoinQueueFragment extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            requireActivity().finish();
                             ((JoinQueueActivity)requireActivity()).openWaitingActivity();
                         }
 

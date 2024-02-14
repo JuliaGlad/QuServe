@@ -29,9 +29,6 @@ public class SettingsViewModel extends ViewModel {
     private final MutableLiveData<String> _userEmail = new MutableLiveData<>();
     LiveData<String> userEmail = _userEmail;
 
-    private final MutableLiveData<String> _helpUserEmail = new MutableLiveData<>();
-    LiveData<String> helpUserEmail = _helpUserEmail;
-
     private final MutableLiveData<Boolean> _isSuccessful = new MutableLiveData<>();
     LiveData<Boolean> isSuccessful = _isSuccessful;
 
@@ -46,9 +43,6 @@ public class SettingsViewModel extends ViewModel {
 
     public void updatePassword(String oldPassword, String newPassword) {
         if (!oldPassword.isEmpty() && !newPassword.isEmpty()) {
-//            authCredential = EmailAuthProvider.getCredential(authUser.getEmail(), oldPassword);
-//            authUser.reauthenticate(authCredential).addOnSuccessListener(unused ->
-//                    _updatePassword.postValue(authUser.updatePassword(newPassword)));
             DI.changePasswordUseCase.invoke(oldPassword, newPassword)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {

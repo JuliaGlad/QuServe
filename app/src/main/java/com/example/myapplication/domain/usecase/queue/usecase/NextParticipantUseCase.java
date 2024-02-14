@@ -2,10 +2,10 @@ package com.example.myapplication.domain.usecase.queue.usecase;
 
 import com.example.myapplication.DI;
 
-import java.util.List;
+import io.reactivex.rxjava3.core.Completable;
 
-public class RemoveUserFromParticipantsList {
+public class NextParticipantUseCase {
     public void invoke(String queueID, String name){
-        DI.queueRepository.removeUserFromParticipantList(queueID, name);
+         DI.queueRepository.nextParticipant(queueID, name);
     }
 }

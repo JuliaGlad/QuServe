@@ -8,8 +8,7 @@ import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
-import static com.example.myapplication.presentation.utils.Utils.auth;
-import static com.example.myapplication.presentation.utils.Utils.storageReference;
+
 
 import android.net.Uri;
 
@@ -45,7 +44,7 @@ public class ProfileRepository {
         return Completable.create(emitter -> {
             service.auth.getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    auth.getCurrentUser().updatePassword(newPassword);
+                    service.auth.getCurrentUser().updatePassword(newPassword);
                     emitter.onComplete();
                 } else {
                     emitter.onError(new Throwable("EXCEPTION"));
@@ -127,7 +126,7 @@ public class ProfileRepository {
 
     public Completable uploadToFireStorage(Uri imageUri) {
         return Completable.create(emitter -> {
-            StorageReference reference = storageReference.child(PROFILE_IMAGES + PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
+            StorageReference reference = service.storageReference.child(PROFILE_IMAGES + PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
             reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
                 emitter.onComplete();
             });
