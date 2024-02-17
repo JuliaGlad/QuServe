@@ -125,10 +125,11 @@
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>
-        <item>1 час</item>
-        <item>6 часов</item>
+        <item>3 часа</item>
+        <item>12 часов</item>
         <item>1 день</item>
-        <item>1 неделя</item>
+        <item>1 месяц</item>
+        <item>6 месяцев</item>
         <item>1 год</item>
     </string-array>
 

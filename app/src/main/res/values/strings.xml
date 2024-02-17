@@ -128,11 +128,14 @@
     <string name="are_you_sure_you_want_to_leave_the_queue">Are you sure you want to leave the queue?</string>
 
     <string-array name="lifetime">
-        <item>No set LifeTime</item>
-        <item>1 hour</item>
-        <item>6 hours</item>
+        <item>
+            No set LifeTime
+        </item>
+        <item>3 hours</item>
+        <item>12 hours</item>
         <item>1 day</item>
-        <item>1 week</item>
+        <item>1 month</item>
+        <item>6 months</item>
         <item>1 year</item>
     </string-array>
 

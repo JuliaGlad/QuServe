@@ -38,6 +38,7 @@ public class FinishedQueueCreationFragment extends Fragment {
 
         setupObserves();
 
+        viewModel.delayQueueFinish(view);
         viewModel.getQrCode(queueID);
         initOkayButton();
         initSeeDetails();

@@ -3,12 +3,14 @@ package com.example.myapplication.presentation.queue.createQueue.mainFragment;
 import static com.example.myapplication.presentation.queue.createQueue.arguments.Arguments.queueID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
+import static com.example.myapplication.presentation.utils.Utils.stringsArray;
 
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -18,7 +20,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -36,7 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-;import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -51,6 +52,8 @@ import myapplication.android.ui.recycler.ui.items.items.progressBar.ProgressBarM
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewModel;
 
+;
+
 public class CreateQueueViewModel extends ViewModel {
 
     private String queueName;
@@ -59,7 +62,7 @@ public class CreateQueueViewModel extends ViewModel {
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
-    public void onPageInit(String page) {
+    public void onPageInit(String page,String[] array) {
         switch (page) {
             case PAGE_1:
                 buildList(new DelegateItem[]{
@@ -76,7 +79,11 @@ public class CreateQueueViewModel extends ViewModel {
                         new ProgressBarDelegateItem(new ProgressBarModel(1, 50)),
                         new TextViewDelegateItem(new TextViewModel(2, R.string.set_queue_life_time, 24)),
                         new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
-                            queueTime = stringTime;
+                            for (int i = 0; i < array.length; i++) {
+                                if (array[i].equals(stringTime)) {
+                                    queueTime = stringsArray[i];
+                                }
+                            }
                         }))
                 });
                 break;
@@ -145,7 +152,7 @@ public class CreateQueueViewModel extends ViewModel {
         return DI.uploadBytesToFireStorageUseCase.invoke(queueID, data);
     }
 
-    private void uploadPdfToFireStorage(File file, String queueID){
+    private void uploadPdfToFireStorage(File file, String queueID) {
         DI.uploadFileToFireStorageUseCase.invoke(file, queueID).subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -165,7 +172,7 @@ public class CreateQueueViewModel extends ViewModel {
                 });
     }
 
-    private void generateQrCode(String queueID, Fragment fragment){
+    private void generateQrCode(String queueID, Fragment fragment) {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
@@ -202,7 +209,7 @@ public class CreateQueueViewModel extends ViewModel {
         }
     }
 
-    private void createPdfDocument(Bitmap qrCode, String queueID){
+    private void createPdfDocument(Bitmap qrCode, String queueID) {
         PdfDocument pdfDocument = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(qrCode.getWidth(), qrCode.getHeight(), 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
@@ -214,7 +221,7 @@ public class CreateQueueViewModel extends ViewModel {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
 
-        if (!folder.exists()){
+        if (!folder.exists()) {
             folder.mkdirs();
         }
 

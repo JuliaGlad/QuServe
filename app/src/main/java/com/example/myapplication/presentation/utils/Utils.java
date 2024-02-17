@@ -6,7 +6,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Utils {
+    public static final String QUEUE_ID = "QueueId";
     public static final int FINE_PERMISSION_CODE = 1;
     public static final String JPG = ".jpg";
     public static final String PDF = ".pdf";
@@ -35,6 +39,7 @@ public class Utils {
     public static final String QUEUE_DATA = "QueueData";
     public static final String NOTIFICATION_CHANNEL_ID = "NOTE_ID";
     public static final String NOTIFICATION_CHANNEL_NAME = "Notification channel";
+    public static final String[] stringsArray  = {"NO_SET_LIFE_TIME","3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS","365 DAYS"};
 }
 
 

@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateQueueBinding;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextDelegate;
@@ -46,7 +48,7 @@ public class CreateQueueFragment extends Fragment {
 
         binding = FragmentCreateQueueBinding.inflate(inflater, container, false);
 
-        viewModel.onPageInit(page);
+        viewModel.onPageInit(page, getResources().getStringArray(R.array.lifetime));
         return binding.getRoot();
     }
 

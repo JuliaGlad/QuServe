@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
 import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.MainActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class QueueFragment extends Fragment {
 

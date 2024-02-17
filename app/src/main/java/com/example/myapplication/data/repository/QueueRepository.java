@@ -12,8 +12,12 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPA
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -22,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +46,7 @@ public class QueueRepository {
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();
                             emitter.onSuccess(documents.stream().map(
                                     document -> new QueueDto(
-                                            Arrays.asList(document.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")),
+                                            Collections.singletonList(document.get(QUEUE_PARTICIPANTS_LIST)),
                                             document.getId(),
                                             document.getString(QUEUE_NAME_KEY),
                                             document.getString(QUEUE_LIFE_TIME_KEY),
@@ -60,7 +65,8 @@ public class QueueRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             DocumentSnapshot documents = task.getResult().getDocuments().get(0);
-                            emitter.onSuccess(new QueueDto(new ArrayList<>(Arrays.asList(documents.get(QUEUE_PARTICIPANTS_LIST).toString())),
+                            emitter.onSuccess(new QueueDto(
+                                    Collections.singletonList(documents.get(QUEUE_PARTICIPANTS_LIST).toString()),
                                     documents.getId(),
                                     documents.getString(QUEUE_NAME_KEY),
                                     documents.getString(QUEUE_LIFE_TIME_KEY),
@@ -86,6 +92,11 @@ public class QueueRepository {
                         }
                     });
         });
+    }
+
+    public void finishQueue(String queueId){
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        docRef.delete();
     }
 
     public Completable addContainParticipantIdDocumentsSnapshot(String queueId) {

@@ -19,6 +19,7 @@ import com.example.myapplication.domain.usecase.queue.usecase.AddDocumentSnapSho
 import com.example.myapplication.domain.usecase.queue.usecase.AddContainParticipantIdDocumentSnapshot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddToParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CreateQueueDocumentUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.FinishQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsList;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodeImageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodePdfUseCase;
@@ -31,6 +32,7 @@ import com.example.myapplication.domain.usecase.profile.UpdateUserDataUseCase;
 import com.example.myapplication.domain.usecase.profile.UploadToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByParticipantIdUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByQueueIdUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.GetQueueTimeModelUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.NextParticipantUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.RemoveParticipantById;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadBytesToFireStorageUseCase;
@@ -61,6 +63,8 @@ public class DI {
     public static ChangePasswordUseCase changePasswordUseCase = new ChangePasswordUseCase();
 
     //QUEUE USECASE
+    public static GetQueueTimeModelUseCase getQueueTimeModelUseCase = new GetQueueTimeModelUseCase();
+    public static FinishQueueUseCase finishQueueUseCase = new FinishQueueUseCase();
     public static GetQueueByAuthorUseCase getQueueByAuthorUseCase = new GetQueueByAuthorUseCase();
     public static GetQueueByQueueIdUseCase getQueueByQueueIdUseCase = new GetQueueByQueueIdUseCase();
     public static CreateQueueDocumentUseCase createQueueDocumentUseCase = new CreateQueueDocumentUseCase();
