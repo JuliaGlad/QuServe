@@ -3,24 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/queue_details_navigation"
-    app:startDestination="@id/queueDetailsFragment">
+    app:startDestination="@id/detailsQueueFragment">
 
     <fragment
-        android:id="@+id/queueDetailsFragment"
+        android:id="@+id/detailsQueueFragment"
         android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
         android:label="fragment_queue_details"
-        tools:layout="@layout/fragment_queue_details" >
+        tools:layout="@layout/fragment_queue_details">
         <action
             android:id="@+id/action_queueDetailsFragment_to_participantsListFragment"
+            android:defaultValue="@null"
             app:destination="@id/participantsListFragment" />
+        <action
+            android:id="@+id/action_queueDetailsFragment_to_pausedQueueFragment"
+            android:defaultValue="@null"
+            app:destination="@id/pausedQueueFragment"
+            app:nullable="true"/>
+
+<!--        <argument-->
+<!--            android:name="time"-->
+<!--            app:argType="integer" />-->
+
     </fragment>
+
     <fragment
         android:id="@+id/participantsListFragment"
         android:name="com.example.myapplication.presentation.queue.participantList.ParticipantsListFragment"
         android:label="fragment_participants_list"
-        tools:layout="@layout/fragment_participants_list" >
+        tools:layout="@layout/fragment_participants_list">
         <action
             android:id="@+id/action_participantsListFragment_to_queueDetailsFragment"
+            app:destination="@id/queueDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pausedQueueFragment"
+        android:name="com.example.myapplication.presentation.queue.queueDetails.pausedQueueFragment.PausedQueueFragment"
+        android:label="fragment_paused_queue"
+        tools:layout="@layout/fragment_paused_queue">
+        <action
+            android:id="@+id/action_pausedQueueFragment_to_queueDetailsFragment"
             app:destination="@id/queueDetailsFragment" />
     </fragment>
 </navigation>

@@ -18,6 +18,7 @@ import com.example.myapplication.presentation.queue.waitingFragment.fragment.rec
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegateItem;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemModel;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ import java.util.List;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -35,7 +37,7 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 
 public class WaitingViewModel extends ViewModel {
 
-    private String queueID;
+    private String queueId;
 
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
@@ -47,7 +49,7 @@ public class WaitingViewModel extends ViewModel {
         buildList(new DelegateItem[]{
                 new StringTextViewDelegateItem(new StringTextViewModel(1, queueName, 28, View.TEXT_ALIGNMENT_CENTER)),
                 new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, list, fragment.getString(R.string.estimated_waiting_time), time, true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, list, fragment.getString(R.string.people_before_you), queueLength, true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, list, fragment.getString(R.string.people_before_you), String.valueOf(Integer.parseInt(queueLength) - 1), true, EDIT_PEOPLE_BEFORE_YOU)),
                 new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, list, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> {
                     _showLeaveDialog.postValue(true);
@@ -56,7 +58,7 @@ public class WaitingViewModel extends ViewModel {
     }
 
     public Completable leaveQueue() {
-        return DI.removeParticipantById.invoke(queueID);
+        return DI.removeParticipantById.invoke(queueId);
     }
 
     public void getQueue(Fragment fragment) {
@@ -72,12 +74,56 @@ public class WaitingViewModel extends ViewModel {
                     public void onSuccess(@NonNull QueueModel queueModel) {
                         List<String> participants = Arrays.asList(queueModel.getParticipants().toString().split(","));
                         initRecycler(queueModel.getId(), participants, queueModel.getName(), "12 minutes", String.valueOf(participants.size()), fragment);
-                        queueID = queueModel.getId();
+                        queueId = queueModel.getId();
+                        addServedSnapshot(fragment);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.e("Exception", e.toString());
+                    }
+                });
+    }
+    
+    public void addServedSnapshot(Fragment fragment){
+        DI.addSnapshotUseCase.invoke(queueId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<DocumentSnapshot>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull DocumentSnapshot snapshot) {
+                        DI.onParticipantServedUseCase.invoke(snapshot)
+                                .subscribeOn(Schedulers.io())
+                                .subscribe(new CompletableObserver() {
+                                    @Override
+                                    public void onSubscribe(@NonNull Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                        fragment.requireActivity().finish();
+                                    }
+
+                                    @Override
+                                    public void onError(@NonNull Throwable e) {
+
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
     }

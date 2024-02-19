@@ -122,6 +122,22 @@
     <string name="tips_description">Enjoy your time waiting in the queue and our app will always inform when your turn is near </string>
     <string name="leave">Leave</string>
     <string name="are_you_sure_you_want_to_leave_the_queue">Are you sure you want to leave the queue?</string>
+    <string name="are_you_sure_you_want_to_finish_queue">Are you sure you want to finish queue?</string>
+    <string name="you_won_t_be_able_to_undo_this_action">You won`t be able to undo this action</string>
+    <string name="finish">Finish</string>
+    <string name="choose_time">Choose time:</string>
+    <string name="set_on_pause">Pause</string>
+    <string name="your_queue_has_been_paused">Your queue has been paused!</string>
+    <string name="have_a_little_rest_and_then_come_back">Have a little rest and then come back!</string>
+    <string name="stop">Stop</string>
+    <string name="are_you_sure_you_want_to_stop_pause_and_go_back_to_work">Are you sure you want to go back to work?</string>
+    <string name="next_pause_will_be_available_only_in_2_hours">Next pause will be available only in 2 hours!</string>
+    <string name="stop_pause">Stop pause</string>
+    <string name="paused">Paused</string>
+    <string name="queue_paused_content_text">Queue was paused for </string>
+    <string name="no_internet_connection">No internet connection!</string>
+    <string name="check_your_network_and_try_again">Check your network and try again!</string>
+    <string name="retry">Retry</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>

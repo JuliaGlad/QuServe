@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.queue.waitingFragment.fragment.WaitingActivity">
 
-
     <fragment
         android:id="@+id/waitingFragment"
         android:name="com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingFragment"

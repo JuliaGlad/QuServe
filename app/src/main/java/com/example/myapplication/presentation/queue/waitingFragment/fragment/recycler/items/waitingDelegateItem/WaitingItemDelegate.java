@@ -46,7 +46,6 @@ public class WaitingItemDelegate implements AdapterDelegate {
         }
 
         void bind(WaitingItemModel model) {
-
             binding.header.setText(model.headerText);
             binding.description.setText(model.descriptionText);
 

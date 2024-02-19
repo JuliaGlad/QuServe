@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -14,6 +15,8 @@ import com.example.myapplication.presentation.profile.historyProfile.HistoryActi
 import com.example.myapplication.presentation.queue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationBroadcastReceiver;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
         }
+
     }
 
     @Override
@@ -66,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         recreate();
     }
 
+    public void startNotificationForegroundService(){
+        Intent intent = new Intent(this, NotificationForegroundService.class);
+        startService(intent);
+    }
 
     public void openEditActivity() {
         Intent intent = new Intent(this, EditProfileActivity.class);

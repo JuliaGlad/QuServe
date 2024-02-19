@@ -1,6 +1,9 @@
 package com.example.myapplication.presentation.queue.main;
 
+import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +22,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
 import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.MainActivity;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -43,7 +48,6 @@ public class QueueFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initCreateButton();
         initEnterButton();
         initLauncher();

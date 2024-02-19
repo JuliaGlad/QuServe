@@ -5,7 +5,7 @@ import com.example.myapplication.DI;
 import io.reactivex.rxjava3.core.Completable;
 
 public class NextParticipantUseCase {
-    public void invoke(String queueID, String name){
-         DI.queueRepository.nextParticipant(queueID, name);
+    public Completable invoke(String queueID, String name){
+        return DI.queueRepository.nextParticipantUpdateList(queueID, name);
     }
 }

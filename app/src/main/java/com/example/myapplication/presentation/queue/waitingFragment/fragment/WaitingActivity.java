@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.utils.NotificationForegroundService;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 public class WaitingActivity extends AppCompatActivity {
 

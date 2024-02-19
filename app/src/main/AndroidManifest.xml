@@ -66,13 +66,17 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
 
-        <service android:name=".presentation.utils.NotificationForegroundService"/>
-        <receiver android:name=".presentation.utils.BroadcastReceiver"
+        <service android:name=".presentation.utils.queuePausedNotification.NotificationQueuePaused"/>
+        <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork"/>
+        <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService"/>
+        <service android:name=".presentation.utils.youtTurnNotification.YourTurnForegroundService"/>
+        <receiver android:name=".presentation.utils.waitingNotification.NotificationBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

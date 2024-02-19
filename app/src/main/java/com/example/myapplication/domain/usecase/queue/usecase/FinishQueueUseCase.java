@@ -5,7 +5,7 @@ import com.example.myapplication.DI;
 import io.reactivex.rxjava3.core.Completable;
 
 public class FinishQueueUseCase {
-    public void invoke(String queueId){
-        DI.queueRepository.finishQueue(queueId);
+    public Completable invoke(String queueId){
+        return DI.queueRepository.finishQueue(queueId);
     }
 }

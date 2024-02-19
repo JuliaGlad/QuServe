@@ -2,10 +2,13 @@ package com.example.myapplication.presentation.profile.loggedProfile;
 
 import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.ImageModel;
@@ -28,7 +31,7 @@ public class ProfileLoggedViewModel extends ViewModel {
     private final MutableLiveData<String> _userEmail = new MutableLiveData<>();
     LiveData<String> userEmail = _userEmail;
 
-    public void retrieveUserNameData() {
+    public void retrieveUserNameData(Fragment fragment) {
         DI.getUserEmailAndPasswordDataUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<UserEmailAndNameModel>() {
@@ -45,7 +48,7 @@ public class ProfileLoggedViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        NavHostFragment.findNavController(fragment);
                     }
                 });
     }

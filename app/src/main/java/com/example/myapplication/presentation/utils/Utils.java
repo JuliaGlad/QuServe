@@ -1,14 +1,5 @@
 package com.example.myapplication.presentation.utils;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Utils {
     public static final String QUEUE_ID = "QueueId";
     public static final int FINE_PERMISSION_CODE = 1;
@@ -22,6 +13,7 @@ public class Utils {
     public static final String QUEUE_PARTICIPANTS_LIST = "ParticipantsList";
     public static final String QUEUE_NAME_KEY = "QueueName";
     public static final String QUEUE_LIFE_TIME_KEY = "QueueLifeTime";
+    public static final String QUEUE_IN_PROGRESS = "InProgress";
     public static final String PAGE_KEY = "Page";
     public static final String QUEUE_LOCATION_KEY = "QueueLocation";
     public static final String USER_LIST = "UsersList";
@@ -34,11 +26,15 @@ public class Utils {
     public static final String FEMALE_KEY = "Female";
     public static final String PAGE_1 = "PAGE_1";
     public static final String PAGE_2 = "PAGE_2";
+    public static final String PAUSED_TIME = "Time on Pause";
     public static final String EDIT_ESTIMATED_TIME = "Edit estimated time";
     public static final String EDIT_PEOPLE_BEFORE_YOU = "Edit people before you";
     public static final String QUEUE_DATA = "QueueData";
     public static final String NOTIFICATION_CHANNEL_ID = "NOTE_ID";
     public static final String NOTIFICATION_CHANNEL_NAME = "Notification channel";
+    public static final String YOUR_TURN_CHANNEL_ID = "YOUR_TURN_ID";
+    public static final String YOUR_TURN_CHANNEL_NAME = "Your turn";
+    public static final String PAUSED = "Paused";
     public static final String[] stringsArray  = {"NO_SET_LIFE_TIME","3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS","365 DAYS"};
 }
 

@@ -4,8 +4,8 @@ import com.example.myapplication.DI;
 
 import io.reactivex.rxjava3.core.Completable;
 
-public class AddContainParticipantIdDocumentSnapshot {
+public class ContinueQueueUseCase {
     public Completable invoke(String queueId){
-        return DI.queueRepository.addContainParticipantIdDocumentsSnapshot(queueId);
+        return DI.queueRepository.continueQueue(queueId);
     }
 }

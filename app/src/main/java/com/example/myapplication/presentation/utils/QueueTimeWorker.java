@@ -3,6 +3,8 @@ package com.example.myapplication.presentation.utils;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.content.Context;
+import android.icu.number.Scale;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -10,6 +12,10 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.myapplication.DI;
+
+import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class QueueTimeWorker extends Worker {
 
@@ -21,7 +27,24 @@ public class QueueTimeWorker extends Worker {
     @Override
     public Result doWork() {
         Data data = getInputData();
-        DI.finishQueueUseCase.invoke(data.getString(QUEUE_ID));
+        DI.finishQueueUseCase.invoke(data.getString(QUEUE_ID))
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
         return Result.success();
     }
 }

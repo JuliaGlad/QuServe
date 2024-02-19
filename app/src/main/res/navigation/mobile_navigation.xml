@@ -100,13 +100,6 @@
             app:destination="@id/createQueueFragment" />
     </fragment>
 
-    <!--    <fragment-->
-<!--        android:id="@+id/waitingRoomFragment"-->
-<!--        android:name="com.example.myapplication.presentation.queue.waitingRoom.WaitingRoomFragment"-->
-<!--        android:label="waiting room"-->
-<!--        tools:layout="@layout/fragment_waiting_room">-->
-
-<!--    </fragment>-->
     <fragment
         android:id="@+id/queueDetailsFragment"
         android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"

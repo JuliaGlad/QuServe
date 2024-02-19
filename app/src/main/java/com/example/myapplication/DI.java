@@ -16,8 +16,11 @@ import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase
 import com.example.myapplication.domain.usecase.profile.UpdateEmailFieldUseCase;
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddDocumentSnapShot;
-import com.example.myapplication.domain.usecase.queue.usecase.AddContainParticipantIdDocumentSnapshot;
+import com.example.myapplication.domain.usecase.queue.usecase.OnContainParticipantUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.OnPausedUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.onParticipantServedUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddToParticipantsListUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.ContinueQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CreateQueueDocumentUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.FinishQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsList;
@@ -34,9 +37,12 @@ import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByParticip
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByQueueIdUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueTimeModelUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.NextParticipantUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.PauseQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.RemoveParticipantById;
+import com.example.myapplication.domain.usecase.queue.usecase.UpdateInProgressUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadBytesToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadFileToFireStorageUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.AddSnapshotUseCase;
 
 public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
@@ -63,6 +69,12 @@ public class DI {
     public static ChangePasswordUseCase changePasswordUseCase = new ChangePasswordUseCase();
 
     //QUEUE USECASE
+    public static OnPausedUseCase onPausedUseCase = new OnPausedUseCase();
+    public static AddSnapshotUseCase addSnapshotUseCase = new AddSnapshotUseCase();
+    public static ContinueQueueUseCase continueQueueUseCase = new ContinueQueueUseCase();
+    public static PauseQueueUseCase pauseQueueUseCase = new PauseQueueUseCase();
+    public static onParticipantServedUseCase onParticipantServedUseCase = new onParticipantServedUseCase();
+    public static UpdateInProgressUseCase updateInProgressUseCase = new UpdateInProgressUseCase();
     public static GetQueueTimeModelUseCase getQueueTimeModelUseCase = new GetQueueTimeModelUseCase();
     public static FinishQueueUseCase finishQueueUseCase = new FinishQueueUseCase();
     public static GetQueueByAuthorUseCase getQueueByAuthorUseCase = new GetQueueByAuthorUseCase();
@@ -80,5 +92,5 @@ public class DI {
     public static GetQueueByParticipantIdUseCase getQueueByParticipantIdUseCase = new GetQueueByParticipantIdUseCase();
     public static NextParticipantUseCase nextParticipantUseCase = new NextParticipantUseCase();
     public static RemoveParticipantById removeParticipantById = new RemoveParticipantById();
-    public static AddContainParticipantIdDocumentSnapshot addContainParticipantIdDocumentSnapshot = new AddContainParticipantIdDocumentSnapshot();
+    public static OnContainParticipantUseCase onContainParticipantUseCase = new OnContainParticipantUseCase();
 }

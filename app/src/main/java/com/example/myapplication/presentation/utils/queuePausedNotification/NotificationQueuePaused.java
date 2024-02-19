@@ -1,0 +1,119 @@
+package com.example.myapplication.presentation.utils.queuePausedNotification;
+
+import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
+import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
+
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Build;
+import android.os.IBinder;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+
+import com.example.myapplication.DI;
+import com.example.myapplication.R;
+import com.example.myapplication.domain.model.QueueModel;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class NotificationQueuePaused extends Service {
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        setupNotification();
+        getQueue();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private void setupNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentText(getString(R.string.queue_paused_content_text))
+                .setContentTitle(getString(R.string.paused))
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        createNotificationChannel(builder);
+    }
+
+    private void createNotificationChannel(NotificationCompat.Builder builder) {
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            Notification notification = builder.build();
+            startForeground(2, notification);
+        }
+    }
+
+    private void getQueue(){
+        DI.getQueueByParticipantIdUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<QueueModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull QueueModel queueModel) {
+                       addSnapshot(queueModel.getId());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+
+    }
+
+    private void addSnapshot(String queueId){
+        DI.addSnapshotUseCase.invoke(queueId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<DocumentSnapshot>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull DocumentSnapshot snapshot) {
+                        if (DI.onPausedUseCase.invoke(snapshot)){
+                            stopForeground(true);
+                            stopSelf();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+}

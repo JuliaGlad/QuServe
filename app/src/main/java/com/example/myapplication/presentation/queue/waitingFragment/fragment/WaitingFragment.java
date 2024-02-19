@@ -2,12 +2,7 @@ package com.example.myapplication.presentation.queue.waitingFragment.fragment;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +11,14 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWaitingBinding;
-import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegate;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegate;
-import com.example.myapplication.presentation.utils.NotificationForegroundService;
-
-import java.io.IOException;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -38,7 +29,6 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 public class WaitingFragment extends Fragment {
 
     private WaitingViewModel viewModel;
-    private NotificationForegroundService service;
     private FragmentWaitingBinding binding;
     private MainAdapter mainAdapter = new MainAdapter();
 
