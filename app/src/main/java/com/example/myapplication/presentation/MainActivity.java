@@ -4,9 +4,13 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
@@ -15,14 +19,11 @@ import com.example.myapplication.presentation.profile.historyProfile.HistoryActi
 import com.example.myapplication.presentation.queue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
-import com.example.myapplication.presentation.utils.waitingNotification.NotificationBroadcastReceiver;
-import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -44,10 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
+
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
 
         if (navHostFragment != null) {
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+            NavController navController = navHostFragment.getNavController();
 
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
@@ -68,11 +70,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
-    }
-
-    public void startNotificationForegroundService(){
-        Intent intent = new Intent(this, NotificationForegroundService.class);
-        startService(intent);
     }
 
     public void openEditActivity() {

@@ -10,7 +10,6 @@ import android.graphics.pdf.PdfDocument;
 import android.os.Environment;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -135,6 +134,7 @@ public class CreateQueueViewModel extends ViewModel {
 
     private void createQueueDocument(String queueID) {
         DI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime);
+        DI.updateOwnQueueUseCase.invoke(true);
     }
 
     private String generateID() {

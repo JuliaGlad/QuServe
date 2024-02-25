@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityQueueDetailsBinding;
 import com.example.myapplication.presentation.utils.backToWorkNotification.NotificationGoBackToWork;
+import com.example.myapplication.presentation.utils.countdownTimer.TimerService;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 public class QueueDetailsActivity extends AppCompatActivity {
@@ -40,4 +41,17 @@ public class QueueDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NotificationGoBackToWork.class);
         startService(intent);
     }
+
+    public void startTimerForegroundService(long time, String timeLeft, String queueId){
+        Intent intent = new Intent(this, TimerService.class);
+        intent.putExtra("TIME_MILLIS", time);
+        intent.putExtra("QUEUE_ID", queueId);
+        intent.putExtra("TIME_LEFT", timeLeft);
+        startService(intent);
+    }
+
+    public void stopServiceForeground(){
+        stopService(new Intent(this, TimerService.class));
+    }
+
 }

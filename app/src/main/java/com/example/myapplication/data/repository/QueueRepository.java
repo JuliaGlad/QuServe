@@ -2,7 +2,9 @@ package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
+import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
+import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
@@ -12,9 +14,12 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -23,19 +28,23 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableEmitter;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class QueueRepository {
+
+    public void updateTimePassed(String queueId, int previous, int passed){
+        if (passed != 0) {
+            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+            docRef.update(MID_TIME_WAITING, String.valueOf((previous + 30) / passed));
+        }
+    }
 
     public Single<List<QueueDto>> getQueuesList() {
         return Single.create(emitter -> {
@@ -45,31 +54,15 @@ public class QueueRepository {
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();
                             emitter.onSuccess(documents.stream().map(
                                     document -> new QueueDto(
-                                            Collections.singletonList(document.get(QUEUE_PARTICIPANTS_LIST)),
+                                            (List<Object>) document.get(QUEUE_PARTICIPANTS_LIST),
                                             document.getId(),
                                             document.getString(QUEUE_NAME_KEY),
                                             document.getString(QUEUE_LIFE_TIME_KEY),
-                                            document.getString(QUEUE_AUTHOR_KEY))
+                                            document.getString(QUEUE_AUTHOR_KEY),
+                                            document.getString(QUEUE_IN_PROGRESS),
+                                            document.getString(PEOPLE_PASSED),
+                                            document.getString(MID_TIME_WAITING))
                             ).collect(Collectors.toList()));
-                        }
-                    });
-        });
-    }
-
-    public Single<QueueDto> getParticipantsList() {
-        return Single.create(emitter -> {
-            service.fireStore.collection(QUEUE_LIST)
-                    .whereArrayContains(QUEUE_PARTICIPANTS_LIST, service.auth.getCurrentUser().getUid())
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot documents = task.getResult().getDocuments().get(0);
-                            emitter.onSuccess(new QueueDto(
-                                    Collections.singletonList(documents.get(QUEUE_PARTICIPANTS_LIST).toString()),
-                                    documents.getId(),
-                                    documents.getString(QUEUE_NAME_KEY),
-                                    documents.getString(QUEUE_LIFE_TIME_KEY),
-                                    documents.getString(QUEUE_AUTHOR_KEY)));
                         }
                     });
         });
@@ -95,23 +88,6 @@ public class QueueRepository {
         });
     }
 
-    public Observable<String> ifPaused(DocumentSnapshot value) {
-        return Observable.create(emitter -> {
-            emitter.onNext(getTime(value));
-        });
-    }
-
-    public Completable notPaused() {
-        return Completable.create(CompletableEmitter::onComplete);
-    }
-
-    private String getTime(DocumentSnapshot value) {
-        String progress = value.getString(QUEUE_IN_PROGRESS);
-        int index = progress.indexOf("_");
-        String time = progress.substring(0, index);
-        return time;
-    }
-
     public Completable pauseQueue(String queueId, String time) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
@@ -134,9 +110,10 @@ public class QueueRepository {
         });
     }
 
-    public void updateInProgress(String queueId, String name) {
+    public void updateInProgress(String queueId, String name, int peoplePassed) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         docRef.update(QUEUE_IN_PROGRESS, name);
+        docRef.update(PEOPLE_PASSED, String.valueOf(peoplePassed + 1));
     }
 
     public Completable removeParticipantById(String queueId) {
@@ -160,6 +137,10 @@ public class QueueRepository {
                 }
             });
         });
+    }
+
+    public void deleteQrCode(String queueId){
+        service.storageReference.child(QR_CODES).child(queueId).delete();
     }
 
     public Completable onParticipantServed(DocumentSnapshot value){
@@ -186,6 +167,28 @@ public class QueueRepository {
         });
     }
 
+    public Observable<Integer> addPeopleBeforeDocumentSnapshot(String queueId, int previousSize) {
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        return Observable.create(emitter -> {
+            docRef.addSnapshotListener((value, error) -> {
+                List<String> peopleBeforeYou;
+                int size = 0;
+                if (value != null) {
+                    peopleBeforeYou = (List<String>) value.get(QUEUE_PARTICIPANTS_LIST);
+                    for (int i = 0; i < peopleBeforeYou.size(); i++) {
+                        if (peopleBeforeYou.get(i).equals(service.auth.getCurrentUser().getUid())) {
+                            size = i;
+                            break;
+                        }
+                    }
+                    if (size < previousSize) {
+                        emitter.onNext(size);
+                    }
+                }
+            });
+        });
+    }
+
     public void createQrCodeDocument(String queueID, String queueName, String queueTime) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
         ArrayList<String> arrayList = new ArrayList<>();
@@ -196,7 +199,9 @@ public class QueueRepository {
         userQueue.put(QUEUE_NAME_KEY, queueName);
         userQueue.put(QUEUE_LIFE_TIME_KEY, queueTime);
         userQueue.put(QUEUE_PARTICIPANTS_LIST, arrayList);
-        userQueue.put(QUEUE_IN_PROGRESS, null);
+        userQueue.put(QUEUE_IN_PROGRESS, "No one");
+        userQueue.put(PEOPLE_PASSED, "0");
+        userQueue.put(MID_TIME_WAITING, "0");
 
         docRef.set(userQueue);
     }

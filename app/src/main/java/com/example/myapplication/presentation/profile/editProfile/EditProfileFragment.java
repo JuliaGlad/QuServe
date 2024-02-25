@@ -112,7 +112,7 @@ public class EditProfileFragment extends Fragment {
             }
 
             viewModel.showProgress(true);
-            viewModel.saveData(newUserName, newPhoneNumber, email, gender, imageUri, this);
+            viewModel.saveData(newUserName, newPhoneNumber, gender, imageUri, this);
         });
     }
     private void setupObserves(){

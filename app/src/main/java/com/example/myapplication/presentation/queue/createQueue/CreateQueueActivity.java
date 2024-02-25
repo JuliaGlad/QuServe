@@ -6,10 +6,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityCreateQueueBinding;
+import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
 
 public class CreateQueueActivity extends AppCompatActivity {
 
@@ -31,5 +33,10 @@ public class CreateQueueActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController);
             NavigationUI.setupWithNavController(binding.toolbarCreateQueue, navController);
         }
+    }
+
+    public void openQueueDetailsActivity(){
+        Intent intent = new Intent(this, QueueDetailsActivity.class);
+        startActivity(intent);
     }
 }

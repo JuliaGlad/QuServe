@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +50,13 @@ public class ParticipantsListFragment extends Fragment {
 
     private void initNextParticipantButton() {
         binding.nextButton.setOnClickListener(v -> {
-            viewModel.nextParticipant();
+            viewModel.nextParticipant(getView());
         });
     }
 
     private void initBackButton() {
         binding.imageButtonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).navigate(R.id.action_participantsListFragment_to_queueDetailsFragment);
+            NavHostFragment.findNavController(this).navigate(R.id.action_participantsListFragment_to_detailsQueueFragment);
         });
     }
 

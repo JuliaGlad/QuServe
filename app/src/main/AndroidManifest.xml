@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -70,13 +71,14 @@
         <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork"/>
         <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService"/>
         <service android:name=".presentation.utils.youtTurnNotification.YourTurnForegroundService"/>
+        <service android:name=".presentation.utils.countdownTimer.TimerService"/>
+
         <receiver android:name=".presentation.utils.waitingNotification.NotificationBroadcastReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

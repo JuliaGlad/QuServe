@@ -3,32 +3,42 @@ package com.example.myapplication.data.repository;
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
+import static com.example.myapplication.presentation.utils.Utils.OWN_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
+import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
 
-    public boolean checkUserId(){
-       return service.auth.getCurrentUser() == null;
+    public boolean checkUserId() {
+        return service.auth.getCurrentUser() == null;
     }
 
     public Completable signInAnonymously() {
@@ -36,6 +46,17 @@ public class ProfileRepository {
             service.auth.signInAnonymously().addOnCompleteListener(task -> {
                 emitter.onComplete();
             });
+        });
+    }
+
+    public Observable<DocumentSnapshot> addSnapshot() {
+        return Observable.create(emitter -> {
+            service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid())
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null) {
+                            emitter.onNext(value);
+                        }
+                    });
         });
     }
 
@@ -94,6 +115,16 @@ public class ProfileRepository {
         });
     }
 
+    public void updateOwnQueue(boolean value){
+        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+        docRef.update(OWN_QUEUE, value);
+    }
+
+    public void updateParticipateInQueue(boolean value){
+        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+        docRef.update(PARTICIPATE_IN_QUEUE, value);
+    }
+
     public Completable createAccount(String email, String password, String userName, String phoneNumber) {
         return Completable.create(emitter -> {
             service.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
@@ -103,6 +134,8 @@ public class ProfileRepository {
                             .document(service.auth.getCurrentUser().getUid());
 
                     Map<String, Object> user = new HashMap<>();
+                    user.put(OWN_QUEUE, false);
+                    user.put(PARTICIPATE_IN_QUEUE, false);
                     user.put(USER_NAME_KEY, userName);
                     user.put(PHONE_NUMBER_KEY, phoneNumber);
                     user.put(EMAIL_KEY, email);
@@ -133,14 +166,15 @@ public class ProfileRepository {
         });
     }
 
-    public Completable updateUserData(String newUserName, String newUserEmail, String newUserPhone, String newUserGender) {
+    public Completable updateUserData(String newUserName, String newUserPhone, String newUserGender) {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+            FieldValue timestamp = FieldValue.serverTimestamp();
             docRef.update(
+                    PROFILE_UPDATED_AT, timestamp,
                     USER_NAME_KEY, newUserName,
                     GENDER_KEY, newUserGender,
-                    PHONE_NUMBER_KEY, newUserPhone,
-                    EMAIL_KEY, newUserEmail).addOnCompleteListener(task -> emitter.onComplete());
+                    PHONE_NUMBER_KEY, newUserPhone).addOnCompleteListener(task -> emitter.onComplete());
         });
     }
 
@@ -157,7 +191,7 @@ public class ProfileRepository {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
                     emitter.onSuccess(new UserDto(value.getString(USER_NAME_KEY), value.getString(GENDER_KEY),
-                            value.getString(PHONE_NUMBER_KEY), value.getString(EMAIL_KEY)));
+                            value.getString(PHONE_NUMBER_KEY), value.getString(EMAIL_KEY), Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)), Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE))));
                 }
             });
         });

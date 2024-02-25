@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewWaitingItemBinding;
 import com.example.myapplication.domain.model.QueueSizeModel;
 
@@ -50,17 +49,18 @@ public class WaitingItemDelegate implements AdapterDelegate {
             binding.description.setText(model.descriptionText);
 
             if (model.editable && model.flag.equals(EDIT_PEOPLE_BEFORE_YOU)) {
-                DI.addDocumentSnapShot.invoke(model.queueID)
+                DI.addPeopleBeforeYouSnapshot.invoke(model.queueID, model.size)
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new Observer<QueueSizeModel>() {
+                        .subscribe(new Observer<Integer>() {
                             @Override
                             public void onSubscribe(@NonNull Disposable d) {
 
                             }
 
                             @Override
-                            public void onNext(@NonNull QueueSizeModel queueSizeModel) {
-                                binding.description.setText(String.valueOf(queueSizeModel.getSize()));
+                            public void onNext(@NonNull Integer integer) {
+                                binding.description.setText(String.valueOf(integer));
+                                model.size -= 1;
                             }
 
                             @Override

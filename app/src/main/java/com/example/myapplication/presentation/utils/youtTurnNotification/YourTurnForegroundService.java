@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANN
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
@@ -12,11 +13,19 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.work.Constraints;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.QueueModel;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
+import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -51,7 +60,7 @@ public class YourTurnForegroundService extends Service {
 
                     @Override
                     public void onSuccess(@NonNull QueueModel queueModel) {
-                        DI.addSnapshotUseCase.invoke(queueModel.getId())
+                        DI.addSnapshotQueueUseCase.invoke(queueModel.getId())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe(new Observer<DocumentSnapshot>() {
                                     @Override
@@ -103,11 +112,16 @@ public class YourTurnForegroundService extends Service {
     }
 
     private void setupNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), YOUR_TURN_CHANNEL_ID)
+
+        Intent intent = new Intent(this, WaitingActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, YOUR_TURN_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentTitle("It`s your turn now")
                 .setContentText("Come to the service point")
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         createNotificationChannel(builder);
     }
@@ -121,4 +135,34 @@ public class YourTurnForegroundService extends Service {
             startForeground(1, builder.build());
         }
     }
+
+    private void initNotificationWorker() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresDeviceIdle(false)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(HideNotificationWorker.class)
+                .setConstraints(constraints)
+                .setInitialDelay(5, TimeUnit.MINUTES)
+                .addTag("StopPause")
+                .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(request);
+    }
+
+    private void initPauseAvailableWorker() {
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresDeviceIdle(false)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
+                .setConstraints(constraints)
+                .setInitialDelay(2, TimeUnit.HOURS)
+                .addTag("PauseAvailable")
+                .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(request);
+    }
+
 }

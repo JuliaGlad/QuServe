@@ -31,7 +31,7 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 public class ParticipantsListViewModel extends ViewModel {
 
     private int participantsSize;
-
+    private int peoplePassed;
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> item = _items;
     private final List<DelegateItem> itemsList = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ParticipantsListViewModel extends ViewModel {
     }
 
     public void getParticipantsList(Fragment fragment) {
-        DI.getParticipantsList.invoke()
+        DI.getParticipantsListUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueParticipantsListModel>() {
                     @Override
@@ -67,8 +67,11 @@ public class ParticipantsListViewModel extends ViewModel {
                         } else {
                             participantsSize = queueParticipantsListModel.getParticipants().size();
                         }
+
+                        peoplePassed = 0;
+
                         initRecyclerView(fragment);
-                        addDocumentSnapshot(fragment, queueParticipantsListModel.getId());
+                        addQueueSizeModelSnapshot(fragment, queueParticipantsListModel.getId());
                     }
 
                     @Override
@@ -79,8 +82,8 @@ public class ParticipantsListViewModel extends ViewModel {
 
     }
 
-    public void addDocumentSnapshot(Fragment fragment, String queueID) {
-        DI.addDocumentSnapShot.invoke(queueID)
+    public void addQueueSizeModelSnapshot(Fragment fragment, String queueID) {
+        DI.addQueueSizeModelSnapShot.invoke(queueID)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {
                     @Override
@@ -120,8 +123,8 @@ public class ParticipantsListViewModel extends ViewModel {
 
     }
 
-    public void nextParticipant() {
-        DI.getParticipantsList.invoke()
+    public void nextParticipant(View view) {
+        DI.getParticipantsListUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueParticipantsListModel>() {
                     @Override
@@ -131,6 +134,7 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
+
                         String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
                         DI.nextParticipantUseCase.invoke(queueParticipantsListModel.getId(), name)
                                 .subscribeOn(Schedulers.io())
@@ -142,7 +146,8 @@ public class ParticipantsListViewModel extends ViewModel {
 
                                     @Override
                                     public void onComplete() {
-                                        DI.updateInProgressUseCase.invoke(queueParticipantsListModel.getId(), name);
+                                        DI.updateInProgressUseCase.invoke(queueParticipantsListModel.getId(), name, peoplePassed);
+                                        peoplePassed += 1;
                                     }
 
                                     @Override

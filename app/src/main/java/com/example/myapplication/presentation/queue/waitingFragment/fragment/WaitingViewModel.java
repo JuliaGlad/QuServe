@@ -38,6 +38,8 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 public class WaitingViewModel extends ViewModel {
 
     private String queueId;
+    private int midTime = 0;
+    private int peopleBeforeSize = 0;
 
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
@@ -45,12 +47,12 @@ public class WaitingViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _showLeaveDialog = new MutableLiveData<>();
     public LiveData<Boolean> showLeaveDialog = _showLeaveDialog;
 
-    private void initRecycler(String queueId, List<String> list, String queueName, String time, String queueLength, Fragment fragment) {
+    private void initRecycler(String queueId, String queueName, Fragment fragment) {
         buildList(new DelegateItem[]{
                 new StringTextViewDelegateItem(new StringTextViewModel(1, queueName, 28, View.TEXT_ALIGNMENT_CENTER)),
-                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, list, fragment.getString(R.string.estimated_waiting_time), time, true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, list, fragment.getString(R.string.people_before_you), String.valueOf(Integer.parseInt(queueLength) - 1), true, EDIT_PEOPLE_BEFORE_YOU)),
-                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, list, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), false, null)),
+                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, fragment.getString(R.string.estimated_waiting_time), String.valueOf(midTime), true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, fragment.getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> {
                     _showLeaveDialog.postValue(true);
                 }))
@@ -72,8 +74,16 @@ public class WaitingViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueModel queueModel) {
-                        List<String> participants = Arrays.asList(queueModel.getParticipants().toString().split(","));
-                        initRecycler(queueModel.getId(), participants, queueModel.getName(), "12 minutes", String.valueOf(participants.size()), fragment);
+                        List<String> participantsList = queueModel.getParticipants();
+
+                        for (int i = 0; i < participantsList.size(); i++) {
+                            if (DI.checkParticipantIndexUseCase.invoke(participantsList, i)){
+                                peopleBeforeSize = i;
+                                midTime = Integer.parseInt(queueModel.getMidTime()) * peopleBeforeSize;
+                                break;
+                            }
+                        }
+                        initRecycler(queueModel.getId(), queueModel.getName(),  fragment);
                         queueId = queueModel.getId();
                         addServedSnapshot(fragment);
                     }
@@ -86,7 +96,7 @@ public class WaitingViewModel extends ViewModel {
     }
     
     public void addServedSnapshot(Fragment fragment){
-        DI.addSnapshotUseCase.invoke(queueId)
+        DI.addSnapshotQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
@@ -131,5 +141,9 @@ public class WaitingViewModel extends ViewModel {
     private void buildList(DelegateItem[] items) {
         List<DelegateItem> list = new ArrayList<>(Arrays.asList(items));
         _items.setValue(list);
+    }
+
+    public void updateParticipateInQueue(){
+        DI.updateParticipateInQueueUseCase.invoke(false);
     }
 }

@@ -81,4 +81,8 @@ public class JoinQueueViewModel extends ViewModel {
         return DI.addToParticipantsListUseCase.invoke(queueID);
     }
 
+    public void updateParticipateInQueue(){
+        DI.updateParticipateInQueueUseCase.invoke(true);
+    }
+
 }

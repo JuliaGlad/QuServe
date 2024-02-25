@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_navigation_queue_to_queueDetailsFragment"
             app:destination="@id/queueDetailsFragment" />
+        <action
+            android:id="@+id/action_navigation_queue_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_navigation_queue_to_createAccount"
+            app:destination="@id/createAccount" />
     </fragment>
 
     <fragment
@@ -105,5 +111,10 @@
         android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
         android:label="fragment_queue_details"
         tools:layout="@layout/fragment_queue_details" />
+    <fragment
+        android:id="@+id/connectionLostFragment"
+        android:name="com.example.myapplication.presentation.utils.connectionLostFragment.ConnectionLostFragment"
+        android:label="fragment_connection_lost"
+        tools:layout="@layout/fragment_connection_lost" />
 
 </navigation>

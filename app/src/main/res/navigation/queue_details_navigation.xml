@@ -17,12 +17,10 @@
         <action
             android:id="@+id/action_queueDetailsFragment_to_pausedQueueFragment"
             android:defaultValue="@null"
+            app:popUpToInclusive="true"
+            app:popUpTo="@+id/detailsQueueFragment"
             app:destination="@id/pausedQueueFragment"
             app:nullable="true"/>
-
-<!--        <argument-->
-<!--            android:name="time"-->
-<!--            app:argType="integer" />-->
 
     </fragment>
 
@@ -32,8 +30,8 @@
         android:label="fragment_participants_list"
         tools:layout="@layout/fragment_participants_list">
         <action
-            android:id="@+id/action_participantsListFragment_to_queueDetailsFragment"
-            app:destination="@id/queueDetailsFragment" />
+            android:id="@+id/action_participantsListFragment_to_detailsQueueFragment"
+            app:destination="@id/detailsQueueFragment" />
     </fragment>
     <fragment
         android:id="@+id/pausedQueueFragment"
@@ -41,7 +39,7 @@
         android:label="fragment_paused_queue"
         tools:layout="@layout/fragment_paused_queue">
         <action
-            android:id="@+id/action_pausedQueueFragment_to_queueDetailsFragment"
-            app:destination="@id/queueDetailsFragment" />
+            android:id="@+id/action_pausedQueueFragment_to_detailsQueueFragment"
+            app:destination="@id/detailsQueueFragment" />
     </fragment>
 </navigation>

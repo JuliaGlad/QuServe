@@ -1,18 +1,17 @@
 package com.example.myapplication.presentation.utils.queuePausedNotification;
 
+import static com.example.myapplication.presentation.utils.Utils.INTENT_TIME_PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -20,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.QueueModel;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -30,8 +30,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationQueuePaused extends Service {
 
+    String time;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        time = intent.getStringExtra(INTENT_TIME_PAUSED);
         setupNotification();
         getQueue();
         return super.onStartCommand(intent, flags, startId);
@@ -44,11 +47,16 @@ public class NotificationQueuePaused extends Service {
     }
 
     private void setupNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID)
+
+        Intent intent = new Intent(this, WaitingActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentText(getString(R.string.queue_paused_content_text))
+                .setContentText(getString(R.string.queue_paused_content_text) + " " + time )
                 .setContentTitle(getString(R.string.paused))
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         createNotificationChannel(builder);
@@ -88,7 +96,7 @@ public class NotificationQueuePaused extends Service {
     }
 
     private void addSnapshot(String queueId){
-        DI.addSnapshotUseCase.invoke(queueId)
+        DI.addSnapshotQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override

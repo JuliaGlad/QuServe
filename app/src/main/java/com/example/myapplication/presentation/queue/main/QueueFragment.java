@@ -1,45 +1,45 @@
 package com.example.myapplication.presentation.queue.main;
 
-import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
-import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.MainActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.myapplication.presentation.profile.profileLogin.ProfileNavigationFragment;
+import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 public class QueueFragment extends Fragment {
-
+    private int peoplePassed = 0;
     private FragmentQueueBinding binding;
+    private boolean isOwnQueue, isParticipateInQueue;
     private QueueViewModel viewModel;
     private ActivityResultLauncher<ScanOptions> launcher;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(QueueViewModel.class);
+
+        viewModel.getQueueData();
+        viewModel.getUserData();
 
         binding = FragmentQueueBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -48,16 +48,14 @@ public class QueueFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setupObserves();
         initCreateButton();
         initEnterButton();
         initLauncher();
 
-        binding.testQueueOwner.setOnClickListener(v -> {
-            ((MainActivity)requireActivity()).openQueueDetailsActivity();
-        });
-
-        binding.testQueueParticipant.setOnClickListener(v ->
-                ((MainActivity)requireActivity()).openQueueWaitingActivity());
+        initQueueOwnerDetailsButton();
+        initQueueParticipantDetailsButton();
     }
 
     @Override
@@ -66,7 +64,32 @@ public class QueueFragment extends Fragment {
         binding = null;
     }
 
-    private void initLauncher(){
+    private void initQueueParticipantDetailsButton() {
+        binding.testQueueParticipant.setOnClickListener(v ->
+                ((MainActivity) requireActivity()).openQueueWaitingActivity());
+    }
+
+    private void initQueueOwnerDetailsButton() {
+        binding.testQueueOwner.setOnClickListener(v -> {
+            ((MainActivity) requireActivity()).openQueueDetailsActivity();
+        });
+    }
+
+    private void showYouNeedToLoginDialog() {
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_you_need_to_register, null);
+        AlertDialog needToLoginQueueDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView).create();
+
+        needToLoginQueueDialog.show();
+
+        Button ok = dialogView.findViewById(R.id.ok_button);
+
+        ok.setOnClickListener(view -> {
+            needToLoginQueueDialog.dismiss();
+        });
+    }
+
+    private void initLauncher() {
         launcher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), JoinQueueActivity.class);
@@ -87,13 +110,76 @@ public class QueueFragment extends Fragment {
 
     private void initEnterButton() {
         binding.buttonEnter.setOnClickListener(v -> {
-            setScanOptions();
+            if (!isParticipateInQueue) {
+                setScanOptions();
+            } else {
+                showAlreadyParticipateDialog();
+            }
+        });
+    }
+
+    private void showAlreadyParticipateDialog() {
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_already_participate, null);
+        AlertDialog participateInQueueDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView).create();
+
+        participateInQueueDialog.show();
+
+        Button cancel = dialogView.findViewById(R.id.cancel_button);
+        Button leave = dialogView.findViewById(R.id.leave_button);
+
+        leave.setOnClickListener(view -> {
+            viewModel.leaveQueue();
+            participateInQueueDialog.dismiss();
+        });
+
+        cancel.setOnClickListener(view -> {
+            participateInQueueDialog.dismiss();
+        });
+    }
+
+    private void showAlreadyOwnDialog() {
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_already_own_queue, null);
+        AlertDialog ownQueueDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView).create();
+
+        ownQueueDialog.show();
+
+        Button cancel = dialogView.findViewById(R.id.cancel_button);
+        Button finish = dialogView.findViewById(R.id.finish_button);
+
+        finish.setOnClickListener(view -> {
+            viewModel.finishQueue();
+            ownQueueDialog.dismiss();
+        });
+
+        cancel.setOnClickListener(view -> {
+            ownQueueDialog.dismiss();
         });
     }
 
     private void initCreateButton() {
         binding.button.setOnClickListener(v -> {
-           ((MainActivity)requireActivity()).openCreateQueueActivity();
+            if (DI.checkAuthentificationUseCase.invoke()) {
+                if (!isOwnQueue) {
+                    ((MainActivity) requireActivity()).openCreateQueueActivity();
+                } else {
+                    showAlreadyOwnDialog();
+                }
+            } else {
+                showYouNeedToLoginDialog();
+            }
         });
     }
+
+    private void setupObserves() {
+        viewModel.isParticipateInQueue.observe(getViewLifecycleOwner(), aBoolean -> {
+            isParticipateInQueue = aBoolean;
+        });
+
+        viewModel.isOwnQueue.observe(getViewLifecycleOwner(), aBoolean -> {
+            isOwnQueue = aBoolean;
+        });
+    }
+
 }

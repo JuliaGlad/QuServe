@@ -1,6 +1,8 @@
-package com.example.myapplication.presentation.utils;
+package com.example.myapplication.presentation.utils.workers;
 
+import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 
 import android.content.Context;
 import android.icu.number.Scale;
@@ -27,7 +29,9 @@ public class QueueTimeWorker extends Worker {
     @Override
     public Result doWork() {
         Data data = getInputData();
-        DI.finishQueueUseCase.invoke(data.getString(QUEUE_ID))
+        String queueId = data.getString(QUEUE_ID);
+        DI.deleteQrCodeUseCase.invoke(queueId);
+        DI.finishQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -45,6 +49,7 @@ public class QueueTimeWorker extends Worker {
 
                     }
                 });
+
         return Result.success();
     }
 }

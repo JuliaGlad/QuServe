@@ -11,14 +11,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.work.Constraints;
 import androidx.work.Data;
-import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.ImageModel;
 import com.example.myapplication.domain.model.QueueTimeModel;
-import com.example.myapplication.presentation.utils.QueueTimeWorker;
+import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
+import com.example.myapplication.presentation.utils.workers.QueueTimeWorker;
+import com.example.myapplication.presentation.utils.workers.MidTimeWorker;
 import com.google.android.gms.tasks.Task;
 
 import java.util.Arrays;
@@ -34,6 +36,18 @@ public class FinishedQueueCreationViewModel extends ViewModel {
 
     private final MutableLiveData<Task<Uri>> _image = new MutableLiveData<>();
     public LiveData<Task<Uri>> image = _image;
+
+    public void addTimeCounterWorker(View view){
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresDeviceIdle(false)
+                .build();
+
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(MidTimeWorker.class, 15, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance(view.getContext()).enqueue(request);
+    }
 
     public void delayQueueFinish(View view){
         DI.getQueueTimeModelUseCase.invoke()
@@ -77,6 +91,20 @@ public class FinishedQueueCreationViewModel extends ViewModel {
 
                     }
                 });
+    }
+
+    public void delayPauseAvailable(View view){
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresDeviceIdle(false)
+                .build();
+
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
+                .setConstraints(constraints)
+                .setInitialDelay(2, TimeUnit.HOURS)
+                .addTag("FinishQueueScheduler")
+                .build();
+
+        WorkManager.getInstance(view.getContext()).enqueue(request);
     }
 
     public void getQrCode(String queueID) {

@@ -88,6 +88,7 @@ public class WaitingFragment extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            viewModel.updateParticipateInQueue();
                             leaveQueueDialog.dismiss();
                             requireActivity().finish();
                         }
@@ -117,16 +118,16 @@ public class WaitingFragment extends Fragment {
     }
 
     private boolean checkForegroundServiceRunning() {
-            ActivityManager manager = (ActivityManager) requireContext().getSystemService(Context.ACTIVITY_SERVICE);
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (NotificationForegroundService.class.getName().equals(service.service.getClassName())) {
-                    if (service.foreground) {
-                        return true;
-                    }
+        ActivityManager manager = (ActivityManager) requireContext().getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationForegroundService.class.getName().equals(service.service.getClassName())) {
+                if (service.foreground) {
+                    return true;
                 }
             }
-            return false;
         }
+        return false;
+    }
 
 
 }

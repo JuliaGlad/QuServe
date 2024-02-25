@@ -1,12 +1,19 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String PROFILE_UPDATED_AT = "UpdatedAt";
+    public static final String MID_TIME_WAITING = "MidTimeWaiting";
+    public static boolean PAUSE_AVAILABLE = true;
+    public static long CURRENT_TIMER_TIME = 0;
+    public static final String INTENT_TIME_PAUSED = "TIME_PAUSED";
+    public static final String OWN_QUEUE = "OwnQueue";
+    public static final String PARTICIPATE_IN_QUEUE = "ParticipateInQueue";
     public static final String QUEUE_ID = "QueueId";
     public static final int FINE_PERMISSION_CODE = 1;
     public static final String JPG = ".jpg";
     public static final String PDF = ".pdf";
     public static final String QR_CODES = "qr-codes/";
-    public static final String QUEUE_LIST = "QueueList"; //Collection
+    public static final String QUEUE_LIST = "QueueList";
     public static final String PROFILE_IMAGES = "profileImages/";
     public static final String PROFILE_PHOTO = "profilePhoto_";
     public static final String QUEUE_AUTHOR_KEY = "QueueAuthor";
@@ -14,6 +21,8 @@ public class Utils {
     public static final String QUEUE_NAME_KEY = "QueueName";
     public static final String QUEUE_LIFE_TIME_KEY = "QueueLifeTime";
     public static final String QUEUE_IN_PROGRESS = "InProgress";
+    public static final String TIME_WAITING = "TimeWaiting";
+    public static final String PEOPLE_PASSED = "PeoplePassed";
     public static final String PAGE_KEY = "Page";
     public static final String QUEUE_LOCATION_KEY = "QueueLocation";
     public static final String USER_LIST = "UsersList";

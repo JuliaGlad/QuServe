@@ -101,9 +101,9 @@ public class EditProfileViewModel extends ViewModel {
                 });
     }
 
-    public void saveData(String newUserName, String newUserPhoneNumber, String newUserEmail, String newUserGender, Uri imageUri, Fragment fragment) {
+    public void saveData(String newUserName, String newUserPhoneNumber, String newUserGender, Uri imageUri, Fragment fragment) {
 
-        DI.updateUserDataUseCase.invoke(newUserName, newUserEmail, newUserPhoneNumber, newUserGender)
+        DI.updateUserDataUseCase.invoke(newUserName, newUserPhoneNumber, newUserGender)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

@@ -4,15 +4,19 @@ import java.util.List;
 
 public class QueueModel {
 
-    private String name;
-    private List<String> participants;
-    private String id;
+    private final String name;
+    private final String midTime;
+    private final List<String> participants;
+    private final String id;
 
-    public QueueModel(String name, List<String> participants, String id) {
+    public QueueModel(String name, List<String> participants, String id, String midTime) {
         this.name = name;
         this.participants = participants;
         this.id = id;
+        this.midTime = midTime;
     }
+
+    public String getMidTime(){return midTime;}
 
     public String getName() {
         return name;

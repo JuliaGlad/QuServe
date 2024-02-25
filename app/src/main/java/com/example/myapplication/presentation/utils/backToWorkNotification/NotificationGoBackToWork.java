@@ -3,9 +3,12 @@ package com.example.myapplication.presentation.utils.backToWorkNotification;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
 
+import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -14,6 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.R;
+import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 public class NotificationGoBackToWork extends Service {
 
@@ -30,11 +36,16 @@ public class NotificationGoBackToWork extends Service {
     }
 
     private void setupNotification() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), YOUR_TURN_CHANNEL_ID)
+
+        Intent intent = new Intent(this, QueueDetailsActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, YOUR_TURN_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentTitle("Time to go back to work!")
                 .setContentText("Your rest has come to end! It`s time to work!")
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         createNotificationChannel(builder);
     }

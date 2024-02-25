@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.databinding.FragmentFinishedQueueCreationBinding;
+import com.example.myapplication.presentation.queue.createQueue.CreateQueueActivity;
 
 public class FinishedQueueCreationFragment extends Fragment {
 
@@ -38,7 +39,9 @@ public class FinishedQueueCreationFragment extends Fragment {
 
         setupObserves();
 
+        viewModel.addTimeCounterWorker(view);
         viewModel.delayQueueFinish(view);
+        viewModel.delayPauseAvailable(view);
         viewModel.getQrCode(queueID);
         initOkayButton();
         initSeeDetails();
@@ -53,8 +56,7 @@ public class FinishedQueueCreationFragment extends Fragment {
 
     private void initSeeDetails(){
         binding.seeDetails.setOnClickListener(view -> {
-            //TODO
-            // NavHostFragment.findNavController(this).navigate(R.id.action_finishedQueueCreationFragment_to_queue_details_fragment);
+            ((CreateQueueActivity)requireActivity()).openQueueDetailsActivity();
         });
     }
 

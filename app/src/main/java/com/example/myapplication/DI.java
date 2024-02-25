@@ -3,27 +3,42 @@ package com.example.myapplication;
 import com.example.myapplication.data.FirebaseUserService;
 import com.example.myapplication.data.repository.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
+import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthentificationUseCase;
+import com.example.myapplication.domain.usecase.profile.CheckBooleanDataUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckVerificationUseCase;
 import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
+import com.example.myapplication.domain.usecase.profile.GetNameUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileEditUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileImageUseCase;
+import com.example.myapplication.domain.usecase.profile.GetUserBooleanDataUseCase;
 import com.example.myapplication.domain.usecase.profile.SendVerificationEmailUseCase;
+import com.example.myapplication.domain.usecase.profile.UpdateOwnQueueUseCase;
 import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateEmailFieldUseCase;
+import com.example.myapplication.domain.usecase.profile.UpdateParticipateInQueueUseCase;
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
-import com.example.myapplication.domain.usecase.queue.usecase.AddDocumentSnapShot;
+import com.example.myapplication.domain.usecase.queue.usecase.AddPeopleBeforeYouSnapshot;
+import com.example.myapplication.domain.usecase.queue.usecase.AddQueueSizeModelSnapShot;
+import com.example.myapplication.domain.usecase.queue.usecase.CheckParticipantIndexUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.DeleteQrCodeUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.GetOwnQueueData;
+import com.example.myapplication.domain.usecase.queue.usecase.GetParticipateInQueueData;
+import com.example.myapplication.domain.usecase.queue.usecase.GetQueueInProgressModelUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.GetQueueMidTimeModel;
+import com.example.myapplication.domain.usecase.queue.usecase.GetTimeProgressPausedUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.OnContainParticipantUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.OnPausedUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.UpdateMidTimeUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.onParticipantServedUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddToParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.ContinueQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CreateQueueDocumentUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.FinishQueueUseCase;
-import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsList;
+import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodeImageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodePdfUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByAuthorUseCase;
@@ -42,15 +57,22 @@ import com.example.myapplication.domain.usecase.queue.usecase.RemoveParticipantB
 import com.example.myapplication.domain.usecase.queue.usecase.UpdateInProgressUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadBytesToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadFileToFireStorageUseCase;
-import com.example.myapplication.domain.usecase.queue.usecase.AddSnapshotUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.AddSnapshotQueueUseCase;
 
 public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
-
     public static QueueRepository queueRepository = new QueueRepository();
     public static ProfileRepository profileRepository = new ProfileRepository();
 
     //PROFILE USECASE
+    public static UpdateParticipateInQueueUseCase updateParticipateInQueueUseCase = new UpdateParticipateInQueueUseCase();
+    public static GetParticipateInQueueData getParticipateInQueueData = new GetParticipateInQueueData();
+    public static GetOwnQueueData getOwnQueueData = new GetOwnQueueData();
+    public static CheckBooleanDataUseCase checkBooleanDataUseCase = new CheckBooleanDataUseCase();
+    public static GetUserBooleanDataUseCase getUserBooleanDataUseCase = new GetUserBooleanDataUseCase();
+    public static UpdateOwnQueueUseCase updateOwnQueueUseCase = new UpdateOwnQueueUseCase();
+    public static GetNameUseCase getNameUseCase = new GetNameUseCase();
+    public static AddSnapshotProfileUseCase addSnapshotProfileUseCase = new AddSnapshotProfileUseCase();
     public static CheckVerificationUseCase checkVerificationUseCase = new CheckVerificationUseCase();
     public static GetUserEmailAndPasswordDataUseCase getUserEmailAndPasswordDataUseCase = new GetUserEmailAndPasswordDataUseCase();
     public static GetProfileImageUseCase getProfileImageUseCase = new GetProfileImageUseCase();
@@ -69,8 +91,15 @@ public class DI {
     public static ChangePasswordUseCase changePasswordUseCase = new ChangePasswordUseCase();
 
     //QUEUE USECASE
+    public static DeleteQrCodeUseCase deleteQrCodeUseCase = new DeleteQrCodeUseCase();
+    public static GetQueueMidTimeModel getQueueMidTimeModel = new GetQueueMidTimeModel();
+    public static UpdateMidTimeUseCase updateMidTimeUseCase = new UpdateMidTimeUseCase();
+    public static GetQueueInProgressModelUseCase getQueueInProgressModelUseCase = new GetQueueInProgressModelUseCase();
+    public static CheckParticipantIndexUseCase checkParticipantIndexUseCase = new CheckParticipantIndexUseCase();
+    public static AddPeopleBeforeYouSnapshot addPeopleBeforeYouSnapshot = new AddPeopleBeforeYouSnapshot();
+    public static GetTimeProgressPausedUseCase getTimeProgressPausedUseCase = new GetTimeProgressPausedUseCase();
     public static OnPausedUseCase onPausedUseCase = new OnPausedUseCase();
-    public static AddSnapshotUseCase addSnapshotUseCase = new AddSnapshotUseCase();
+    public static AddSnapshotQueueUseCase addSnapshotQueueUseCase = new AddSnapshotQueueUseCase();
     public static ContinueQueueUseCase continueQueueUseCase = new ContinueQueueUseCase();
     public static PauseQueueUseCase pauseQueueUseCase = new PauseQueueUseCase();
     public static onParticipantServedUseCase onParticipantServedUseCase = new onParticipantServedUseCase();
@@ -87,8 +116,8 @@ public class DI {
     public static SignInAnonymouslyUseCase signInAnonymouslyUseCase = new SignInAnonymouslyUseCase();
     public static CheckUserIdUseCase checkUserIdUseCase = new CheckUserIdUseCase();
     public static GetQrCodePdfUseCase getQrCodePdfUseCase = new GetQrCodePdfUseCase();
-    public static GetParticipantsList getParticipantsList = new GetParticipantsList();
-    public static AddDocumentSnapShot addDocumentSnapShot = new AddDocumentSnapShot();
+    public static GetParticipantsListUseCase getParticipantsListUseCase = new GetParticipantsListUseCase();
+    public static AddQueueSizeModelSnapShot addQueueSizeModelSnapShot = new AddQueueSizeModelSnapShot();
     public static GetQueueByParticipantIdUseCase getQueueByParticipantIdUseCase = new GetQueueByParticipantIdUseCase();
     public static NextParticipantUseCase nextParticipantUseCase = new NextParticipantUseCase();
     public static RemoveParticipantById removeParticipantById = new RemoveParticipantById();

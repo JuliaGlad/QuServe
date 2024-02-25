@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.queue.queueDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.PAUSED;
+
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -8,11 +10,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.ImageModel;
 import com.example.myapplication.domain.model.QueueIdAndNameModel;
+import com.example.myapplication.domain.model.QueueInProgressModel;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegateItem;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonModel;
@@ -54,7 +58,32 @@ public class QueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
+    public void getQueue(Fragment fragment){
+        DI.getQueueInProgressModelUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<QueueInProgressModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull QueueInProgressModel queueInProgressModel) {
+                        if (queueInProgressModel.getInProgress().contains("Paused")){
+                           NavHostFragment.findNavController(fragment).navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
     public Completable finishQueue(){
+        DI.deleteQrCodeUseCase.invoke(queueId);
         return DI.finishQueueUseCase.invoke(queueId);
     }
 
@@ -79,7 +108,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("Error", "error");
+                        Log.e("Error", "Problem with network");
                     }
                 });
     }
@@ -103,7 +132,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                    @Override
                    public void onError(@NonNull Throwable e) {
-
+                       Log.e("Error", "Problem with network");
                    }
                });
     }

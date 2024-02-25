@@ -5,7 +5,7 @@ import com.example.myapplication.domain.model.QueueSizeModel;
 
 import io.reactivex.rxjava3.core.Observable;
 
-public class AddDocumentSnapShot {
+public class AddQueueSizeModelSnapShot {
     public Observable<QueueSizeModel> invoke(String queueId){
        return DI.queueRepository.addParticipantsSizeDocumentSnapshot(queueId).flatMap(integer ->
                Observable.just(new QueueSizeModel(integer)));

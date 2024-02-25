@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.queue.queueDetails.pausedQueueFragment;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
@@ -13,7 +15,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PausedQueueFragmentViewModel extends ViewModel {
 
-    private String queueId;
+    private final MutableLiveData<String> _queueId = new MutableLiveData<>(null);
+    LiveData<String> queueId = _queueId;
 
     public void getQueue(){
         DI.getQueueByAuthorUseCase.invoke()
@@ -26,7 +29,7 @@ public class PausedQueueFragmentViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
-                        queueId = queueIdAndNameModel.getId();
+                        _queueId.postValue(queueIdAndNameModel.getId());
                     }
 
                     @Override
@@ -37,6 +40,7 @@ public class PausedQueueFragmentViewModel extends ViewModel {
     }
 
     public Completable continueQueue(){
-       return DI.continueQueueUseCase.invoke(queueId);
+       return DI.continueQueueUseCase.invoke(_queueId.getValue());
     }
+
 }

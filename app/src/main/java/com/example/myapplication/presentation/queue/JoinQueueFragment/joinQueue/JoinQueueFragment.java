@@ -88,6 +88,7 @@ public class JoinQueueFragment extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            viewModel.updateParticipateInQueue();
                             requireActivity().finish();
                             ((JoinQueueActivity)requireActivity()).openWaitingActivity();
                         }

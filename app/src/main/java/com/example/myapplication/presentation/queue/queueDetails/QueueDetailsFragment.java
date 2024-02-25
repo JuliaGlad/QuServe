@@ -1,11 +1,13 @@
 package com.example.myapplication.presentation.queue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.PAUSE_AVAILABLE;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.NumberPicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -23,6 +26,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
 import com.example.myapplication.presentation.queue.createQueue.mainFragment.CreateQueueFragmentDirections;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegate;
+import com.example.myapplication.presentation.queue.queueDetails.pausedQueueFragment.PausedQueueFragment;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonDelegate;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -42,8 +46,8 @@ public class QueueDetailsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(QueueDetailsViewModel.class);
-
         binding = FragmentQueueDetailsBinding.inflate(inflater, container, false);
+        viewModel.getQueue(this);
         viewModel.getQueueRecycler(() -> NavHostFragment.findNavController(this)
                 .navigate(R.id.action_queueDetailsFragment_to_participantsListFragment));
 
@@ -55,16 +59,14 @@ public class QueueDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setMainAdapter();
         setupObserves();
-
         initBackButton();
     }
 
     private void initBackButton() {
-        binding.imageButtonBack.setOnClickListener(v -> {
+        binding.imageButton.setOnClickListener(v -> {
             requireActivity().finish();
         });
     }
-
 
     private void setMainAdapter() {
         mainAdapter.addDelegate(new StringTextViewDelegate());
@@ -121,7 +123,6 @@ public class QueueDetailsFragment extends Fragment {
         });
     }
 
-
     private void showFinishQueueDialog() {
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_finish_queue, null);
         AlertDialog finishQueueDialog = new AlertDialog.Builder(getContext())
@@ -160,19 +161,30 @@ public class QueueDetailsFragment extends Fragment {
 
     }
 
+    private void showPauseUnavailableDialog(){
+        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_next_pause_available_later, null);
+        AlertDialog pauseDialog = new AlertDialog.Builder(getContext())
+                .setView(dialogView).create();
+
+        pauseDialog.show();
+
+        Button ok = dialogView.findViewById(R.id.ok_button);
+        ok.setOnClickListener(view -> {
+            pauseDialog.dismiss();
+        });
+    }
+
     private void setupObserves() {
         viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
 
         viewModel.finishQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 showFinishQueueDialog();
             }
         });
 
         viewModel.pauseQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                showTimePickerDialog();
-            }
+            showTimePickerDialog();
         });
 
         viewModel.pdfUri.observe(getViewLifecycleOwner(), uriTask -> {
