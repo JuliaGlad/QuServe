@@ -1,7 +1,7 @@
 package com.example.myapplication.domain.usecase.profile;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.ImageModel;
+import com.example.myapplication.domain.model.common.ImageModel;
 
 import io.reactivex.rxjava3.core.Single;
 

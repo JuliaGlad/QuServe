@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>
     <string name="title_queue">Очередь</string>
@@ -148,6 +148,18 @@
     <string name="next_chance_to_stop_queue_will_be_available_only_in_2_hours">Next chance to stop queue will be available only in 2 hours!</string>
     <string name="you_need_to_have_an_account_to_create_and_own_queues">You need to have an account to create and own queues!</string>
     <string name="you_don_t_have_any_queue">You don`t have any queue!</string>
+    <string name="for_yourself">For yourself</string>
+    <string name="for_company">For company</string>
+    <string name="company_name">Company name</string>
+    <string name="enter_company_name">Enter your company name</string>
+    <string name="add_company_logo">Add company logo</string>
+    <string name="add_constituent_document">Add constituent document</string>
+    <string name="work_email">Work email</string>
+    <string name="add_work_email">Add work email</string>
+    <string name="add_work_phone">Add work phone</string>
+    <string name="work_phone_number">Work phone number</string>
+    <string name="choose_service">Choose service</string>
+    <string name="edit_company">Edit Com</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>
@@ -158,5 +170,19 @@
         <item>6 месяцев</item>
         <item>1 год</item>
     </string-array>
+
+    <string-array name="services">
+        <item>Очередь</item>
+        <item>Питание</item>
+        <item>Обслуживание в самолете</item>
+    </string-array>
+    <string name="employees">Сотрудники</string>
+    <string name="go_to_my_profile">Go to my profile</string>
+    <string name="go_to_company">Go to company</string>
+    <string name="all">All</string>
+    <string name="admins">Admins</string>
+    <string name="workers">Workers</string>
+    <string name="role">Role:</string>
+    <string name="do_you_want_to_become_employee_of">Do you want to become employee of</string>
 
 </resources>

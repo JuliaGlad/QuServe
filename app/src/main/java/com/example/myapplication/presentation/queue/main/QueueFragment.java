@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.queue.main;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.app.AlertDialog;
@@ -14,15 +15,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
 import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.profile.profileLogin.ProfileNavigationFragment;
+import com.example.myapplication.presentation.profile.becomeEmployee.BecomeEmployeeActivity;
+import com.example.myapplication.presentation.profile.becomeEmployee.BecomeEmployeeViewModel;
 import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -32,7 +32,8 @@ public class QueueFragment extends Fragment {
     private FragmentQueueBinding binding;
     private boolean isOwnQueue, isParticipateInQueue;
     private QueueViewModel viewModel;
-    private ActivityResultLauncher<ScanOptions> launcher;
+    private ActivityResultLauncher<ScanOptions> joinQueueLauncher;
+    private ActivityResultLauncher<ScanOptions> becomeEmployeeLauncher;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,10 +53,28 @@ public class QueueFragment extends Fragment {
         setupObserves();
         initCreateButton();
         initEnterButton();
-        initLauncher();
+        initEmployeeButton();
+        initJoinQueueLauncher();
+        initBecomeEmployeeLauncher();
 
         initQueueOwnerDetailsButton();
         initQueueParticipantDetailsButton();
+    }
+
+    private void initBecomeEmployeeLauncher() {
+        becomeEmployeeLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                Intent intent = new Intent(requireContext(), BecomeEmployeeActivity.class);
+                intent.putExtra(COMPANY, result.getContents());
+                requireActivity().startActivity(intent);
+            }
+        });
+    }
+
+    private void initEmployeeButton() {
+        binding.button3.setOnClickListener(v -> {
+            setBecomeEmployeeScanOptions();
+        });
     }
 
     @Override
@@ -89,8 +108,8 @@ public class QueueFragment extends Fragment {
         });
     }
 
-    private void initLauncher() {
-        launcher = registerForActivityResult(new ScanContract(), result -> {
+    private void initJoinQueueLauncher() {
+        joinQueueLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), JoinQueueActivity.class);
                 intent.putExtra(QUEUE_DATA, result.getContents());
@@ -99,19 +118,29 @@ public class QueueFragment extends Fragment {
         });
     }
 
-    private void setScanOptions() {
+    private void setBecomeEmployeeScanOptions() {
         ScanOptions scanOptions = new ScanOptions();
-        scanOptions.setPrompt("Scan Qr-Code For Your Queue");
+        scanOptions.setPrompt("Scan Qr-Code");
         scanOptions.setBeepEnabled(true);
         scanOptions.setCaptureActivity(ScanCode.class);
         scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
-        launcher.launch(scanOptions);
+        becomeEmployeeLauncher.launch(scanOptions);
+    }
+
+
+    private void setJoinQueueScanOptions() {
+        ScanOptions scanOptions = new ScanOptions();
+        scanOptions.setPrompt("Scan Qr-Code");
+        scanOptions.setBeepEnabled(true);
+        scanOptions.setCaptureActivity(ScanCode.class);
+        scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        joinQueueLauncher.launch(scanOptions);
     }
 
     private void initEnterButton() {
         binding.buttonEnter.setOnClickListener(v -> {
             if (!isParticipateInQueue) {
-                setScanOptions();
+                setJoinQueueScanOptions();
             } else {
                 showAlreadyParticipateDialog();
             }

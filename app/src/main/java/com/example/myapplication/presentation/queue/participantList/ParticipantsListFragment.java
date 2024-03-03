@@ -31,7 +31,6 @@ public class ParticipantsListFragment extends Fragment {
 
         binding = FragmentParticipantsListBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(ParticipantsListViewModel.class);
-
         viewModel.getParticipantsList(this);
 
         return binding.getRoot();

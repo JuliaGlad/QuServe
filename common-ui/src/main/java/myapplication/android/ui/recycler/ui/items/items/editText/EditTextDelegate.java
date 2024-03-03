@@ -42,7 +42,6 @@ public class EditTextDelegate implements AdapterDelegate {
             if (model.text == null) {
                 binding.textInputLayout.setHint(model.hint);
             } else {
-//                binding.textInputLayout.setHint(model.hint);
                 binding.editText.setText(model.text);
             }
             if (!model.editable){

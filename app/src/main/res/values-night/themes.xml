@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.QuServe" parent="Theme.Material3.DynamicColors.Light">
 <!--        <item name="colorPrimaryVariant">@color/background</item>-->
         <item name="colorPrimary">@color/strokeColor</item>
 <!--        <item name="colorOnPrimary">#58448C</item>-->

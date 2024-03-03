@@ -1,7 +1,7 @@
 package com.example.myapplication.domain.usecase.queue.usecase;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueSizeModel;
+import com.example.myapplication.domain.model.queue.QueueSizeModel;
 
 import io.reactivex.rxjava3.core.Observable;
 

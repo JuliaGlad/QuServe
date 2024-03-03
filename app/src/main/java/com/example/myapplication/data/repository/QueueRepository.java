@@ -14,12 +14,9 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -189,7 +186,7 @@ public class QueueRepository {
         });
     }
 
-    public void createQrCodeDocument(String queueID, String queueName, String queueTime) {
+    public void createQueueDocument(String queueID, String queueName, String queueTime) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
         ArrayList<String> arrayList = new ArrayList<>();
 

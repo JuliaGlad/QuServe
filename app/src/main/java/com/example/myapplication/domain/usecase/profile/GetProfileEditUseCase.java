@@ -1,7 +1,7 @@
 package com.example.myapplication.domain.usecase.profile;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.UserEditModel;
+import com.example.myapplication.domain.model.profile.UserEditModel;
 
 
 import io.reactivex.rxjava3.core.Single;

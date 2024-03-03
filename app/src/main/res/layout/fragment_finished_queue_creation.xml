@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="40dp"
-    tools:context=".presentation.queue.createQueue.finishedQueueCreation.FinishedQueueCreationFragment">
+    tools:context="com.example.myapplication.presentation.queue.finishedQueueCreation.FinishedQueueCreationFragment">
 
     <ImageView
         android:id="@+id/qr_code_image"

@@ -3,8 +3,7 @@ package com.example.myapplication.domain.usecase.queue.usecase;
 import static com.example.myapplication.DI.service;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueIdAndNameModel;
-import com.example.myapplication.domain.model.QueueInProgressModel;
+import com.example.myapplication.domain.model.queue.QueueInProgressModel;
 
 import java.util.Objects;
 

@@ -1,12 +1,8 @@
 package com.example.myapplication.presentation.utils.workers;
 
-import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 
 import android.content.Context;
-import android.icu.number.Scale;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -41,7 +37,7 @@ public class QueueTimeWorker extends Worker {
 
                     @Override
                     public void onComplete() {
-
+                        DI.updateOwnQueueUseCase.invoke(false);
                     }
 
                     @Override

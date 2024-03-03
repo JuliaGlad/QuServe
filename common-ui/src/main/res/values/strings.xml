@@ -134,6 +134,9 @@
     <string name="your_queue_has_been_paused">Your queue has been paused!</string>
     <string name="have_a_little_rest_and_then_come_back">Have a little rest and then come back!</string>
     <string name="stop">Stop</string>
+    <string name="all">All</string>
+    <string name="admins">Admins</string>
+    <string name="workers">Workers</string>
 
     <string-array name="lifetime">
         <item>

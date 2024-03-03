@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <style name="TextAppearance.Material3.BodyLarge.QuServe" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+    
+    <style name="TextAppearance.Material3.HeadlineMedium.QuServe" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/colorCardBackground</item>
+        <item name="boxBackgroundColor">@color/colorCardBackground</item>
+        <item name="boxStrokeWidth">0dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+</resources>

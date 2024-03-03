@@ -2,14 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -19,8 +19,20 @@
         android:label="QuServe"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication"
+        android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.queue.company.createQueue.map.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.queue.company.createQueue.CreateCompanyQueueActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.becomeEmployee.BecomeEmployeeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.employees.EmployeeMainActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.queue.waitingFragment.fragment.WaitingActivity"
             android:exported="false" />
@@ -31,13 +43,13 @@
             android:name=".presentation.queue.JoinQueueFragment.JoinQueueActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.queue.createQueue.CreateQueueActivity"
+            android:name=".presentation.queue.basic.createQueue.CreateQueueActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.profile.historyProfile.HistoryActivity"
+            android:name=".presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.profile.editProfile.EditProfileActivity"
+            android:name=".presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -67,16 +79,17 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />
 
-        <service android:name=".presentation.utils.queuePausedNotification.NotificationQueuePaused"/>
-        <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork"/>
-        <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService"/>
-        <service android:name=".presentation.utils.youtTurnNotification.YourTurnForegroundService"/>
-        <service android:name=".presentation.utils.countdownTimer.TimerService"/>
+        <service android:name=".presentation.utils.queuePausedNotification.NotificationQueuePaused" />
+        <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork" />
+        <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService" />
+        <service android:name=".presentation.utils.youtTurnNotification.YourTurnForegroundService" />
+        <service android:name=".presentation.utils.countdownTimer.TimerService" />
 
-        <receiver android:name=".presentation.utils.waitingNotification.NotificationBroadcastReceiver"
+        <receiver
+            android:name=".presentation.utils.waitingNotification.NotificationBroadcastReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

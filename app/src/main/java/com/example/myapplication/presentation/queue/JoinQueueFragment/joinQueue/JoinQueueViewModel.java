@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.ImageModel;
-import com.example.myapplication.domain.model.QueueNameModel;
+import com.example.myapplication.domain.model.common.ImageModel;
+import com.example.myapplication.domain.model.queue.QueueNameModel;
 import com.google.android.gms.tasks.Task;
 
 import io.reactivex.rxjava3.annotations.NonNull;

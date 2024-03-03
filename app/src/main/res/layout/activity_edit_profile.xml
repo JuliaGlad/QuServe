@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/failureColor"
-    tools:context=".presentation.profile.editProfile.EditProfileActivity">
+    tools:context=".presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity">
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.example.myapplication.presentation.profile.editProfile.EditProfileFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

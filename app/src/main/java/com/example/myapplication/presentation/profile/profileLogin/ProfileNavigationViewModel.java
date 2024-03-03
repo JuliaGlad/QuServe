@@ -1,5 +1,9 @@
 package com.example.myapplication.presentation.profile.profileLogin;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -44,8 +48,11 @@ public class ProfileNavigationViewModel extends ViewModel {
 
     public void checkCurrentUser(Fragment fragment){
         if (DI.checkAuthentificationUseCase.invoke()){
+            Bundle bundle = new Bundle();
+            bundle.putString(PAGE_KEY, BASIC);
+
             NavHostFragment.findNavController(fragment)
-                    .navigate(R.id.action_navigation_profile_to_profileLoggedFragment);
+                    .navigate(R.id.action_navigation_profile_to_profileLoggedFragment, bundle);
         }
     }
 
@@ -61,8 +68,12 @@ public class ProfileNavigationViewModel extends ViewModel {
 
                        @Override
                        public void onComplete() {
+
+                           Bundle bundle = new Bundle();
+                           bundle.putString(PAGE_KEY, BASIC);
+
                            NavHostFragment.findNavController(fragment)
-                                   .navigate(R.id.action_navigation_profile_to_profileLoggedFragment);
+                                   .navigate(R.id.action_navigation_profile_to_profileLoggedFragment, bundle);
                        }
 
                        @Override

@@ -3,7 +3,7 @@ package com.example.myapplication.domain.usecase.queue.usecase;
 import static com.example.myapplication.DI.service;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueMidTimeModel;
+import com.example.myapplication.domain.model.queue.QueueMidTimeModel;
 
 import java.util.Objects;
 

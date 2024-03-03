@@ -1,6 +1,19 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String EMPLOYEE_EMAIL = "EmployeeEmail";
+    public static final String WORKER = "Worker";
+    public static final String ADMIN = "Admin";
+    public static final String COMPANY_ID = "Company Id";
+    public static final String EMPLOYEES = "Employees";
+    public static final String EMPLOYEE_NAME = "Name";
+    public static final String EMPLOYEE_ROLE = "Role";
+    public static final String COMPANY_SERVICE = "COMPANY_SERVICE";
+    public static final String COMPANY_PHONE = "COMPANY_PHONE";
+    public static final String COMPANY_EMAIL = "COMPANY_EMAIL";
+    public static final String COMPANY_NAME = "COMPANY_NAME";
+    public static final String BASIC = "Basic";
+    public static final String COMPANY = "Company";
     public static final String PROFILE_UPDATED_AT = "UpdatedAt";
     public static final String MID_TIME_WAITING = "MidTimeWaiting";
     public static boolean PAUSE_AVAILABLE = true;
@@ -35,6 +48,9 @@ public class Utils {
     public static final String FEMALE_KEY = "Female";
     public static final String PAGE_1 = "PAGE_1";
     public static final String PAGE_2 = "PAGE_2";
+    public static final String PAGE_3 = "PAGE_3";
+    public static final String PAGE_4 = "PAGE_4";
+    public static final String PAGE_5 = "PAGE_5";
     public static final String PAUSED_TIME = "Time on Pause";
     public static final String EDIT_ESTIMATED_TIME = "Edit estimated time";
     public static final String EDIT_PEOPLE_BEFORE_YOU = "Edit people before you";
@@ -44,7 +60,8 @@ public class Utils {
     public static final String YOUR_TURN_CHANNEL_ID = "YOUR_TURN_ID";
     public static final String YOUR_TURN_CHANNEL_NAME = "Your turn";
     public static final String PAUSED = "Paused";
-    public static final String[] stringsArray  = {"NO_SET_LIFE_TIME","3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS","365 DAYS"};
+    public static final String[] stringsTimeArray = {"NO_SET_LIFE_TIME", "3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS", "365 DAYS"};
+    public static final String[] stringsServicesArray = {"Queue", "Dining", "On-Board catering"};
 }
 
 

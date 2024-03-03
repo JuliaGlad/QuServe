@@ -1,6 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="current_location">Current Location</string>
-    <string name="app_name" translatable="false">Smart Queue</string>
+    <string name="app_name" translatable="false">QuServe</string>
     <string name="title_home">Home</string>
     <string name="title_queue">Queue</string>
     <string name="title_notifications">Notifications</string>
@@ -25,7 +25,7 @@
     <string name="personal_information">Personal Information</string>
     <string name="edit_profile">Edit profile</string>
     <string name="logout">Logout</string>
-    <string name="forget_password">Forget password?</string>
+    <string name="forget_password">Forgot password?</string>
     <string name="reset_password">Reset password</string>
     <string name="contact_information">Contact Information</string>
     <string name="save">Save</string>
@@ -36,7 +36,7 @@
     <string name="failed_to_verify_email">Failed to verify email!</string>
     <string name="email_is_not_verified_please_try_again">Email is not verified. Please, try again.</string>
     <string name="ok" translatable="false">Ok</string>
-    <string name="welcome">Welcome!</string>
+    <string name="welcome">Welcome back!</string>
     <string name="skip">SKIP</string>
     <string name="create_account_to_get_all_features">Create account to get all features</string>
     <string name="already_have_account">Already have account?</string>
@@ -152,11 +152,21 @@
     <string name="next_chance_to_stop_queue_will_be_available_only_in_2_hours">Next chance to stop queue will be available only in 2 hours!</string>
     <string name="you_need_to_have_an_account_to_create_and_own_queues">You need to have an account to create and own queues!</string>
     <string name="you_don_t_have_any_queue">You don`t have any queue!</string>
+    <string name="for_yourself">For yourself</string>
+    <string name="for_company">For company</string>
+    <string name="company_name">Company name</string>
+    <string name="enter_company_name">Enter your company name</string>
+    <string name="add_company_logo">Add company logo</string>
+    <string name="add_constituent_document">Add constituent document</string>
+    <string name="work_email">Work email</string>
+    <string name="add_work_email">Add work email</string>
+    <string name="add_work_phone">Add work phone</string>
+    <string name="work_phone_number">Work phone number</string>
+    <string name="choose_service">Choose service</string>
+    <string name="edit_company">Edit company</string>
 
     <string-array name="lifetime">
-        <item>
-            No set LifeTime
-        </item>
+        <item>No set LifeTime</item>
         <item>3 hours</item>
         <item>12 hours</item>
         <item>1 day</item>
@@ -164,5 +174,19 @@
         <item>6 months</item>
         <item>1 year</item>
     </string-array>
+
+    <string-array name="services">
+        <item>Queue</item>
+        <item>Dining</item>
+        <item>On-board catering</item>
+    </string-array>
+    <string name="employees">Employees</string>
+    <string name="go_to_my_profile">Go to my profile</string>
+    <string name="go_to_company">Go to company</string>
+    <string name="all">All</string>
+    <string name="admins">Admins</string>
+    <string name="workers">Workers</string>
+    <string name="role">Role:</string>
+    <string name="do_you_want_to_become_employee_of">Do you want to become employee of</string>
 
 </resources>

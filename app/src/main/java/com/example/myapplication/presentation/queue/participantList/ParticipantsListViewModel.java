@@ -10,8 +10,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.QueueParticipantsListModel;
-import com.example.myapplication.domain.model.QueueSizeModel;
+import com.example.myapplication.domain.model.queue.QueueParticipantsListModel;
+import com.example.myapplication.domain.model.queue.QueueSizeModel;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListDelegateItem;
 import com.example.myapplication.presentation.queue.participantList.participantListItem.ParticipantListModel;
 

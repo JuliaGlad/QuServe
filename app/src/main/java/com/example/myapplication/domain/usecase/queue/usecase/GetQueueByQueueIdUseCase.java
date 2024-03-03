@@ -1,8 +1,7 @@
 package com.example.myapplication.domain.usecase.queue.usecase;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueIdAndNameModel;
-import com.example.myapplication.domain.model.QueueNameModel;
+import com.example.myapplication.domain.model.queue.QueueNameModel;
 
 import java.util.Objects;
 

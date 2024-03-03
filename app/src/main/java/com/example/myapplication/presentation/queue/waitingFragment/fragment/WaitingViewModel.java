@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.QueueModel;
+import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegateItem;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegateItem;

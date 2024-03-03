@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.databinding.RecyclerViewWaitingItemBinding;
-import com.example.myapplication.domain.model.QueueSizeModel;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;

@@ -18,7 +18,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.QueueModel;
+import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 

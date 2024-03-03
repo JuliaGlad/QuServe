@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".presentation.profile.createAccount.CreateAccountFragment">
+    tools:context=".presentation.profile.createAccount.firstFragment.CreateAccountFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_create_account"

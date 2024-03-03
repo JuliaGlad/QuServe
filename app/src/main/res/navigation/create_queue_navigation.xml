@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/createQueueFragment"
-        android:name="com.example.myapplication.presentation.queue.createQueue.mainFragment.CreateQueueFragment"
+        android:name="com.example.myapplication.presentation.queue.basic.createQueue.mainFragment.CreateQueueFragment"
         android:label="fragment_create_queue"
         tools:layout="@layout/fragment_create_queue">
 
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/finishedQueueCreationFragment"
-        android:name="com.example.myapplication.presentation.queue.createQueue.finishedQueueCreation.FinishedQueueCreationFragment"
+        android:name="com.example.myapplication.presentation.queue.finishedQueueCreation.FinishedQueueCreationFragment"
         android:label="fragment_finished_queue_creation"
         tools:layout="@layout/fragment_finished_queue_creation" />
 </navigation>

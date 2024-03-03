@@ -1,8 +1,19 @@
 package com.example.myapplication;
 
 import com.example.myapplication.data.FirebaseUserService;
+import com.example.myapplication.data.repository.CompanyQueueRepository;
 import com.example.myapplication.data.repository.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
+import com.example.myapplication.domain.usecase.companyQueue.company.CheckCompanyExistUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.CreateCompanyDocumentUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyByStringPathUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyPathUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetSingleCompanyUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyBytesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeeQrCodeUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthentificationUseCase;
@@ -42,7 +53,7 @@ import com.example.myapplication.domain.usecase.queue.usecase.GetParticipantsLis
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodeImageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQrCodePdfUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByAuthorUseCase;
-import com.example.myapplication.domain.usecase.profile.GetUserEmailAndPasswordDataUseCase;
+import com.example.myapplication.domain.usecase.profile.GetUserEmailAndNameDataUseCase;
 import com.example.myapplication.domain.usecase.profile.SendResetPasswordEmailUseCase;
 import com.example.myapplication.domain.usecase.profile.SignInWithEmailAndPasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.SignOutUseCase;
@@ -63,6 +74,19 @@ public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
     public static QueueRepository queueRepository = new QueueRepository();
     public static ProfileRepository profileRepository = new ProfileRepository();
+    public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
+
+    //COMPANY QUEUE USECASE
+    public static UploadCompanyBytesUseCase uploadCompanyBytesUseCase = new UploadCompanyBytesUseCase();
+    public static CreateCompanyDocumentUseCase createCompanyDocumentUseCase = new CreateCompanyDocumentUseCase();
+    public static GetCompanyPathUseCase getCompanyPathUseCase = new GetCompanyPathUseCase();
+    public static CheckCompanyExistUseCase checkCompanyExistUseCase = new CheckCompanyExistUseCase();
+    public static GetCompanyUseCase getCompanyUseCase = new GetCompanyUseCase();
+    public static GetSingleCompanyUseCase getSingleCompanyUseCase = new GetSingleCompanyUseCase();
+    public static GetEmployeesUseCase getEmployeesUseCase = new GetEmployeesUseCase();
+    public static GetEmployeeQrCodeUseCase getEmployeeQrCodeUseCase = new GetEmployeeQrCodeUseCase();
+    public static GetCompanyByStringPathUseCase getCompanyByStringPathUseCase = new GetCompanyByStringPathUseCase();
+    public static AddEmployeeUseCase addEmployeeUseCase = new AddEmployeeUseCase();
 
     //PROFILE USECASE
     public static UpdateParticipateInQueueUseCase updateParticipateInQueueUseCase = new UpdateParticipateInQueueUseCase();
@@ -74,7 +98,7 @@ public class DI {
     public static GetNameUseCase getNameUseCase = new GetNameUseCase();
     public static AddSnapshotProfileUseCase addSnapshotProfileUseCase = new AddSnapshotProfileUseCase();
     public static CheckVerificationUseCase checkVerificationUseCase = new CheckVerificationUseCase();
-    public static GetUserEmailAndPasswordDataUseCase getUserEmailAndPasswordDataUseCase = new GetUserEmailAndPasswordDataUseCase();
+    public static GetUserEmailAndNameDataUseCase getUserEmailAndNameDataUseCase = new GetUserEmailAndNameDataUseCase();
     public static GetProfileImageUseCase getProfileImageUseCase = new GetProfileImageUseCase();
     public static GetProfileEditUseCase getProfileEditUseCase = new GetProfileEditUseCase();
     public static UpdateUserDataUseCase updateUserDataUseCase = new UpdateUserDataUseCase();

@@ -4,6 +4,6 @@ import com.example.myapplication.DI;
 
 public class CreateQueueDocumentUseCase {
     public void invoke(String queueID, String queueName, String queueTime){
-        DI.queueRepository.createQrCodeDocument(queueID, queueName, queueTime);
+        DI.queueRepository.createQueueDocument(queueID, queueName, queueTime);
     }
 }

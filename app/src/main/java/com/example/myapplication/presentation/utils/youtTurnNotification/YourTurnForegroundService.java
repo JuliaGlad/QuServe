@@ -19,7 +19,7 @@ import androidx.work.WorkManager;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.QueueModel;
+import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
 import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;

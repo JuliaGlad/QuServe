@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.queue.queueDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.PAUSED;
-
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -14,14 +12,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.ImageModel;
-import com.example.myapplication.domain.model.QueueIdAndNameModel;
-import com.example.myapplication.domain.model.QueueInProgressModel;
+import com.example.myapplication.domain.model.common.ImageModel;
+import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
+import com.example.myapplication.domain.model.queue.QueueInProgressModel;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegateItem;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailsButtonDelegateItem;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
@@ -30,7 +27,6 @@ import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;

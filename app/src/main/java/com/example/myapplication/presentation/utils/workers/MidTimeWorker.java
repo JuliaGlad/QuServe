@@ -7,7 +7,7 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueMidTimeModel;
+import com.example.myapplication.domain.model.queue.QueueMidTimeModel;
 
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;

@@ -5,15 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentConnectionLostBinding;
-import com.example.myapplication.presentation.profile.loggedProfile.ProfileLoggedFragment;
 
 public class ConnectionLostFragment extends Fragment {
 

@@ -1,14 +1,12 @@
 package com.example.myapplication.presentation.queue.main;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.QueueIdAndNameModel;
-import com.example.myapplication.domain.model.UserBooleanDataModel;
+import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
+import com.example.myapplication.domain.model.profile.UserBooleanDataModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.annotations.NonNull;
