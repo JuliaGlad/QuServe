@@ -1,15 +1,18 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.FEMALE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.MALE_KEY;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -20,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditProfileBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
@@ -30,7 +34,7 @@ public class EditProfileFragment extends Fragment {
 //
     private EditProfileViewModel viewModel;
     private FragmentEditProfileBinding binding;
-    private String newUserName, newPhoneNumber, gender, email;
+    private String name, phone, email, gender, birthday;
     private Uri imageUri;
     ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -57,19 +61,32 @@ public class EditProfileFragment extends Fragment {
         viewModel.getProfileImage();
         viewModel.retrieveUserData();
 
+        initBirthdayButton();
         initChangePhotoButton();
         initSaveDataButton();
         initBackButton();
 
     }
 
+    private void initBirthdayButton() {
+        binding.editLayoutData.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext());
+            datePickerDialog.show();
+            datePickerDialog.setOnDateSetListener((view, year, month, dayOfMonth) -> {
+                birthday = dayOfMonth + "." + (month + 1) + "." + year;
+                binding.editLayoutData.setText(birthday);
+                datePickerDialog.dismiss();
+            });
+        });
+    }
+
     private void initBackButton() {
-        binding.imageButtonBackEdit.setOnClickListener(v ->
+        binding.buttonBack.setOnClickListener(v ->
                 requireActivity().finish());
     }
 
-    private void initImagePicker(ActivityResultLauncher<Intent> activityResultLauncher, Fragment fragment) {
-        ImagePicker.with(fragment)
+    private void initImagePicker() {
+        ImagePicker.with(this)
                 .cropSquare()
                 .compress(512)
                 .maxResultSize(512, 512)
@@ -87,64 +104,54 @@ public class EditProfileFragment extends Fragment {
                         if (data != null) {
                             imageUri = data.getData();
                             Glide.with(EditProfileFragment.this).load(imageUri).apply(RequestOptions.circleCropTransform())
-                                    .into(binding.profilePhotoEditFragment);
+                                    .into(binding.profilePhoto);
                         }
                     }
                 });
     }
 
     private void initChangePhotoButton(){
-        binding.actionButtonChangePhoto.setOnClickListener(
-                view -> initImagePicker(activityResultLauncher, this));
+        binding.profilePhoto.setOnClickListener(
+                view -> initImagePicker());
     }
 
     private void initSaveDataButton(){
-        binding.saveButton.setOnClickListener(v -> {
+        binding.buttonSave.setOnClickListener(v -> {
 
-            newUserName = binding.userNameEdit.getText().toString();
-            newPhoneNumber = binding.userPhoneNumberEdit.getText().toString();
-            email = binding.userEmailEdit.getText().toString();
-
-            if (binding.radioButtonFemaleEditFragment.isChecked()){
-                gender = FEMALE_KEY;
-            } else {
-                gender = MALE_KEY;
-            }
-
-            viewModel.showProgress(true);
-            viewModel.saveData(newUserName, newPhoneNumber, gender, imageUri, this);
+            name = binding.editLayoutName.getText().toString();
+            phone = binding.editLayoutPhone.getText().toString();
+            email = binding.editLayoutEmail.getText().toString();
+            gender = binding.editLayoutGender.getText().toString();
+            viewModel.saveData(name, phone, gender, birthday, imageUri, this);
         });
     }
     private void setupObserves(){
 
         viewModel.image.observe(getViewLifecycleOwner(), uriTask -> {
             uriTask.addOnSuccessListener(uri -> {
-                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).into(binding.profilePhotoEditFragment);
+                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).into(binding.profilePhoto);
             });
         });
 
-        viewModel.femaleMode.observe(getViewLifecycleOwner(), setChecked -> {
-            if (setChecked){
-                binding.radioButtonFemaleEditFragment.setChecked(true);
-            }
-        });
-
-        viewModel.maleMode.observe(getViewLifecycleOwner(), setChecked -> {
-            if (setChecked){
-                binding.radioButtonMaleEditFragment.setChecked(true);
-            }
-        });
-
         viewModel.userName.observe(getViewLifecycleOwner(), string -> {
-            binding.userNameEdit.setText(string);
+            binding.editLayoutName.setText(string);
         });
 
         viewModel.userEmail.observe(getViewLifecycleOwner(), string -> {
-            binding.userEmailEdit.setText(string);
+            binding.editLayoutEmail.setText(string);
         });
 
         viewModel.phoneNumber.observe(getViewLifecycleOwner(), string -> {
-            binding.userPhoneNumberEdit.setText(string);
+            binding.editLayoutPhone.setText(string);
+        });
+
+        viewModel.birthday.observe(getViewLifecycleOwner(), string -> {
+            binding.editLayoutData.setText(string);
+        });
+
+        viewModel.gender.observe(getViewLifecycleOwner(), string -> {
+            binding.editLayoutGender.setText(string);
+            binding.editLayoutGender.setSimpleItems(R.array.genders);
         });
     }
 }

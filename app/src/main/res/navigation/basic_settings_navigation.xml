@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/basic_settings_navigation"
+    app:startDestination="@id/basicSettingsFragment">
+
+    <fragment
+        android:id="@+id/basicSettingsFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsFragment"
+        android:label="fragment_basic_settings"
+        tools:layout="@layout/fragment_basic_settings" >
+        <action
+            android:id="@+id/action_basicSettingsFragment_to_privacySettingsFragment"
+            app:destination="@id/privacySettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacySettingsFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.privacySettings.PrivacySettingsFragment"
+        android:label="fragment_privacy_settings"
+        tools:layout="@layout/fragment_privacy_settings" />
+</navigation>

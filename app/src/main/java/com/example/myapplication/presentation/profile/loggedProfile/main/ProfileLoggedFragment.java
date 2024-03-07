@@ -2,33 +2,26 @@ package com.example.myapplication.presentation.profile.loggedProfile.main;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Switch;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.databinding.FragmentProfileLoggedBinding;
-import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.FragmentProfileLoggedBinding;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
-
-import java.sql.SQLData;
 
 /*
  * @author j.gladkikh
@@ -37,7 +30,7 @@ public class ProfileLoggedFragment extends Fragment {
 
     FragmentProfileLoggedBinding binding;
     private ProfileLoggedViewModel viewModel;
-    private String page;
+    private String type;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -48,11 +41,13 @@ public class ProfileLoggedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        page = getArguments().getString(PAGE_KEY);
+        Log.d("OnCreate ProfileLoggedFragment", "onCreate");
+
+        type = getArguments().getString(STATE);
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
-        switch (page) {
+        switch (type) {
             case BASIC:
                 fragmentManager
                         .beginTransaction()
@@ -76,5 +71,14 @@ public class ProfileLoggedFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentProfileLoggedBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!DI.checkAuthentificationUseCase.invoke()){
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_profileLoggedFragment_to_navigation_profile);
+        }
     }
 }

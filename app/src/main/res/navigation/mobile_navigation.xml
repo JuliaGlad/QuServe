@@ -43,7 +43,7 @@
             app:destination="@id/profileLoggedFragment" />
         <action
             android:id="@+id/action_navigation_profile_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/basicSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createAccount"
@@ -66,11 +66,17 @@
             android:id="@+id/action_profileLoggedFragment_to_historyFragment"
             app:destination="@id/historyFragment" />
         <action
-            android:id="@+id/action_profileLoggedFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_profileLoggedFragment_to_basicSettingsFragment"
+            app:destination="@id/basicSettingsFragment" />
         <action
             android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
             app:destination="@id/navigation_queue" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_createCompanyAccountFragment"
+            app:destination="@id/createCompanyAccountFragment" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_chooseCompanyFragment"
+            app:destination="@id/chooseCompanyFragment" />
     </fragment>
 
     <fragment
@@ -79,21 +85,21 @@
         android:label="@string/history"
         tools:layout="@layout/fragment_history" />
 
-    <fragment
-        android:id="@+id/settingsFragment"
-        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.SettingsFragment"
-        android:label="@string/settings"
-        tools:layout="@layout/fragment_settings" >
-        <action
-            android:id="@+id/action_settingsFragment_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
-        <action
-            android:id="@+id/action_settingsFragment_to_profileLoggedFragment"
-            app:destination="@id/profileLoggedFragment" />
-        <action
-            android:id="@+id/action_settingsFragment_to_navigation_queue"
-            app:destination="@id/navigation_queue" />
-    </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/basicSettingsFragment"-->
+<!--        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsFragment"-->
+<!--        android:label="@string/settings"-->
+<!--        tools:layout="@layout/fragment_basic_settings" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_settingsFragment_to_navigation_profile"-->
+<!--            app:destination="@id/navigation_profile" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_settingsFragment_to_profileLoggedFragment"-->
+<!--            app:destination="@id/profileLoggedFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_settingsFragment_to_navigation_queue"-->
+<!--            app:destination="@id/navigation_queue" />-->
+<!--    </fragment>-->
 
     <fragment
         android:id="@+id/mapFragment"
@@ -149,7 +155,12 @@
         tools:layout="@layout/fragment_basic_user" >
         <action
             android:id="@+id/action_basicUserFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/basicSettingsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chooseCompanyFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.chooseCompany.ChooseCompanyFragment"
+        android:label="fragment_choose_company"
+        tools:layout="@layout/fragment_choose_company" />
 
 </navigation>

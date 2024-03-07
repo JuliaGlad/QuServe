@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.profile.createAccount.firstFragment;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -13,7 +14,9 @@ import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-
+/*
+ * @author j.gladkikh
+ */
 public class CreateAccountViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> _verified = new MutableLiveData<>(false);
@@ -28,9 +31,8 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
     LiveData<String> nameError = _nameError;
 
-    public void createUserWithEmailAndPassword(String email, String password, String userName, String phoneNumber) {
-
-        DI.createAccountUseCase.invoke(email, password, userName, phoneNumber)
+    public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
+        DI.createAccountUseCase.invoke(email, password, userName)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -41,6 +43,26 @@ public class CreateAccountViewModel extends ViewModel {
                     @Override
                     public void onComplete() {
                         Log.d("Complete creation", "completed");
+                        if (uri != null){
+                            DI.uploadToFireStorageUseCase.invoke(uri)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new CompletableObserver() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+                                            Log.d("Complete uploading", "completed");
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+
+                                        }
+                                    });
+                        }
                         DI.sendVerificationEmailUseCase.invoke().subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override
@@ -67,26 +89,6 @@ public class CreateAccountViewModel extends ViewModel {
                 });
     }
 
-    public void checkVerification() {
-        DI.checkVerificationUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<Boolean>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull Boolean aBoolean) {
-                        _verified.postValue(aBoolean);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-    }
 
     public void sendEmailError(String errorMessage) {
         _emailError.setValue(errorMessage);

@@ -1,6 +1,7 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.OWN_QUEUE;
@@ -16,26 +17,39 @@ import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
+
+    public Completable onPasswordCheck(String password) {
+        return Completable.create(emitter -> {
+            AuthCredential authCredential = EmailAuthProvider.getCredential(service.auth.getCurrentUser().getEmail(), password);
+            Log.d("Check", password + " " + service.auth.getCurrentUser().getUid() + " " + service.auth.getCurrentUser().getEmail() + " " + authCredential);
+            service.auth.getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public boolean checkUserId() {
         return service.auth.getCurrentUser() == null;
@@ -77,7 +91,12 @@ public class ProfileRepository {
     public Completable verifyBeforeUpdateEmail(String email) {
         return Completable.create(emitter -> {
             service.auth.getCurrentUser().verifyBeforeUpdateEmail(email)
-                    .addOnCompleteListener(task -> emitter.onComplete());
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d("Current user", service.auth.getCurrentUser().getUid());
+                            emitter.onComplete();
+                        }
+                    });
         });
 
     }
@@ -85,27 +104,62 @@ public class ProfileRepository {
     public Single<Boolean> checkVerification() {
         return Single.create(emitter -> {
             service.auth.getCurrentUser().reload().addOnCompleteListener(task -> {
-                emitter.onSuccess(service.auth.getCurrentUser().isEmailVerified());
+                if (task.isSuccessful()) {
+                    Log.d("Current user", service.auth.getCurrentUser().getUid());
+                    emitter.onSuccess(service.auth.getCurrentUser().isEmailVerified());
+                }
             });
         });
 
     }
 
-    public boolean checkAuthentification() {
+    public boolean checkAuth() {
         return service.auth.getCurrentUser() != null && !service.auth.getCurrentUser().isAnonymous();
     }
 
-    public void deleteAccount() {
-        service.auth.getCurrentUser().delete();
-        service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid()).delete();
+    public Completable deleteAccount(String password) {
+        return Completable.create(emitter -> {
+            AuthCredential authCredential = EmailAuthProvider.getCredential(service.auth.getCurrentUser().getEmail(), password);
+            service.auth.getCurrentUser().reauthenticate(authCredential)
+                    .addOnCompleteListener(auth -> {
+                        if (auth.isSuccessful()) {
+                            service.auth.getCurrentUser().delete()
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            service.fireStore
+                                                    .collection(USER_LIST)
+                                                    .document(service.auth.getCurrentUser().getUid())
+                                                    .delete();
+                                            emitter.onComplete();
+                                        } else {
+                                            Log.d("Error", task.getException().getMessage());
+                                        }
+                                    });
+
+                        }else {
+                            Log.d("Error", auth.getException().getMessage());
+                        }
+                    });
+
+        });
+
     }
 
     public void logout() {
         service.auth.signOut();
     }
 
-    public void sendResetPasswordEmail(String email) {
-        service.auth.sendPasswordResetEmail(email);
+    public Single<Boolean> sendResetPasswordEmail(String email) {
+        return Single.create(emitter -> {
+            service.auth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onSuccess(true);
+                        } else {
+                            emitter.onSuccess(false);
+                        }
+                    });
+        });
     }
 
     public Completable sendEmailVerification() {
@@ -115,17 +169,17 @@ public class ProfileRepository {
         });
     }
 
-    public void updateOwnQueue(boolean value){
+    public void updateOwnQueue(boolean value) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
         docRef.update(OWN_QUEUE, value);
     }
 
-    public void updateParticipateInQueue(boolean value){
+    public void updateParticipateInQueue(boolean value) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
         docRef.update(PARTICIPATE_IN_QUEUE, value);
     }
 
-    public Completable createAccount(String email, String password, String userName, String phoneNumber) {
+    public Completable createAccount(String email, String password, String userName) {
         return Completable.create(emitter -> {
             service.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -137,9 +191,10 @@ public class ProfileRepository {
                     user.put(OWN_QUEUE, false);
                     user.put(PARTICIPATE_IN_QUEUE, false);
                     user.put(USER_NAME_KEY, userName);
-                    user.put(PHONE_NUMBER_KEY, phoneNumber);
+                    user.put(PHONE_NUMBER_KEY, "");
                     user.put(EMAIL_KEY, email);
-                    user.put(GENDER_KEY, null);
+                    user.put(GENDER_KEY, "");
+                    user.put(BIRTHDAY_KEY, "");
 
                     docRef.set(user);
 
@@ -166,7 +221,7 @@ public class ProfileRepository {
         });
     }
 
-    public Completable updateUserData(String newUserName, String newUserPhone, String newUserGender) {
+    public Completable updateUserData(String newUserName, String newUserPhone, String newUserGender, String newBirthday) {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
             FieldValue timestamp = FieldValue.serverTimestamp();
@@ -174,14 +229,20 @@ public class ProfileRepository {
                     PROFILE_UPDATED_AT, timestamp,
                     USER_NAME_KEY, newUserName,
                     GENDER_KEY, newUserGender,
-                    PHONE_NUMBER_KEY, newUserPhone).addOnCompleteListener(task -> emitter.onComplete());
+                    PHONE_NUMBER_KEY, newUserPhone,
+                    BIRTHDAY_KEY, newBirthday
+            ).addOnCompleteListener(task -> emitter.onComplete());
         });
     }
 
     public Completable updateEmailField(String newEmail) {
         return Completable.create(emitter -> {
             service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid())
-                    .update(EMAIL_KEY, newEmail);
+                    .update(EMAIL_KEY, newEmail).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
         });
     }
 
@@ -190,8 +251,16 @@ public class ProfileRepository {
             DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
-                    emitter.onSuccess(new UserDto(value.getString(USER_NAME_KEY), value.getString(GENDER_KEY),
-                            value.getString(PHONE_NUMBER_KEY), value.getString(EMAIL_KEY), Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)), Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE))));
+                    emitter.onSuccess(new UserDto(
+                            value.getString(USER_NAME_KEY),
+                            value.getString(GENDER_KEY),
+                            value.getString(PHONE_NUMBER_KEY),
+                            value.getString(EMAIL_KEY),
+                            value.getString(BIRTHDAY_KEY),
+                            Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)),
+                            Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE)
+                            ))
+                    );
                 }
             });
         });

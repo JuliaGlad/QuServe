@@ -26,11 +26,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditProfileViewModel extends ViewModel {
 
+    private final MutableLiveData<String> _birthday = new MutableLiveData<>();
+    LiveData<String> birthday = _birthday;
+
     private final MutableLiveData<Task<Uri>> _image = new MutableLiveData<>();
     LiveData<Task<Uri>> image = _image;
 
-    private final MutableLiveData<Boolean> _showProgress = new MutableLiveData<>(false);
-    LiveData<Boolean> showProgress = _showProgress;
+    private final MutableLiveData<String> _gender = new MutableLiveData<>();
+    LiveData<String> gender = _gender;
 
     private final MutableLiveData<String> _userName = new MutableLiveData<>();
     LiveData<String> userName = _userName;
@@ -40,12 +43,6 @@ public class EditProfileViewModel extends ViewModel {
 
     private final MutableLiveData<String> _phoneNumber = new MutableLiveData<>();
     LiveData<String> phoneNumber = _phoneNumber;
-
-    private final MutableLiveData<Boolean> _femaleMode = new MutableLiveData<>();
-    LiveData<Boolean> femaleMode = _femaleMode;
-
-    private final MutableLiveData<Boolean> _maleMode = new MutableLiveData<>();
-    LiveData<Boolean> maleMode = _maleMode;
 
     public void getProfileImage() {
         DI.getProfileImageUseCase.invoke()
@@ -81,17 +78,8 @@ public class EditProfileViewModel extends ViewModel {
                         _userName.postValue(userEditModel.getUserName());
                         _userEmail.postValue(userEditModel.getEmail());
                         _phoneNumber.postValue(userEditModel.getPhoneNumber());
-
-                        try {
-                            if (userEditModel.getGender().equals(FEMALE_KEY)) {
-                                _femaleMode.postValue(true);
-                            } else if (userEditModel.getGender().equals(MALE_KEY)) {
-                                _maleMode.postValue(true);
-                            }
-                        } catch (NullPointerException e) {
-                            Log.d(TAG_EXCEPTION, e.getMessage());
-                        }
-
+                        _gender.postValue(userEditModel.getGender());
+                        _birthday.postValue(userEditModel.getBirthday());
                     }
 
                     @Override
@@ -101,9 +89,8 @@ public class EditProfileViewModel extends ViewModel {
                 });
     }
 
-    public void saveData(String newUserName, String newUserPhoneNumber, String newUserGender, Uri imageUri, Fragment fragment) {
-
-        DI.updateUserDataUseCase.invoke(newUserName, newUserPhoneNumber, newUserGender)
+    public void saveData(String newUserName, String newUserPhoneNumber, String newUserGender, String newBirthday, Uri imageUri, Fragment fragment) {
+        DI.updateUserDataUseCase.invoke(newUserName, newUserPhoneNumber, newUserGender, newBirthday)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -145,7 +132,4 @@ public class EditProfileViewModel extends ViewModel {
 
     }
 
-    public void showProgress(boolean showProgress) {
-        _showProgress.setValue(showProgress);
-    }
 }

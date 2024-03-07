@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +11,29 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserBinding;
 import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.SettingsFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.chooseCompany.ChooseCompanyFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.mainItem.MainItemDelegate;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemDelegate;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsFragment;
+
+import myapplication.android.ui.recycler.delegate.MainAdapter;
 
 public class BasicUserFragment extends Fragment {
 
     private BasicUserViewModel viewModel;
     private FragmentBasicUserBinding binding;
+    private final MainAdapter mainAdapter = new MainAdapter();
     private boolean companyExist = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("onCreate BasicUserFragment", "onCreate");
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,7 +41,7 @@ public class BasicUserFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BasicUserViewModel.class);
 
         viewModel.checkCompanyExist();
-
+        viewModel.retrieveUserNameData(this);
         binding = FragmentBasicUserBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
@@ -42,81 +51,26 @@ public class BasicUserFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
-        viewModel.getProfileImage();
-        viewModel.retrieveUserNameData();
-
-        initEditNavigationButton();
-        initCompanyButton();
-        initHistoryNavigationButton();
-        initSettingsNavigationButton();
-
+        setAdapter();
+        initSettingButton();
     }
 
-    private void initCompanyButton() {
-        binding.constraintLayoutToCompany.setOnClickListener(v -> {
-            if (companyExist) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.logged_container, ChooseCompanyFragment.class, null)
-                        .commit();
-            }
+    private void initSettingButton() {
+        binding.buttonSettings.setOnClickListener(v -> {
+            ((MainActivity)requireActivity()).openSettingsActivity();
         });
     }
 
-    private void initEditNavigationButton() {
-        binding.constraintLayoutEdit.setOnClickListener(v -> {
-            ((MainActivity) requireActivity()).openEditActivity();
+    private void setAdapter() {
 
-        });
+        mainAdapter.addDelegate(new MainItemDelegate());
+        mainAdapter.addDelegate(new ServiceItemDelegate());
+
+        binding.recyclerView.setAdapter(mainAdapter);
     }
 
-    private void initHistoryNavigationButton() {
-        binding.constraintLayoutHistory.setOnClickListener(v ->
-                ((MainActivity) requireActivity()).openHistoryActivity());
-    }
-
-    private void initSettingsNavigationButton() {
-        binding.constraintLayoutSettings.setOnClickListener(view -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            fragmentManager
-                    .beginTransaction()
-                    .addToBackStack(".presentation.profile.loggedProfile.basicUser.BasicUserFragment")
-                    .replace(R.id.logged_container, SettingsFragment.class, null)
-                    .commit();
-        });
-    }
 
     private void setupObserves() {
-        viewModel.imageUpdated.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnSuccessListener(uri -> {
-                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).into(binding.profilePhoto);
-            });
-        });
-
-        viewModel.image.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnSuccessListener(uri -> {
-                Glide.with(this)
-                        .load(uri)
-                        .skipMemoryCache(true)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(binding.profilePhoto);
-            });
-        });
-
-        viewModel.userName.observe(getViewLifecycleOwner(), string -> {
-            binding.userProfileName.setText(string);
-        });
-
-        viewModel.userEmail.observe(getViewLifecycleOwner(), string -> {
-            binding.email.setText(string);
-        });
-
-        viewModel.companyExist.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                companyExist = true;
-            }
-        });
+        viewModel.item.observe(getViewLifecycleOwner(), mainAdapter::submitList);
     }
 }

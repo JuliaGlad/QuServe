@@ -19,18 +19,18 @@
     <string name="email" translatable="false">Email</string>
     <string name="phone_number">Phone number</string>
     <string name="sign_in">Sign in</string>
-    <string name="don_t_have_an_account_yet">Don\'t have an account yet?</string>
+    <string name="don_t_have_an_account_yet">Don\'t have an account yet?  <u>Sign up!</u></string>
     <string name="create_a_new_account">Create a new account!</string>
     <string name="let_get_started">Let\'s Get Started</string>
     <string name="personal_information">Personal Information</string>
     <string name="edit_profile">Edit profile</string>
     <string name="logout">Logout</string>
-    <string name="forget_password">Forgot password?</string>
+    <string name="forget_password"><u>Forgot password?</u></string>
     <string name="reset_password">Reset password</string>
     <string name="contact_information">Contact Information</string>
     <string name="save">Save</string>
-    <string name="verify_your_email">Verify your email</string>
-    <string name="we_send_a_verification_link_to">You`re almost there! We send a verification link to </string>
+    <string name="verify_your_email">Verify your email!</string>
+    <string name="we_send_a_verification_link_to">We have send a verification link to </string>
     <string name="click_the_link_on_the_email_to_get_started">Click the link on the email to get started!</string>
     <string name="done">Done</string>
     <string name="failed_to_verify_email">Failed to verify email!</string>
@@ -63,8 +63,7 @@
     <string name="system">System</string>
     <string name="addition">""</string>
     <string name="failed_to_login">Failed to login!</string>
-    <string name="update_email">Change email</string>
-    <string name="change_password">Update password</string>
+    <string name="change_email">Change email</string>
     <string name="update_password">Update password</string>
     <string name="old_password">Old password</string>
     <string name="new_password">New password</string>
@@ -80,7 +79,7 @@
     <string name="delete">Delete</string>
     <string name="about_us">About us</string>
     <string name="your_question">Your question</string>
-    <string name="write_us_email_so_we_will_be_able_to_help_you">Write us email, so we will be able to help you!</string>
+    <string name="write_us_email_so_we_will_be_able_to_help_you">Write us email, so we can help you!</string>
     <string name="have_a_problem">Have a problem?</string>
     <string name="enter_name">Enter name</string>
     <string name="name">Name</string>
@@ -115,7 +114,7 @@
     <string name="participants_list">Participants List</string>
     <string name="participants_list_description">Serve people and move the queue</string>
     <string name="finish_queue">Finish Queue</string>
-    <string name="are_you_sure">Are you sure</string>
+    <string name="are_you_sure">Are you sure?</string>
     <string name="you_want_to_download_qr_code_pdf_file">you want to download qr-code pdf file?</string>
     <string name="participant">Participant</string>
     <string name="next_participant">Next Participant</string>
@@ -164,6 +163,8 @@
     <string name="work_phone_number">Work phone number</string>
     <string name="choose_service">Choose service</string>
     <string name="edit_company">Edit company</string>
+    <string name="add_company">Add company</string>
+    <string name="privacy_and_security">Privacy and security</string>
 
     <string-array name="lifetime">
         <item>No set LifeTime</item>
@@ -180,6 +181,12 @@
         <item>Dining</item>
         <item>On-board catering</item>
     </string-array>
+
+    <string-array name="genders">
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+
     <string name="employees">Employees</string>
     <string name="go_to_my_profile">Go to my profile</string>
     <string name="go_to_company">Go to company</string>
@@ -188,5 +195,11 @@
     <string name="workers">Workers</string>
     <string name="role">Role:</string>
     <string name="do_you_want_to_become_employee_of">Do you want to become employee of</string>
+    <string name="birthday">Birthday</string>
+    <string name="check_your_mail">Check your mail!</string>
+    <string name="we_have_sent_password_resetting_instructions_to_your_email">We have sent password resetting instructions to your email</string>
+    <string name="your_email_has_been_changed_successfully">Your email has been changed successfully!</string>
+    <string name="your_password_has_been_updates_successfully">Your password has been updates successfully!</string>
+    <string name="write_your_password_to_continue">Write your password to continue</string>
 
 </resources>

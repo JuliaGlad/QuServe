@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/state_home_icon"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_queue"
-        android:icon="@drawable/ic_queue"
+        android:icon="@drawable/state_queue_icon"
         android:title="@string/title_queue" />
 
     <item
         android:id="@id/navigation_profile"
-        android:icon="@drawable/ic_person_ic"
+        android:icon="@drawable/state_profile_icon"
         android:title="@string/profile"/>
 
 </menu>

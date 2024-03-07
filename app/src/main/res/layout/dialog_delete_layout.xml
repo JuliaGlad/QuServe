@@ -1,86 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
-    android:layout_gravity="center_horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/dialog_background_red"
+    android:padding="16dp"
+    android:layout_margin="24dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/error_drawable_delete_dialog"
+        android:id="@+id/icon_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_error_ic"
-        app:tint="@color/strokeColor" />
+        app:srcCompat="@drawable/ic_delete"
+        app:tint="?colorOnErrorContainer" />
 
-    <TextView
-        android:id="@+id/are_you_sure_delete_dialog"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.Red.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/bold_roboto"
-        android:text="@string/confirm_delete"
-        android:textColor="@color/strokeColor"
-        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/are_you_sure"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_drawable_delete_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_delete" />
 
-    <TextView
-        android:id="@+id/cannot_undo"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_main"
+        style="@style/TextAppearance.Material3.BodyMedium.Red.Dialog.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/you_cannot_undo_this_action"
-        android:textColor="@color/stroke_75"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/are_you_sure" />
-
-    <android.widget.Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="4dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
-        android:text="@string/cancel"
-        android:textColor="@color/strokeColor"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cannot_undo" />
-
-    <android.widget.Button
-        android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="100dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
-        android:text="@string/delete"
-        android:textColor="@color/failureColor"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.631"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/cannot_undo" />
-
-    <TextView
-        android:id="@+id/are_you_sure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
         android:text="@string/are_you_sure_you_want_to_delete_your_account"
-        android:textColor="@color/stroke_75"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/are_you_sure_delete_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_delete"
+        style="@style/Widget.Material3.Button.TonalButton.Red.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_main" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Red.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_delete"
+        app:layout_constraintEnd_toStartOf="@+id/button_delete"
+        app:layout_constraintTop_toTopOf="@+id/button_delete" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

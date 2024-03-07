@@ -4,6 +4,6 @@ import com.example.myapplication.DI;
 
 public class CheckAuthentificationUseCase {
     public boolean invoke(){
-        return DI.profileRepository.checkAuthentification();
+        return DI.profileRepository.checkAuth();
     }
 }

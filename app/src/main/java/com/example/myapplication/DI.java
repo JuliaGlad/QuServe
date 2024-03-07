@@ -18,6 +18,7 @@ import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCas
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthentificationUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckBooleanDataUseCase;
+import com.example.myapplication.domain.usecase.profile.CheckPasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckVerificationUseCase;
 import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
@@ -89,6 +90,7 @@ public class DI {
     public static AddEmployeeUseCase addEmployeeUseCase = new AddEmployeeUseCase();
 
     //PROFILE USECASE
+    public static CheckPasswordUseCase checkPasswordUseCase = new CheckPasswordUseCase();
     public static UpdateParticipateInQueueUseCase updateParticipateInQueueUseCase = new UpdateParticipateInQueueUseCase();
     public static GetParticipateInQueueData getParticipateInQueueData = new GetParticipateInQueueData();
     public static GetOwnQueueData getOwnQueueData = new GetOwnQueueData();

@@ -1,12 +1,10 @@
 package com.example.myapplication.presentation.profile.profileLogin;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -16,13 +14,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 /*
@@ -36,20 +30,10 @@ public class ProfileNavigationViewModel extends ViewModel {
     private final MutableLiveData<String> _passwordError = new MutableLiveData<>(null);
     LiveData<String> passwordError = _passwordError;
 
-    private final MutableLiveData<Boolean> _showProgress = new MutableLiveData<>(false);
-    LiveData<Boolean> showProgress = _showProgress;
-
-    private final MutableLiveData<String> _resetEmailError = new MutableLiveData<>(null);
-    LiveData<String> resetEmailError = _resetEmailError;
-
-    public void sendResetPasswordEmail(String checkingEmail) {
-      DI.sendResetPasswordEmailUseCase.invoke(checkingEmail);
-    }
-
     public void checkCurrentUser(Fragment fragment){
         if (DI.checkAuthentificationUseCase.invoke()){
             Bundle bundle = new Bundle();
-            bundle.putString(PAGE_KEY, BASIC);
+            bundle.putString(STATE, BASIC);
 
             NavHostFragment.findNavController(fragment)
                     .navigate(R.id.action_navigation_profile_to_profileLoggedFragment, bundle);
@@ -70,7 +54,7 @@ public class ProfileNavigationViewModel extends ViewModel {
                        public void onComplete() {
 
                            Bundle bundle = new Bundle();
-                           bundle.putString(PAGE_KEY, BASIC);
+                           bundle.putString(STATE, BASIC);
 
                            NavHostFragment.findNavController(fragment)
                                    .navigate(R.id.action_navigation_profile_to_profileLoggedFragment, bundle);
@@ -84,29 +68,15 @@ public class ProfileNavigationViewModel extends ViewModel {
         }
     }
 
-    public void showProgress(boolean showProgress) {
-        _showProgress.setValue(showProgress);
-    }
-
     public void sendEmailError(String errorMessage) {
         _emailError.setValue(errorMessage);
-        _showProgress.setValue(false);
-    }
-
-    public void removeEmailError() {
-        _emailError.setValue(null);
     }
 
     public void sendPasswordError(String errorMessage) {
         _passwordError.setValue(errorMessage);
-        _showProgress.setValue(false);
     }
 
-    public void sendResetEmailError(String errorMessage) {
-        _resetEmailError.setValue(errorMessage);
-    }
+    public void removePasswordError(){_passwordError.setValue(null);}
 
-    public void removePasswordError() {
-        _passwordError.setValue(null);
-    }
+    public void removeEmailError(){_emailError.setValue(null);}
 }

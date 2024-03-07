@@ -1,13 +1,11 @@
 package com.example.myapplication.presentation.queue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
-import static com.example.myapplication.presentation.utils.Utils.PAUSE_AVAILABLE;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +15,12 @@ import android.widget.NumberPicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
-import com.example.myapplication.presentation.queue.createQueue.mainFragment.CreateQueueFragmentDirections;
 import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegate;
-import com.example.myapplication.presentation.queue.queueDetails.pausedQueueFragment.PausedQueueFragment;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonDelegate;
 
 import io.reactivex.rxjava3.core.CompletableObserver;

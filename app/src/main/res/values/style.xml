@@ -1,28 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
+    <style name="Widget.Material3.Button.QuServe" parent="Widget.Material3.Button">
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="TextAppearance.Material3.BodyLarge.QuServe" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/regular</item>
         <item name="android:fontFamily">@font/bold_roboto</item>
     </style>
-    
+
     <style name="TextAppearance.Material3.HeadlineMedium.QuServe" parent="TextAppearance.Material3.HeadlineMedium">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/bold_roboto</item>
         <item name="android:fontFamily">@font/bold_roboto</item>
     </style>
 
+    <style name="TextAppearance.Material3.HeadlineSmall.QuServe" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
     <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>
         <item name="boxCornerRadiusBottomEnd">100dp</item>
         <item name="boxCornerRadiusBottomStart">100dp</item>
         <item name="boxCornerRadiusTopEnd">100dp</item>
         <item name="boxCornerRadiusTopStart">100dp</item>
-        <item name="boxStrokeColor">@color/colorCardBackground</item>
-        <item name="boxBackgroundColor">@color/colorCardBackground</item>
-        <item name="boxStrokeWidth">0dp</item>
-        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">?cardBackgroundColor</item>
         <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.Dialog.Tonal.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">@color/colorTonal</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.Dialog.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_red</item>
+        <item name="boxBackgroundColor">@color/colorOnErrorTonal</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.Email.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">?cardBackgroundColor</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu.QuServe" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintEnabled">false</item>>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">?cardBackgroundColor</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleSmall.QuServe" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleSmall.Red.QuServe" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorOnErrorContainer</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Dialog.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:textColorHint</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Red.Dialog.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorOnErrorContainerVariant</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.ExtraAttention.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:textColorHint</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Widget.Material3.Button.TonalButton.QuServe" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/colorTonal</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
+    <style name="Widget.Material3.Button.TextButton.Dialog.QuServe" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?android:textColorHint</item>
+    </style>
+
+    <style name="Widget.Material3.Button.TextButton.Red.Dialog.QuServe" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorOnErrorContainerVariant</item>
+    </style>
+
+    <style name="Widget.Material3.Button.TonalButton.Red.QuServe" parent="Widget.Material3.Button.TonalButton">
+        <item name="backgroundTint">@color/colorOnErrorTonal</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?colorOnErrorContainer</item>
     </style>
 
 </resources>

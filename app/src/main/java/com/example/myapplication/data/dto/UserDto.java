@@ -5,17 +5,21 @@ public class UserDto {
     private final String gender;
     private final String phoneNumber;
     private final String email;
+    private final String birthday;
     private final boolean ownQueue;
     private final boolean participateInQueue;
 
-    public UserDto(String userName, String gender, String phoneNumber, String email, boolean ownQueue, boolean participateInQueue) {
+    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday,boolean ownQueue, boolean participateInQueue) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.birthday = birthday;
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
     }
+
+    public String getBirthday(){return birthday;}
 
     public boolean isOwnQueue() {
         return ownQueue;

@@ -1,99 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
-
+    android:background="@drawable/dialog_background"
+    android:layout_margin="24dp"
+    android:padding="16dp">
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/icon_shield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_shield_lock"
-        app:tint="@color/strokeColor" />
+        app:tint="?colorPrimary" />
 
-
-    <TextView
-        android:id="@+id/verify_email_dialog"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
+        android:layout_marginTop="20dp"
         android:text="@string/verify_your_email"
-        android:textColor="@color/strokeColor"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_shield" />
 
-    <TextView
-        android:id="@+id/send_textView"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_main"
+        style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:fontFamily="@font/regular"
+        android:layout_marginTop="16dp"
         android:text="@string/we_send_a_verification_link_to"
-        android:textColor="@color/hintColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/verify_email_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <TextView
-        android:id="@+id/your_email"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/user_email"
+        style="@style/TextAppearance.Material3.BodyMedium.ExtraAttention.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/bold_roboto"
-        android:text="@string/email"
-        android:textColor="@color/strokeColor"
+        android:layout_marginTop="5dp"
+        android:text="user_email@gmail.com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send_textView" />
+        app:layout_constraintTop_toBottomOf="@+id/text_main" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_done"
+        style="@style/Widget.Material3.Button.TonalButton.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/done"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/your_email">
+        app:layout_constraintTop_toBottomOf="@+id/user_email" />
 
-        <android.widget.Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="90dp"
-            android:layout_weight="1"
-            android:background="@color/transparent"
-            android:fontFamily="@font/regular"
-            android:text="@string/cancel"
-            android:textColor="@color/strokeColor"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <android.widget.Button
-            android:id="@+id/done_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="90dp"
-            android:layout_weight="1"
-            android:background="@color/transparent"
-            android:fontFamily="@font/regular"
-            android:text="@string/done"
-            android:textColor="@color/strokeColor"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_done"
+        app:layout_constraintEnd_toStartOf="@+id/button_done"
+        app:layout_constraintTop_toTopOf="@+id/button_done" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

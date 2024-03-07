@@ -3,73 +3,80 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:layout_margin="24dp"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/have_problem"
+    <ImageView
+        android:id="@+id/icon_shield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_help"
+        app:tint="?colorPrimary" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/have_a_problem"
-        android:textSize="18sp"
-        android:fontFamily="@font/bold_roboto"
-        android:textColor="@color/strokeColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_shield" />
 
-    <TextView
-        android:id="@+id/write_us"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/write_us_email_so_we_will_be_able_to_help_you"
-        android:fontFamily="@font/regular"
-        android:textColor="@color/hintColor"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/have_problem" />
-
-    <EditText
-        android:id="@+id/your_question"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textLayout_question"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dialog.Tonal.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/strokeColor"
-        android:hint="@string/your_question"
-        android:textSize="14sp"
-        android:textColorHint="@color/hintColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/write_us" />
+        app:layout_constraintTop_toBottomOf="@+id/text_main">
 
-    <android.widget.Button
-        android:id="@+id/cancel_button"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editLayout_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/your_question"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_send"
+        style="@style/Widget.Material3.Button.TonalButton.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
-        android:text="@string/cancel"
-        android:textColor="@color/strokeColor"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_question" />
-
-    <android.widget.Button
-        android:id="@+id/send_button_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="70dp"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/send"
-        android:textColor="@color/strokeColor"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/your_question" />
+        app:layout_constraintTop_toBottomOf="@+id/textLayout_question" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_send"
+        app:layout_constraintEnd_toStartOf="@+id/button_send"
+        app:layout_constraintTop_toTopOf="@+id/button_send" />
+
+    <TextView
+        android:id="@+id/text_main"
+        style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/write_us_email_so_we_will_be_able_to_help_you"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

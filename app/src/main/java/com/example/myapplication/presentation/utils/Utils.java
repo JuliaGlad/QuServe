@@ -1,6 +1,9 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String EMAIL = "Email";
+    public static final String PASSWORD = "Password";
+    public static final String STATE = "State";
     public static final String EMPLOYEE_EMAIL = "EmployeeEmail";
     public static final String WORKER = "Worker";
     public static final String ADMIN = "Admin";
@@ -43,6 +46,7 @@ public class Utils {
     public static final String EMAIL_KEY = "Email";
     public static final String PHONE_NUMBER_KEY = "PhoneNumber";
     public static final String GENDER_KEY = "Gender";
+    public static final String BIRTHDAY_KEY = "Birthday";
     public static final String TAG_EXCEPTION = "Exception";
     public static final String MALE_KEY = "Male";
     public static final String FEMALE_KEY = "Female";

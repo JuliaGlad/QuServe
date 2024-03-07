@@ -21,6 +21,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.presentation.profile.employees.EmployeeMainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
 import com.example.myapplication.presentation.queue.basic.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.queue.company.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
@@ -68,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openSettingsActivity(){
+        Intent intent = new Intent(this, BasicSettingsActivity.class);
+        startActivity(intent);
     }
 
     public void openEmployeesActivity(String id) {

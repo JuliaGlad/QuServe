@@ -49,6 +49,7 @@
     <string name="password_is_required">Пароль необходим!</string>
     <string name="privacy">Приватность</string>
     <string name="language">Язык</string>
+    <string name="change_email">Change email</string>
     <string name="theme">Тема</string>
     <string name="help">Помощь</string>
     <string name="are_you_sure_you_want_to_log_out">Вы уверены, что хотите выйти?</string>
@@ -160,6 +161,8 @@
     <string name="work_phone_number">Work phone number</string>
     <string name="choose_service">Choose service</string>
     <string name="edit_company">Edit Com</string>
+    <string name="add_company">Add company</string>
+    <string name="privacy_and_security">Privacy and security</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>
@@ -176,6 +179,13 @@
         <item>Питание</item>
         <item>Обслуживание в самолете</item>
     </string-array>
+
+
+    <string-array name="genders">
+        <item>Female</item>
+        <item>Male</item>
+    </string-array>
+
     <string name="employees">Сотрудники</string>
     <string name="go_to_my_profile">Go to my profile</string>
     <string name="go_to_company">Go to company</string>
@@ -184,5 +194,11 @@
     <string name="workers">Workers</string>
     <string name="role">Role:</string>
     <string name="do_you_want_to_become_employee_of">Do you want to become employee of</string>
+    <string name="birthday">Birthday</string>
+    <string name="check_your_mail">Check your mail!</string>
+    <string name="we_have_sent_password_resetting_instructions_to_your_email">We have sent password resetting instructions to your email</string>
+    <string name="your_email_has_been_changed_successfully">Your email has been changed successfully!</string>
+    <string name="your_password_has_been_updates_successfully">Your password has been updates successfully!</string>
+    <string name="write_your_password_to_continue">Write your password to continue</string>
 
 </resources>

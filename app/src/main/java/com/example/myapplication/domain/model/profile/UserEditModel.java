@@ -2,17 +2,21 @@ package com.example.myapplication.domain.model.profile;
 
 public class UserEditModel {
 
-    private String userName;
-    private String gender;
-    private String phoneNumber;
-    private String email;
+    private final String userName;
+    private final String gender;
+    private final String phoneNumber;
+    private final String email;
+    private final String birthday;
 
-    public UserEditModel(String userName, String gender, String phoneNumber, String email) {
+    public UserEditModel(String userName, String gender, String phoneNumber, String email, String birthday) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.birthday = birthday;
     }
+
+    public String getBirthday(){return birthday;}
 
     public String getUserName() {
         return userName;

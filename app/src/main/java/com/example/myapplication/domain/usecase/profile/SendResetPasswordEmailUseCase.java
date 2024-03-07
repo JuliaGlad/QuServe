@@ -2,10 +2,12 @@ package com.example.myapplication.domain.usecase.profile;
 
 import com.example.myapplication.DI;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class SendResetPasswordEmailUseCase {
 
-    public void invoke(String email){
-        DI.profileRepository.sendResetPasswordEmail(email);
+    public Single<Boolean> invoke(String email){
+       return DI.profileRepository.sendResetPasswordEmail(email);
     }
 
 }

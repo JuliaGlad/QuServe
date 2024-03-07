@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.profile.createAccount.chooseFragment;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,14 +38,16 @@ public class ChooseFragment extends Fragment {
     }
 
     private void initYourselfButton() {
-        binding.forYourself.setOnClickListener(v -> {
+        binding.forYourselfLayout.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(STATE, BASIC);
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_chooseFragment_to_profileLoggedFragment);
+                    .navigate(R.id.action_chooseFragment_to_profileLoggedFragment, bundle);
         });
     }
 
     private void initCompanyButton(){
-        binding.forCompany.setOnClickListener(v -> {
+        binding.forCompanyLayout.setOnClickListener(v -> {
             NavHostFragment.findNavController(this)
                     .navigate(ChooseFragmentDirections.actionChooseFragmentToCreateCompanyAccountFragment(PAGE_1));
         });
