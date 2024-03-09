@@ -120,10 +120,10 @@ public class QueueDetailsViewModel extends ViewModel {
 
                    @Override
                    public void onSuccess(@NonNull ImageModel imageModel) {
-                      imageModel.getImageUri().addOnCompleteListener(task -> {
-                          imageUri = task.getResult();
-                          initRecyclerView(name, voidListener);
-                      });
+//                      imageModel.getImageUri().addOnCompleteListener(task -> {
+//                          imageUri = task.getResult();
+//                          initRecyclerView(name, voidListener);
+//                      });
                    }
 
                    @Override
@@ -161,7 +161,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-                        _pdfUri.postValue(imageModel.getImageUri());
+//                        _pdfUri.postValue(imageModel.getImageUri());
                     }
 
                     @Override

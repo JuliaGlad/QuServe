@@ -177,7 +177,7 @@ public class CompanyQueueRepository {
             StorageReference local = service.storageReference.child("COMPANIES/").child(  companyID + "/").child("EMPLOYEES_QR-CODE.jpg");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
+//                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
                 }
             });
         });

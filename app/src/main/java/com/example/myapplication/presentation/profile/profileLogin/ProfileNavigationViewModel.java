@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragment;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;

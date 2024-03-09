@@ -22,6 +22,7 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.de
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceRedItem.ServiceRedItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.userItemDelegate.SettingsUserItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.userItemDelegate.SettingsUserItemModel;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,33 +36,38 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class BasicSettingsViewModel extends ViewModel {
 
-    private MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
+    private Uri uri;
+
+    private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     LiveData<List<DelegateItem>> items = _items;
+
+    private final MutableLiveData<Boolean> _openHelpDialog = new MutableLiveData<>();
+    LiveData<Boolean> openHelpDialog = _openHelpDialog;
+
+    private final MutableLiveData<Boolean> _openAboutUsDialog = new MutableLiveData<>();
+    LiveData<Boolean> openAboutUsDialog = _openAboutUsDialog;
+
+    private final MutableLiveData<Boolean> _logoutDialog = new MutableLiveData<>();
+    LiveData<Boolean> logoutDialog = _logoutDialog;
+
+    private final MutableLiveData<Boolean> _navigateToPrivacy = new MutableLiveData<>();
+    LiveData<Boolean> navigateToPrivacy = _navigateToPrivacy;
 
     private void initRecycler(String name, String email, Uri uri, Fragment fragment){
         buildList(new DelegateItem[]{
                 new SettingsUserItemDelegateItem(new SettingsUserItemModel(1, name, email, uri)),
                 new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_shield_person, R.string.privacy_and_security, () -> {
-                    NavHostFragment.findNavController(fragment)
-                            .navigate(R.id.action_basicSettingsFragment_to_privacySettingsFragment);
+                    _navigateToPrivacy.postValue(true);
                 })),
                 new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
-                    HelpDialogFragment dialogFragment = new HelpDialogFragment();
-                    dialogFragment.show(fragment.getActivity().getSupportFragmentManager(), "HELP_DIALOG");
+                    _openHelpDialog.postValue(true);
                 })),
                 new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_group, R.string.about_us, () -> {
-                    AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
-                    dialogFragment.show(fragment.getActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
+                    _openAboutUsDialog.postValue(true);
                 })),
                 new ServiceRedItemDelegateItem(new ServiceRedItemModel(5, R.drawable.ic_logout, R.string.logout, () -> {
 
-                    LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
-                    dialogFragment.show(fragment.getActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
-                    DialogDismissedListener listener = bundle -> {
-                        fragment.getActivity().finish();
-                    };
-                    dialogFragment.onDismissListener(listener);
-
+                    _logoutDialog.postValue(true);
                 }))
 
         });
@@ -88,9 +94,7 @@ public class BasicSettingsViewModel extends ViewModel {
 
                                     @Override
                                     public void onSuccess(@NonNull ImageModel imageModel) {
-                                        imageModel.getImageUri().addOnCompleteListener(task -> {
-                                            initRecycler(userEmailAndNameModel.getName(), userEmailAndNameModel.getEmail(), task.getResult(), fragment );
-                                        });
+                                        initRecycler(userEmailAndNameModel.getName(), userEmailAndNameModel.getEmail(), imageModel.getImageUri(), fragment );
                                     }
 
                                     @Override

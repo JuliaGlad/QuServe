@@ -6,13 +6,13 @@ import com.google.android.gms.tasks.Task;
 
 public class ImageModel {
 
-    private Task<Uri> imageUri;
+    private final Uri imageUri;
 
-    public ImageModel(Task<Uri> imageUri) {
+    public ImageModel(Uri imageUri) {
         this.imageUri = imageUri;
     }
 
-    public Task<Uri> getImageUri() {
+    public Uri getImageUri() {
         return imageUri;
     }
 }

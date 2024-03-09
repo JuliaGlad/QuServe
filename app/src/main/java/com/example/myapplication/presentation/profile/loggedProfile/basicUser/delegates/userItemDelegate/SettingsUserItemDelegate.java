@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.userItemDelegate;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -40,7 +41,7 @@ public class SettingsUserItemDelegate implements AdapterDelegate {
         void bind(SettingsUserItemModel model){
             binding.userName.setText(model.name);
             binding.userEmail.setText(model.email);
-            if (model.uri != null){
+            if (model.uri != Uri.EMPTY){
                 Glide.with(itemView.getContext())
                         .load(model.uri)
                         .apply(RequestOptions.circleCropTransform())

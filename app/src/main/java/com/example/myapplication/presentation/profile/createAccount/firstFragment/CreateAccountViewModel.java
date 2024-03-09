@@ -63,6 +63,7 @@ public class CreateAccountViewModel extends ViewModel {
                                         }
                                     });
                         }
+
                         DI.sendVerificationEmailUseCase.invoke().subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override

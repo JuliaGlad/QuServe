@@ -45,7 +45,7 @@ public class JoinQueueViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-                        _image.postValue(imageModel.getImageUri());
+//                        _image.postValue(imageModel.getImageUri());
                     }
 
                     @Override

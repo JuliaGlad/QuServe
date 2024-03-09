@@ -19,17 +19,23 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.App;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
+import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -123,20 +129,27 @@ public class ProfileRepository {
             service.auth.getCurrentUser().reauthenticate(authCredential)
                     .addOnCompleteListener(auth -> {
                         if (auth.isSuccessful()) {
-                            service.auth.getCurrentUser().delete()
-                                    .addOnCompleteListener(task -> {
+                            service.fireStore
+                                    .collection(USER_LIST)
+                                    .document(service.auth.getCurrentUser().getUid())
+                                    .delete().addOnCompleteListener(task -> {
                                         if (task.isSuccessful()) {
-                                            service.fireStore
-                                                    .collection(USER_LIST)
-                                                    .document(service.auth.getCurrentUser().getUid())
-                                                    .delete();
-                                            emitter.onComplete();
+                                            service.auth.getCurrentUser().delete()
+                                                    .addOnCompleteListener(taskNew -> {
+                                                        if (taskNew.isSuccessful()) {
+                                                            UserDatabaseProvider.deleteUser();
+                                                            emitter.onComplete();
+                                                        } else {
+                                                            Log.d("Error", taskNew.getException().getMessage());
+                                                        }
+                                                    });
                                         } else {
                                             Log.d("Error", task.getException().getMessage());
                                         }
                                     });
 
-                        }else {
+
+                        } else {
                             Log.d("Error", auth.getException().getMessage());
                         }
                     });
@@ -147,6 +160,7 @@ public class ProfileRepository {
 
     public void logout() {
         service.auth.signOut();
+        UserDatabaseProvider.deleteUser();
     }
 
     public Single<Boolean> sendResetPasswordEmail(String email) {
@@ -196,15 +210,20 @@ public class ProfileRepository {
                     user.put(GENDER_KEY, "");
                     user.put(BIRTHDAY_KEY, "");
 
-                    docRef.set(user);
-
-                    emitter.onComplete();
+                    docRef.set(user).addOnCompleteListener(task1 -> {
+                        if (task.isSuccessful()){
+                            UserDto userDto = new UserDto(userName, "", "", email, "", String.valueOf(Uri.EMPTY), false, false);
+                            UserDatabaseProvider.insertUser(userDto);
+                            emitter.onComplete();
+                        }
+                    });
                 }
             });
         });
     }
 
     public Completable signInWithEmailAndPassword(String email, String password) {
+        App.getInstance().getDatabase().userDao().deleteALl();
         return Completable.create(emitter -> {
             service.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 emitter.onComplete();
@@ -214,8 +233,10 @@ public class ProfileRepository {
 
     public Completable uploadToFireStorage(Uri imageUri) {
         return Completable.create(emitter -> {
+            Log.d("Start uri", String.valueOf(imageUri));
             StorageReference reference = service.storageReference.child(PROFILE_IMAGES + PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
             reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                UserDatabaseProvider.updateUri(String.valueOf(imageUri));
                 emitter.onComplete();
             });
         });
@@ -231,7 +252,10 @@ public class ProfileRepository {
                     GENDER_KEY, newUserGender,
                     PHONE_NUMBER_KEY, newUserPhone,
                     BIRTHDAY_KEY, newBirthday
-            ).addOnCompleteListener(task -> emitter.onComplete());
+            ).addOnCompleteListener(task -> {
+                UserDatabaseProvider.updateUser(newUserName, newUserGender, newUserPhone, newBirthday);
+                emitter.onComplete();
+            });
         });
     }
 
@@ -247,30 +271,62 @@ public class ProfileRepository {
     }
 
     public Single<UserDto> getUserData() {
-        return Single.create(emitter -> {
-            DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
-            docRef.addSnapshotListener((value, error) -> {
-                if (value != null) {
-                    emitter.onSuccess(new UserDto(
-                            value.getString(USER_NAME_KEY),
-                            value.getString(GENDER_KEY),
-                            value.getString(PHONE_NUMBER_KEY),
-                            value.getString(EMAIL_KEY),
-                            value.getString(BIRTHDAY_KEY),
-                            Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)),
-                            Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE)
-                            ))
-                    );
-                }
+        UserDto localUser = UserDatabaseProvider.getUser();
+        if (localUser != null) {
+            return Single.create(emitter -> {
+                emitter.onSuccess(localUser);
             });
-        });
+        } else {
+            return
+                    Single.create(emitter -> {
+                        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+                        docRef.addSnapshotListener((value, error) -> {
+                            if (value != null) {
+                                UserDto userDto = new UserDto(
+                                        value.getString(USER_NAME_KEY),
+                                        value.getString(GENDER_KEY),
+                                        value.getString(PHONE_NUMBER_KEY),
+                                        value.getString(EMAIL_KEY),
+                                        value.getString(BIRTHDAY_KEY),
+                                        String.valueOf(Uri.EMPTY),
+                                        Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)),
+                                        Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE))
+                                );
+                                UserDatabaseProvider.insertUser(userDto);
+                                emitter.onSuccess(userDto);
+                            }
+                        });
+                    });
+        }
     }
 
     public Single<ImageDto> getProfileImage() {
-        return Single.create(emitter -> {
-            StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-            emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
-        });
+        UserDto localUser = UserDatabaseProvider.getUser();
+        if (localUser != null) {
+            return Single.create(emitter -> {
+                emitter.onSuccess(new ImageDto(Uri.parse(UserDatabaseProvider.getUser().getUri())));
+            });
+        }else {
+            return
+                    Single.create(emitter -> {
+                        StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
+                        try {
+                            local.getDownloadUrl().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Uri uri = task.getResult();
+                                    emitter.onSuccess(new ImageDto(uri));
+                                } else {
+                                    Log.d("Error", task.getException().getMessage());
+                                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                                }
+                            });
+                        } catch (RuntimeExecutionException e) {
+                            Log.d("RuntimeExecutionException", e.getMessage());
+                            emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                        }
+
+                    });
+        }
     }
 }
 

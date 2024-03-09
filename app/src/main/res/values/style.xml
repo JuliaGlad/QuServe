@@ -77,6 +77,7 @@
         <item name="android:textColorHint">?android:textColorHint</item>
     </style>
 
+
     <style name="TextAppearance.Material3.TitleSmall.QuServe" parent="TextAppearance.Material3.TitleMedium">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorOnSurface</item>
@@ -144,4 +145,13 @@
         <item name="android:textColor">?colorOnErrorContainer</item>
     </style>
 
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.Dialog.Tonal.Red.QuServe" parent="">
+        <item name="cursorColor">@color/colorOnErrorContainerVariant</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke_red</item>
+        <item name="boxBackgroundColor">@color/colorOnErrorTonal</item>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+    </style>
 </resources>

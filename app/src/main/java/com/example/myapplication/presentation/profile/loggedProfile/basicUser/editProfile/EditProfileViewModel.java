@@ -16,6 +16,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.profile.UserEditModel;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.model.UserModel;
+import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -26,11 +28,13 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditProfileViewModel extends ViewModel {
 
+    private Uri uri;
+
     private final MutableLiveData<String> _birthday = new MutableLiveData<>();
     LiveData<String> birthday = _birthday;
 
-    private final MutableLiveData<Task<Uri>> _image = new MutableLiveData<>();
-    LiveData<Task<Uri>> image = _image;
+    private final MutableLiveData<Uri> _image = new MutableLiveData<>();
+    LiveData<Uri> image = _image;
 
     private final MutableLiveData<String> _gender = new MutableLiveData<>();
     LiveData<String> gender = _gender;
@@ -76,6 +80,7 @@ public class EditProfileViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull UserEditModel userEditModel) {
                         _userName.postValue(userEditModel.getUserName());
+                        Log.d("User name", userEditModel.getUserName());
                         _userEmail.postValue(userEditModel.getEmail());
                         _phoneNumber.postValue(userEditModel.getPhoneNumber());
                         _gender.postValue(userEditModel.getGender());

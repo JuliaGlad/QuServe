@@ -5,13 +5,13 @@ import android.net.Uri;
 import com.google.android.gms.tasks.Task;
 
 public class ImageDto {
-    private Task<Uri> imageUri;
+    private final Uri imageUri;
 
-    public Task<Uri> getImageUri() {
+    public Uri getImageUri() {
         return imageUri;
     }
 
-    public ImageDto(Task<Uri> imageUri) {
+    public ImageDto(Uri imageUri) {
         this.imageUri = imageUri;
     }
 }

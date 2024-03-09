@@ -7,11 +7,16 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -22,6 +27,7 @@ import com.example.myapplication.presentation.profile.employees.EmployeeMainActi
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragment;
 import com.example.myapplication.presentation.queue.basic.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.queue.company.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
@@ -43,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         setSupportActionBar(binding.toolbar);
-
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
 

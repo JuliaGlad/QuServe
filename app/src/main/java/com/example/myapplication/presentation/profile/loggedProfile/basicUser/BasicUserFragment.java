@@ -32,7 +32,6 @@ public class BasicUserFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("onCreate BasicUserFragment", "onCreate");
     }
 
     @Override

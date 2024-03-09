@@ -3,6 +3,8 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 
 import android.net.Uri;
+import android.util.Log;
+import android.util.Pair;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,16 +21,23 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.de
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.mainItem.MainItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemModel;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.model.UserModel;
 import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragmentDirections;
+import com.google.android.gms.tasks.RuntimeExecutionException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.core.SingleSource;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
@@ -36,18 +45,20 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 public class BasicUserViewModel extends ViewModel {
 
     private boolean companyExist = false;
+    private Uri uri = null;
 
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     LiveData<List<DelegateItem>> item = _items;
+    private Fragment fragment;
 
     public void initRecycler(Uri uri, String name, String email, Fragment fragment) {
         buildList(new DelegateItem[]{
                 new MainItemDelegateItem(new MainItemModel(1, uri, name, email)),
                 new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_edit, R.string.edit_profile, () -> {
-                    ((MainActivity)fragment.requireActivity()).openEditActivity();
+                    ((MainActivity) fragment.requireActivity()).openEditActivity();
                 })),
                 new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_history, R.string.history, () -> {
-                    ((MainActivity)fragment.requireActivity()).openHistoryActivity();
+                    ((MainActivity) fragment.requireActivity()).openHistoryActivity();
                 })),
                 addCompanyService(fragment)
         });
@@ -95,37 +106,22 @@ public class BasicUserViewModel extends ViewModel {
     }
 
     public void retrieveUserNameData(Fragment fragment) {
+        this.fragment = fragment;
         DI.getUserEmailAndNameDataUseCase.invoke()
+                .zipWith(DI.getProfileImageUseCase.invoke(), (BiFunction<UserEmailAndNameModel, ImageModel, UserModel>) (userEmailAndNameModel, imageModel) -> {
+                    return new UserModel(userEmailAndNameModel.getName(), userEmailAndNameModel.getEmail(), imageModel.getImageUri());
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<UserEmailAndNameModel>() {
+                .subscribe(new SingleObserver<UserModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull UserEmailAndNameModel userEmailAndNameModel) {
-                        DI.getProfileImageUseCase.invoke()
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new SingleObserver<ImageModel>() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
+                    public void onSuccess(@NonNull UserModel userModel) {
+                        initRecycler(userModel.getImage(), userModel.getName(), userModel.getEmail(), fragment);
 
-                                    }
-
-                                    @Override
-                                    public void onSuccess(@NonNull ImageModel imageModel) {
-                                        imageModel.getImageUri()
-                                                .addOnCompleteListener(task -> {
-                                                    initRecycler(task.getResult(), userEmailAndNameModel.getName(), userEmailAndNameModel.getEmail(), fragment);
-                                                });
-
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-                                    }
-                                });
                     }
 
                     @Override
@@ -133,6 +129,8 @@ public class BasicUserViewModel extends ViewModel {
 
                     }
                 });
+
+
     }
 
     private void buildList(DelegateItem[] item) {

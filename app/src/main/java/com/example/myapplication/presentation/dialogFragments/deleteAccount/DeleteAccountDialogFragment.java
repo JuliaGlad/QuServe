@@ -40,9 +40,8 @@ public class DeleteAccountDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonDelete.setOnClickListener(v -> {
-            String password = null;
+            String password = binding.editLayoutPassword.getText().toString();
             viewModel.deleteAccount(password);
-            dismiss();
         });
 
         binding.buttonCancel.setOnClickListener(v -> dismiss());
@@ -53,6 +52,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
     private void setupObserves() {
         viewModel.isDeleted.observe(this, aBoolean -> {
             isDeleted = aBoolean;
+            dismiss();
         });
     }
 

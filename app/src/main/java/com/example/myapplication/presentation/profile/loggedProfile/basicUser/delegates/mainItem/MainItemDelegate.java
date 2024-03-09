@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.d
 
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class MainItemDelegate implements AdapterDelegate {
             binding.name.setText(model.name);
             binding.yourEmail.setText(model.email);
 
-            if (model.uri != null) {
+            if (model.uri != Uri.EMPTY) {
                 Glide.with(itemView.getContext())
                         .load(model.uri)
                         .skipMemoryCache(true)

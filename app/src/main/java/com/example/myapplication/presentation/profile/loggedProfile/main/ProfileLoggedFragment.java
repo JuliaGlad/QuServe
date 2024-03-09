@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.profile.loggedProfile.main;
 
+import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.room.Dao;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
@@ -27,7 +29,6 @@ import com.example.myapplication.presentation.profile.loggedProfile.companyUser.
  * @author j.gladkikh
  */
 public class ProfileLoggedFragment extends Fragment {
-
     FragmentProfileLoggedBinding binding;
     private ProfileLoggedViewModel viewModel;
     private String type;
@@ -40,8 +41,6 @@ public class ProfileLoggedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d("OnCreate ProfileLoggedFragment", "onCreate");
 
         type = getArguments().getString(STATE);
 
@@ -76,7 +75,7 @@ public class ProfileLoggedFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (!DI.checkAuthentificationUseCase.invoke()){
+        if (!DI.checkAuthentificationUseCase.invoke() || service.auth.getCurrentUser() == null){
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_profileLoggedFragment_to_navigation_profile);
         }

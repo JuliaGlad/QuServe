@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,10 +128,10 @@ public class EditProfileFragment extends Fragment {
     }
     private void setupObserves(){
 
-        viewModel.image.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnSuccessListener(uri -> {
+        viewModel.image.observe(getViewLifecycleOwner(), uri -> {
+            if (!(uri == Uri.EMPTY)) {
                 Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).into(binding.profilePhoto);
-            });
+            }
         });
 
         viewModel.userName.observe(getViewLifecycleOwner(), string -> {
