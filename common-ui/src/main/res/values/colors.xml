@@ -1,5 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="colorPrimary">#266180</color>
+    <color name="colorOnPrimary">#F7FCFF</color>
+    <color name="colorSecondary">#4D6880</color>
+    <color name="colorOnSecondary">#F7FCFF</color>
+    <color name="colorTertiary">#6A5880</color>
+    <color name="colorOnTertiary">#FBF7FF</color>
+    <color name="colorError">#CC3A3A</color>
+    <color name="colorOnError">#FFF4F4</color>
+    <color name="colorErrorContainer">#FFEAE9</color>
+    <color name="colorOnErrorContainer">#B23333</color>
+    <color name="colorOnErrorContainerVariant">#E98080</color>
+    <color name="colorOnErrorTonal">#FFCFCB</color>
+    <color name="colorPrimaryContainer">#A4D0E5</color>
+    <color name="colorOnPrimaryContainer">#0D1D26</color>
+    <color name="colorSecondaryContainer">#BED3E5</color>
+    <color name="colorOnSecondaryContainer">#171F26</color>
+    <color name="colorTertiaryContainer">#EFE4FB</color>
+    <color name="colorOnTertiaryContainer">#9881B2</color>
+    <color name="colorSurface">#F2FAFC</color>
+    <color name="colorOnSurface">#266180</color>
+    <color name="colorOnSurfaceVariant">#3F464C</color>
+    <color name="colorSurfaceContainer">#D7E6F2</color>
+    <color name="colorCardBackground">#E4F2FF</color>
+    <color name="colorSurfaceContainerLowest">#EFF7FF</color>
+    <color name="colorSurfaceContainerHigh">#D0DFEB</color>
+    <color name="colorSurfaceContainerHighest">#CBDAE5</color>
+    <color name="colorOutline">#889199</color>
+    <color name="colorOutlineVariant">#7C8B99</color>
+    <color name="colorInverseSurface">#2A3940</color>
+    <color name="colorOnInverseSurface">#F0F7FC</color>
+    <color name="colorInversePrimary">#408BB2</color>
+    <color name="colorTextHint">#5FA5C9</color>
+    <color name="colorTonal">#D2E5F4</color>
+    <color name="colorBoxStroke">#CAE2F5</color>
+
     <color name="iconDialogColor">@color/background</color>
     <color name="button_secondary_color">#C9B2FF</color>
     <color name="background">@color/white</color>

@@ -34,8 +34,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FinishedQueueCreationViewModel extends ViewModel {
 
-    private final MutableLiveData<Task<Uri>> _image = new MutableLiveData<>();
-    public LiveData<Task<Uri>> image = _image;
+    private final MutableLiveData<Uri> _image = new MutableLiveData<>();
+    public LiveData<Uri> image = _image;
 
     public void addTimeCounterWorker(View view){
         Constraints constraints = new Constraints.Builder()
@@ -118,7 +118,7 @@ public class FinishedQueueCreationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-//                        _image.postValue(imageModel.getImageUri());
+                        _image.postValue(imageModel.getImageUri());
                     }
 
                     @Override

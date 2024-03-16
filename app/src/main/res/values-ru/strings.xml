@@ -163,6 +163,9 @@
     <string name="edit_company">Edit Com</string>
     <string name="add_company">Add company</string>
     <string name="privacy_and_security">Privacy and security</string>
+    <string name="change_owner">Change owner</string>
+    <string name="delete_company">Delete company</string>
+    <string name="your_will_receive_notification_when_your_company_is_approved">Your will receive notification when your company is approved!</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>
@@ -200,5 +203,16 @@
     <string name="your_email_has_been_changed_successfully">Your email has been changed successfully!</string>
     <string name="your_password_has_been_updates_successfully">Your password has been updates successfully!</string>
     <string name="write_your_password_to_continue">Write your password to continue</string>
+    <string name="service">Service</string>
+    <string name="are_you_sure_you_want_to_delete_your_company">Are you sure you want to delete your company?</string>
+    <string name="choose_company">Choose Company</string>
+    <string name="change_role">Change role</string>
+    <string name="change_your_employee_s_role_in_company">Change your employee`s role in company</string>
+    <string name="manages_workers">Manages workers</string>
+    <string name="manages_company_n_queues">Manages company \n queues</string>
+    <string name="worker">Worker</string>
+    <string name="serves_customers">Serves customers</string>
+    <string name="change">Change</string>
+    <string name="statistics">Statistics</string>
 
 </resources>

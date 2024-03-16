@@ -37,7 +37,7 @@ public class CreateAccountFragment extends Fragment {
     private FragmentCreateAccountBinding binding;
     private CreateAccountViewModel viewModel;
     private String email, password, userName;
-    private Uri imageUri;
+    private Uri imageUri = null;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
@@ -87,12 +87,17 @@ public class CreateAccountFragment extends Fragment {
 
             if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
                 viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
-                createVerificationDialog(email);
             }
         });
     }
 
     private void setupObserves() {
+
+        viewModel.showDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                createVerificationDialog(email);
+            }
+        });
 
         viewModel.verified.observe(getViewLifecycleOwner(), verified -> {
             if (verified) {

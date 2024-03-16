@@ -9,18 +9,24 @@ public class UserDto {
     private final String email;
     private final String birthday;
     private final String uri;
+    private final String background;
     private final boolean ownQueue;
     private final boolean participateInQueue;
 
-    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String uri, boolean ownQueue, boolean participateInQueue) {
+    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, boolean ownQueue, boolean participateInQueue) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.birthday = birthday;
         this.uri = uri;
+        this.background = background;
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
+    }
+
+    public String getBackground() {
+        return background;
     }
 
     public String getUri() {

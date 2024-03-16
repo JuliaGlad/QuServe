@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public class CheckCompanyExistUseCase {
     public Single<Boolean> invoke(){
-        return DI.companyQueueRepository.checkCompany();
+        return DI.companyUserRepository.checkCompany();
     }
 }

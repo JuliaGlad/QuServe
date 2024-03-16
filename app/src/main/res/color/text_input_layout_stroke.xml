@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector  xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="?cardBackgroundColor" android:state_focused="false" />
-    <item android:color="?cardBackgroundColor" android:state_focused="true" /></selector>
+    <item android:color="@color/colorBox" android:state_focused="false" />
+    <item android:color="@color/colorBox" android:state_focused="true" /></selector>

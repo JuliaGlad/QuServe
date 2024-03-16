@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation("androidx.room:room-rxjava3:2.6.1")
     implementation(project(":common-ui"))
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("com.github.FrangSierra:RxFirebase:1.5.6")

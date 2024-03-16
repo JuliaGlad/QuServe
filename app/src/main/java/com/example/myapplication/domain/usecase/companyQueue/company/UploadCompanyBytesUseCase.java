@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadCompanyBytesUseCase {
     public Completable invoke(String companyId, byte[] data){
-       return DI.companyQueueRepository.uploadCompanyBytesToFireStorage(companyId, data);
+       return DI.companyUserRepository.uploadCompanyBytesToFireStorage(companyId, data);
     }
 }

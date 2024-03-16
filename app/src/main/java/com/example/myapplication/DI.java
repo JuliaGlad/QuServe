@@ -1,18 +1,31 @@
 package com.example.myapplication;
 
 import com.example.myapplication.data.FirebaseUserService;
-import com.example.myapplication.data.repository.CompanyQueueRepository;
+import com.example.myapplication.data.repository.CompanyUserRepository;
 import com.example.myapplication.data.repository.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
+import com.example.myapplication.domain.usecase.companyQueue.company.AddCompanySnapshotUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.CheckCompanyExistUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.CheckCurrentCompanyExist;
 import com.example.myapplication.domain.usecase.companyQueue.company.CreateCompanyDocumentUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.DeleteCompanyUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompaniesLogosUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyByStringPathUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyLogoUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyModelUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyPathUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetSingleCompanyUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.UpdateApprovedUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.UpdateCompanyDataUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.UpdateRoleUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyBytesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyLogoToFireStorageUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeSnapshotUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeePhotoUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeeQrCodeUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesPhotosUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
@@ -23,15 +36,17 @@ import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckVerificationUseCase;
 import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
-import com.example.myapplication.domain.usecase.profile.GetNameUseCase;
+import com.example.myapplication.domain.usecase.profile.GetBackgroundImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileEditUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetUserBooleanDataUseCase;
+import com.example.myapplication.domain.usecase.profile.IsNullUseCase;
 import com.example.myapplication.domain.usecase.profile.SendVerificationEmailUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateOwnQueueUseCase;
 import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateEmailFieldUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateParticipateInQueueUseCase;
+import com.example.myapplication.domain.usecase.profile.UploadBackgroundImageUseCase;
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddPeopleBeforeYouSnapshot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddQueueSizeModelSnapShot;
@@ -59,7 +74,7 @@ import com.example.myapplication.domain.usecase.profile.SendResetPasswordEmailUs
 import com.example.myapplication.domain.usecase.profile.SignInWithEmailAndPasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.SignOutUseCase;
 import com.example.myapplication.domain.usecase.profile.UpdateUserDataUseCase;
-import com.example.myapplication.domain.usecase.profile.UploadToFireStorageUseCase;
+import com.example.myapplication.domain.usecase.profile.UploadProfileImageToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByParticipantIdUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueByQueueIdUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetQueueTimeModelUseCase;
@@ -75,9 +90,17 @@ public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
     public static QueueRepository queueRepository = new QueueRepository();
     public static ProfileRepository profileRepository = new ProfileRepository();
-    public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
+    public static CompanyUserRepository companyUserRepository = new CompanyUserRepository();
 
     //COMPANY QUEUE USECASE
+    public static UpdateApprovedUseCase updateApprovedUseCase = new UpdateApprovedUseCase();
+    public static GetEmployeePhotoUseCase getEmployeePhotoUseCase = new GetEmployeePhotoUseCase();
+    public static GetEmployeesPhotosUseCase getEmployeesPhotosUseCase = new GetEmployeesPhotosUseCase();
+    public static GetCompaniesLogosUseCase getCompaniesLogosUseCase = new GetCompaniesLogosUseCase();
+    public static AddEmployeeSnapshotUseCase addEmployeeSnapshotUseCase = new AddEmployeeSnapshotUseCase();
+    public static AddCompanySnapshotUseCase addCompanySnapshotUseCase = new AddCompanySnapshotUseCase();
+    public static UpdateRoleUseCase updateRoleUseCase = new UpdateRoleUseCase();
+    public static CheckCurrentCompanyExist checkCurrentCompanyExist = new CheckCurrentCompanyExist();
     public static UploadCompanyBytesUseCase uploadCompanyBytesUseCase = new UploadCompanyBytesUseCase();
     public static CreateCompanyDocumentUseCase createCompanyDocumentUseCase = new CreateCompanyDocumentUseCase();
     public static GetCompanyPathUseCase getCompanyPathUseCase = new GetCompanyPathUseCase();
@@ -88,8 +111,14 @@ public class DI {
     public static GetEmployeeQrCodeUseCase getEmployeeQrCodeUseCase = new GetEmployeeQrCodeUseCase();
     public static GetCompanyByStringPathUseCase getCompanyByStringPathUseCase = new GetCompanyByStringPathUseCase();
     public static AddEmployeeUseCase addEmployeeUseCase = new AddEmployeeUseCase();
+    public static UploadCompanyLogoToFireStorageUseCase uploadCompanyLogoToFireStorageUseCase = new UploadCompanyLogoToFireStorageUseCase();
+    public static GetCompanyLogoUseCase getCompanyLogoUseCase = new GetCompanyLogoUseCase();
+    public static UpdateCompanyDataUseCase updateCompanyDataUseCase = new UpdateCompanyDataUseCase();
+    public static GetCompanyModelUseCase getCompanyModelUseCase = new GetCompanyModelUseCase();
+    public static DeleteCompanyUseCase deleteCompanyUseCase = new DeleteCompanyUseCase();
 
     //PROFILE USECASE
+    public static IsNullUseCase isNullUseCase = new IsNullUseCase();
     public static CheckPasswordUseCase checkPasswordUseCase = new CheckPasswordUseCase();
     public static UpdateParticipateInQueueUseCase updateParticipateInQueueUseCase = new UpdateParticipateInQueueUseCase();
     public static GetParticipateInQueueData getParticipateInQueueData = new GetParticipateInQueueData();
@@ -97,14 +126,13 @@ public class DI {
     public static CheckBooleanDataUseCase checkBooleanDataUseCase = new CheckBooleanDataUseCase();
     public static GetUserBooleanDataUseCase getUserBooleanDataUseCase = new GetUserBooleanDataUseCase();
     public static UpdateOwnQueueUseCase updateOwnQueueUseCase = new UpdateOwnQueueUseCase();
-    public static GetNameUseCase getNameUseCase = new GetNameUseCase();
     public static AddSnapshotProfileUseCase addSnapshotProfileUseCase = new AddSnapshotProfileUseCase();
     public static CheckVerificationUseCase checkVerificationUseCase = new CheckVerificationUseCase();
     public static GetUserEmailAndNameDataUseCase getUserEmailAndNameDataUseCase = new GetUserEmailAndNameDataUseCase();
     public static GetProfileImageUseCase getProfileImageUseCase = new GetProfileImageUseCase();
     public static GetProfileEditUseCase getProfileEditUseCase = new GetProfileEditUseCase();
     public static UpdateUserDataUseCase updateUserDataUseCase = new UpdateUserDataUseCase();
-    public static UploadToFireStorageUseCase uploadToFireStorageUseCase = new UploadToFireStorageUseCase();
+    public static UploadProfileImageToFireStorageUseCase uploadProfileImageToFireStorageUseCase = new UploadProfileImageToFireStorageUseCase();
     public static SignInWithEmailAndPasswordUseCase signInWithEmailAndPasswordUseCase = new SignInWithEmailAndPasswordUseCase();
     public static SendResetPasswordEmailUseCase sendResetPasswordEmailUseCase = new SendResetPasswordEmailUseCase();
     public static SignOutUseCase signOutUseCase = new SignOutUseCase();
@@ -115,6 +143,8 @@ public class DI {
     public static UpdateEmailFieldUseCase updateEmailFieldUseCase = new UpdateEmailFieldUseCase();
     public static VerifyBeforeUpdateEmailUseCase verifyBeforeUpdateEmailUseCase = new VerifyBeforeUpdateEmailUseCase();
     public static ChangePasswordUseCase changePasswordUseCase = new ChangePasswordUseCase();
+    public static UploadBackgroundImageUseCase uploadBackgroundImageUseCase = new UploadBackgroundImageUseCase();
+    public static GetBackgroundImageUseCase getBackgroundImageUseCase = new GetBackgroundImageUseCase();
 
     //QUEUE USECASE
     public static DeleteQrCodeUseCase deleteQrCodeUseCase = new DeleteQrCodeUseCase();

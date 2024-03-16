@@ -227,7 +227,7 @@ public class QueueRepository {
             StorageReference local = service.storageReference.child(QR_CODES).child(queueID + "/" + queueID + ".jpg");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-//                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
+                    emitter.onSuccess(new ImageDto(task.getResult()));
                 }
             });
         });
@@ -248,7 +248,7 @@ public class QueueRepository {
             StorageReference local = service.storageReference.child(QR_CODES).child(queueId + "/" + "QR-CODE.pdf");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-//                    emitter.onSuccess(new ImageDto(local.getDownloadUrl()));
+                    emitter.onSuccess(new ImageDto(task.getResult()));
                 }
             });
         });

@@ -5,7 +5,7 @@ import com.example.myapplication.DI;
 import io.reactivex.rxjava3.core.Completable;
 
 public class CreateAccountUseCase {
-    public Completable invoke(String email, String password, String name){
-        return DI.profileRepository.createAccount(email, password, name);
+    public Completable invoke(String email, String password, String name, String uri){
+        return DI.profileRepository.createAccount(email, password, name, uri);
     }
 }

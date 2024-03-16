@@ -2,8 +2,13 @@ package com.example.myapplication.presentation.queue.queueDetails;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -22,6 +27,7 @@ public class QueueDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityQueueDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -36,6 +42,8 @@ public class QueueDetailsActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(binding.toolbarQueueDetails, navController);
         }
     }
+
+
 
     public void startNotificationForegroundService(){
         Intent intent = new Intent(this, NotificationGoBackToWork.class);

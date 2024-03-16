@@ -37,6 +37,8 @@ public class AutoCompleteTextDelegate implements AdapterDelegate {
         void bind(AutoCompleteTextModel model) {
             binding.autoCompleteText.setSimpleItems(model.stringArray);
 
+            binding.autoCompleteText.setHint(model.hint);
+
             binding.autoCompleteText.setOnItemClickListener((parent, view, position, id) -> {
                 String lifetime = (parent.getItemAtPosition(position).toString());
                 model.listener.getResult(lifetime);

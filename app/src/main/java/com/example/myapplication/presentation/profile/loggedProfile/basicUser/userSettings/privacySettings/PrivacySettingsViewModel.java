@@ -1,26 +1,15 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.privacySettings;
 
-import static com.example.myapplication.presentation.utils.Utils.EMAIL;
-import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
-
-import android.content.DialogInterface;
-
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.updatePasswordDialog.UpdatePasswordDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.verification.VerificationDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemDelegateItem;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemModel;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceRedItem.ServiceRedItemDelegateItem;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceRedItem.ServiceRedItemModel;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegateItem;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemModel;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceRedItem.ServiceRedItemDelegateItem;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceRedItem.ServiceRedItemModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +18,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.listeners.DialogDismissedListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class PrivacySettingsViewModel extends ViewModel {

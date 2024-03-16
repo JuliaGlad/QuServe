@@ -10,7 +10,13 @@ public class GetProfileEditUseCase {
 
     public Single<UserEditModel> invoke(){
         return DI.profileRepository.getUserData().flatMap(userDto ->
-                Single.just(new UserEditModel(userDto.getUserName(), userDto.getGender(), userDto.getPhoneNumber(), userDto.getEmail(), userDto.getBirthday())));
+                Single.just(new UserEditModel(
+                        userDto.getUserName(),
+                        userDto.getGender(),
+                        userDto.getPhoneNumber(),
+                        userDto.getEmail(),
+                        userDto.getBirthday()))
+        );
     }
 
 }

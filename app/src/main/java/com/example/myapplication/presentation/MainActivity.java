@@ -7,29 +7,25 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
-import com.example.myapplication.presentation.profile.employees.EmployeeMainActivity;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.EditCompanyActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
 import com.example.myapplication.presentation.queue.basic.createQueue.CreateQueueActivity;
-import com.example.myapplication.presentation.queue.company.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 
@@ -40,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -76,7 +74,19 @@ public class MainActivity extends AppCompatActivity {
         recreate();
     }
 
-    public void openSettingsActivity(){
+    public void openCreateCompanyActivity(){
+        Intent intent = new Intent(this, CreateCompanyActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        startActivity(intent);
+    }
+
+    public void openCompanySettingsActivity(String companyId){
+        Intent intent = new Intent(this, SettingsCompanyActivity.class);
+        intent.putExtra(COMPANY_ID, companyId);
+        startActivity(intent);
+    }
+
+    public void openBasicSettingsActivity(){
         Intent intent = new Intent(this, BasicSettingsActivity.class);
         startActivity(intent);
     }
@@ -84,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
     public void openEmployeesActivity(String id) {
         Intent intent = new Intent(this, EmployeeMainActivity.class);
         intent.putExtra(COMPANY_ID, id);
+        startActivity(intent);
+    }
+
+    public void openEditCompanyActivity(String companyId) {
+        Intent intent = new Intent(this, EditCompanyActivity.class);
+        intent.putExtra(COMPANY_ID, companyId);
         startActivity(intent);
     }
 
@@ -114,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openCreateCompanyQueueActivity(){
-        Intent intent = new Intent(this, CreateCompanyQueueActivity.class);
+        Intent intent = new Intent(this, CreateCompanyActivity.class);
         intent.putExtra(PAGE_KEY, PAGE_1);
         startActivity(intent);
     }

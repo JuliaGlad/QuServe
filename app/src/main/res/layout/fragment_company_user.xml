@@ -5,230 +5,44 @@
     android:id="@+id/logged_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    android:padding="10dp"
     tools:context=".presentation.profile.loggedProfile.basicUser.BasicUserFragment">
 
-    <ImageView
-        android:id="@+id/profile_photo"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_round_add_photo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingContentDescription" />
 
-    <TextView
-        android:id="@+id/company_name"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:paddingTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="40dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ImageButton
+        android:id="@+id/button_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/bold_roboto"
-        android:text="Company name"
-        android:textColor="@color/strokeColor"
-        android:textSize="24sp"
+        android:background="@drawable/icon_settings_background"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_edit"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/company_name">
-
-        <ImageView
-            android:id="@+id/edit_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-        <TextView
-            android:id="@+id/edit_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
-            android:text="@string/edit_company"
-            android:textColor="@color/strokeColor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_icon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageButton
-            android:id="@+id/next_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:padding="16dp"
-            android:src="@drawable/ic_navigate"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_employees"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_edit">
-
-        <ImageView
-            android:id="@+id/employees_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_group"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-        <TextView
-            android:id="@+id/employees"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
-            android:text="@string/employees"
-            android:textColor="@color/strokeColor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/employees_icon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next_employees"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:padding="16dp"
-            android:src="@drawable/ic_navigate"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_to_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.842"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_employees">
-
-        <ImageView
-            android:id="@+id/to_user_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_person"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-        <TextView
-            android:id="@+id/to_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
-            android:text="@string/go_to_my_profile"
-            android:textColor="@color/strokeColor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/to_user_icon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:padding="16dp"
-            android:src="@drawable/ic_navigate"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_settings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.842"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_to_user">
-
-        <ImageView
-            android:id="@+id/settings_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:padding="16dp"
-            android:src="@drawable/ic_settings"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-        <TextView
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
-            android:text="@string/settings"
-            android:textColor="@color/strokeColor"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/settings_icon"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/next_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:padding="16dp"
-            android:src="@drawable/ic_navigate"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/iconColor_50"
-            tools:ignore="MissingContentDescription" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="80dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 

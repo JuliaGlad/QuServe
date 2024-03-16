@@ -2,8 +2,6 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.e
 
 import androidx.lifecycle.ViewModel;
 
-import static com.example.myapplication.presentation.utils.Utils.FEMALE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.MALE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.TAG_EXCEPTION;
 
 import android.net.Uri;
@@ -16,19 +14,15 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.profile.UserEditModel;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.model.UserModel;
-import com.google.android.gms.tasks.RuntimeExecutionException;
-import com.google.android.gms.tasks.Task;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditProfileViewModel extends ViewModel {
-
-    private Uri uri;
 
     private final MutableLiveData<String> _birthday = new MutableLiveData<>();
     LiveData<String> birthday = _birthday;
@@ -79,8 +73,7 @@ public class EditProfileViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull UserEditModel userEditModel) {
-                        _userName.postValue(userEditModel.getUserName());
-                        Log.d("User name", userEditModel.getUserName());
+                        _userName.postValue(userEditModel.getUserName());;
                         _userEmail.postValue(userEditModel.getEmail());
                         _phoneNumber.postValue(userEditModel.getPhoneNumber());
                         _gender.postValue(userEditModel.getGender());
@@ -96,6 +89,7 @@ public class EditProfileViewModel extends ViewModel {
 
     public void saveData(String newUserName, String newUserPhoneNumber, String newUserGender, String newBirthday, Uri imageUri, Fragment fragment) {
         DI.updateUserDataUseCase.invoke(newUserName, newUserPhoneNumber, newUserGender, newBirthday)
+                .concatWith(DI.uploadProfileImageToFireStorageUseCase.invoke(imageUri))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -105,28 +99,7 @@ public class EditProfileViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        if (imageUri != null) {
-                            DI.uploadToFireStorageUseCase.invoke(imageUri)
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new CompletableObserver() {
-                                        @Override
-                                        public void onSubscribe(@NonNull Disposable d) {
-
-                                        }
-
-                                        @Override
-                                        public void onComplete() {
-                                            fragment.requireActivity().finish();
-                                        }
-
-                                        @Override
-                                        public void onError(@NonNull Throwable e) {
-                                            Log.e("Exception", e.getMessage());
-                                        }
-                                    });
-                        } else {
-                            fragment.requireActivity().finish();
-                        }
+                        fragment.requireActivity().finish();
                     }
 
                     @Override

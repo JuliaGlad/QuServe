@@ -2,7 +2,6 @@ package com.example.myapplication.presentation.queue.queueDetails;
 
 import android.net.Uri;
 import android.util.Log;
-import android.view.View;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -15,11 +14,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.example.myapplication.domain.model.queue.QueueInProgressModel;
-import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegateItem;
-import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonModel;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailsButtonDelegateItem;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,18 +28,21 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.VoidListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewModel;
 
 public class QueueDetailsViewModel extends ViewModel {
 
     private Uri imageUri;
     private String queueId;
 
-    private final MutableLiveData<Task<Uri>> _pdfUri = new MutableLiveData<>();
-    public LiveData<Task<Uri>> pdfUri = _pdfUri;
+    private final MutableLiveData<String> _name = new MutableLiveData<>(null);
+    public LiveData<String> name = _name;
+
+    private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>();
+    public LiveData<Uri> pdfUri = _pdfUri;
 
     private final MutableLiveData<Boolean> _finishQueue = new MutableLiveData<>();
     public LiveData<Boolean> finishQueue = _finishQueue;
@@ -99,7 +98,8 @@ public class QueueDetailsViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
                         queueId = queueIdAndNameModel.getId();
-                        getQrCodeImage( queueIdAndNameModel.getName(), onButtonListener);
+                        _name.postValue(queueIdAndNameModel.getName());
+                        getQrCodeImage(onButtonListener);
                     }
 
                     @Override
@@ -109,7 +109,7 @@ public class QueueDetailsViewModel extends ViewModel {
                 });
     }
 
-    private void getQrCodeImage(String name, VoidListener voidListener) {
+    private void getQrCodeImage(VoidListener voidListener) {
        DI.getQrCodeImageUseCase.invoke(queueId)
                .subscribeOn(Schedulers.io())
                .subscribe(new SingleObserver<ImageModel>() {
@@ -120,10 +120,8 @@ public class QueueDetailsViewModel extends ViewModel {
 
                    @Override
                    public void onSuccess(@NonNull ImageModel imageModel) {
-//                      imageModel.getImageUri().addOnCompleteListener(task -> {
-//                          imageUri = task.getResult();
-//                          initRecyclerView(name, voidListener);
-//                      });
+                       imageUri = imageModel.getImageUri();
+                       initRecyclerView(voidListener);
                    }
 
                    @Override
@@ -133,20 +131,19 @@ public class QueueDetailsViewModel extends ViewModel {
                });
     }
 
-    private void initRecyclerView(String queueName, VoidListener onButtonListener) {
+    private void initRecyclerView(VoidListener onButtonListener) {
         buildList(new DelegateItem[]{
-                new StringTextViewDelegateItem(new StringTextViewModel(1, queueName, 32, View.TEXT_ALIGNMENT_CENTER)),
-                new ImageViewDelegateItem(new ImageViewModel(2, imageUri)),
-                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, () -> {
+                new ImageViewDelegateItem(new ImageViewModel(1, imageUri)),
+                new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.here_you_can_see_queue_details)),
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, R.drawable.ic_qrcode,
+                        () -> {
                     getQrCodePdf(queueId);
                 })),
-                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue, R.string.pause_queue_description, () -> {
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue, R.string.pause_queue_description, R.drawable.ic_time,
+                        () -> {
                     _pauseQueue.postValue(true);
                 })),
-                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, onButtonListener::run)),
-                new FinishQueueButtonDelegateItem(new FinishQueueButtonModel(6, R.string.finish_queue, () -> {
-                    _finishQueue.postValue(true);
-                }))
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, R.drawable.ic_group, onButtonListener::run)),
         });
     }
 
@@ -161,7 +158,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-//                        _pdfUri.postValue(imageModel.getImageUri());
+                        _pdfUri.postValue(imageModel.getImageUri());
                     }
 
                     @Override

@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.queue.basic.createQueue.mainFragment;
 
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 
 import android.os.Bundle;
@@ -20,7 +22,7 @@ import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCom
 import myapplication.android.ui.recycler.ui.items.items.button.ButtonDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.progressBar.ProgressBarDelegate;
-import myapplication.android.ui.recycler.ui.items.items.textView.TextViewDelegate;
+import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
 
 public class CreateQueueFragment extends Fragment {
 
@@ -57,6 +59,11 @@ public class CreateQueueFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        if (page.equals(PAGE_2)){
+            binding.buttonNext.setText(R.string.finish);
+            binding.companyProgressBar.setProgress(50);
+        }
+
         setMainAdapter();
         initNextButton();
         initCloseButton();
@@ -72,19 +79,19 @@ public class CreateQueueFragment extends Fragment {
     }
 
     private void initBackButton() {
-        binding.imageButtonBack.setOnClickListener(v -> {
+        binding.buttonBack.setOnClickListener(v -> {
             viewModel.navigateBack(page, this);
         });
     }
 
     private void initNextButton() {
-        binding.nextButton.setOnClickListener(v -> {
+        binding.buttonNext.setOnClickListener(v -> {
             viewModel.navigateNext(page, this);
         });
     }
 
     private void initCloseButton() {
-        binding.imageButtonClose.setOnClickListener(v -> {
+        binding.buttonClose.setOnClickListener(v -> {
             requireActivity().finish();
             viewModel.setArgumentsNull();
         });
@@ -94,7 +101,7 @@ public class CreateQueueFragment extends Fragment {
 
         mainAdapter.addDelegate(new ProgressBarDelegate());
         mainAdapter.addDelegate(delegate);
-        mainAdapter.addDelegate(new TextViewDelegate());
+        mainAdapter.addDelegate(new TextViewHeaderDelegate());
         mainAdapter.addDelegate(new AutoCompleteTextDelegate());
         mainAdapter.addDelegate(new ButtonDelegate());
 

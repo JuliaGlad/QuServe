@@ -23,6 +23,15 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.loggedProfile.companyUser.editCompany.EditCompanyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity"
             android:exported="false" />
         <activity
@@ -35,7 +44,7 @@
             android:name=".presentation.profile.becomeEmployee.BecomeEmployeeActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.profile.employees.EmployeeMainActivity"
+            android:name=".presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.queue.waitingFragment.fragment.WaitingActivity"
@@ -70,7 +79,7 @@
             android:name=".presentation.MainActivity"
             android:configChanges="uiMode"
             android:exported="true"
-            android:label="@string/smart_queue">
+            android:label="QuServe">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

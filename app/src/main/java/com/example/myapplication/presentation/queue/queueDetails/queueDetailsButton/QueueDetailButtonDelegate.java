@@ -3,8 +3,10 @@ package com.example.myapplication.presentation.queue.queueDetails.queueDetailsBu
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewQueueDetailsItemBinding;
 
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
@@ -37,8 +39,9 @@ public class QueueDetailButtonDelegate implements AdapterDelegate {
 
         public void bind(QueueDetailButtonModel model, QueueDetailButtonItemListener listener){
             binding.title.setText(model.title);
-            binding.description.setText(model.description);
-            binding.queueDetailsItem.setOnClickListener(v -> listener.onClick());
+            binding.textBody.setText(model.description);
+            binding.icon.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), model.drawable, itemView.getContext().getTheme()));
+            binding.queueDetailsButtonLayout.setOnClickListener(v -> listener.onClick());
         }
     }
 }

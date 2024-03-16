@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:layout_margin="24dp"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/icon_shield"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_edit"
+        app:tint="?colorPrimary" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/change_role"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_shield" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/head_line"
+        style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/change_your_employee_s_role_in_company"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_send"
+        style="@style/Widget.Material3.Button.TonalButton.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/change"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_admin" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_send"
+        app:layout_constraintEnd_toStartOf="@+id/button_send"
+        app:layout_constraintTop_toTopOf="@+id/button_send" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_admin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/role_card_background"
+        android:padding="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toStartOf="@+id/icon_shield"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/head_line">
+
+
+        <ImageView
+            android:id="@+id/icon_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_admin"
+            app:layout_constraintBottom_toBottomOf="@+id/role"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/role" />
+
+        <TextView
+            android:id="@+id/role"
+            style="@style/TextAppearance.Material3.TitleSmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/admin"
+            app:layout_constraintStart_toEndOf="@+id/icon_admin"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/first_admin_feature"
+            style="@style/TextAppearance.Material3.BodySmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/manages_workers"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/role" />
+
+        <TextView
+            android:id="@+id/second_admin_feature"
+            style="@style/TextAppearance.Material3.BodySmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/manages_company_n_queues"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/first_admin_feature" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_worker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/role_card_background"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/icon_shield"
+        app:layout_constraintTop_toBottomOf="@+id/head_line">
+
+
+        <ImageView
+            android:id="@+id/icon_worker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_worker"
+            app:layout_constraintBottom_toBottomOf="@+id/role_worker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/role_worker" />
+
+        <TextView
+            android:id="@+id/role_worker"
+            style="@style/TextAppearance.Material3.TitleSmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/worker"
+            app:layout_constraintStart_toEndOf="@+id/icon_worker"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/first_worker_feature"
+            style="@style/TextAppearance.Material3.BodySmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/serves_customers"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/role_worker" />
+
+        <TextView
+            android:id="@+id/second_worker_feature"
+            style="@style/TextAppearance.Material3.BodySmall.Dialog.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Manages \nassigned queues"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/first_worker_feature" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

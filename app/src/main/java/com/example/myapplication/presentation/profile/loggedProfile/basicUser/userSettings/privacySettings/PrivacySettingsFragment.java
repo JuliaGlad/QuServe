@@ -11,23 +11,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPrivacySettingsBinding;
 import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.deleteAccount.DeleteAccountDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.updatePasswordDialog.UpdatePasswordDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceItem.ServiceItemDelegate;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.delegates.serviceRedItem.ServiceRedItemDelegate;
-
-import java.util.List;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegate;
+import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceRedItem.ServiceRedItemDelegate;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
-import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 
 public class PrivacySettingsFragment extends Fragment {

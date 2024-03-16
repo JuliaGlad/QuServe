@@ -38,19 +38,19 @@ public class EditTextDelegate implements AdapterDelegate {
         }
 
         void bind(EditTextModel model) {
-            binding.editText.setInputType(model.inputType);
+            binding.editLayout.setInputType(model.inputType);
             if (model.text == null) {
-                binding.textInputLayout.setHint(model.hint);
+                binding.editLayout.setHint(model.hint);
             } else {
-                binding.editText.setText(model.text);
+                binding.editLayout.setText(model.text);
             }
             if (!model.editable){
-                binding.editText.setFocusable(false);
-                binding.editText.setClickable(false);
-                binding.editText.setCursorVisible(false);
+                binding.editLayout.setFocusable(false);
+                binding.editLayout.setClickable(false);
+                binding.editLayout.setCursorVisible(false);
             }
 
-            binding.editText.addTextChangedListener(new TextWatcher() {
+            binding.editLayout.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

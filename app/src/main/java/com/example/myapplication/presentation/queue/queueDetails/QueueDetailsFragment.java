@@ -4,31 +4,36 @@ import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
-import com.example.myapplication.presentation.queue.queueDetails.finishQueueButton.FinishQueueButtonDelegate;
 import com.example.myapplication.presentation.queue.queueDetails.queueDetailsButton.QueueDetailButtonDelegate;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
 
 public class QueueDetailsFragment extends Fragment {
 
@@ -54,6 +59,20 @@ public class QueueDetailsFragment extends Fragment {
         setMainAdapter();
         setupObserves();
         initBackButton();
+        initMenuButton();
+    }
+
+    private void initMenuButton() {
+        binding.buttonMenu.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.queue_details_menu, popupMenu.getMenu());
+            popupMenu.show();
+
+            popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
+                showFinishQueueDialog();
+                return false;
+            });
+        });
     }
 
     private void initBackButton() {
@@ -63,10 +82,9 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void setMainAdapter() {
-        mainAdapter.addDelegate(new StringTextViewDelegate());
         mainAdapter.addDelegate(new ImageViewDelegate());
         mainAdapter.addDelegate(new QueueDetailButtonDelegate());
-        mainAdapter.addDelegate(new FinishQueueButtonDelegate());
+        mainAdapter.addDelegate(new AdviseBoxDelegate());
 
         binding.recyclerView.setAdapter(mainAdapter);
     }
@@ -155,21 +173,12 @@ public class QueueDetailsFragment extends Fragment {
 
     }
 
-    private void showPauseUnavailableDialog(){
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_next_pause_available_later, null);
-        AlertDialog pauseDialog = new AlertDialog.Builder(getContext())
-                .setView(dialogView).create();
-
-        pauseDialog.show();
-
-        Button ok = dialogView.findViewById(R.id.ok_button);
-        ok.setOnClickListener(view -> {
-            pauseDialog.dismiss();
-        });
-    }
-
     private void setupObserves() {
         viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
+
+        viewModel.name.observe(getViewLifecycleOwner(), s -> {
+            binding.queueName.setText(s);
+        });
 
         viewModel.finishQueue.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
@@ -181,14 +190,9 @@ public class QueueDetailsFragment extends Fragment {
             showTimePickerDialog();
         });
 
-        viewModel.pdfUri.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnSuccessListener(uri -> {
-
-                String uriString = uri.toString();
-
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uriString));
-                requireActivity().startActivity(intent);
-            });
+        viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            requireActivity().startActivity(intent);
         });
-    }
+    };
 }

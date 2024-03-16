@@ -123,6 +123,8 @@ public class EditProfileFragment extends Fragment {
             phone = binding.editLayoutPhone.getText().toString();
             email = binding.editLayoutEmail.getText().toString();
             gender = binding.editLayoutGender.getText().toString();
+            birthday = binding.editLayoutData.getText().toString();
+            Log.d("Birthday", birthday);
             viewModel.saveData(name, phone, gender, birthday, imageUri, this);
         });
     }

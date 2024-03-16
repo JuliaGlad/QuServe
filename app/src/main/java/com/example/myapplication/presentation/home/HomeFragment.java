@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.databinding.FragmentHomeBinding;
+import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -33,6 +34,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 //        binding.button2.setOnClickListener(v -> {
 //            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 //            intent.addCategory(Intent.CATEGORY_OPENABLE);

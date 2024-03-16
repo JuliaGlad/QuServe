@@ -72,9 +72,6 @@
             android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
             app:destination="@id/navigation_queue" />
         <action
-            android:id="@+id/action_profileLoggedFragment_to_createCompanyAccountFragment"
-            app:destination="@id/createCompanyAccountFragment" />
-        <action
             android:id="@+id/action_profileLoggedFragment_to_chooseCompanyFragment"
             app:destination="@id/chooseCompanyFragment" />
     </fragment>
@@ -87,7 +84,7 @@
 
 <!--    <fragment-->
 <!--        android:id="@+id/basicSettingsFragment"-->
-<!--        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsFragment"-->
+<!--        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.BasicSettingsFragment"-->
 <!--        android:label="@string/settings"-->
 <!--        tools:layout="@layout/fragment_basic_settings" >-->
 <!--        <action-->
@@ -125,28 +122,6 @@
         <action
             android:id="@+id/action_chooseFragment_to_profileLoggedFragment"
             app:destination="@id/profileLoggedFragment" />
-        <action
-            android:id="@+id/action_chooseFragment_to_createCompanyAccountFragment"
-            app:destination="@id/createCompanyAccountFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/createCompanyAccountFragment"
-        android:name="com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyAccountFragment"
-        android:label="fragment_create_company_account"
-        tools:layout="@layout/fragment_create_company_account" >
-        <action
-            android:id="@+id/action_createCompanyAccountFragment_self"
-            app:destination="@id/createCompanyAccountFragment" />
-        <argument
-            android:name="page"
-            app:nullable="true"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_createCompanyAccountFragment_to_chooseFragment"
-            app:destination="@id/chooseFragment" />
-        <action
-            android:id="@+id/action_createCompanyAccountFragment_to_profileLoggedFragment"
-            app:destination="@id/profileLoggedFragment" />
     </fragment>
     <fragment
         android:id="@+id/basicUserFragment"
@@ -159,8 +134,12 @@
     </fragment>
     <fragment
         android:id="@+id/chooseCompanyFragment"
-        android:name="com.example.myapplication.presentation.profile.loggedProfile.chooseCompany.ChooseCompanyFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyFragment"
         android:label="fragment_choose_company"
-        tools:layout="@layout/fragment_choose_company" />
+        tools:layout="@layout/fragment_choose_company" >
+        <action
+            android:id="@+id/action_chooseCompanyFragment_to_profileLoggedFragment"
+            app:destination="@id/profileLoggedFragment" />
+    </fragment>
 
 </navigation>

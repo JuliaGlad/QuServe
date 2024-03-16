@@ -137,6 +137,7 @@
     <string name="all">All</string>
     <string name="admins">Admins</string>
     <string name="workers">Workers</string>
+    <string name="company_name">Company name</string>
 
     <string-array name="lifetime">
         <item>

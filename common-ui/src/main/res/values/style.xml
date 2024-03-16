@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">?cardBackgroundColor</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="TextAppearance.Material3.HeadlineSmall.QuServe" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Dialog.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">?android:textColorHint</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/regular</item>
+    </style>
+
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu.QuServe" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintEnabled">false</item>>
+        <item name="boxCornerRadiusBottomEnd">100dp</item>
+        <item name="boxCornerRadiusBottomStart">100dp</item>
+        <item name="boxCornerRadiusTopEnd">100dp</item>
+        <item name="boxCornerRadiusTopStart">100dp</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">?cardBackgroundColor</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+</resources>

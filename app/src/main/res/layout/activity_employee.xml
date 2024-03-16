@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.profile.employees.EmployeeMainActivity">
+    tools:context=".presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_employees"
-        android:name="com.example.myapplication.presentation.profile.employees.fragment.EmployeesFragment"
+        android:name="com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

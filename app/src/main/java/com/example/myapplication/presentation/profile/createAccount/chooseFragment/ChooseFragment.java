@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentChooseBinding;
+import com.example.myapplication.presentation.MainActivity;
 
 public class ChooseFragment extends Fragment {
 
@@ -48,8 +49,7 @@ public class ChooseFragment extends Fragment {
 
     private void initCompanyButton(){
         binding.forCompanyLayout.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(ChooseFragmentDirections.actionChooseFragmentToCreateCompanyAccountFragment(PAGE_1));
+//            ((MainActivity)requireActivity()).openCreateCompanyActivity();
         });
     }
 }

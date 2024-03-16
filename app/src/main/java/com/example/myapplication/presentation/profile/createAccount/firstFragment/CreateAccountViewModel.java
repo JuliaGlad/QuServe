@@ -10,10 +10,11 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.DI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+
 /*
  * @author j.gladkikh
  */
@@ -22,17 +23,21 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _verified = new MutableLiveData<>(false);
     LiveData<Boolean> verified = _verified;
 
+    private final MutableLiveData<Boolean> _showDialog = new MutableLiveData<>(false);
+    LiveData<Boolean> showDialog = _showDialog;
+
     private final MutableLiveData<String> _emailError = new MutableLiveData<>(null);
-    LiveData<String> emailError = _emailError;
 
     private final MutableLiveData<String> _passwordError = new MutableLiveData<>(null);
-    LiveData<String> passwordError = _passwordError;
 
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
-    LiveData<String> nameError = _nameError;
 
     public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
-        DI.createAccountUseCase.invoke(email, password, userName)
+        DI.createAccountUseCase.invoke(email, password, userName, String.valueOf(uri))
+                .concatWith(
+                        DI.uploadProfileImageToFireStorageUseCase.invoke(uri)
+                                .andThen(DI.sendVerificationEmailUseCase.invoke())
+                )
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -42,50 +47,12 @@ public class CreateAccountViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        Log.d("Complete creation", "completed");
-                        if (uri != null){
-                            DI.uploadToFireStorageUseCase.invoke(uri)
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe(new CompletableObserver() {
-                                        @Override
-                                        public void onSubscribe(@NonNull Disposable d) {
-
-                                        }
-
-                                        @Override
-                                        public void onComplete() {
-                                            Log.d("Complete uploading", "completed");
-                                        }
-
-                                        @Override
-                                        public void onError(@NonNull Throwable e) {
-
-                                        }
-                                    });
-                        }
-
-                        DI.sendVerificationEmailUseCase.invoke().subscribeOn(Schedulers.io())
-                                .subscribe(new CompletableObserver() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-                                        Log.d("Complete send", "completed");
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-                                });
+                        _showDialog.postValue(true);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("Exception", e.getMessage());
+
                     }
                 });
     }

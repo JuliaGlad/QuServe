@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserDatabaseProvider {
 
-    public static void deleteUser(){
+    public static void deleteUser() {
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
@@ -27,6 +27,7 @@ public class UserDatabaseProvider {
                         userDto.getEmail(),
                         userDto.getBirthday(),
                         userDto.getUri(),
+                        userDto.getBackground(),
                         userDto.isOwnQueue(),
                         userDto.isParticipateInQueue()
                 )
@@ -45,6 +46,7 @@ public class UserDatabaseProvider {
                     entity.email,
                     entity.birthday,
                     entity.uri,
+                    entity.background,
                     entity.ownQueue,
                     entity.participateInQueue
             );
@@ -53,23 +55,42 @@ public class UserDatabaseProvider {
         }
     }
 
-    public static void updateUser(String userName, String gender, String phoneNumber, String birthday){
+    public static void updateUser(String userName, String gender, String phoneNumber, String birthday) {
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
-            entity.userName = userName;
-            entity.gender = gender;
-            entity.phoneNumber = phoneNumber;
-            entity.birthday = birthday;
+
+            if (!entity.userName.equals(userName) && userName != null) {
+                entity.userName = userName;
+            }
+            if (!entity.gender.equals(gender) && gender != null) {
+                entity.gender = gender;
+            }
+            if (!entity.phoneNumber.equals(phoneNumber)) {
+                entity.phoneNumber = phoneNumber;
+            }
+            if (birthday != null && !entity.birthday.equals(birthday) ) {
+                entity.birthday = birthday;
+            }
+
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }
 
-    public static void updateUri(String uri){
+    public static void updateUri(String uri) {
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
             entity.uri = uri;
+            App.getInstance().getDatabase().userDao().update(entity);
+        }
+    }
+
+    public static void updateBackground(String uri) {
+        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
+        if (entities.size() > 0) {
+            UserEntity entity = entities.get(0);
+            entity.background = uri;
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }

@@ -31,7 +31,7 @@
         <item name="colorOnSurfaceInverse">@color/colorOnInverseSurface</item>
         <item name="colorPrimaryInverse">@color/colorInversePrimary</item>
         <item name="android:colorBackground">?colorSurface</item>
-        <item name="cardBackgroundColor">@color/colorCardBackground</item>
+        <item name="cardBackgroundColor">#DDEEFC</item>
         <item name="android:textColorHint">@color/colorTextHint</item>
     </style>
 

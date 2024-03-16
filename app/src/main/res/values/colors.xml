@@ -12,8 +12,8 @@
     <color name="colorOnErrorContainer">#B23333</color>
     <color name="colorOnErrorContainerVariant">#E98080</color>
     <color name="colorOnErrorTonal">#FFCFCB</color>
-    <color name="colorPrimaryContainer">#A4D0E5</color>
-    <color name="colorOnPrimaryContainer">#0D1D26</color>
+    <color name="colorPrimaryContainer">#AEDEF5</color>
+    <color name="colorOnPrimaryContainer">@color/colorPrimary</color>
     <color name="colorSecondaryContainer">#BED3E5</color>
     <color name="colorOnSecondaryContainer">#171F26</color>
     <color name="colorTertiaryContainer">#EFE4FB</color>
@@ -22,7 +22,7 @@
     <color name="colorOnSurface">#266180</color>
     <color name="colorOnSurfaceVariant">#3F464C</color>
     <color name="colorSurfaceContainer">#D7E6F2</color>
-    <color name="colorCardBackground">#E6F2FC</color>
+    <color name="colorCardBackground">#E2F2FF</color>
     <color name="colorSurfaceContainerLowest">#EFF7FF</color>
     <color name="colorSurfaceContainerHigh">#D0DFEB</color>
     <color name="colorSurfaceContainerHighest">#CBDAE5</color>
@@ -32,7 +32,10 @@
     <color name="colorOnInverseSurface">#F0F7FC</color>
     <color name="colorInversePrimary">#408BB2</color>
     <color name="colorTextHint">#5FA5C9</color>
-    <color name="colorTonal">#D2E5F4</color>
+    <color name="colorTonal">#D6E9F8</color>
+    <color name="colorBoxStroke">#CAE2F5</color>
+    <color name="colorBox">#E4F2FF</color>
+    <color name="colorTextDisabled">#AEC1D1</color>
 
     //OLD
     <color name="iconDialogColor">@color/background</color>

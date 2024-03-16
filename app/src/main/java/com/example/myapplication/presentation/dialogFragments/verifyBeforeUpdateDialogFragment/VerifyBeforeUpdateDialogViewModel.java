@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.DI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -19,33 +20,17 @@ public class VerifyBeforeUpdateDialogViewModel extends ViewModel {
     public void checkVerification(String email, String password) {
         DI.signOutUseCase.invoke();
         DI.signInWithEmailAndPasswordUseCase.invoke(email, password)
+                .andThen(DI.checkVerificationUseCase.invoke())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new SingleObserver<Boolean>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onComplete() {
-                        DI.checkVerificationUseCase.invoke()
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new SingleObserver<Boolean>() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
+                    public void onSuccess(@NonNull Boolean aBoolean) {
 
-                                    }
-
-                                    @Override
-                                    public void onSuccess(@NonNull Boolean aBoolean) {
-                                        _isVerified.postValue(aBoolean);
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-                                });
                     }
 
                     @Override
@@ -53,6 +38,41 @@ public class VerifyBeforeUpdateDialogViewModel extends ViewModel {
 
                     }
                 });
+//        DI.signInWithEmailAndPasswordUseCase.invoke(email, password)
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new CompletableObserver() {
+//                    @Override
+//                    public void onSubscribe(@NonNull Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        DI.checkVerificationUseCase.invoke()
+//                                .subscribeOn(Schedulers.io())
+//                                .subscribe(new SingleObserver<Boolean>() {
+//                                    @Override
+//                                    public void onSubscribe(@NonNull Disposable d) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onSuccess(@NonNull Boolean aBoolean) {
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onError(@NonNull Throwable e) {
+//
+//                                    }
+//                                });
+//                    }
+//
+//                    @Override
+//                    public void onError(@NonNull Throwable e) {
+//
+//                    }
+//                });
 
     }
 }

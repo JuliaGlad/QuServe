@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_company_navigation"
+    app:startDestination="@id/createCompanyAccountFragment">
+
+    <fragment
+        android:id="@+id/createCompanyAccountFragment"
+        android:name="com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.CreateCompanyAccountFragment"
+        android:label="fragment_create_company_account"
+        tools:layout="@layout/fragment_create_company_account" >
+        <action
+            android:id="@+id/action_createCompanyAccountFragment_self"
+            app:destination="@id/createCompanyAccountFragment" />
+
+        <argument
+            android:name="page"
+            app:nullable="true"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_createCompanyAccountFragment_to_approvalFragment"
+            app:destination="@id/approvalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/approvalFragment"
+        android:name="com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.ApprovalFragment"
+        android:label="fragment_approval"
+        tools:layout="@layout/fragment_approval" />
+</navigation>

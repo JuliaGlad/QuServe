@@ -48,8 +48,8 @@ import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegat
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
 import myapplication.android.ui.recycler.ui.items.items.progressBar.ProgressBarDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.progressBar.ProgressBarModel;
-import myapplication.android.ui.recycler.ui.items.items.textView.TextViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.textView.TextViewModel;
+import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
 
 
 public class CreateQueueViewModel extends ViewModel {
@@ -64,8 +64,7 @@ public class CreateQueueViewModel extends ViewModel {
         switch (page) {
             case PAGE_1:
                 buildList(new DelegateItem[]{
-                        new ProgressBarDelegateItem(new ProgressBarModel(1, 0)),
-                        new TextViewDelegateItem(new TextViewModel(2, R.string.enter_name, 24)),
+                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_name, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.name, queueName, InputType.TYPE_CLASS_TEXT, true, stringName -> {
                             queueName = stringName;
                         }))
@@ -74,8 +73,7 @@ public class CreateQueueViewModel extends ViewModel {
 
             case PAGE_2:
                 buildList(new DelegateItem[]{
-                        new ProgressBarDelegateItem(new ProgressBarModel(1, 50)),
-                        new TextViewDelegateItem(new TextViewModel(2, R.string.set_queue_life_time, 24)),
+                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)),
                         new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
                             for (int i = 0; i < array.length; i++) {
                                 if (array[i].equals(stringTime)) {

@@ -2,48 +2,51 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/employee_item"
+    android:id="@+id/item"
+    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/employee_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/regular"
-        android:text="Name"
-        android:textColor="@color/strokeColor"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/employee_image"
+    <ImageView
+        android:id="@+id/employee_photo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/role_title"
+        android:id="@+id/employee_name"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="20dp"
+        android:text="Employee name"
+        app:layout_constraintStart_toEndOf="@+id/employee_photo"
+        app:layout_constraintTop_toTopOf="@+id/employee_photo" />
+
+    <TextView
+        android:id="@+id/role_headline"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/role"
-        app:layout_constraintBottom_toBottomOf="@+id/employee_image"
-        app:layout_constraintStart_toEndOf="@+id/employee_image"
+        app:layout_constraintStart_toEndOf="@+id/employee_photo"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />
 
     <TextView
         android:id="@+id/role"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:text="admin/worker"
-        app:layout_constraintBottom_toBottomOf="@+id/employee_image"
-        app:layout_constraintStart_toEndOf="@+id/role_title"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:text="Worker/Admin"
+        app:layout_constraintStart_toEndOf="@+id/role_headline"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />
 
-    <ImageView
-        android:id="@+id/employee_image"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_account_circle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

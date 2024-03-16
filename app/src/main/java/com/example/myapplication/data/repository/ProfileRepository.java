@@ -1,6 +1,8 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
+import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
@@ -10,6 +12,7 @@ import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KE
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
+import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 
@@ -17,25 +20,19 @@ import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.myapplication.App;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
+import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.RuntimeExecutionException;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -138,6 +135,7 @@ public class ProfileRepository {
                                                     .addOnCompleteListener(taskNew -> {
                                                         if (taskNew.isSuccessful()) {
                                                             UserDatabaseProvider.deleteUser();
+                                                            CompanyUserProvider.deleteAll();
                                                             emitter.onComplete();
                                                         } else {
                                                             Log.d("Error", taskNew.getException().getMessage());
@@ -160,6 +158,7 @@ public class ProfileRepository {
 
     public void logout() {
         service.auth.signOut();
+        CompanyUserProvider.deleteAll();
         UserDatabaseProvider.deleteUser();
     }
 
@@ -193,7 +192,7 @@ public class ProfileRepository {
         docRef.update(PARTICIPATE_IN_QUEUE, value);
     }
 
-    public Completable createAccount(String email, String password, String userName) {
+    public Completable createAccount(String email, String password, String userName, String uri) {
         return Completable.create(emitter -> {
             service.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -209,10 +208,12 @@ public class ProfileRepository {
                     user.put(EMAIL_KEY, email);
                     user.put(GENDER_KEY, "");
                     user.put(BIRTHDAY_KEY, "");
+                    user.put(URI, uri);
+                    user.put(BACKGROUND_IMAGE, String.valueOf(Uri.EMPTY));
 
                     docRef.set(user).addOnCompleteListener(task1 -> {
-                        if (task.isSuccessful()){
-                            UserDto userDto = new UserDto(userName, "", "", email, "", String.valueOf(Uri.EMPTY), false, false);
+                        if (task.isSuccessful()) {
+                            UserDto userDto = new UserDto(userName, "", "", email, "", String.valueOf(Uri.EMPTY), String.valueOf(Uri.EMPTY), false, false);
                             UserDatabaseProvider.insertUser(userDto);
                             emitter.onComplete();
                         }
@@ -231,14 +232,41 @@ public class ProfileRepository {
         });
     }
 
-    public Completable uploadToFireStorage(Uri imageUri) {
+    public Completable uploadProfileImageToFireStorage(Uri imageUri) {
         return Completable.create(emitter -> {
-            Log.d("Start uri", String.valueOf(imageUri));
-            StorageReference reference = service.storageReference.child(PROFILE_IMAGES + PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-            reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
-                UserDatabaseProvider.updateUri(String.valueOf(imageUri));
+            if (imageUri != null) {
+                StorageReference reference = service.storageReference.child(PROFILE_IMAGES + PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
+                reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                    DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+                    docRef.update(URI, imageUri).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            UserDatabaseProvider.updateUri(String.valueOf(imageUri));
+                            emitter.onComplete();
+                        }
+                    });
+
+                });
+            } else {
                 emitter.onComplete();
+            }
+        });
+    }
+
+    public Completable uploadBackgroundToFireStorage(Uri imageUri) {
+        return Completable.create(emitter -> {
+            StorageReference reference = service.storageReference.child("BACKGROUND_IMAGES/").child(BACKGROUND_IMAGE + service.auth.getCurrentUser().getUid());
+
+            reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+                docRef.update(BACKGROUND_IMAGE, imageUri).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        UserDatabaseProvider.updateBackground(String.valueOf(imageUri));
+                        emitter.onComplete();
+                    }
+                });
+
             });
+
         });
     }
 
@@ -255,6 +283,17 @@ public class ProfileRepository {
             ).addOnCompleteListener(task -> {
                 UserDatabaseProvider.updateUser(newUserName, newUserGender, newUserPhone, newBirthday);
                 emitter.onComplete();
+            });
+        });
+    }
+
+    public Completable updateUri(String uri) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+            docRef.update(URI, uri).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
             });
         });
     }
@@ -288,7 +327,8 @@ public class ProfileRepository {
                                         value.getString(PHONE_NUMBER_KEY),
                                         value.getString(EMAIL_KEY),
                                         value.getString(BIRTHDAY_KEY),
-                                        String.valueOf(Uri.EMPTY),
+                                        value.getString(URI),
+                                        value.getString(BACKGROUND_IMAGE),
                                         Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)),
                                         Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE))
                                 );
@@ -300,33 +340,64 @@ public class ProfileRepository {
         }
     }
 
-    public Single<ImageDto> getProfileImage() {
-        UserDto localUser = UserDatabaseProvider.getUser();
-        if (localUser != null) {
-            return Single.create(emitter -> {
-                emitter.onSuccess(new ImageDto(Uri.parse(UserDatabaseProvider.getUser().getUri())));
-            });
-        }else {
-            return
-                    Single.create(emitter -> {
-                        StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-                        try {
-                            local.getDownloadUrl().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Uri uri = task.getResult();
-                                    emitter.onSuccess(new ImageDto(uri));
-                                } else {
-                                    Log.d("Error", task.getException().getMessage());
-                                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
-                                }
-                            });
-                        } catch (RuntimeExecutionException e) {
-                            Log.d("RuntimeExecutionException", e.getMessage());
-                            emitter.onSuccess(new ImageDto(Uri.EMPTY));
-                        }
+    public Single<ImageDto> getBackgroundImage() {
+//        UserDto localUser = UserDatabaseProvider.getUser();
+//        if (localUser != null) {
+//            return Single.create(emitter -> {
+//                Log.d("Uri test back", localUser.getBackground());
+//                emitter.onSuccess(new ImageDto(Uri.parse(localUser.getBackground())));
+//            });
+//        } else {
+        return Single.create(emitter -> {
+            StorageReference local = service.storageReference.child("BACKGROUND_IMAGES/").child(BACKGROUND_IMAGE + service.auth.getCurrentUser().getUid());
+            try {
+                local.getDownloadUrl().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Uri uri = task.getResult();
+                        emitter.onSuccess(new ImageDto(uri));
+                    } else {
+                        Log.d("Error", task.getException().getMessage());
+                        emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                    }
+                });
+            } catch (RuntimeExecutionException e) {
+                Log.d("RuntimeExecutionException", e.getMessage());
+                emitter.onSuccess(new ImageDto(Uri.EMPTY));
+            }
 
-                    });
-        }
+        });
+//        }
+    }
+
+    public Single<ImageDto> getProfileImage() {
+//        UserDto localUser = UserDatabaseProvider.getUser();
+//        if (localUser != null) {
+//            return Single.create(emitter -> {
+//                Log.d("Uri test", localUser.getUri());
+//                emitter.onSuccess(new ImageDto(Uri.parse(localUser.getUri())));
+//            });
+//        } else {
+        return
+                Single.create(emitter -> {
+                    StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
+                    try {
+                        local.getDownloadUrl().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Uri uri = task.getResult();
+                                Log.d("Uri test", String.valueOf(uri));
+                                emitter.onSuccess(new ImageDto(uri));
+                            } else {
+                                Log.d("Error", task.getException().getMessage());
+                                emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                            }
+                        });
+                    } catch (RuntimeExecutionException e) {
+                        Log.d("RuntimeExecutionException", e.getMessage());
+                        emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                    }
+
+                });
+        //}
     }
 }
 

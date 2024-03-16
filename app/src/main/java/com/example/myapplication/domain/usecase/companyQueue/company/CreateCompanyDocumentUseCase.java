@@ -4,6 +4,6 @@ import com.example.myapplication.DI;
 
 public class CreateCompanyDocumentUseCase {
     public void invoke( String companyID, String name, String email, String phone, String companyService){
-        DI.companyQueueRepository.createCompanyDocument(companyID, name, email, phone, companyService);
+        DI.companyUserRepository.createCompanyDocument(companyID, name, email, phone, companyService);
     }
 }

@@ -16,57 +16,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.widget.Button
-        android:id="@+id/ok_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/style_button"
-        android:fontFamily="@font/bold_roboto"
-        android:text="@string/ok"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/success_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/regular"
-        android:gravity="center"
-        android:text="@string/show_this_qr_code_to_people_who_are_looking_forward_to_join_your_queue"
-        android:textColor="@color/stroke_50"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_text" />
-
-    <TextView
-        android:id="@+id/see_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/regular"
-        android:text="@string/see_details"
-        android:textColor="@color/purple"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_textView" />
-
     <TextView
         android:id="@+id/success_text"
+        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
         android:text="@string/your_queue_was_created"
-        android:textColor="@color/strokeColor"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
 
+    <include
+        android:id="@+id/info_layout"
+        layout="@layout/info_box_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="@+id/qr_code_image"
+        app:layout_constraintStart_toStartOf="@+id/qr_code_image"
+        app:layout_constraintTop_toBottomOf="@+id/success_text" />
+
+    <Button
+        android:id="@+id/button_see_details"
+        style="@style/Widget.Material3.Button.QuServe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/see_details"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

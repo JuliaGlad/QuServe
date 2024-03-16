@@ -1,6 +1,17 @@
 package com.example.myapplication.presentation.utils;
 
+import android.os.Bundle;
+
 public class Utils {
+    public static final String COMPANY_STATE = "Company_state";
+    public static final String APPROVED = "Approved";
+    public static final String CREATED = "Created";
+    public static final String COMPANY_LOGO = "Company_logo";
+    public static final String COMPANIES = "COMPANIES/";
+    public static final String PROFILE_IMAGE = "Profile image";
+    public static final String BACKGROUND_IMAGE = "Background image";
+    public static final String BACKGROUND_IMAGES = "BackGround images";
+    public static final String URI = "Uri";
     public static final String EMAIL = "Email";
     public static final String PASSWORD = "Password";
     public static final String STATE = "State";
@@ -72,7 +83,7 @@ public class Utils {
 //case PAGE_3:
 //        buildList(new DelegateItem[]{
 //        new ProgressBarDelegateItem(new ProgressBarModel(1, 70)),
-//        new TextViewDelegateItem(new TextViewModel(2, R.string.choose_queue_location, 24)),
+//        new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.choose_queue_location, 24)),
 //        new EditTextDelegateItem(new EditTextModel(3, R.string.location, queueLocation, InputType.TYPE_CLASS_TEXT, false, stringLocation -> {
 //        })),
 //        new ButtonDelegateItem(new ButtonModel(4, R.string.open_map, () -> {
@@ -87,7 +98,7 @@ public class Utils {
 //case PAGE_3:
 //        buildList(new DelegateItem[]{
 //        new ProgressBarDelegateItem(new ProgressBarModel(1, 50)),
-//        new InfoTextItemDelegateItem(new TextViewModel(2, R.string.invite_users_to_your_queue, 24)),
+//        new InfoTextItemDelegateItem(new TextViewHeaderModel(2, R.string.invite_users_to_your_queue, 24)),
 //        new EditTextDelegateItem(new EditTextModel(3, R.string.name, InputType.TYPE_CLASS_NUMBER, true, stringInvitedUsers -> {
 //              invitedUser.add(Integer.parseInt(stringInvitedUsers));
 //        })),
