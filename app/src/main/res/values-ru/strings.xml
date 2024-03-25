@@ -166,6 +166,10 @@
     <string name="change_owner">Change owner</string>
     <string name="delete_company">Delete company</string>
     <string name="your_will_receive_notification_when_your_company_is_approved">Your will receive notification when your company is approved!</string>
+    <string name="add_workers">Add workers:</string>
+    <string name="here_you_can_see_queue_details">Here you can see all your queue details and serve participants</string>
+    <string name="edit_queue">Edit Queue</string>
+    <string name="edit_queue_description">See details of your queue and edit them</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>
@@ -214,5 +218,7 @@
     <string name="serves_customers">Serves customers</string>
     <string name="change">Change</string>
     <string name="statistics">Statistics</string>
+    <string name="all_cities">All Cities</string>
+    <string name="choose_city">Choose city</string>
 
 </resources>

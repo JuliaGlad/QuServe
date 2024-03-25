@@ -90,7 +90,7 @@
     <string name="select_item">Select item</string>
     <string name="lifetime">LifeTime</string>
     <string name="invite_users_to_your_queue">Invite users to your queue</string>
-    <string name="choose_queue_location">Choose queue`s location</string>
+    <string name="choose_queue_location">Choose location</string>
     <string name="open_map">Open Map</string>
     <string name="search">Search</string>
     <string name="your_location">Your location</string>
@@ -130,8 +130,8 @@
     <string name="finish">Finish</string>
     <string name="choose_time">Choose time(minutes):</string>
     <string name="set_on_pause">Pause</string>
-    <string name="your_queue_has_been_paused">Your queue has been paused!</string>
-    <string name="have_a_little_rest_and_then_come_back">Have a little rest and then come back!</string>
+    <string name="your_queue_has_been_paused">Your Queue was Paused!</string>
+    <string name="have_a_little_rest_and_then_come_back">Take a little rest and then come back!</string>
     <string name="stop">Stop</string>
     <string name="are_you_sure_you_want_to_stop_pause_and_go_back_to_work">Are you sure you want to go back to work?</string>
     <string name="next_pause_will_be_available_only_in_2_hours">Next pause will be available only in 2 hours!</string>
@@ -168,6 +168,7 @@
     <string name="change_owner">Change owner</string>
     <string name="delete_company">Delete company</string>
     <string name="your_will_receive_notification_when_your_company_is_approved">Your will receive notification when your company is approved!</string>
+    <string name="add_workers">Add workers:</string>
 
     <string-array name="lifetime">
         <item>No set LifeTime</item>
@@ -217,5 +218,9 @@
     <string name="change">Change</string>
     <string name="here_you_can_see_queue_details">Here you can see all your queue details and serve participants</string>
     <string name="statistics">Statistics</string>
+    <string name="all_cities">All Cities</string>
+    <string name="edit_queue">Edit Queue</string>
+    <string name="edit_queue_description">See details of your queue and edit them</string>
+    <string name="choose_city">Choose city</string>
 
 </resources>

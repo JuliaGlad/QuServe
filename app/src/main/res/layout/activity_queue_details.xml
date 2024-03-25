@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.queue.queueDetails.QueueDetailsActivity">
+    tools:context=".presentation.basicQueue.queueDetails.QueueDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_queue_details"

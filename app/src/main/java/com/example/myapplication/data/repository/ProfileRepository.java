@@ -341,13 +341,6 @@ public class ProfileRepository {
     }
 
     public Single<ImageDto> getBackgroundImage() {
-//        UserDto localUser = UserDatabaseProvider.getUser();
-//        if (localUser != null) {
-//            return Single.create(emitter -> {
-//                Log.d("Uri test back", localUser.getBackground());
-//                emitter.onSuccess(new ImageDto(Uri.parse(localUser.getBackground())));
-//            });
-//        } else {
         return Single.create(emitter -> {
             StorageReference local = service.storageReference.child("BACKGROUND_IMAGES/").child(BACKGROUND_IMAGE + service.auth.getCurrentUser().getUid());
             try {
@@ -370,13 +363,6 @@ public class ProfileRepository {
     }
 
     public Single<ImageDto> getProfileImage() {
-//        UserDto localUser = UserDatabaseProvider.getUser();
-//        if (localUser != null) {
-//            return Single.create(emitter -> {
-//                Log.d("Uri test", localUser.getUri());
-//                emitter.onSuccess(new ImageDto(Uri.parse(localUser.getUri())));
-//            });
-//        } else {
         return
                 Single.create(emitter -> {
                     StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());

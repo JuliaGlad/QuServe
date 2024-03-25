@@ -3,12 +3,10 @@ package com.example.myapplication.presentation.utils.backToWorkNotification;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
 
-import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -17,9 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
-import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
-import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
+import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 
 public class NotificationGoBackToWork extends Service {
 

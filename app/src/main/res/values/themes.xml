@@ -33,6 +33,8 @@
         <item name="android:colorBackground">?colorSurface</item>
         <item name="cardBackgroundColor">#DDEEFC</item>
         <item name="android:textColorHint">@color/colorTextHint</item>
+        <item name="android:editTextColor">@color/colorPrimary</item>
+
     </style>
 
 </resources>

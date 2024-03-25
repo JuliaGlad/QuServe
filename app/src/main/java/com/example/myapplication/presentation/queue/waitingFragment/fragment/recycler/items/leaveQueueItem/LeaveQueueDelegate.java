@@ -38,7 +38,7 @@ public class LeaveQueueDelegate implements AdapterDelegate {
         }
 
         void bind( ButtonItemListener listener){
-            binding.leaveQueueButton.setOnClickListener(v -> listener.onClick());
+            binding.buttonLeaveQueue.setOnClickListener(v -> listener.onClick());
         }
 
     }

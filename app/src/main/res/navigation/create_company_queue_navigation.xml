@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_company_queue_navigation"
+    app:startDestination="@id/createCompanyQueueFragment">
+
+    <fragment
+        android:id="@+id/createCompanyQueueFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.main.CreateCompanyQueueFragment"
+        android:label="fragment_create_company_queue"
+        tools:layout="@layout/fragment_create_company_queue" >
+        <action
+            android:id="@+id/action_createCompanyQueueFragment_self"
+            app:destination="@id/createCompanyQueueFragment" />
+        <action
+            android:id="@+id/action_createCompanyQueueFragment_to_finishedQueueCreationFragment2"
+            app:destination="@id/finishedQueueCreationFragment2" />
+
+        <argument android:name="page"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_createCompanyQueueFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_createCompanyQueueFragment_to_chooseWorkersFragment"
+            app:destination="@id/chooseWorkersFragment" />
+        <action
+            android:id="@+id/action_createCompanyQueueFragment_self2"
+            app:destination="@id/createCompanyQueueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishedQueueCreationFragment2"
+        android:name="com.example.myapplication.presentation.queue.finishedQueueCreation.FinishedQueueCreationFragment"
+        android:label="fragment_finished_queue_creation"
+        tools:layout="@layout/fragment_finished_queue_creation" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_createCompanyQueueFragment"
+            app:destination="@id/createCompanyQueueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chooseWorkersFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.ChooseWorkersFragment"
+        android:label="ChooseWorkersFragment" >
+        <action
+            android:id="@+id/action_chooseWorkersFragment_to_createCompanyQueueFragment"
+            app:destination="@id/createCompanyQueueFragment" />
+    </fragment>
+
+</navigation>

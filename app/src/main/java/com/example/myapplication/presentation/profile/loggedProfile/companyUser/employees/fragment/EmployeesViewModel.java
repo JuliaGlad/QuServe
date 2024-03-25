@@ -14,26 +14,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.common.ImageModel;
-import com.example.myapplication.domain.model.common.ImageTaskModel;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.listeners.DialogDismissedListener;
-import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class EmployeesViewModel extends ViewModel {
 
@@ -76,34 +69,31 @@ public class EmployeesViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<EmployeeMainModel> employeeMainModels) {
-                        final String[] role = new String[1];
                         for (int i = 0; i < employeeMainModels.size(); i++) {
                             int index = i;
+
                             String id = employeeMainModels.get(index).getId();
                             String name = employeeMainModels.get(index).getName();
-                            role[0] = employeeMainModels.get(index).getRole();
-                            basic.add(new EmployeeItemModel(i, fragment, name, id, role[0], companyId, () -> {
-                                    ChangeRoleDialogFragment dialogFragment = new ChangeRoleDialogFragment(
-                                            companyId,
-                                            id,
-                                            role[0]
-                                    );
+                            String role = employeeMainModels.get(index).getRole();
 
-                                    dialogFragment.show(fragment.getActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
-                                    DialogDismissedListener listener = bundleDialog -> {
-                                        if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
-                                            _addToAdmins.postValue(id);
-                                            role[0] = ADMIN;
-                                        } else {
-                                            _addToWorkers.postValue(id);
-                                            role[0] = WORKER;
-                                        }
-                                    };
-                                    dialogFragment.onDismissListener(listener);
+                            final ChangeRoleDialogFragment[] dialogFragment = {new ChangeRoleDialogFragment(companyId, id, role)};
+                            basic.add(new EmployeeItemModel(i, fragment, name, id, role, companyId, dialogFragment[0], () -> {
 
+                                dialogFragment[0].show(fragment.getActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
+
+                                DialogDismissedListener listener = bundleDialog -> {
+                                    if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
+                                        _addToAdmins.postValue(id);
+                                        dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, ADMIN);
+                                    } else {
+                                        _addToWorkers.postValue(id);
+                                        dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, WORKER);
+                                    }
+                                };
+
+                                dialogFragment[0].onDismissListener(listener);
 
                             }));
-                            Log.d("Item" + i, id + " " + name + " " + role[0] + " ");
                         }
                         _basicList.postValue(basic);
                         initSubLists();

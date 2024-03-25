@@ -44,7 +44,7 @@ public class WaitingItemDelegate implements AdapterDelegate {
         }
 
         void bind(WaitingItemModel model) {
-            binding.header.setText(model.headerText);
+            binding.headLine.setText(model.headerText);
             binding.description.setText(model.descriptionText);
 
             if (model.editable && model.flag.equals(EDIT_PEOPLE_BEFORE_YOU)) {

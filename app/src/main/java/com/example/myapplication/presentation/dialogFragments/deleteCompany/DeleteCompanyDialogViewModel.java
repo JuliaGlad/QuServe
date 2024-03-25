@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DeleteCompanyDialogViewModel extends ViewModel {
 
-    private MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
     LiveData<Boolean> isDeleted = _isDeleted;
 
     public void deleteCompany(String companyId) {

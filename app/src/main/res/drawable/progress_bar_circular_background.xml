@@ -3,10 +3,10 @@
     <item>
         <shape
             android:shape="ring"
-            android:innerRadiusRatio="2.5"
-            android:thicknessRatio="100"
+            android:innerRadiusRatio="2.3"
+            android:thicknessRatio="20"
             android:useLevel="false">
-           <solid android:color="@color/progress_bar_background"/>
+           <solid android:color="?colorSurfaceContainerLow"/>
         </shape>
     </item>
 

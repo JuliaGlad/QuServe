@@ -87,7 +87,6 @@ public class CompanyUserViewModel extends ViewModel {
                         name = companyUserModel.getName();
                         email = companyUserModel.getEmail();
                         uri = companyUserModel.getUri();
-
                         initRecycler(companyId);
                     }
 

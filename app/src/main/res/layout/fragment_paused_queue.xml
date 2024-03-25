@@ -5,44 +5,30 @@
     android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.queue.queueDetails.pausedQueueFragment.PausedQueueFragment">
+    tools:context=".presentation.basicQueue.queueDetails.pausedQueueFragment.PausedQueueFragment">
 
     <TextView
         android:id="@+id/title"
+        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
         android:text="@string/your_queue_has_been_paused"
-        android:textColor="@color/strokeColor"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/regular"
-        android:text="@string/have_a_little_rest_and_then_come_back"
-        android:textColor="@color/strokeColor"
-        android:textSize="18sp"
+    <ProgressBar
+        android:id="@+id/indicator"
+        style="@style/Widget.Material3.CircularProgressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/progress_bar_circular_background"
+        android:progressDrawable="@drawable/progressbar_style_progress_drawable"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <ProgressBar
-        android:id="@+id/countdown_timer"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/progress_bar_circular_background"
-        android:progressDrawable="@drawable/progressbar_style_progress_drawable"
-        app:layout_constraintBottom_toTopOf="@+id/stop_pause"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle" />
 
     <TextView
         android:id="@+id/timer"
@@ -50,37 +36,43 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bold_roboto"
         android:text="00:00"
-        android:textColor="@color/strokeColor"
         android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="@+id/countdown_timer"
-        app:layout_constraintEnd_toEndOf="@+id/countdown_timer"
-        app:layout_constraintStart_toStartOf="@+id/countdown_timer"
-        app:layout_constraintTop_toTopOf="@+id/countdown_timer" />
+        android:textColor="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/indicator"
+        app:layout_constraintEnd_toEndOf="@+id/indicator"
+        app:layout_constraintStart_toStartOf="@+id/indicator"
+        app:layout_constraintTop_toTopOf="@+id/indicator" />
 
-    <android.widget.Button
-        android:id="@+id/stop_pause"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_stop_pause"
+        style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:background="@drawable/style_button"
-        android:fontFamily="@font/bold_roboto"
         android:text="@string/stop"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"
-        android:background="@color/white"
-        app:tint="@color/iconColor"
+        android:src="@drawable/ic_arrow_back"
+        android:background="@color/transparent"
+        app:tint="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title" />
+
+    <include
+        layout="@layout/info_box_layout"
+        android:id="@+id/layout_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/indicator" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

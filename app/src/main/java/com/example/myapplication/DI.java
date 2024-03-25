@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import com.example.myapplication.data.FirebaseUserService;
+import com.example.myapplication.data.repository.CompanyQueueRepository;
 import com.example.myapplication.data.repository.CompanyUserRepository;
 import com.example.myapplication.data.repository.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
@@ -23,10 +24,21 @@ import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompa
 import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyLogoToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeSnapshotUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetAdminsUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeePhotoUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeeQrCodeUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesPhotosUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.AddCompanyQueueParticipantsSizeSnapshot;
+import com.example.myapplication.domain.usecase.companyQueue.queues.CreateCompanyQueueDocumentUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.FinishCompanyQueueUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompaniesQueuesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueParticipantsListUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueByIdUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueNameAndLocationById;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueWorkersListUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.NextCompanyQueueParticipantUpdateListUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateQueueDataUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthentificationUseCase;
@@ -91,8 +103,22 @@ public class DI {
     public static QueueRepository queueRepository = new QueueRepository();
     public static ProfileRepository profileRepository = new ProfileRepository();
     public static CompanyUserRepository companyUserRepository = new CompanyUserRepository();
+    public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
 
     //COMPANY QUEUE USECASE
+    public static CreateCompanyQueueDocumentUseCase createCompanyQueueDocumentUseCase = new CreateCompanyQueueDocumentUseCase();
+    public static GetCompaniesQueuesUseCase getCompaniesQueuesUseCase = new GetCompaniesQueuesUseCase();
+    public static GetQueueWorkersListUseCase getQueueWorkersListUseCase = new GetQueueWorkersListUseCase();
+    public static GetQueueByIdUseCase getQueueByIdUseCase = new GetQueueByIdUseCase();
+    public static NextCompanyQueueParticipantUpdateListUseCase nextParticipantUseCompanyUseCase = new NextCompanyQueueParticipantUpdateListUseCase();
+    public static GetCompanyQueueParticipantsListUseCase getCompanyQueueParticipantsListUseCase = new GetCompanyQueueParticipantsListUseCase();
+    public static AddCompanyQueueParticipantsSizeSnapshot addCompanyQueueParticipantsSizeSnapshot = new AddCompanyQueueParticipantsSizeSnapshot();
+    public static FinishCompanyQueueUseCase finishCompanyQueueUseCase = new FinishCompanyQueueUseCase();
+    public static GetQueueNameAndLocationById getQueueNameAndLocationById = new GetQueueNameAndLocationById();
+    public static GetAdminsUseCase getAdminsUseCase = new GetAdminsUseCase();
+    public static UpdateQueueDataUseCase updateQueueDataUseCase = new UpdateQueueDataUseCase();
+
+    //COMPANY USER USECASE
     public static UpdateApprovedUseCase updateApprovedUseCase = new UpdateApprovedUseCase();
     public static GetEmployeePhotoUseCase getEmployeePhotoUseCase = new GetEmployeePhotoUseCase();
     public static GetEmployeesPhotosUseCase getEmployeesPhotosUseCase = new GetEmployeesPhotosUseCase();

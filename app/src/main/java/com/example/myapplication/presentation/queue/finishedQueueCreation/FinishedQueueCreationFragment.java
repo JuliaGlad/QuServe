@@ -13,8 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentFinishedQueueCreationBinding;
-import com.example.myapplication.presentation.queue.basic.createQueue.arguments.Arguments;
-import com.example.myapplication.presentation.queue.basic.createQueue.CreateQueueActivity;
+import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
+import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 
 public class FinishedQueueCreationFragment extends Fragment {
 

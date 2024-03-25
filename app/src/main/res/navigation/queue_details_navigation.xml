@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/detailsQueueFragment"
-        android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
+        android:name="com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsFragment"
         android:label="fragment_queue_details"
         tools:layout="@layout/fragment_queue_details">
         <action
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/participantsListFragment"
-        android:name="com.example.myapplication.presentation.queue.participantList.ParticipantsListFragment"
+        android:name="com.example.myapplication.presentation.basicQueue.queueDetails.participantList.ParticipantsListFragment"
         android:label="fragment_participants_list"
         tools:layout="@layout/fragment_participants_list">
         <action
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/pausedQueueFragment"
-        android:name="com.example.myapplication.presentation.queue.queueDetails.pausedQueueFragment.PausedQueueFragment"
+        android:name="com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment.PausedQueueFragment"
         android:label="fragment_paused_queue"
         tools:layout="@layout/fragment_paused_queue">
         <action

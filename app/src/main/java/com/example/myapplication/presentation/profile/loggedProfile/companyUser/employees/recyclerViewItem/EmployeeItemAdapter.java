@@ -2,10 +2,8 @@ package com.example.myapplication.presentation.profile.loggedProfile.companyUser
 
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,10 +17,8 @@ import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewEmployeeItemBinding;
 import com.example.myapplication.domain.model.common.ImageModel;
-import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -56,9 +52,9 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
         }
 
         void bind(EmployeeItemModel model) {
+
             binding.employeeName.setText(model.getName());
             binding.role.setText(model.role);
-
 
             DI.getEmployeePhotoUseCase.invoke(model.employeeId)
                     .subscribeOn(Schedulers.io())
@@ -90,7 +86,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
                     });
 
             binding.item.setOnClickListener(v -> {
-               model.listener.onClick();
+                model.listener.onClick();
             });
             addSnapshot(model);
         }

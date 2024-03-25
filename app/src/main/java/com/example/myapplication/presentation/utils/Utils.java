@@ -1,8 +1,18 @@
 package com.example.myapplication.presentation.utils;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 public class Utils {
+    public static final String CITY_KEY = "City";
+    public static final String QUEUE_MANAGER = "QUEUE_MANAGER";
+    public static final String WORKERS_COUNT = "WorkersCount";
+    public static final String COMPANY_DETAILS = "COMPANY_DETAILS";
+    public static final String CREATE_QUEUE = "CREATE_QUEUE";
+    public static final String WORKERS_LIST = "WORKERS_LIST";
+    public static final String CHOSEN = "CHOSEN";
+    public static final String NOT_CHOSEN = "NOT_CHOSEN";
+    public static final String COMPANIES_QUEUES = "CompaniesQueues";
     public static final String COMPANY_STATE = "Company_state";
     public static final String APPROVED = "Approved";
     public static final String CREATED = "Created";

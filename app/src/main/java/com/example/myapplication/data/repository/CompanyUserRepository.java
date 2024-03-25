@@ -1,6 +1,7 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.APPROVED;
 import static com.example.myapplication.presentation.utils.Utils.COMPANIES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.myapplication.App;
+import com.example.myapplication.DI;
 import com.example.myapplication.data.dto.CompanyDto;
 import com.example.myapplication.data.dto.EmployeeDto;
 import com.example.myapplication.data.dto.ImageDto;
@@ -49,6 +51,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -155,6 +158,37 @@ public class CompanyUserRepository {
         }
     }
 
+    public Maybe<List<CompanyDto>> getMaybeCompany() {
+        List<CompanyDto> local = CompanyUserProvider.getCompanies();
+        if (local != null) {
+            return Maybe.create(emitter -> {
+                emitter.onSuccess(local);
+            });
+        } else {
+            return
+                    Maybe.create(emitter -> {
+                        service.fireStore
+                                .collection(USER_LIST)
+                                .document(service.auth.getCurrentUser().getUid())
+                                .collection(COMPANY)
+                                .get().addOnCompleteListener(task -> {
+                                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                    List<CompanyDto> dtoList = documents.stream().map(
+                                            document -> new CompanyDto(
+                                                    document.getId(),
+                                                    document.getString(URI),
+                                                    document.getString(COMPANY_NAME),
+                                                    document.getString(COMPANY_EMAIL),
+                                                    document.getString(COMPANY_PHONE),
+                                                    document.getString(COMPANY_SERVICE))
+                                    ).collect(Collectors.toList());
+                                    CompanyUserProvider.insertAllCompanies(dtoList);
+                                    emitter.onSuccess(dtoList);
+                                });
+                    });
+        }
+    }
+
     public Completable uploadCompanyBytesToFireStorage(String companyId, byte[] data) {
         StorageReference reference = service.storageReference
                 .child(COMPANIES)
@@ -209,6 +243,31 @@ public class CompanyUserRepository {
                 .getPath();
     }
 
+    public Single<List<EmployeeDto>> getAdmins(String companyId) {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(COMPANY)
+                    .document(companyId)
+                    .collection(EMPLOYEES)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                            emitter.onSuccess(
+                                    documents.stream()
+                                            .filter(documentSnapshot -> documentSnapshot.getString(EMPLOYEE_ROLE).equals(ADMIN))
+                                            .map(document -> new EmployeeDto(
+                                                    document.getString(EMPLOYEE_NAME),
+                                                    document.getId(),
+                                                    document.getString(EMPLOYEE_ROLE))
+                                            ).collect(Collectors.toList())
+                            );
+                        }
+                    });
+        });
+    }
+
     public Single<List<EmployeeDto>> getEmployees(String companyId) {
         return Single.create(emitter -> {
             service.fireStore
@@ -220,17 +279,13 @@ public class CompanyUserRepository {
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            if (task.isSuccessful()) {
-                                List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                emitter.onSuccess(
-                                        documents.stream().map(document -> new EmployeeDto(
-                                                document.getString(EMPLOYEE_NAME),
-                                                document.getId(),
-                                                document.getString(EMPLOYEE_ROLE))
-                                        ).collect(Collectors.toList()));
-
-
-                            }
+                            List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                            emitter.onSuccess(
+                                    documents.stream().map(document -> new EmployeeDto(
+                                            document.getString(EMPLOYEE_NAME),
+                                            document.getId(),
+                                            document.getString(EMPLOYEE_ROLE))
+                                    ).collect(Collectors.toList()));
                         }
                     });
         });
@@ -351,34 +406,6 @@ public class CompanyUserRepository {
                         }
                     });
         });
-//        return Single.create(emitter -> {
-//            List<Task<Uri>> listTask = new ArrayList<>();
-//            getCompany()
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe(new SingleObserver<List<CompanyDto>>() {
-//                        @Override
-//                        public void onSubscribe(@NonNull Disposable d) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(@NonNull List<CompanyDto> companyDtos) {
-//                            for (int i = 0; i < companyDtos.size(); i++) {
-//                                StorageReference local = service.storageReference
-//                                        .child(PROFILE_IMAGES)
-//                                        .child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-//                                listTask.add(local.getDownloadUrl());
-//                            }
-//                            emitter.onSuccess(listTask);
-//                        }
-//
-//                        @Override
-//                        public void onError(@NonNull Throwable e) {
-//
-//                        }
-//                    });
-//        });
-
     }
 
     public Single<List<Task<Uri>>> getCompaniesLogos() {
@@ -410,21 +437,6 @@ public class CompanyUserRepository {
     }
 
     public Single<ImageDto> getCompanyLogo(String companyId) {
-//        String uri = null;
-//        List<CompanyDto> list = CompanyUserProvider.getCompanies();
-//        for (int i = 0; i < list.size() ; i++) {
-//            if (list.get(i).getId().equals(companyId)){
-//                uri = list.get(i).getUri();
-//                break;
-//            }
-//        }
-//        if (uri != null){
-//            Log.d("Uri test", uri);
-//            String finalUri = uri;
-//            return Single.create(emitter -> {
-//                emitter.onSuccess(new ImageDto(Uri.parse(finalUri)));
-//            });
-//        } else {
         return Single.create(emitter -> {
 
             StorageReference reference = service.storageReference.child(COMPANIES).child(companyId + "/").child(COMPANY_LOGO);

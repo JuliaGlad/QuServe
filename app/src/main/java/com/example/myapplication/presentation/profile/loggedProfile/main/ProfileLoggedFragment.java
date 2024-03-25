@@ -41,7 +41,11 @@ public class ProfileLoggedFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(ProfileLoggedFragmentViewModel.class);
-        type = getArguments().getString(STATE);
+        try{
+            type = getArguments().getString(STATE);
+        } catch (IllegalArgumentException e){
+            type = getActivity().getIntent().getStringExtra(STATE);
+        }
 
     }
 

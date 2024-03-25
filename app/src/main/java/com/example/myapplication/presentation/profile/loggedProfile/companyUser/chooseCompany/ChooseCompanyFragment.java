@@ -1,10 +1,14 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.CREATE_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_MANAGER;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +17,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentChooseCompanyBinding;
 import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.companyListItem.CompanyListItemDelegate;
 
 import myapplication.android.ui.recycler.delegate.MainAdapter;
@@ -30,7 +30,14 @@ public class ChooseCompanyFragment extends Fragment {
 
     private ChooseCompanyViewModel viewModel;
     private FragmentChooseCompanyBinding binding;
+    private String state;
     private final MainAdapter mainAdapter = new MainAdapter();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        state = getActivity().getIntent().getStringExtra(STATE);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -52,16 +59,13 @@ public class ChooseCompanyFragment extends Fragment {
 
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            ((MainActivity)requireActivity()).openCreateCompanyQueueActivity();
+            ((ChooseCompanyActivity)requireActivity()).openCreateCompanyActivity();
         });
     }
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString(STATE, BASIC);
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_chooseCompanyFragment_to_profileLoggedFragment, bundle);
+            requireActivity().finish();
         });
     }
 
@@ -77,14 +81,27 @@ public class ChooseCompanyFragment extends Fragment {
         viewModel.navigate.observe(getViewLifecycleOwner(), id -> {
 
             if (id != null) {
-                Bundle bundle = new Bundle();
 
-                bundle.putString(COMPANY_ID, id);
-                bundle.putString(STATE, COMPANY);
+                switch (state){
+                    case COMPANY_DETAILS:
 
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_chooseCompanyFragment_to_profileLoggedFragment, bundle);
+                        Intent intent = new Intent();
+                        intent.putExtra(COMPANY_ID, id);
+                        intent.putExtra(STATE, COMPANY);
 
+                        getActivity().setResult(Activity.RESULT_OK, intent);
+
+                        requireActivity().finish();
+                        break;
+
+                    case CREATE_QUEUE:
+                        ((ChooseCompanyActivity)requireActivity()).openCreateCompanyQueueActivity(id);
+                        break;
+
+                    case QUEUE_MANAGER:
+                        ((ChooseCompanyActivity)requireActivity()).openQueueManagerActivity(id);
+                        break;
+                }
             }
         });
 

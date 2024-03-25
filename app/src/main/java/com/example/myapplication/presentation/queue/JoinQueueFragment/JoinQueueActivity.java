@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.databinding.ActivityJoinQueueBinding;
-import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 
 public class JoinQueueActivity extends AppCompatActivity {

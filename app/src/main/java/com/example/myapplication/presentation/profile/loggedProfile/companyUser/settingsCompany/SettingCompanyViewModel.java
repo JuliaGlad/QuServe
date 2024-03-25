@@ -89,47 +89,6 @@ public class SettingCompanyViewModel extends ViewModel {
 
                     }
                 });
-//        DI.getSingleCompanyUseCase.invoke(companyId)
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new SingleObserver<CompanyNameAndEmailModel>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onSuccess(@NonNull CompanyNameAndEmailModel companyNameAndEmailModel) {
-//                        name = companyNameAndEmailModel.getName();
-//                        email = companyNameAndEmailModel.getEmail();
-//
-//                        DI.getCompanyLogoUseCase.invoke(companyId)
-//                                .subscribeOn(Schedulers.io())
-//                                .subscribe(new SingleObserver<ImageModel>() {
-//                                    @Override
-//                                    public void onSubscribe(@NonNull Disposable d) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onSuccess(@NonNull ImageModel imageModel) {
-//                                        uri = imageModel.getImageUri();
-//                                        initRecycler();
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(@NonNull Throwable e) {
-//
-//                                    }
-//                                });
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//
-//                    }
-//                });
     }
 
     private void buildList(DelegateItem[] items) {

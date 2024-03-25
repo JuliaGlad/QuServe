@@ -17,12 +17,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.DI;
 import com.example.myapplication.databinding.RecyclerViewUserProfileMainItemBinding;
+import com.example.myapplication.domain.model.common.ImageModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Objects;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
@@ -92,12 +94,37 @@ public class MainItemDelegate implements AdapterDelegate {
                                 binding.yourEmail.setText(documentSnapshot.getString(COMPANY_EMAIL));
                             }
 
-                            if (!String.valueOf(model.uri).equals(documentSnapshot.getString(URI))) {
-                                Glide.with(itemView.getContext())
-                                        .load(documentSnapshot.getString(URI))
-                                        .apply(RequestOptions.circleCropTransform())
-                                        .into(binding.profilePhoto);
-                            }
+                            DI.getCompanyLogoUseCase.invoke(model.companyId)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new SingleObserver<ImageModel>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(@NonNull ImageModel imageModel) {
+                                            Uri uri = imageModel.getImageUri();
+                                            if (!uri.equals(model.uri)) {
+                                                Glide.with(itemView.getContext())
+                                                        .load(uri)
+                                                        .apply(RequestOptions.circleCropTransform())
+                                                        .into(binding.profilePhoto);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+
+                                        }
+                                    });
+
+//                            if (!String.valueOf(model.uri).equals(documentSnapshot.getString(URI))) {
+//                                Glide.with(itemView.getContext())
+//                                        .load(documentSnapshot.getString(URI))
+//                                        .apply(RequestOptions.circleCropTransform())
+//                                        .into(binding.profilePhoto);
+//                            }
                         }
 
                         @Override
@@ -123,19 +150,37 @@ public class MainItemDelegate implements AdapterDelegate {
 
                         @Override
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull DocumentSnapshot snapshot) {
-                            String uri = snapshot.getString(URI);
                             String name = snapshot.getString(USER_NAME_KEY);
 
                             if (!name.equals(model.name)) {
                                 binding.name.setText(snapshot.getString(USER_NAME_KEY));
                             }
 
-                            if (model.uri != Uri.parse(uri) && !Objects.equals(uri, String.valueOf(Uri.EMPTY))) {
-                                Glide.with(itemView.getContext())
-                                        .load(Uri.parse(snapshot.getString(URI)))
-                                        .apply(RequestOptions.circleCropTransform())
-                                        .into(binding.profilePhoto);
-                            }
+                            DI.getProfileImageUseCase.invoke()
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new SingleObserver<ImageModel>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(@NonNull ImageModel imageModel) {
+                                            Uri uri = imageModel.getImageUri();
+                                            if (!uri.equals(model.uri)){
+                                                Glide.with(itemView.getContext())
+                                                        .load(uri)
+                                                        .apply(RequestOptions.circleCropTransform())
+                                                        .into(binding.profilePhoto);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+
+                                        }
+                                    });
+
                         }
 
                         @Override

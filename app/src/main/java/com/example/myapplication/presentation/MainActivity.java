@@ -3,6 +3,7 @@ package com.example.myapplication.presentation;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,15 +19,19 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
+import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerActivity;
+import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerFragment;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.EditCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
-import com.example.myapplication.presentation.queue.basic.createQueue.CreateQueueActivity;
-import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
+import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -129,9 +132,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openCreateCompanyQueueActivity(){
-        Intent intent = new Intent(this, CreateCompanyActivity.class);
-        intent.putExtra(PAGE_KEY, PAGE_1);
+    public void openChooseCompanyActivity(String state){
+        Intent intent = new Intent(this, ChooseCompanyActivity.class);
+        intent.putExtra(STATE, state);
         startActivity(intent);
     }
 }

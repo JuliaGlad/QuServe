@@ -48,7 +48,7 @@ public class CompanyUserProvider {
                     list.get(i).getId(),
                     list.get(i).getCompanyName(),
                     list.get(i).getCompanyPhone(),
-                    list.get(i).getCompanyName(),
+                    list.get(i).getCompanyEmail(),
                     list.get(i).getCompanyService(),
                     list.get(i).getUri())
             );

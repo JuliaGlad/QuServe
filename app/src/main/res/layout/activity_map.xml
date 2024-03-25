@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.queue.company.createQueue.map.MapActivity">
+    tools:context=".presentation.companyQueue.createQueue.map.MapActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
-        android:name="com.example.myapplication.presentation.queue.company.createQueue.map.MapFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

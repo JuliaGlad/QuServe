@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/company_queue_details_navigation"
+    app:startDestination="@id/companyQueueDetailsFragment">
+
+    <fragment
+        android:id="@+id/companyQueueDetailsFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsFragment"
+        android:label="CompanyQueueDetailsFragment" >
+        <action
+            android:id="@+id/action_companyQueueDetailsFragment_to_companyQueueParticipantsListFragment"
+            app:destination="@id/companyQueueParticipantsListFragment" />
+        <action
+            android:id="@+id/action_companyQueueDetailsFragment_to_editQueueFragment"
+            app:destination="@id/editQueueFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/companyQueueParticipantsListFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.participantsList.CompanyQueueParticipantsListFragment"
+        android:label="CompanyQueueParticipantsListFragment" >
+        <action
+            android:id="@+id/action_companyQueueParticipantsListFragment_to_companyQueueDetailsFragment"
+            app:destination="@id/companyQueueDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editQueueFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.EditQueueFragment"
+        android:label="fragment_edit_queue"
+        tools:layout="@layout/fragment_edit_queue" >
+        <action
+            android:id="@+id/action_editQueueFragment_to_companyQueueDetailsFragment"
+            app:destination="@id/companyQueueDetailsFragment" />
+    </fragment>
+</navigation>

@@ -16,20 +16,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCompanyUserBinding;
+import com.example.myapplication.domain.model.company.CompanyNameAndEmailModel;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem.MainItemDelegate;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegate;
 
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 
 public class CompanyUserFragment extends Fragment {
 
     private CompanyUserViewModel viewModel;
     private FragmentCompanyUserBinding binding;
-    private String companyId ;
+    private String companyId;
     private boolean isExist = true;
     private final MainAdapter mainAdapter = new MainAdapter();
 
@@ -62,7 +67,8 @@ public class CompanyUserFragment extends Fragment {
     public void onResume() {
         super.onResume();
         viewModel.setLiveDataToDefault();
-        if (Arguments.isDeleted){
+        if (Arguments.isDeleted) {
+            Arguments.isDeleted = false;
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             fragmentManager
                     .beginTransaction()
@@ -70,6 +76,7 @@ public class CompanyUserFragment extends Fragment {
                     .replace(R.id.logged_container, BasicUserFragment.class, null)
                     .commit();
         }
+
     }
 
     private void setAdapter() {
@@ -81,7 +88,7 @@ public class CompanyUserFragment extends Fragment {
 
     private void initSettings() {
         binding.buttonSettings.setOnClickListener(v -> {
-            ((MainActivity)requireActivity()).openCompanySettingsActivity(companyId);
+            ((MainActivity) requireActivity()).openCompanySettingsActivity(companyId);
         });
     }
 
@@ -89,7 +96,7 @@ public class CompanyUserFragment extends Fragment {
 
         viewModel.isExist.observe(getViewLifecycleOwner(), aBoolean -> {
             isExist = aBoolean;
-            if (!aBoolean){
+            if (!aBoolean) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
@@ -102,19 +109,19 @@ public class CompanyUserFragment extends Fragment {
         viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
 
         viewModel.openEditActivity.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                ((MainActivity)requireActivity()).openEditCompanyActivity(companyId);
+            if (aBoolean) {
+                ((MainActivity) requireActivity()).openEditCompanyActivity(companyId);
             }
         });
 
         viewModel.openEmployeesActivity.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                ((MainActivity)requireActivity()).openEmployeesActivity(companyId);
+            if (aBoolean) {
+                ((MainActivity) requireActivity()).openEmployeesActivity(companyId);
             }
         });
 
         viewModel.goToProfile.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()

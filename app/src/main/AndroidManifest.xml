@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -23,6 +26,15 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.companyQueue.queueManager.QueueManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity"
             android:exported="false" />
         <activity
@@ -35,10 +47,10 @@
             android:name=".presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.queue.company.createQueue.map.MapActivity"
+            android:name=".presentation.companyQueue.createQueue.map.MapActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.queue.company.createQueue.CreateCompanyQueueActivity"
+            android:name=".presentation.companyQueue.createQueue.CreateCompanyQueueActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.becomeEmployee.BecomeEmployeeActivity"
@@ -50,13 +62,13 @@
             android:name=".presentation.queue.waitingFragment.fragment.WaitingActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.queue.queueDetails.QueueDetailsActivity"
+            android:name=".presentation.basicQueue.queueDetails.QueueDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.queue.JoinQueueFragment.JoinQueueActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.queue.basic.createQueue.CreateQueueActivity"
+            android:name=".presentation.basicQueue.createQueue.CreateQueueActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity"

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/queue_manager_item"
+    app:cardCornerRadius="40dp"
+    app:cardElevation="0dp"
+    android:layout_marginTop="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurfaceContainerLow">
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/liquid_blue_background_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/queue_name"
+            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/regular"
+            android:text="Queue name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title_workers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="24dp"
+            android:text="@string/workers"
+            android:textColor="?colorOnSurface"
+            android:fontFamily="@font/bold_roboto"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/queue_name"
+            app:layout_constraintTop_toBottomOf="@+id/location" />
+
+        <ImageView
+            android:id="@+id/first_worker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/title_workers"
+            app:layout_constraintTop_toTopOf="@+id/title_workers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="?colorPrimaryContainer" />
+
+
+        <ImageView
+            android:id="@+id/second_worker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/first_worker"
+            app:layout_constraintTop_toTopOf="@id/title_workers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#8EC8E4" />
+
+        <ImageView
+            android:id="@+id/third_worker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/second_worker"
+            app:layout_constraintTop_toTopOf="@+id/title_workers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#5EA8CC" />
+
+        <TextView
+            android:id="@+id/workers_count"
+            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="+33"
+            app:layout_constraintBottom_toBottomOf="@+id/second_worker"
+            app:layout_constraintStart_toEndOf="@+id/third_worker"
+            app:layout_constraintTop_toTopOf="@+id/second_worker" />
+
+        <TextView
+            android:id="@+id/location"
+            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:text="Moscow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/queue_name"
+            app:layout_constraintTop_toBottomOf="@+id/queue_name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

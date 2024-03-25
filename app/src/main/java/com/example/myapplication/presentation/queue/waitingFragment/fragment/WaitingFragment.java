@@ -30,7 +30,7 @@ public class WaitingFragment extends Fragment {
 
     private WaitingViewModel viewModel;
     private FragmentWaitingBinding binding;
-    private MainAdapter mainAdapter = new MainAdapter();
+    private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,7 +58,7 @@ public class WaitingFragment extends Fragment {
     }
 
     private void initCloseButton() {
-        binding.imageButtonClose.setOnClickListener(v -> requireActivity().finish());
+        binding.buttonBack.setOnClickListener(v -> requireActivity().finish());
     }
 
     private void setMainAdapter() {

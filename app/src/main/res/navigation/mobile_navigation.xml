@@ -9,16 +9,17 @@
         android:id="@+id/navigation_home"
         android:name="com.example.myapplication.presentation.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_chooseCityDialogFragment"
+            app:destination="@id/chooseCityDialogFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_queue"
         android:name="com.example.myapplication.presentation.queue.main.QueueFragment"
         android:label="@string/title_queue"
         tools:layout="@layout/fragment_queue" >
-        <action
-            android:id="@+id/action_navigation_queue_to_queueDetailsFragment"
-            app:destination="@id/queueDetailsFragment" />
         <action
             android:id="@+id/action_navigation_queue_to_navigation_profile"
             app:destination="@id/navigation_profile" />
@@ -71,9 +72,6 @@
         <action
             android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
             app:destination="@id/navigation_queue" />
-        <action
-            android:id="@+id/action_profileLoggedFragment_to_chooseCompanyFragment"
-            app:destination="@id/chooseCompanyFragment" />
     </fragment>
 
     <fragment
@@ -100,7 +98,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.myapplication.presentation.queue.company.createQueue.map.MapFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" >
 
@@ -111,7 +109,7 @@
 
     <fragment
         android:id="@+id/queueDetailsFragment"
-        android:name="com.example.myapplication.presentation.queue.queueDetails.QueueDetailsFragment"
+        android:name="com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsFragment"
         android:label="fragment_queue_details"
         tools:layout="@layout/fragment_queue_details" />
     <fragment
@@ -133,13 +131,12 @@
             app:destination="@id/basicSettingsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/chooseCompanyFragment"
-        android:name="com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyFragment"
-        android:label="fragment_choose_company"
-        tools:layout="@layout/fragment_choose_company" >
+        android:id="@+id/chooseCityDialogFragment"
+        android:name="com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog"
+        android:label="ChooseCityDialogFragment" >
         <action
-            android:id="@+id/action_chooseCompanyFragment_to_profileLoggedFragment"
-            app:destination="@id/profileLoggedFragment" />
+            android:id="@+id/action_chooseCityDialogFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 
 </navigation>

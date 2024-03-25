@@ -3,31 +3,29 @@ package com.example.myapplication.presentation.profile.loggedProfile.companyUser
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEmployeesBinding;
 import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.employeeQrCode.EmployeeQrCodeDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.LinearLayoutManagerWrapper;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,7 +54,54 @@ public class EmployeesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initTabLayout();
+        initSearchView();
         initAddButton();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void filterList(String newText) {
+        List<EmployeeItemModel> filteredList = new ArrayList<>();
+
+        if (binding.tabLayout.getTabAt(0).isSelected()) {
+            for (EmployeeItemModel model : basicList) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
+            }
+        } else if (binding.tabLayout.getTabAt(1).isSelected()) {
+            for (EmployeeItemModel model : adminList) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
+            }
+        } else {
+            for (EmployeeItemModel model : workerList) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
+            }
+        }
+
+        setFilteredList(filteredList);
+    }
+
+    private void setFilteredList(List<EmployeeItemModel> models) {
+        employeeItemAdapter.submitList(models);
     }
 
     private void initAddButton() {
@@ -98,6 +143,8 @@ public class EmployeesFragment extends Fragment {
 
     private void initRecycler() {
         employeeItemAdapter.submitList(basicList);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false);
+        binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(employeeItemAdapter);
     }
 
@@ -119,7 +166,6 @@ public class EmployeesFragment extends Fragment {
                             if (Objects.equals(workerList.get(i).getEmployeeId(), bundle.getString("ID"))) {
                                 adminList.add(workerList.get(i));
                                 workerList.remove(i);
-
                             }
                         }
                     } else {
@@ -141,32 +187,12 @@ public class EmployeesFragment extends Fragment {
             }
         });
 
-        viewModel.image.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnCompleteListener(task -> {
-//                final View dialogView = getLayoutInflater().inflate(R.layout.dialog_employee_qr_code, null);
-//                AlertDialog qrCodeDialog = new AlertDialog.Builder(getContext())
-//                        .setView(dialogView).create();
-//
-//                qrCodeDialog.show();
-//
-//                Button ok = dialogView.findViewById(R.id.ok_button);
-//                ImageView imageView = dialogView.findViewById(R.id.qr_code);
-//
-//                Glide.with(requireContext()).load(task.getResult()).into(imageView);
-//
-//                ok.setOnClickListener(view -> {
-//                    qrCodeDialog.dismiss();
-//                });
-            });
-        });
-
         viewModel.addToAdmins.observe(getViewLifecycleOwner(), string -> {
             if (string != null) {
                 for (int i = 0; i < workerList.size(); i++) {
                     if (Objects.equals(workerList.get(i).getEmployeeId(), string)) {
                         adminList.add(workerList.get(i));
                         workerList.remove(i);
-
                     }
                 }
             }

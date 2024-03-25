@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,12 +54,6 @@ public class ChangeRoleDialogFragment extends DialogFragment {
 
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
-        if (role.equals(ADMIN)){
-            setAdminSelected();
-        } else {
-            setWorkerSelected();
-        }
-
         binding.constraintLayoutAdmin.setOnClickListener(v -> {
             setAdminSelected();
         });
@@ -75,6 +70,12 @@ public class ChangeRoleDialogFragment extends DialogFragment {
         binding.buttonCancel.setOnClickListener(v -> {
             dismiss();
         });
+
+        if (role.equals(ADMIN)){
+            setAdminSelected();
+        } else {
+            setWorkerSelected();
+        }
 
         return builder.setView(binding.getRoot()).create();
     }
@@ -147,6 +148,7 @@ public class ChangeRoleDialogFragment extends DialogFragment {
     }
 
     private void setSelected(ImageView imageView, Drawable drawable, TextView header, TextView featureFirst, TextView featureSecond, ConstraintLayout layout) {
+        layout.setSelected(true);
         layout.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.role_card_background, requireContext().getTheme()));
         imageView.setImageDrawable(drawable);
         header.setTextColor(getResources().getColor(R.color.colorPrimary, requireContext().getTheme()));
@@ -155,6 +157,7 @@ public class ChangeRoleDialogFragment extends DialogFragment {
     }
 
     private void setDisabled(ImageView imageView, Drawable drawable, TextView header, TextView featureFirst, TextView featureSecond, ConstraintLayout layout) {
+        layout.setSelected(false);
         layout.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.role_disabled_card_background, requireContext().getTheme()));
         imageView.setImageDrawable(drawable);
         header.setTextColor(getResources().getColor(R.color.colorTextDisabled, requireContext().getTheme()));

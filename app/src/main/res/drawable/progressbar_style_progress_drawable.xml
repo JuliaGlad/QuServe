@@ -3,13 +3,12 @@
 
         <shape
             android:shape="ring"
-            android:innerRadiusRatio="2.5"
-            android:thicknessRatio="40"
+            android:innerRadiusRatio="2.3"
+            android:thicknessRatio="20"
             android:useLevel="true">
            <gradient
-               android:startColor="@color/iconColor"
-               android:centerColor="#A67AEF"
-               android:endColor="@color/purple">
+               android:startColor="#206487"
+               android:endColor="#74BDDF">
            </gradient>
         </shape>
 

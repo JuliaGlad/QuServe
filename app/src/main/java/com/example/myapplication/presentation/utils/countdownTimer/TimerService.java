@@ -2,7 +2,6 @@ package com.example.myapplication.presentation.utils.countdownTimer;
 
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
 
-import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,7 +12,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -23,9 +21,8 @@ import androidx.work.WorkManager;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.queue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
-import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
 
 import java.util.Locale;

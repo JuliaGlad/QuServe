@@ -2,6 +2,9 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -24,6 +28,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem.MainItemDelegate;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem.MainItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem.MainItemModel;
@@ -48,7 +54,7 @@ public class BasicUserFragment extends Fragment {
     private final MainAdapter mainAdapter = new MainAdapter();
     private boolean companyExist = false;
     String companyId = null;
-    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private ActivityResultLauncher<Intent> activityResultLauncher, chooseCompanyLauncher;
     private List<DelegateItem> list = new ArrayList<>();
 
     @Override
@@ -57,6 +63,7 @@ public class BasicUserFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BasicUserViewModel.class);
 
         setActivityResultLauncher();
+        setChooseCompanyLauncher();
     }
 
     @Override
@@ -76,6 +83,12 @@ public class BasicUserFragment extends Fragment {
         viewModel.setBackground();
         initSettingButton();
         initBackground();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        viewModel.isCompanyExist();
     }
 
     private void initBackground() {
@@ -144,18 +157,13 @@ public class BasicUserFragment extends Fragment {
             listNew.addAll(list);
             listNew.remove(listNew.size() - 1);
             listNew.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_profileLoggedFragment_to_chooseCompanyFragment);
+                ((MainActivity) requireActivity()).openChooseCompanyActivity(COMPANY_DETAILS);
             })));
             mainAdapter.submitList(listNew);
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.isCompanyExist();
-    }
+
 
     private void initRecycler(Uri uri, String name, String email) {
         list = Arrays.asList(new MainItemDelegateItem(new MainItemModel(1, uri, name, email, BASIC, null)),
@@ -174,8 +182,9 @@ public class BasicUserFragment extends Fragment {
     private ServiceItemDelegateItem addCompanyServiceDelegateItem() {
         if (companyExist) {
             return new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_profileLoggedFragment_to_chooseCompanyFragment);
+                Intent intent = new Intent(requireActivity(), ChooseCompanyActivity.class);
+                intent.putExtra(STATE, COMPANY_DETAILS);
+                chooseCompanyLauncher.launch(intent);
             }));
         } else {
             return new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_add_business_24, R.string.add_company, () -> {
@@ -197,6 +206,29 @@ public class BasicUserFragment extends Fragment {
                     return null;
                 });
     }
+
+    private void setChooseCompanyLauncher() {
+        chooseCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK){
+                        Intent data = result.getData();
+                        if (data != null){
+
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(COMPANY_ID, data.getStringExtra(COMPANY_ID));
+
+                            fragmentManager
+                                    .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.logged_container, CompanyUserFragment.class, bundle)
+                                    .commit();
+                        }
+                    }
+                });
+    }
+
 
     private void setActivityResultLauncher() {
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),

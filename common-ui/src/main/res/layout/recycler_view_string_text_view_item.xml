@@ -5,12 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
         android:id="@+id/set_text"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
         android:text="Text"
-        android:textColor="@color/strokeColor"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
