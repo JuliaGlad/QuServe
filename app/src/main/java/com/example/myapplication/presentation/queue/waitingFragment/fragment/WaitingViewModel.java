@@ -20,9 +20,14 @@ import com.example.myapplication.presentation.queue.waitingFragment.fragment.rec
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
@@ -47,12 +52,15 @@ public class WaitingViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _showLeaveDialog = new MutableLiveData<>();
     public LiveData<Boolean> showLeaveDialog = _showLeaveDialog;
 
-    private void initRecycler(String queueId, String queueName, Fragment fragment) {
+    private final MutableLiveData<String> _name = new MutableLiveData<>();
+    public LiveData<String> name = _name;
+
+
+    private void initRecycler(String queueId,Fragment fragment) {
         buildList(new DelegateItem[]{
-                new StringTextViewDelegateItem(new StringTextViewModel(1, queueName, 28, View.TEXT_ALIGNMENT_CENTER)),
-                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, fragment.getString(R.string.estimated_waiting_time), String.valueOf(midTime), true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, fragment.getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), true, EDIT_PEOPLE_BEFORE_YOU)),
-                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), false, null)),
+                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, fragment.getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, fragment.getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> {
                     _showLeaveDialog.postValue(true);
                 }))
@@ -83,9 +91,10 @@ public class WaitingViewModel extends ViewModel {
                                 break;
                             }
                         }
-                        initRecycler(queueModel.getId(), queueModel.getName(),  fragment);
+                        _name.postValue(queueModel.getName());
+                        initRecycler(queueModel.getId(), fragment);
                         queueId = queueModel.getId();
-                        addServedSnapshot(fragment);
+                        addServedSnapshot(fragment, queueModel.getName());
                     }
 
                     @Override
@@ -95,7 +104,7 @@ public class WaitingViewModel extends ViewModel {
                 });
     }
     
-    public void addServedSnapshot(Fragment fragment){
+    public void addServedSnapshot(Fragment fragment, String name){
         DI.addSnapshotQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
@@ -116,7 +125,27 @@ public class WaitingViewModel extends ViewModel {
 
                                     @Override
                                     public void onComplete() {
-                                        fragment.requireActivity().finish();
+                                        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+                                        String time =  new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());;
+                                        DI.addQueueToHistoryUseCase.invoke(queueId, name, time, date)
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(new CompletableObserver() {
+                                                    @Override
+                                                    public void onSubscribe(@NonNull Disposable d) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onComplete() {
+                                                        fragment.requireActivity().finish();
+                                                    }
+
+                                                    @Override
+                                                    public void onError(@NonNull Throwable e) {
+
+                                                    }
+                                                });
+
                                     }
 
                                     @Override

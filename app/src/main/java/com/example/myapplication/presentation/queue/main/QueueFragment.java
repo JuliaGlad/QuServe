@@ -1,11 +1,9 @@
 package com.example.myapplication.presentation.queue.main;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
 import static com.example.myapplication.presentation.utils.Utils.CREATE_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_MANAGER;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -20,14 +18,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.profile.becomeEmployee.BecomeEmployeeActivity;
-import com.example.myapplication.presentation.profile.becomeEmployee.BecomeEmployeeViewModel;
 import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -202,7 +198,7 @@ public class QueueFragment extends Fragment {
 
     private void initCreateButton() {
         binding.button.setOnClickListener(v -> {
-            if (DI.checkAuthentificationUseCase.invoke()) {
+            if (DI.checkAuthenticationUseCase.invoke()) {
                 if (!isOwnQueue) {
                     ((MainActivity) requireActivity()).openCreateQueueActivity();
                 } else {

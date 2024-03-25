@@ -22,8 +22,8 @@ public class JoinQueueViewModel extends ViewModel {
     private final MutableLiveData<String> _name = new MutableLiveData<>();
     public LiveData<String> name = _name;
 
-    private final MutableLiveData<Task<Uri>> _image = new MutableLiveData<>();
-    public LiveData<Task<Uri>> image = _image;
+    private final MutableLiveData<Uri> _image = new MutableLiveData<>();
+    public LiveData<Uri> image = _image;
 
     public boolean checkUserID() {
         return DI.checkUserIdUseCase.invoke();
@@ -45,7 +45,7 @@ public class JoinQueueViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-//                        _image.postValue(imageModel.getImageUri());
+                        _image.postValue(imageModel.getImageUri());
                     }
 
                     @Override

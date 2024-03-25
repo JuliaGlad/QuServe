@@ -8,6 +8,6 @@ public class GetTimeProgressPausedUseCase {
     public String invoke(DocumentSnapshot value){
         String progress = value.getString(QUEUE_IN_PROGRESS);
         int index = progress.indexOf("_");
-        return progress.substring(0, index);
+        return "time";
     }
 }

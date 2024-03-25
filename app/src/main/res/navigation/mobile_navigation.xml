@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.myapplication.presentation.profile.profileLogin.ProfileNavigationFragment"
+        android:name="com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment"
         android:label="@string/sign_in"
         tools:layout="@layout/fragment_profile" >
         <action

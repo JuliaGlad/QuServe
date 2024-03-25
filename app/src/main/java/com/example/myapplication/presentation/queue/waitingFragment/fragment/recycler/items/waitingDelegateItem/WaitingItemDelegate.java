@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.EDIT_PEOPLE_BEF
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.DI;
@@ -44,6 +45,7 @@ public class WaitingItemDelegate implements AdapterDelegate {
         }
 
         void bind(WaitingItemModel model) {
+            binding.icon.setImageResource(model.drawable);
             binding.headLine.setText(model.headerText);
             binding.description.setText(model.descriptionText);
 

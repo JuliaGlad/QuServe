@@ -4,6 +4,6 @@ import static com.example.myapplication.DI.service;
 
 public class IsNullUseCase {
     public boolean invoke(){
-        return service.auth.getCurrentUser() != null;
+        return service.auth.getCurrentUser() == null;
     }
 }

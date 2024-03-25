@@ -23,15 +23,15 @@ import myapplication.android.ui.listeners.DialogDismissedListener;
 /*
  * @author j.gladkikh
  */
-public class ProfileNavigationFragment extends Fragment {
+public class ProfileLoginFragment extends Fragment {
 
     private FragmentProfileBinding binding;
-    private ProfileNavigationViewModel viewModel;
+    private ProfileLoginViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(ProfileNavigationViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ProfileLoginViewModel.class);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class ProfileNavigationFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        viewModel.checkCurrentUser(this);
+//        viewModel.checkCurrentUser(this);
         setupObservers();
         initSignUpButton();
         initEditText();

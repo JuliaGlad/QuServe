@@ -4,14 +4,19 @@ import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
+import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
+import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.OWN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
+import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
@@ -21,26 +26,61 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.myapplication.App;
+import com.example.myapplication.data.dto.HistoryQueueDto;
+import com.example.myapplication.data.dto.HistoryQueueModel;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
+
+    public Single<List<HistoryQueueDto>> getHistoryList() {
+        List<HistoryQueueDto> list = new ArrayList<>();
+        return Single.create(emitter -> {
+            CollectionReference collectionRef = service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(HISTORY_KEY);
+
+            collectionRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                    for (int i = 0; i < documents.size(); i++) {
+                        list.add(new HistoryQueueDto(
+                                documents.get(i).getString(DATE_LEFT),
+                                documents.get(i).getString(QUEUE_NAME_KEY),
+                                documents.get(i).getString(TIME)
+                        ));
+                    }
+                    emitter.onSuccess(list);
+                } else {
+                    emitter.onSuccess(Collections.emptyList());
+                }
+            });
+        });
+    }
 
     public Completable onPasswordCheck(String password) {
         return Completable.create(emitter -> {
@@ -192,7 +232,8 @@ public class ProfileRepository {
         docRef.update(PARTICIPATE_IN_QUEUE, value);
     }
 
-    public Completable createAccount(String email, String password, String userName, String uri) {
+    public Completable createAccount(String email, String password, String userName, String
+            uri) {
         return Completable.create(emitter -> {
             service.auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -227,7 +268,10 @@ public class ProfileRepository {
         App.getInstance().getDatabase().userDao().deleteALl();
         return Completable.create(emitter -> {
             service.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                emitter.onComplete();
+                if (task.isSuccessful())
+                    emitter.onComplete();
+                else
+                    emitter.onError(new Throwable("Wrong data"));
             });
         });
     }
@@ -270,7 +314,8 @@ public class ProfileRepository {
         });
     }
 
-    public Completable updateUserData(String newUserName, String newUserPhone, String newUserGender, String newBirthday) {
+    public Completable updateUserData(String newUserName, String newUserPhone, String
+            newUserGender, String newBirthday) {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
             FieldValue timestamp = FieldValue.serverTimestamp();

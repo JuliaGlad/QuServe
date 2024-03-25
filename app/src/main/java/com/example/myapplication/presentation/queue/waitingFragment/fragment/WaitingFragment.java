@@ -108,6 +108,11 @@ public class WaitingFragment extends Fragment {
 
 
     private void setupObserves() {
+
+        viewModel.name.observe(getViewLifecycleOwner(), s -> {
+            binding.queueName.setText(s);
+        });
+
         viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
 
         viewModel.showLeaveDialog.observe(getViewLifecycleOwner(), aBoolean -> {

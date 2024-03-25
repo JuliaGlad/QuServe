@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/service_button_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/card_background"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_icons_background"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_round_done"
+        app:tint="?colorPrimary" />
+
+    <TextView
+        android:id="@+id/queue_name"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Louis Vuitton"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/icon"
+        app:layout_constraintTop_toTopOf="@+id/icon" />
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="18 Dec, 16 : 45"
+        app:layout_constraintBottom_toBottomOf="@+id/icon"
+        app:layout_constraintStart_toStartOf="@+id/queue_name"
+        app:layout_constraintTop_toBottomOf="@+id/queue_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

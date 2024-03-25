@@ -111,8 +111,8 @@ public class JoinQueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.image.observe(getViewLifecycleOwner(), uriTask -> {
-            uriTask.addOnSuccessListener(uri -> Glide.with(JoinQueueFragment.this).load(uri).into(binding.qrCodeImage));
+        viewModel.image.observe(getViewLifecycleOwner(), uri -> {
+           Glide.with(JoinQueueFragment.this).load(uri).into(binding.qrCodeImage);
         });
 
         viewModel.name.observe(getViewLifecycleOwner(), queueName -> {

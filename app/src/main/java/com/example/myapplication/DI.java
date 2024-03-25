@@ -41,7 +41,7 @@ import com.example.myapplication.domain.usecase.companyQueue.queues.NextCompanyQ
 import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateQueueDataUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
-import com.example.myapplication.domain.usecase.profile.CheckAuthentificationUseCase;
+import com.example.myapplication.domain.usecase.profile.CheckAuthenticationUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckBooleanDataUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckPasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
@@ -49,6 +49,7 @@ import com.example.myapplication.domain.usecase.profile.CheckVerificationUseCase
 import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.GetBackgroundImageUseCase;
+import com.example.myapplication.domain.usecase.profile.GetHistoryUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileEditUseCase;
 import com.example.myapplication.domain.usecase.profile.GetProfileImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetUserBooleanDataUseCase;
@@ -62,6 +63,7 @@ import com.example.myapplication.domain.usecase.profile.UploadBackgroundImageUse
 import com.example.myapplication.domain.usecase.profile.VerifyBeforeUpdateEmailUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddPeopleBeforeYouSnapshot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddQueueSizeModelSnapShot;
+import com.example.myapplication.domain.usecase.queue.usecase.AddQueueToHistoryUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.CheckParticipantIndexUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.DeleteQrCodeUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.GetOwnQueueData;
@@ -144,6 +146,7 @@ public class DI {
     public static DeleteCompanyUseCase deleteCompanyUseCase = new DeleteCompanyUseCase();
 
     //PROFILE USECASE
+    public static GetHistoryUseCase getHistoryUseCase = new GetHistoryUseCase();
     public static IsNullUseCase isNullUseCase = new IsNullUseCase();
     public static CheckPasswordUseCase checkPasswordUseCase = new CheckPasswordUseCase();
     public static UpdateParticipateInQueueUseCase updateParticipateInQueueUseCase = new UpdateParticipateInQueueUseCase();
@@ -165,7 +168,7 @@ public class DI {
     public static CreateAccountUseCase createAccountUseCase = new CreateAccountUseCase();
     public static SendVerificationEmailUseCase sendVerificationEmailUseCase = new SendVerificationEmailUseCase();
     public static DeleteAccountUseCase deleteAccountUseCase = new DeleteAccountUseCase();
-    public static CheckAuthentificationUseCase checkAuthentificationUseCase = new CheckAuthentificationUseCase();
+    public static CheckAuthenticationUseCase checkAuthenticationUseCase = new CheckAuthenticationUseCase();
     public static UpdateEmailFieldUseCase updateEmailFieldUseCase = new UpdateEmailFieldUseCase();
     public static VerifyBeforeUpdateEmailUseCase verifyBeforeUpdateEmailUseCase = new VerifyBeforeUpdateEmailUseCase();
     public static ChangePasswordUseCase changePasswordUseCase = new ChangePasswordUseCase();
@@ -173,6 +176,7 @@ public class DI {
     public static GetBackgroundImageUseCase getBackgroundImageUseCase = new GetBackgroundImageUseCase();
 
     //QUEUE USECASE
+    public static AddQueueToHistoryUseCase addQueueToHistoryUseCase = new AddQueueToHistoryUseCase();
     public static DeleteQrCodeUseCase deleteQrCodeUseCase = new DeleteQrCodeUseCase();
     public static GetQueueMidTimeModel getQueueMidTimeModel = new GetQueueMidTimeModel();
     public static UpdateMidTimeUseCase updateMidTimeUseCase = new UpdateMidTimeUseCase();
@@ -204,4 +208,5 @@ public class DI {
     public static NextParticipantUseCase nextParticipantUseCase = new NextParticipantUseCase();
     public static RemoveParticipantById removeParticipantById = new RemoveParticipantById();
     public static OnContainParticipantUseCase onContainParticipantUseCase = new OnContainParticipantUseCase();
+
 }

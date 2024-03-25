@@ -4,6 +4,10 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 public class Utils {
+    public static final String NAVIGATION = "NAVIGATION";
+    public static final String DATE_LEFT = "Date";
+    public static final String TIME = "Time";
+    public static final String HISTORY_KEY = "History";
     public static final String CITY_KEY = "City";
     public static final String QUEUE_MANAGER = "QUEUE_MANAGER";
     public static final String WORKERS_COUNT = "WorkersCount";

@@ -1,6 +1,8 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
+import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
@@ -12,6 +14,8 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
+import static com.example.myapplication.presentation.utils.Utils.TIME;
+import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
 
@@ -35,6 +39,30 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class QueueRepository {
+
+    public Completable addQueueToHistory(String queueId, String name, String timeLeft, String date){
+        DocumentReference docRef = service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid())
+                .collection(HISTORY_KEY)
+                .document(date)
+                .collection(QUEUE_LIST)
+                .document(queueId);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        hashMap.put(QUEUE_NAME_KEY, name);
+        hashMap.put(TIME, timeLeft);
+        hashMap.put(DATE_LEFT, date);
+
+        return Completable.create(emitter -> {
+            docRef.set(hashMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public void updateTimePassed(String queueId, int previous, int passed){
         if (passed != 0) {
