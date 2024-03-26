@@ -2,7 +2,6 @@ package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
-import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
@@ -14,7 +13,6 @@ import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KE
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.URI;
@@ -27,20 +25,17 @@ import android.util.Log;
 
 import com.example.myapplication.App;
 import com.example.myapplication.data.dto.HistoryQueueDto;
-import com.example.myapplication.data.dto.HistoryQueueModel;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -48,7 +43,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -391,8 +386,7 @@ public class ProfileRepository {
             try {
                 local.getDownloadUrl().addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Uri uri = task.getResult();
-                        emitter.onSuccess(new ImageDto(uri));
+                        emitter.onSuccess(new ImageDto(task.getResult()));
                     } else {
                         Log.d("Error", task.getException().getMessage());
                         emitter.onSuccess(new ImageDto(Uri.EMPTY));
@@ -404,7 +398,7 @@ public class ProfileRepository {
             }
 
         });
-//        }
+
     }
 
     public Single<ImageDto> getProfileImage() {

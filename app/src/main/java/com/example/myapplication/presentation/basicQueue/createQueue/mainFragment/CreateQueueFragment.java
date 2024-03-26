@@ -7,10 +7,12 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -50,11 +52,13 @@ public class CreateQueueFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         viewModel = new ViewModelProvider(requireActivity()).get(CreateQueueViewModel.class);
-
         binding = FragmentCreateQueueBinding.inflate(inflater, container, false);
-
         viewModel.onPageInit(page, getResources().getStringArray(R.array.lifetime));
+
+        initBackButtonPressed();
+
         return binding.getRoot();
     }
 
@@ -117,5 +121,13 @@ public class CreateQueueFragment extends Fragment {
         });
     }
 
+    private void initBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                viewModel.navigateBack(page, CreateQueueFragment.this);
+            }
+        });
+    }
 }
 

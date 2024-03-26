@@ -111,7 +111,6 @@ public class EditQueueViewModel extends ViewModel {
                 });
     }
 
-
     public void saveData(String companyId, String queueId, String name, String location) {
         DI.updateQueueDataUseCase.invoke(companyId, queueId, name, location)
                 .subscribeOn(Schedulers.io())

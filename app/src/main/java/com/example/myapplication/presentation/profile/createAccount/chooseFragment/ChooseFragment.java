@@ -5,10 +5,12 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,8 +27,8 @@ public class ChooseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        initBackButtonPressed();
         binding = FragmentChooseBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -49,7 +51,17 @@ public class ChooseFragment extends Fragment {
 
     private void initCompanyButton(){
         binding.forCompanyLayout.setOnClickListener(v -> {
-//            ((MainActivity)requireActivity()).openCreateCompanyActivity();
+            ((MainActivity)requireActivity()).openCreateCompanyActivity();
         });
     }
+
+    private void initBackButtonPressed(){
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Log.d("On button back pressed", "pressed");
+            }
+        });
+    }
+
 }

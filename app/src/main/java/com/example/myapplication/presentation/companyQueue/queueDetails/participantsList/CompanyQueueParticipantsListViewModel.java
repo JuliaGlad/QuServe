@@ -43,35 +43,20 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
 
     public void nextParticipant(String queueId, String companyId) {
         DI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
+                .concatMapCompletable(queueParticipantsListModel -> {
+                    String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
+                    return DI.nextParticipantUseCompanyUseCase.invoke(queueId, companyId, name, peoplePassed);
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueParticipantsListModel>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
-                        String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
-                        DI.nextParticipantUseCompanyUseCase.invoke(queueId, companyId, name)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new CompletableObserver() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-                                        DI.updateInProgressUseCase.invoke(queueParticipantsListModel.getId(), name, peoplePassed);
-                                        peoplePassed += 1;
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-                                });
+                    public void onComplete() {
+                        peoplePassed += 1;
                     }
 
                     @Override
@@ -82,44 +67,18 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
     }
 
     public void getParticipantsList(Fragment fragment, String queueId, String companyId) {
-
         DI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueParticipantsListModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
+                .flatMapObservable(queueParticipantsListModel -> {
+                    if (!queueParticipantsListModel.getParticipants().equals(Collections.emptyList())) {
+                        participantsSize = queueParticipantsListModel.getParticipants().size();
                     }
 
-                    @Override
-                    public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
-                        if (!queueParticipantsListModel.getParticipants().equals(Collections.emptyList())) {
-                            participantsSize = queueParticipantsListModel.getParticipants().size();
-                        }
+                    peoplePassed = 0;
+                    initRecycler(fragment);
 
-                        initRecycler(fragment);
-                        addQueueSizeModelSnapshot(fragment, companyId, queueId);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-    }
-
-    private void addParticipantListDelegateItems(Fragment fragment, int queueLength) {
-        if (queueLength != 0) {
-            for (int i = 0; i < queueLength; i++) {
-                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, fragment.getString(R.string.participant))));
-            }
-        } else {
-            itemsList.add(new StringTextViewDelegateItem(new StringTextViewModel(1, "No user yet", 24, View.TEXT_ALIGNMENT_CENTER)));
-        }
-    }
-
-    private void addQueueSizeModelSnapshot(Fragment fragment, String companyId, String queueId) {
-        DI.addCompanyQueueParticipantsSizeSnapshot.invoke(companyId, queueId)
+                    initRecycler(fragment);
+                    return DI.addQueueSizeModelSnapShot.invoke(queueParticipantsListModel.getId());
+                })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {
                     @Override
@@ -155,6 +114,16 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
 
                     }
                 });
+    }
+
+    private void addParticipantListDelegateItems(Fragment fragment, int queueLength) {
+        if (queueLength != 0) {
+            for (int i = 0; i < queueLength; i++) {
+                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, fragment.getString(R.string.participant))));
+            }
+        } else {
+            itemsList.add(new StringTextViewDelegateItem(new StringTextViewModel(1, "No user yet", 24, View.TEXT_ALIGNMENT_CENTER)));
+        }
     }
 
     private void initRecycler(Fragment fragment) {

@@ -7,7 +7,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.example.myapplication.data.db.entity.CompanyUserEntity;
-import com.example.myapplication.data.db.entity.UserEntity;
 
 import java.util.List;
 

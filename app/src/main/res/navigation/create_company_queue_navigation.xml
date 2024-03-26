@@ -14,8 +14,8 @@
             android:id="@+id/action_createCompanyQueueFragment_self"
             app:destination="@id/createCompanyQueueFragment" />
         <action
-            android:id="@+id/action_createCompanyQueueFragment_to_finishedQueueCreationFragment2"
-            app:destination="@id/finishedQueueCreationFragment2" />
+            android:id="@+id/action_createCompanyQueueFragment_to_finishedQueueCreationFragment"
+            app:destination="@id/finishedQueueCreationFragment" />
 
         <argument android:name="page"
             app:argType="string"/>
@@ -30,7 +30,7 @@
             app:destination="@id/createCompanyQueueFragment" />
     </fragment>
     <fragment
-        android:id="@+id/finishedQueueCreationFragment2"
+        android:id="@+id/finishedQueueCreationFragment"
         android:name="com.example.myapplication.presentation.queue.finishedQueueCreation.FinishedQueueCreationFragment"
         android:label="fragment_finished_queue_creation"
         tools:layout="@layout/fragment_finished_queue_creation" />

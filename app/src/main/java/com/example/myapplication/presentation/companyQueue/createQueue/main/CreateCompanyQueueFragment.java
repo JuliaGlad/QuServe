@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyQueueBinding;
+import com.example.myapplication.presentation.basicQueue.createQueue.mainFragment.CreateQueueFragment;
 import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegate;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegate;
@@ -57,6 +59,9 @@ public class CreateCompanyQueueFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(CreateCompanyQueueViewModel.class);
         binding = FragmentCreateCompanyQueueBinding.inflate(inflater, container, false);
         viewModel.onPageInit(page, companyId, getResources().getStringArray(R.array.lifetime), this);
+
+        initBackButtonPressed();
+
         return binding.getRoot();
     }
 
@@ -103,5 +108,14 @@ public class CreateCompanyQueueFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
+    }
+
+    private void initBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                viewModel.navigateBack(page, CreateCompanyQueueFragment.this);
+            }
+        });
     }
 }

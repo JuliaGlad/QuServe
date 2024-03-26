@@ -33,9 +33,7 @@
         android:name="com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment"
         android:label="@string/sign_in"
         tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_navigation_profile_to_createAccount"
-            app:destination="@id/createAccount" />
+
         <action
             android:id="@+id/action_navigation_profile_to_navigation_home"
             app:destination="@id/navigation_home" />
@@ -72,6 +70,9 @@
         <action
             android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
             app:destination="@id/navigation_queue" />
+        <action
+            android:id="@+id/action_profileLoggedFragment_to_createAccount"
+            app:destination="@id/createAccount" />
     </fragment>
 
     <fragment

@@ -12,12 +12,15 @@ import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.queue.QueueParticipantsListModel;
 import com.example.myapplication.domain.model.queue.QueueSizeModel;
+
+import io.reactivex.rxjava3.functions.BiFunction;
 import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsModel;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListModel;
 import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsDelegateItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -56,36 +59,19 @@ public class ParticipantsListViewModel extends ViewModel {
 
     public void getParticipantsList(Fragment fragment) {
         DI.getParticipantsListUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueParticipantsListModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
+                .flatMapObservable(queueParticipantsListModel -> {
+                    if (queueParticipantsListModel.getParticipants().equals("[]")) {
+                        participantsSize = 0;
+                    } else {
+                        participantsSize = queueParticipantsListModel.getParticipants().size();
                     }
 
-                    @Override
-                    public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
-                        if (queueParticipantsListModel.getParticipants().equals("[]")) {
-                            participantsSize = 0;
-                        } else {
-                            participantsSize = queueParticipantsListModel.getParticipants().size();
-                        }
+                    peoplePassed = 0;
 
-                        peoplePassed = 0;
-
-                        initRecyclerView(fragment);
-                        addQueueSizeModelSnapshot(fragment, queueParticipantsListModel.getId());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-
-    }
-
-    public void addQueueSizeModelSnapshot(Fragment fragment, String queueID) {
-        DI.addQueueSizeModelSnapShot.invoke(queueID)
+                    initRecyclerView(fragment);
+                    ;
+                    return DI.addQueueSizeModelSnapShot.invoke(queueParticipantsListModel.getId());
+                })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {
                     @Override
@@ -127,41 +113,26 @@ public class ParticipantsListViewModel extends ViewModel {
 
     public void nextParticipant() {
         DI.getParticipantsListUseCase.invoke()
+                .flatMapCompletable(queueParticipantsListModel -> {
+                    String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
+                    String id = queueParticipantsListModel.getId();
+                    return DI.nextParticipantUseCase.invoke(id, name, peoplePassed);
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueParticipantsListModel>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull QueueParticipantsListModel queueParticipantsListModel) {
-
-                        String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
-                        DI.nextParticipantUseCase.invoke(queueParticipantsListModel.getId(), name)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new CompletableObserver() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-                                        DI.updateInProgressUseCase.invoke(queueParticipantsListModel.getId(), name, peoplePassed);
-                                        peoplePassed += 1;
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-                                });
+                    public void onComplete() {
+                        peoplePassed += 1;
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        Log.e("NextParticipantException", e.getMessage());
                     }
                 });
     }

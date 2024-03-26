@@ -6,10 +6,13 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -86,6 +89,17 @@ public class CreateCompanyAccountFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+               viewModel.navigateBack(page, CreateCompanyAccountFragment.this);
+            }
+        });
+    }
+
     private void initMainAdapter() {
         mainAdapter.addDelegate(new HorizontalRecyclerDelegate());
         mainAdapter.addDelegate(new AutoCompleteTextDelegate());
@@ -102,10 +116,13 @@ public class CreateCompanyAccountFragment extends Fragment {
 
         viewModel.finished.observe(getViewLifecycleOwner(), string -> {
             if (string != null) {
+                viewModel.setArgumentsNull();
                 NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_createCompanyAccountFragment_to_approvalFragment);
+                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentToApprovalFragment());
             }
         });
 
     }
+
+
 }

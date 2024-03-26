@@ -2,8 +2,10 @@ package com.example.myapplication.presentation.profile.loggedProfile.companyUser
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.PDF;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,9 +20,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.databinding.FragmentEditCompanyBinding;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.model.EditCompanyModel;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.state.EditCompanyState;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 public class EditCompanyFragment extends Fragment {
@@ -53,7 +61,6 @@ public class EditCompanyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         viewModel.getCompanyData(companyId);
-        viewModel.getCompanyLogo(companyId);
         initChangeLogo();
         initBackButton();
         initSaveButton();
@@ -106,34 +113,47 @@ public class EditCompanyFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.companyName.observe(getViewLifecycleOwner(), name -> {
-            binding.editLayoutCompanyName.setText(name);
-        });
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof EditCompanyState.Success){
+                EditCompanyModel model = ((EditCompanyState.Success)state).data;
+                binding.editLayoutCompanyName.setText(model.getName());
+                binding.editLayoutCompanyEmail.setText(model.getEmail());
+                binding.editLayoutCompanyPhone.setText(model.getPhone());
+                binding.editLayoutService.setText(model.getService());
 
-        viewModel.companyEmail.observe(getViewLifecycleOwner(), email -> {
-            binding.editLayoutCompanyEmail.setText(email);
-        });
+                Uri uri = model.getUri();
+                if (uri != Uri.EMPTY) {
+                    Glide.with(this)
+                            .load(uri)
+                            .addListener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
 
-        viewModel.companyPhone.observe(getViewLifecycleOwner(), phone -> {
-            binding.editLayoutCompanyPhone.setText(phone);
-        });
+                                @Override
+                                public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                                    binding.progressLayout.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(binding.companyLogo);
 
-        viewModel.companyService.observe(getViewLifecycleOwner(), service -> {
-            binding.editLayoutService.setText(service);
+                } else {
+                    binding.progressLayout.setVisibility(View.GONE);
+                }
+
+            } else if (state instanceof EditCompanyState.Loading){
+                binding.progressLayout.setVisibility(View.VISIBLE);
+            } else if (state instanceof EditCompanyState.Error){
+
+            }
         });
 
         viewModel.navigateBack.observe(getViewLifecycleOwner(), navigate -> {
             if (navigate){
                 requireActivity().finish();
-            }
-        });
-
-        viewModel.uri.observe(getViewLifecycleOwner(), uri -> {
-            if (uri != Uri.EMPTY) {
-                Glide.with(this)
-                        .load(uri)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(binding.companyLogo);
             }
         });
     }

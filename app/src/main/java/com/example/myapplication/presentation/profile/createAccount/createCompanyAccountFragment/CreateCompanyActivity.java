@@ -30,4 +30,9 @@ public class CreateCompanyActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(binding.toolbarCreateCompany, navController);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

@@ -20,6 +20,8 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.hi
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.delegates.history.HistoryDelegate;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.delegates.history.HistoryDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.delegates.history.HistoryDelegateModel;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.models.HistoryItemModel;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.models.HistoryState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ public class HistoryFragment extends Fragment {
     private HistoryFragmentViewModel viewModel;
     private FragmentHistoryBinding binding;
     private final MainAdapter adapter = new MainAdapter();
+    private final List<String> dates = new ArrayList<>();
+    private final List<DelegateItem> delegates = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +60,39 @@ public class HistoryFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.items.observe(getViewLifecycleOwner(), adapter::submitList);
+
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof HistoryState.Success){
+               List<HistoryItemModel> model = ((HistoryState.Success) state).data;
+
+                for (int i = 0; i < model.size(); i++) {
+                    String date = model.get(i).getDate();
+                    if (!dates.contains(date))
+                        dates.add(date);
+                }
+
+                for (int i = 0; i < dates.size(); i++) {
+                    delegates.add(new DateDelegateItem(new DateModel(i, dates.get(i))));
+                    for (int j = 0; j < model.size(); j++) {
+                        if (dates.get(i).equals(model.get(j).getDate())){
+                            delegates.add(new HistoryDelegateItem(new HistoryDelegateModel(
+                                    j,
+                                    model.get(j).getName(),
+                                    model.get(j).getTime()
+                            )));
+                        }
+                    }
+                }
+                adapter.submitList(delegates);
+                binding.progressBar.setVisibility(View.GONE);
+
+            } else if (state instanceof HistoryState.Loading){
+                binding.progressBar.setVisibility(View.VISIBLE);
+
+            } else if (state instanceof HistoryState.Error){
+
+            }
+        });
     }
 
     private void setAdapter() {

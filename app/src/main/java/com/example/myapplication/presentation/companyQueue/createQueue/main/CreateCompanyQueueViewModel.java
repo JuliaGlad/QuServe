@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.companyQueue.createQueue.ar
 import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueName;
 import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueTime;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
@@ -13,6 +14,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
 
@@ -185,6 +187,7 @@ public class CreateCompanyQueueViewModel extends ViewModel {
         switch (page) {
 
             case PAGE_1:
+                setArgumentsNull();
                 fragment.requireActivity().finish();
                 break;
 
@@ -233,7 +236,9 @@ public class CreateCompanyQueueViewModel extends ViewModel {
     }
 
     private void createQueueDocument(String queueID, String companyId) {
-        DI.createCompanyQueueDocumentUseCase.invoke(queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels);
+        DI.createCompanyQueueDocumentUseCase.invoke(
+                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels
+        );
     }
 
     private String generateID() {
@@ -294,8 +299,13 @@ public class CreateCompanyQueueViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
+                            setArgumentsNull();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(STATE, COMPANY);
+
                             NavHostFragment.findNavController(fragment)
-                                    .navigate(R.id.action_createCompanyQueueFragment_to_finishedQueueCreationFragment2);
+                                    .navigate(R.id.action_createCompanyQueueFragment_to_finishedQueueCreationFragment, bundle);
                         }
 
                         @Override

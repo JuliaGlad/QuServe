@@ -12,6 +12,7 @@ import android.os.Bundle;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityCreateQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 
 public class CreateQueueActivity extends AppCompatActivity {
 
@@ -33,6 +34,11 @@ public class CreateQueueActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController);
             NavigationUI.setupWithNavController(binding.toolbarCreateQueue, navController);
         }
+    }
+
+    public void openCompanyQueueDetailsActivity() {
+        Intent intent = new Intent(this, CompanyQueueDetailsActivity.class);
+        startActivity(intent);
     }
 
     public void openQueueDetailsActivity() {

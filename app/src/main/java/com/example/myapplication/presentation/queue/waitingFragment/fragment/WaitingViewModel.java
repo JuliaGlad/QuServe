@@ -42,7 +42,7 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 
 public class WaitingViewModel extends ViewModel {
 
-    private String queueId;
+    private String queueId, nameString;
     private int midTime = 0;
     private int peopleBeforeSize = 0;
 
@@ -56,7 +56,7 @@ public class WaitingViewModel extends ViewModel {
     public LiveData<String> name = _name;
 
 
-    private void initRecycler(String queueId,Fragment fragment) {
+    private void initRecycler(String queueId, Fragment fragment) {
         buildList(new DelegateItem[]{
                 new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, fragment.getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
                 new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, fragment.getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
@@ -73,95 +73,40 @@ public class WaitingViewModel extends ViewModel {
 
     public void getQueue(Fragment fragment) {
         DI.getQueueByParticipantIdUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull QueueModel queueModel) {
-                        List<String> participantsList = queueModel.getParticipants();
-
-                        for (int i = 0; i < participantsList.size(); i++) {
-                            if (DI.checkParticipantIndexUseCase.invoke(participantsList, i)){
-                                peopleBeforeSize = i;
-                                midTime = Integer.parseInt(queueModel.getMidTime()) * peopleBeforeSize;
-                                break;
-                            }
+                .flatMapObservable(queueModel -> {
+                    List<String> participantsList = queueModel.getParticipants();
+                    for (int i = 0; i < participantsList.size(); i++) {
+                        if (DI.checkParticipantIndexUseCase.invoke(participantsList, i)) {
+                            peopleBeforeSize = i;
+                            midTime = Integer.parseInt(queueModel.getMidTime()) * peopleBeforeSize;
+                            break;
                         }
-                        _name.postValue(queueModel.getName());
-                        initRecycler(queueModel.getId(), fragment);
-                        queueId = queueModel.getId();
-                        addServedSnapshot(fragment, queueModel.getName());
                     }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e("Exception", e.toString());
-                    }
-                });
-    }
-    
-    public void addServedSnapshot(Fragment fragment, String name){
-        DI.addSnapshotQueueUseCase.invoke(queueId)
+                    _name.postValue(queueModel.getName());
+                    initRecycler(queueModel.getId(), fragment);
+                    queueId = queueModel.getId();
+                    nameString = queueModel.getName();
+                    return DI.addSnapshotQueueUseCase.invoke(queueId);
+                })
+                .flatMapCompletable(documentSnapshot -> {
+                    String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+                    String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+                    return DI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<DocumentSnapshot>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull DocumentSnapshot snapshot) {
-                        DI.onParticipantServedUseCase.invoke(snapshot)
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new CompletableObserver() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-                                        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
-                                        String time =  new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());;
-                                        DI.addQueueToHistoryUseCase.invoke(queueId, name, time, date)
-                                                .subscribeOn(Schedulers.io())
-                                                .subscribe(new CompletableObserver() {
-                                                    @Override
-                                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onComplete() {
-                                                        fragment.requireActivity().finish();
-                                                    }
-
-                                                    @Override
-                                                    public void onError(@NonNull Throwable e) {
-
-                                                    }
-                                                });
-
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
 
                     }
 
                     @Override
                     public void onComplete() {
+                        fragment.requireActivity().finish();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
 
                     }
                 });
@@ -172,7 +117,7 @@ public class WaitingViewModel extends ViewModel {
         _items.setValue(list);
     }
 
-    public void updateParticipateInQueue(){
+    public void updateParticipateInQueue() {
         DI.updateParticipateInQueueUseCase.invoke(false);
     }
 }

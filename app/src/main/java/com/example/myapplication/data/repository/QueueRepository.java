@@ -93,12 +93,17 @@ public class QueueRepository {
         });
     }
 
-    public Completable nextParticipantUpdateList(String queueId, String name) {
+    public Completable nextParticipantUpdateList(String queueId, String name, int passed) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name))
                     .addOnCompleteListener(task -> {
-                        emitter.onComplete();
+                        if (task.isSuccessful()) {
+                            updateInProgress(queueId, name, passed);
+                            emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable("Failed" + task.getException()));
+                        }
                     });
         });
     }

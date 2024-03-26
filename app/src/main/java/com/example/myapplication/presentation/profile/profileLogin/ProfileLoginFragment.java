@@ -52,7 +52,7 @@ public class ProfileLoginFragment extends Fragment {
     private void initSignUpButton() {
         binding.textActionCreateAccount.setOnClickListener(v -> {
             NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_navigation_profile_to_createAccount);
+                    .navigate(R.id.action_profileLoggedFragment_to_createAccount);
         });
     }
 

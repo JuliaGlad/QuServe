@@ -1,14 +1,14 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentApprovalBinding;
@@ -33,6 +33,17 @@ public class ApprovalFragment extends Fragment {
 
         binding.buttonOk.setOnClickListener(v -> {
             requireActivity().finish();
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
         });
     }
 }

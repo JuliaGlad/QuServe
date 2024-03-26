@@ -143,14 +143,21 @@ public class CompanyQueueRepository {
         });
     }
 
-    public Completable nextCompanyQueueParticipantUpdateList(String queueId, String companyId, String name) {
+    public Completable nextCompanyQueueParticipantUpdateList(String queueId, String companyId, String name, int passed) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId);
         return Completable.create(emitter -> {
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name))
                     .addOnCompleteListener(task -> {
+                        updateInProgressUseCase(queueId, companyId, name, passed);
                         emitter.onComplete();
                     });
         });
+    }
+
+    public void updateInProgressUseCase(String queueId, String companyId, String name, int passed){
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId);
+        docRef.update(QUEUE_IN_PROGRESS, name);
+        docRef.update(PEOPLE_PASSED, String.valueOf(passed + 1));
     }
 
     public Single<List<WorkerDto>> getWorkersList(String companyId, String queueId) {

@@ -50,15 +50,15 @@ public class CompanyQueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
-    public void setDataNull(){
+    public void setDataNull() {
         _openEditQueue.postValue(false);
         _openParticipants.postValue(false);
         _items.postValue(Collections.emptyList());
     }
 
     public Completable finishQueue(String queueId, String companyId) {
-          DI.deleteQrCodeUseCase.invoke(queueId);
-         return DI.finishCompanyQueueUseCase.invoke(companyId, queueId);
+        DI.deleteQrCodeUseCase.invoke(queueId);
+        return DI.finishCompanyQueueUseCase.invoke(companyId, queueId);
     }
 
     public void getQueueRecycler(String queueId, String companyId) {
@@ -148,7 +148,6 @@ public class CompanyQueueDetailsViewModel extends ViewModel {
         List<DelegateItem> list = new ArrayList<>(Arrays.asList(items));
         _items.postValue(list);
     }
-
 
 
 }

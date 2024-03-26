@@ -40,11 +40,9 @@ public class QueueDetailsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(QueueDetailsViewModel.class);
         binding = FragmentQueueDetailsBinding.inflate(inflater, container, false);
+
         viewModel.getQueue(this);
-        viewModel.getQueueRecycler(() -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_queueDetailsFragment_to_participantsListFragment);
-        });
+        viewModel.getQueueRecycler(this);
 
         return binding.getRoot();
     }

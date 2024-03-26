@@ -14,75 +14,48 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.profile.UserEditModel;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditBasicUserState;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditUserModel;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditProfileViewModel extends ViewModel {
 
-    private final MutableLiveData<String> _birthday = new MutableLiveData<>();
-    LiveData<String> birthday = _birthday;
-
-    private final MutableLiveData<Uri> _image = new MutableLiveData<>();
-    LiveData<Uri> image = _image;
-
-    private final MutableLiveData<String> _gender = new MutableLiveData<>();
-    LiveData<String> gender = _gender;
-
-    private final MutableLiveData<String> _userName = new MutableLiveData<>();
-    LiveData<String> userName = _userName;
-
-    private final MutableLiveData<String> _userEmail = new MutableLiveData<>();
-    LiveData<String> userEmail = _userEmail;
-
-    private final MutableLiveData<String> _phoneNumber = new MutableLiveData<>();
-    LiveData<String> phoneNumber = _phoneNumber;
-
-    public void getProfileImage() {
-        DI.getProfileImageUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<ImageModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull ImageModel imageModel) {
-                        _image.postValue(imageModel.getImageUri());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        Log.e(TAG_EXCEPTION, e.getMessage());
-                    }
-                });
-    }
+    private final MutableLiveData<EditBasicUserState> _state = new MutableLiveData<>(new EditBasicUserState.Loading());
+    LiveData<EditBasicUserState> state = _state;
 
     public void retrieveUserData() {
         DI.getProfileEditUseCase.invoke()
+                .zipWith(DI.getProfileImageUseCase.invoke(), (userEditModel, imageModel) -> new EditUserModel(
+                        userEditModel.getPhoneNumber(),
+                        userEditModel.getUserName(),
+                        userEditModel.getBirthday(),
+                        userEditModel.getEmail(),
+                        userEditModel.getGender(),
+                        imageModel.getImageUri()
+                ))
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<UserEditModel>() {
+                .subscribe(new SingleObserver<EditUserModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+
                     }
 
                     @Override
-                    public void onSuccess(@NonNull UserEditModel userEditModel) {
-                        _userName.postValue(userEditModel.getUserName());;
-                        _userEmail.postValue(userEditModel.getEmail());
-                        _phoneNumber.postValue(userEditModel.getPhoneNumber());
-                        _gender.postValue(userEditModel.getGender());
-                        _birthday.postValue(userEditModel.getBirthday());
+                    public void onSuccess(@NonNull EditUserModel editUserModel) {
+                        _state.postValue(new EditBasicUserState.Success(editUserModel));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e(TAG_EXCEPTION, e.getMessage());
+
                     }
                 });
     }

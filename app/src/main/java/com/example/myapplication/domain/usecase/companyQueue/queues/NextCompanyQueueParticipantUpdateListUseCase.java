@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class NextCompanyQueueParticipantUpdateListUseCase {
 
-    public Completable invoke(String queueId, String companyId, String name){
-        return DI.companyQueueRepository.nextCompanyQueueParticipantUpdateList(queueId, companyId, name);
+    public Completable invoke(String queueId, String companyId, String name, int passed){
+        return DI.companyQueueRepository.nextCompanyQueueParticipantUpdateList(queueId, companyId, name, passed);
     }
 }

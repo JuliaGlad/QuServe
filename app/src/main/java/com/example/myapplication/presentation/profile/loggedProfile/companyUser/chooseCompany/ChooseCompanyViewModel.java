@@ -7,8 +7,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.common.ImageTaskModel;
 import com.example.myapplication.domain.model.company.CompanyNameIdModel;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ChooseCompanyState;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.CompanyListModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ListItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.companyListItem.CompanyListItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.companyListItem.CompanyListItemDelegateModel;
@@ -25,37 +26,22 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class ChooseCompanyViewModel extends ViewModel {
 
-    List<CompanyNameIdModel> list = new ArrayList<>();
-    List<Task<Uri>> imageList = new ArrayList<>();
-
-    private final MutableLiveData<String> _navigate = new MutableLiveData<>(null);
-    LiveData<String> navigate = _navigate;
-
-    private final MutableLiveData<List<DelegateItem>> _item = new MutableLiveData<>();
-    LiveData<List<DelegateItem>> item = _item;
-
-    private final List<DelegateItem> itemsList = new ArrayList<>();
-
-    private void initRecycler() {
-        setItems();
-        _item.postValue(itemsList);
-    }
-
-    private void setItems() {
-        for (int i = 0; i < list.size(); i++) {
-            String id = list.get(i).getId();
-            itemsList.add(new CompanyListItemDelegateItem(new CompanyListItemDelegateModel(
-                    i,
-                    list.get(i).getName(),
-                    imageList.get(i),
-                    () -> _navigate.postValue(id))));
-
-        }
-    }
+    private final MutableLiveData<ChooseCompanyState> _state = new MutableLiveData<>(new ChooseCompanyState.Loading());
+    LiveData<ChooseCompanyState> state = _state;
 
     public void getCompaniesList() {
         DI.getCompanyUseCase.invoke()
-                .zipWith(DI.getCompaniesLogosUseCase.invoke(), ListItemModel::new)
+                        .zipWith(DI.getCompaniesLogosUseCase.invoke(), (companyNameIdModels, imageTaskModels) -> {
+                            List<CompanyListModel> models = new ArrayList<>();
+                            for (int i = 0; i < companyNameIdModels.size(); i++) {
+                                models.add(new CompanyListModel(
+                                        companyNameIdModels.get(i).getId(),
+                                        companyNameIdModels.get(i).getName(),
+                                        companyNameIdModels.get(i).getUri()
+                                ));
+                            }
+                            return new ListItemModel(models, imageTaskModels);
+                        })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<ListItemModel>() {
                     @Override
@@ -65,12 +51,7 @@ public class ChooseCompanyViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ListItemModel listItemModel) {
-                        list = listItemModel.getCompanyNameIdModels();
-                        List<ImageTaskModel> tasks = listItemModel.getImageTaskModels();
-                        for (int i = 0; i < tasks.size(); i++) {
-                            imageList.add(tasks.get(i).getTask());
-                        }
-                        initRecycler();
+                        _state.postValue(new ChooseCompanyState.Success(listItemModel));
                     }
 
                     @Override

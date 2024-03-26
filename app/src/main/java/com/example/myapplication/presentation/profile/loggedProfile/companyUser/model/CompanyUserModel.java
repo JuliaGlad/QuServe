@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.profile.loggedProfile.companyUser.companyUserModelAndState;
+package com.example.myapplication.presentation.profile.loggedProfile.companyUser.model;
 
 import android.net.Uri;
 

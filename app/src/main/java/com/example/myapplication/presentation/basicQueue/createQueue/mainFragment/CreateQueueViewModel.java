@@ -3,9 +3,11 @@ package com.example.myapplication.presentation.basicQueue.createQueue.mainFragme
 import static android.os.Build.VERSION.SDK_INT;
 import static com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments.queueName;
 import static com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments.queueTime;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
 
 import android.Manifest;
@@ -15,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -201,8 +204,12 @@ public class CreateQueueViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(STATE, BASIC);
+
                             NavHostFragment.findNavController(fragment)
-                                    .navigate(R.id.action_createQueueFragment_to_finishedQueueCreationFragment);
+                                    .navigate(R.id.action_createQueueFragment_to_finishedQueueCreationFragment, bundle);
                         }
 
                         @Override
@@ -247,9 +254,9 @@ public class CreateQueueViewModel extends ViewModel {
                 Log.e("File", file.getAbsolutePath() + queueID);
 
             } else {
+
                 Log.e("NOT EXIST!", "File does not exists");
             }
-
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
         } catch (IOException e) {

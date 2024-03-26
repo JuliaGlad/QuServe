@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.state.BasicSettingsState;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.privacySettings.state.PrivacySettingState;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceRedItem.ServiceRedItemDelegateItem;
@@ -22,38 +24,11 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class PrivacySettingsViewModel extends ViewModel {
 
-    private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
-    LiveData<List<DelegateItem>> item = _items;
-
     private final MutableLiveData<Boolean> _openSuccessDialog = new MutableLiveData<>();
     LiveData<Boolean> openSuccessDialog = _openSuccessDialog;
 
     private final MutableLiveData<Boolean> _openVerifyDialog = new MutableLiveData<>();
     LiveData<Boolean> openVerifyDialog = _openVerifyDialog;
-
-    private final MutableLiveData<Boolean> _openChangeEmailDialog = new MutableLiveData<>();
-    LiveData<Boolean> openChangeEmailDialog = _openChangeEmailDialog;
-
-    private final MutableLiveData<Boolean> _openUpdatePasswordDialog = new MutableLiveData<>();
-    LiveData<Boolean> openUpdatePasswordDialog = _openUpdatePasswordDialog;
-
-    private final MutableLiveData<Boolean> _openDeleteDialog = new MutableLiveData<>();
-    LiveData<Boolean> openDeleteDialog = _openDeleteDialog;
-
-    public void initRecycler(){
-        buildList(new DelegateItem[]{
-                new ServiceItemDelegateItem(new ServiceItemModel(1, R.drawable.ic_mail, R.string.change_email, () -> {
-                    _openChangeEmailDialog.postValue(true);
-                })),
-                new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_lock_reset, R.string.update_password, () -> {
-                    _openUpdatePasswordDialog.postValue(true);
-
-                })),
-                new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, R.string.delete_account, () -> {
-                    _openDeleteDialog.postValue(true);
-                }))
-        });
-    }
 
     public void verifyBeforeUpdate(String email){
         DI.verifyBeforeUpdateEmailUseCase.invoke(email)
@@ -96,11 +71,6 @@ public class PrivacySettingsViewModel extends ViewModel {
                     }
                 });
 
-    }
-
-    private void buildList(DelegateItem[] items){
-        List<DelegateItem> list = Arrays.asList(items);
-        _items.postValue(list);
     }
 
 }

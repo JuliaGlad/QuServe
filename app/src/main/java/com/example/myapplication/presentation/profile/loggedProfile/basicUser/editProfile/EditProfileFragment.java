@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,19 +21,26 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditProfileBinding;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditBasicUserState;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditUserModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 ///*
 // * @author j.gladkikh
 // */
 public class EditProfileFragment extends Fragment {
-//
     private EditProfileViewModel viewModel;
     private FragmentEditProfileBinding binding;
     private String name, phone, email, gender, birthday;
@@ -58,8 +66,6 @@ public class EditProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         setupObserves();
-
-        viewModel.getProfileImage();
         viewModel.retrieveUserData();
 
         initBirthdayButton();
@@ -111,12 +117,12 @@ public class EditProfileFragment extends Fragment {
                 });
     }
 
-    private void initChangePhotoButton(){
+    private void initChangePhotoButton() {
         binding.profilePhoto.setOnClickListener(
                 view -> initImagePicker());
     }
 
-    private void initSaveDataButton(){
+    private void initSaveDataButton() {
         binding.buttonSave.setOnClickListener(v -> {
 
             name = binding.editLayoutName.getText().toString();
@@ -128,33 +134,52 @@ public class EditProfileFragment extends Fragment {
             viewModel.saveData(name, phone, gender, birthday, imageUri, this);
         });
     }
-    private void setupObserves(){
 
-        viewModel.image.observe(getViewLifecycleOwner(), uri -> {
-            if (!(uri == Uri.EMPTY)) {
-                Glide.with(this).load(uri).apply(RequestOptions.circleCropTransform()).into(binding.profilePhoto);
+    private void setupObserves() {
+
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof EditBasicUserState.Success) {
+                EditUserModel editUserModel = ((EditBasicUserState.Success) state).data;
+
+                Uri uri = editUserModel.getUri();
+
+                binding.editLayoutName.setText(editUserModel.getName());
+                binding.editLayoutEmail.setText(editUserModel.getEmail());
+                binding.editLayoutGender.setText(editUserModel.getGender());
+                binding.editLayoutGender.setSimpleItems(R.array.genders);
+                binding.editLayoutData.setText(editUserModel.getBirthday());
+                binding.editLayoutPhone.setText(editUserModel.getPhoneNumber());
+
+                if (!(uri == Uri.EMPTY)) {
+
+                    Glide.with(this)
+                            .load(uri)
+                            .addListener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                                    binding.progressLayout.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            })
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(binding.profilePhoto);
+                } else {
+                    binding.progressLayout.setVisibility(View.GONE);
+                }
+
+
+            } else if (state instanceof EditBasicUserState.Loading) {
+                binding.progressLayout.setVisibility(View.VISIBLE);
+
+            } else if (state instanceof EditBasicUserState.Error) {
+
             }
         });
 
-        viewModel.userName.observe(getViewLifecycleOwner(), string -> {
-            binding.editLayoutName.setText(string);
-        });
-
-        viewModel.userEmail.observe(getViewLifecycleOwner(), string -> {
-            binding.editLayoutEmail.setText(string);
-        });
-
-        viewModel.phoneNumber.observe(getViewLifecycleOwner(), string -> {
-            binding.editLayoutPhone.setText(string);
-        });
-
-        viewModel.birthday.observe(getViewLifecycleOwner(), string -> {
-            binding.editLayoutData.setText(string);
-        });
-
-        viewModel.gender.observe(getViewLifecycleOwner(), string -> {
-            binding.editLayoutGender.setText(string);
-            binding.editLayoutGender.setSimpleItems(R.array.genders);
-        });
     }
 }

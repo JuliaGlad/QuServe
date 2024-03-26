@@ -38,11 +38,11 @@ public class BasicUserViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _checked = new MutableLiveData<>(false);
     LiveData<Boolean> checked = _checked;
 
-
     private final MutableLiveData<Uri> _uri = new MutableLiveData<>();
     LiveData<Uri> uri = _uri;
 
-    MutableLiveData<BasicUserState> state = new MutableLiveData<>(new BasicUserState.Loading());
+    private final MutableLiveData<BasicUserState> _state = new MutableLiveData<>(new BasicUserState.Loading());
+    LiveData<BasicUserState> state = _state;
 
     public void retrieveUserNameData() {
         Single.zip(DI.getProfileImageUseCase.invoke(), DI.getUserEmailAndNameDataUseCase.invoke(), DI.checkCompanyExistUseCase.invoke(),
@@ -63,7 +63,7 @@ public class BasicUserViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull BasicUserDataModel data) {
                         _companyExist.postValue(data.isaBoolean());
-                        state.postValue(new BasicUserState.Success(new BasicUserDataModel(
+                        _state.postValue(new BasicUserState.Success(new BasicUserDataModel(
                                 data.getName(),
                                 data.getEmail(),
                                 data.getUri(),

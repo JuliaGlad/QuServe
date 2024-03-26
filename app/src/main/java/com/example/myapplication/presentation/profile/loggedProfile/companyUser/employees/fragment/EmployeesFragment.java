@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.profile.loggedProfile.companyUser
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,9 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.databinding.FragmentEmployeesBinding;
 import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.employeeQrCode.EmployeeQrCodeDialogFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.model.EmployeeModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.LinearLayoutManagerWrapper;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.state.EmployeeState;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -36,7 +39,9 @@ public class EmployeesFragment extends Fragment {
     private EmployeesViewModel viewModel;
     private FragmentEmployeesBinding binding;
     private String companyId;
-    private List<EmployeeItemModel> basicList, workerList, adminList;
+    private final List<EmployeeItemModel> basicList = new ArrayList<>();
+    private final List<EmployeeItemModel> workerList = new ArrayList<>();
+    private final List<EmployeeItemModel> adminList = new ArrayList<>();
     private final EmployeeItemAdapter employeeItemAdapter = new EmployeeItemAdapter();
 
     @Override
@@ -45,7 +50,7 @@ public class EmployeesFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(EmployeesViewModel.class);
         binding = FragmentEmployeesBinding.inflate(inflater, container, false);
         companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        viewModel.getEmployees(companyId, this);
+        viewModel.getEmployees(companyId);
         return binding.getRoot();
     }
 
@@ -146,79 +151,78 @@ public class EmployeesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(employeeItemAdapter);
+        binding.progressBar.setVisibility(View.GONE);
+    }
+
+    private void addToAdmins(String id) {
+        for (int i = 0; i < workerList.size(); i++) {
+            if (Objects.equals(workerList.get(i).getEmployeeId(), id)) {
+                adminList.add(workerList.get(i));
+                workerList.remove(i);
+            }
+        }
+    }
+
+    private void addToWorkers(String id) {
+        for (int i = 0; i < adminList.size(); i++) {
+            if (adminList.get(i).getEmployeeId().equals(id)) {
+                workerList.add(adminList.get(i));
+                adminList.remove(i);
+            }
+        }
+    }
+
+    private void initSubLists() {
+        for (int i = 0; i < basicList.size(); i++) {
+            if (basicList.get(i).getRole().equals(WORKER)) {
+                workerList.add(basicList.get(i));
+            } else {
+                adminList.add(basicList.get(i));
+            }
+        }
     }
 
     private void setupObserves() {
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof EmployeeState.Success) {
+                List<EmployeeModel> models = ((EmployeeState.Success) state).data;
+                for (int i = 0; i < models.size(); i++) {
+                    EmployeeModel current = models.get(i);
 
-        viewModel.showDialog.observe(getViewLifecycleOwner(), bundle -> {
-            if (bundle != null) {
+                    String id = current.getId();
+                    String name = current.getName();
+                    String role = current.getRole();
 
-                ChangeRoleDialogFragment dialogFragment = new ChangeRoleDialogFragment(
-                        companyId,
-                        bundle.getString("ID"),
-                        bundle.getString(EMPLOYEE_ROLE)
-                );
+                    final ChangeRoleDialogFragment[] dialogFragment = {new ChangeRoleDialogFragment(companyId, id, role)};
 
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
-                DialogDismissedListener listener = bundleDialog -> {
-                    if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
-                        for (int i = 0; i < workerList.size(); i++) {
-                            if (Objects.equals(workerList.get(i).getEmployeeId(), bundle.getString("ID"))) {
-                                adminList.add(workerList.get(i));
-                                workerList.remove(i);
+                    basicList.add(new EmployeeItemModel(i, this, name, id, role, companyId, dialogFragment[0], () -> {
+
+                        dialogFragment[0].show(getActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
+
+                        DialogDismissedListener listener = bundleDialog -> {
+                            if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
+                                addToAdmins(id);
+                                dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, ADMIN);
+                            } else {
+                                addToWorkers(id);
+                                dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, WORKER);
                             }
-                        }
-                    } else {
-                        for (int i = 0; i < adminList.size(); i++) {
-                            if (adminList.get(i).getEmployeeId().equals(bundle.getString("ID"))) {
-                                workerList.add(adminList.get(i));
-                                adminList.remove(i);
-                            }
-                        }
-                    }
-                };
-                dialogFragment.onDismissListener(listener);
-            }
-        });
+                        };
 
-        viewModel.onComplete.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
+                        dialogFragment[0].onDismissListener(listener);
+                    }));
+
+
+                }
+                initSubLists();
                 initRecycler();
+            } else if (state instanceof EmployeeState.Loading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else if (state instanceof EmployeeState.Error) {
+
             }
-        });
-
-        viewModel.addToAdmins.observe(getViewLifecycleOwner(), string -> {
-            if (string != null) {
-                for (int i = 0; i < workerList.size(); i++) {
-                    if (Objects.equals(workerList.get(i).getEmployeeId(), string)) {
-                        adminList.add(workerList.get(i));
-                        workerList.remove(i);
-                    }
-                }
-            }
-        });
-
-        viewModel.addToWorkers.observe(getViewLifecycleOwner(), string -> {
-            if (string != null) {
-                for (int i = 0; i < adminList.size(); i++) {
-                    if (adminList.get(i).getEmployeeId().equals(string)) {
-                        workerList.add(adminList.get(i));
-                        adminList.remove(i);
-                    }
-                }
-            }
-        });
-
-        viewModel.basicList.observe(getViewLifecycleOwner(), list -> {
-            basicList = list;
-        });
-
-        viewModel.adminList.observe(getViewLifecycleOwner(), list -> {
-            adminList = list;
-        });
-
-        viewModel.workerList.observe(getViewLifecycleOwner(), list -> {
-            workerList = list;
         });
     }
+
+
 }

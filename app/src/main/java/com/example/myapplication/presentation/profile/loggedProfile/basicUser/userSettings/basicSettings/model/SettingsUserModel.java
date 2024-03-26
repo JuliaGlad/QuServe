@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.model;
+package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.model;
 
 import android.net.Uri;
 

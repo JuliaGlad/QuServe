@@ -71,6 +71,7 @@ public class CreateCompanyAccountViewModel extends ViewModel {
     public void onPageInit(String page) {
         switch (page) {
             case PAGE_1:
+
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.enter_company_name, 24)),
                         new EditTextDelegateItem(new EditTextModel(1, R.string.company_name, name, InputType.TYPE_CLASS_TEXT, true, stringName -> {
@@ -147,6 +148,7 @@ public class CreateCompanyAccountViewModel extends ViewModel {
     public void navigateBack(String page, Fragment fragment) {
         switch (page) {
             case PAGE_1:
+                setArgumentsNull();
                 fragment.requireActivity().finish();
                 break;
             case PAGE_2:
@@ -191,6 +193,13 @@ public class CreateCompanyAccountViewModel extends ViewModel {
         byte[] data = baos.toByteArray();
 
         return DI.uploadCompanyBytesUseCase.invoke(companyId, data);
+    }
+
+    public void setArgumentsNull(){
+        name = null;
+        service = null;
+        email = null;
+        phoneNumber = null;
     }
 
     private void generateQrCode(String path, Fragment fragment) {

@@ -14,6 +14,10 @@ import com.example.myapplication.R;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.example.myapplication.domain.model.queue.QueueInProgressModel;
+import com.example.myapplication.presentation.basicQueue.queueDetails.model.QueueDetailsModel;
+
+import io.reactivex.rxjava3.functions.BiFunction;
+import myapplication.android.ui.listeners.QueueDetailButtonItemListener;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailsButtonDelegateItem;
 
@@ -53,7 +57,7 @@ public class QueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
     public LiveData<List<DelegateItem>> items = _items;
 
-    public void getQueue(Fragment fragment){
+    public void getQueue(Fragment fragment) {
         DI.getQueueInProgressModelUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueInProgressModel>() {
@@ -64,8 +68,8 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueInProgressModel queueInProgressModel) {
-                        if (queueInProgressModel.getInProgress().contains("Paused")){
-                           NavHostFragment.findNavController(fragment).navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
+                        if (queueInProgressModel.getInProgress().contains("Paused")) {
+                            NavHostFragment.findNavController(fragment).navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
                         }
 
                     }
@@ -77,73 +81,62 @@ public class QueueDetailsViewModel extends ViewModel {
                 });
     }
 
-    public Completable finishQueue(){
+    public Completable finishQueue() {
         DI.deleteQrCodeUseCase.invoke(queueId);
         return DI.finishQueueUseCase.invoke(queueId);
     }
 
-    public Completable pauseQueue(String time){
+    public Completable pauseQueue(String time) {
         return DI.pauseQueueUseCase.invoke(queueId, time);
     }
 
-    public void getQueueRecycler(VoidListener onButtonListener) {
+    public void getQueueRecycler(Fragment fragment) {
         DI.getQueueByAuthorUseCase.invoke()
+                .flatMap(queueIdAndNameModel -> DI.getQrCodeImageUseCase.invoke(queueIdAndNameModel.getId()), new BiFunction<QueueIdAndNameModel, ImageModel, QueueDetailsModel>() {
+                    @Override
+                    public QueueDetailsModel apply(QueueIdAndNameModel queueIdAndNameModel, ImageModel imageModel) throws Throwable {
+                        return new QueueDetailsModel(queueIdAndNameModel.getName(), queueIdAndNameModel.getId(), imageModel.getImageUri());
+                    }
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueIdAndNameModel>() {
+                .subscribe(new SingleObserver<QueueDetailsModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
-                        queueId = queueIdAndNameModel.getId();
-                        _name.postValue(queueIdAndNameModel.getName());
-                        getQrCodeImage(onButtonListener);
+                    public void onSuccess(@NonNull QueueDetailsModel queueDetailsModel) {
+                        queueId = queueDetailsModel.getId();
+                        imageUri = queueDetailsModel.getUri();
+                        _name.postValue(queueDetailsModel.getName());
+                        initRecyclerView(fragment);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("Error", "Problem with network");
+
                     }
                 });
+
     }
 
-    private void getQrCodeImage(VoidListener voidListener) {
-       DI.getQrCodeImageUseCase.invoke(queueId)
-               .subscribeOn(Schedulers.io())
-               .subscribe(new SingleObserver<ImageModel>() {
-                   @Override
-                   public void onSubscribe(@NonNull Disposable d) {
-
-                   }
-
-                   @Override
-                   public void onSuccess(@NonNull ImageModel imageModel) {
-                       imageUri = imageModel.getImageUri();
-                       initRecyclerView(voidListener);
-                   }
-
-                   @Override
-                   public void onError(@NonNull Throwable e) {
-                       Log.e("Error", "Problem with network");
-                   }
-               });
-    }
-
-    private void initRecyclerView(VoidListener onButtonListener) {
+    private void initRecyclerView(Fragment fragment) {
         buildList(new DelegateItem[]{
                 new ImageViewDelegateItem(new ImageViewModel(1, imageUri)),
                 new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.here_you_can_see_queue_details)),
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, R.drawable.ic_qrcode,
                         () -> {
-                    getQrCodePdf(queueId);
-                })),
+                            getQrCodePdf(queueId);
+                        })),
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue, R.string.pause_queue_description, R.drawable.ic_time,
                         () -> {
-                    _pauseQueue.postValue(true);
+                            _pauseQueue.postValue(true);
+                        })),
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, R.drawable.ic_group, () -> {
+                    NavHostFragment.findNavController(fragment)
+                            .navigate(R.id.action_queueDetailsFragment_to_participantsListFragment);
                 })),
-                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, R.drawable.ic_group, onButtonListener::run)),
         });
     }
 
