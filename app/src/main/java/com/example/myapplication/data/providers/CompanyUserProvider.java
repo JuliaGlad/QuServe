@@ -1,6 +1,6 @@
 package com.example.myapplication.data.providers;
 
-import com.example.myapplication.App;
+import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.entity.CompanyUserEntity;
 import com.example.myapplication.data.dto.CompanyDto;
 

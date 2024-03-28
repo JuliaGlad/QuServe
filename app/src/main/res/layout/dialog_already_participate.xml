@@ -2,79 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background"
-    android:layout_margin="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:layout_margin="24dp"
+    android:padding="16dp">
 
     <ImageView
-        android:id="@+id/error_drawable_logout_dialog"
+        android:id="@+id/icon_shield"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_error_ic"
-        app:tint="@color/strokeColor" />
+        app:tint="?colorPrimary" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="@string/you_already_participate_in_queue"
-        android:fontFamily="@font/bold_roboto"
-        android:textSize="18sp"
-        android:textColor="@color/strokeColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_drawable_logout_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_shield" />
 
-    <TextView
-        android:id="@+id/subText"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/head_line"
+        style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="@string/you_can_only_participate_in_1_queue_at_the_same_time"
-        android:fontFamily="@font/regular"
-        android:textColor="@color/stroke_75"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <android.widget.Button
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
-        android:text="@string/cancel"
-        android:textColor="@color/strokeColor"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subText" />
 
-    <android.widget.Button
-        android:id="@+id/leave_button"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_leave"
+        style="@style/Widget.Material3.Button.TonalButton.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="105dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
-        android:text="@string/leave_another_queue"
-        android:textColor="@color/failureColor"
-        android:textSize="14sp"
+        android:layout_marginTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/leave_queue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/subText" />
+        app:layout_constraintTop_toBottomOf="@+id/head_line" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/button_leave"
+        app:layout_constraintEnd_toStartOf="@+id/button_leave"
+        app:layout_constraintTop_toTopOf="@+id/button_leave" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

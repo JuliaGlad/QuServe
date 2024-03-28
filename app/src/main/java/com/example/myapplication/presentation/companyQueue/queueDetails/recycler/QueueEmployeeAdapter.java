@@ -2,17 +2,15 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.recycle
 
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.RecyclerViewEmployeeItemBinding;
 
-public class QueueEmployeeAdapter extends ListAdapter<QueueEmployeeModel, RecyclerView.ViewHolder> {
+public class QueueEmployeeAdapter extends ListAdapter<RecyclerEmployeeModel, RecyclerView.ViewHolder> {
 
     public QueueEmployeeAdapter() {
         super(new QueueEmployeeCallBack());
@@ -26,7 +24,7 @@ public class QueueEmployeeAdapter extends ListAdapter<QueueEmployeeModel, Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder)holder).bind((QueueEmployeeModel) getItem(position));
+        ((ViewHolder)holder).bind((RecyclerEmployeeModel) getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -38,7 +36,7 @@ public class QueueEmployeeAdapter extends ListAdapter<QueueEmployeeModel, Recycl
             binding = _binding;
         }
 
-        void bind(QueueEmployeeModel model) {
+        void bind(RecyclerEmployeeModel model) {
 
             binding.role.setText(model.role);
             binding.employeeName.setText(model.name);

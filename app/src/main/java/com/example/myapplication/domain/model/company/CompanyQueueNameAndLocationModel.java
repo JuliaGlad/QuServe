@@ -2,8 +2,8 @@ package com.example.myapplication.domain.model.company;
 
 public class CompanyQueueNameAndLocationModel {
 
-    private String name;
-    private String location;
+    private final String name;
+    private final String location;
 
     public CompanyQueueNameAndLocationModel(String name, String location) {
         this.name = name;

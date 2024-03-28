@@ -18,6 +18,7 @@ import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
@@ -118,10 +119,10 @@ public class QueueRepository {
         });
     }
 
-    public Completable pauseQueue(String queueId, String time) {
+    public Completable pauseQueue(String queueId, int hours, int minutes, int seconds) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            docRef.update(QUEUE_IN_PROGRESS, time + "_" + PAUSED).addOnCompleteListener(task -> {
+            docRef.update(QUEUE_IN_PROGRESS, hours + "Hours_" + minutes + "Minutes_" + seconds + "Seconds_" + PAUSED).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
@@ -169,8 +170,15 @@ public class QueueRepository {
         });
     }
 
-    public void deleteQrCode(String queueId){
-        service.storageReference.child(QR_CODES).child(queueId).delete();
+    public Completable deleteQrCode(String queueId){
+       return Completable.create(emitter -> {
+           service.storageReference.child(QR_CODES).child(queueId + "/" + queueId + ".jpg")
+                   .delete().addOnCompleteListener(task -> {
+                       if (task.isSuccessful()){
+                            emitter.onComplete();
+                       }
+                   });
+       });
     }
 
     public Completable onParticipantServed(DocumentSnapshot value){

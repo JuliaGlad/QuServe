@@ -26,22 +26,17 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.myapplication.App;
-import com.example.myapplication.DI;
 import com.example.myapplication.data.dto.CompanyDto;
 import com.example.myapplication.data.dto.EmployeeDto;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
-import com.example.myapplication.domain.model.common.ImageModel;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

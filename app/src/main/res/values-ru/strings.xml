@@ -147,7 +147,7 @@
     <string name="leave_another_queue">Leave another queue</string>
     <string name="pause_unavailable">Pause unavailable!</string>
     <string name="next_chance_to_stop_queue_will_be_available_only_in_2_hours">Next chance to stop queue will be available only in 2 hours!</string>
-    <string name="you_need_to_have_an_account_to_create_and_own_queues">You need to have an account to create and own queues!</string>
+    <string name="you_need_to_have_an_account_to_create_and_own_queues">You need to have an account to create queue!</string>
     <string name="you_don_t_have_any_queue">You don`t have any queue!</string>
     <string name="for_yourself">For yourself</string>
     <string name="for_company">For company</string>
@@ -220,5 +220,14 @@
     <string name="statistics">Statistics</string>
     <string name="all_cities">All Cities</string>
     <string name="choose_city">Choose city</string>
+    <string name="ooops">Ooops!</string>
+    <string name="slow_or_no_internet_connection">Slow or no internet connection</string>
+    <string name="check_your_network_settings_and_try_again">Check your network settings and try again!</string>
+    <string name="try_again">Try again</string>
+    <string name="you_need_account">You need account!</string>
+    <string name="hours">Hours</string>
+    <string name="minutes">Minutes</string>
+    <string name="seconds">Seconds</string>
+    <string name="pause">Pause</string>
 
 </resources>

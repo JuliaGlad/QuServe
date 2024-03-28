@@ -1,10 +1,13 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +23,21 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
+import com.example.myapplication.presentation.basicQueue.queueDetails.model.QueueDetailsModel;
+import com.example.myapplication.presentation.basicQueue.queueDetails.state.QueueDetailsState;
+import com.example.myapplication.presentation.dialogFragments.finishQueue.FinishQueueDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.pauseQueue.PauseQueueDialogFragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import myapplication.android.ui.listeners.QueueDetailButtonItemListener;
+import myapplication.android.ui.recycler.delegate.DelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonDelegate;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -28,11 +46,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
+import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonModel;
+import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailsButtonDelegateItem;
 
 public class QueueDetailsFragment extends Fragment {
 
     private QueueDetailsViewModel viewModel;
     private FragmentQueueDetailsBinding binding;
+    private String queueId;
+    private List<DelegateItem> list = new ArrayList<>();;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
@@ -42,7 +64,7 @@ public class QueueDetailsFragment extends Fragment {
         binding = FragmentQueueDetailsBinding.inflate(inflater, container, false);
 
         viewModel.getQueue(this);
-        viewModel.getQueueRecycler(this);
+        viewModel.getQueueRecycler();
 
         return binding.getRoot();
     }
@@ -54,6 +76,32 @@ public class QueueDetailsFragment extends Fragment {
         setupObserves();
         initBackButton();
         initMenuButton();
+    }
+
+    private void setupObserves() {
+
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof QueueDetailsState.Success){
+                if (list.size() == 0) {
+                    QueueDetailsModel model = ((QueueDetailsState.Success) state).data;
+                    binding.queueName.setText(model.getName());
+                    Uri uri = model.getUri();
+                    queueId = model.getId();
+                    initRecycler(uri, queueId);
+                }
+
+            } else if (state instanceof QueueDetailsState.Loading){
+                binding.progressBar.setVisibility(View.VISIBLE);
+
+            } else if (state instanceof QueueDetailsState.Error){
+
+            }
+        });
+
+        viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            requireActivity().startActivity(intent);
+        });
     }
 
     private void initMenuButton() {
@@ -83,110 +131,49 @@ public class QueueDetailsFragment extends Fragment {
         binding.recyclerView.setAdapter(mainAdapter);
     }
 
-    private void showTimePickerDialog() {
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_number_picker, null);
-        AlertDialog pauseQueueDialog = new AlertDialog.Builder(getContext())
-                .setView(dialogView).create();
+    private void showTimePickerDialog(String queueId) {
+        PauseQueueDialogFragment dialogFragment = new PauseQueueDialogFragment(queueId);
 
-        pauseQueueDialog.show();
+        dialogFragment.show(getActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
 
-        NumberPicker numberPicker = dialogView.findViewById(R.id.time_picker);
-        numberPicker.setMinValue(5);
-        numberPicker.setMaxValue(20);
-        numberPicker.setValue(10);
-        numberPicker.setWrapSelectorWheel(false);
-
-        Button pauseQueue = dialogView.findViewById(R.id.pause_button);
-        Button cancel = dialogView.findViewById(R.id.cancel_button);
-
-        pauseQueue.setOnClickListener(view -> {
-            viewModel.pauseQueue(String.valueOf(numberPicker.getValue()))
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            pauseQueueDialog.dismiss();
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(PAUSED_TIME, numberPicker.getValue());
-                            NavHostFragment.findNavController(QueueDetailsFragment.this)
-                                    .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-                    });
-        });
-
-        cancel.setOnClickListener(view -> {
-            pauseQueueDialog.dismiss();
+        dialogFragment.onDismissListener(bundle -> {
+            NavHostFragment.findNavController(QueueDetailsFragment.this)
+                    .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
         });
     }
 
     private void showFinishQueueDialog() {
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_finish_queue, null);
-        AlertDialog finishQueueDialog = new AlertDialog.Builder(getContext())
-                .setView(dialogView).create();
-
-        finishQueueDialog.show();
-
-        Button finishQueue = dialogView.findViewById(R.id.finish_button);
-        Button cancel = dialogView.findViewById(R.id.cancel_button);
-
-        finishQueue.setOnClickListener(view -> {
-            viewModel.finishQueue()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            requireActivity().finish();
-                            finishQueueDialog.dismiss();
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-                    });
+        final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, BASIC, null);
+        dialogFragment.show(getActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
+        dialogFragment.onDismissListener(bundle -> {
+            requireActivity().finish();
         });
-
-        cancel.setOnClickListener(view -> {
-            finishQueueDialog.dismiss();
-        });
-
     }
 
-    private void setupObserves() {
-        viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
+    private void initRecycler(Uri uri, String queueId) {
+        buildList(new DelegateItem[]{
+                new ImageViewDelegateItem(new ImageViewModel(1, uri)),
 
-        viewModel.name.observe(getViewLifecycleOwner(), s -> {
-            binding.queueName.setText(s);
-        });
+                new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.here_you_can_see_queue_details)),
 
-        viewModel.finishQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                showFinishQueueDialog();
-            }
-        });
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, R.drawable.ic_qrcode,
+                        () -> { viewModel.getQrCodePdf(); })),
 
-        viewModel.pauseQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            showTimePickerDialog();
-        });
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue,
+                        R.string.pause_queue_description, R.drawable.ic_time, () -> {
+                            showTimePickerDialog(queueId);
+                        })),
 
-        viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            requireActivity().startActivity(intent);
+                new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, R.drawable.ic_group, () -> {
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_queueDetailsFragment_to_participantsListFragment);
+                })),
         });
+    }
+
+    private void buildList(DelegateItem[] items) {
+        list = Arrays.asList(items);
+        mainAdapter.submitList(list);
+        binding.progressBar.setVisibility(View.GONE);
     }
 }

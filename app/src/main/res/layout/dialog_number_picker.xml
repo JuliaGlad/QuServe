@@ -2,62 +2,211 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:layout_margin="24dp"
+    android:padding="16dp">
 
     <NumberPicker
-        android:id="@+id/time_picker"
-        android:layout_width="0dp"
+        android:id="@+id/hours_picker"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="40dp"
-        app:tint="@color/purple"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:theme="@style/NumberPickerTheme"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title_hours" />
+
+    <NumberPicker
+        android:id="@+id/minutes_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:theme="@style/NumberPickerTheme"
+        app:layout_constraintEnd_toStartOf="@+id/second_picker"
+        app:layout_constraintStart_toEndOf="@+id/hours_picker"
+        app:layout_constraintTop_toBottomOf="@+id/title_minutes" />
+
+    <NumberPicker
+        android:id="@+id/second_picker"
+        android:theme="@style/NumberPickerTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:padding="16dp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_seconds" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/colon_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/choose_time"
-        android:textSize="20sp"
+        android:text=":"
         android:fontFamily="@font/bold_roboto"
-        android:textColor="@color/strokeColor"
+        android:textSize="32sp"
+        android:textColor="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/minutes_picker"
+        app:layout_constraintEnd_toStartOf="@+id/minutes_picker"
+        app:layout_constraintStart_toEndOf="@+id/hours_picker"
+        app:layout_constraintTop_toTopOf="@+id/minutes_picker" />
+
+    <TextView
+        android:id="@+id/colon_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:fontFamily="@font/bold_roboto"
+        android:textSize="32sp"
+        android:textColor="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/minutes_picker"
+        app:layout_constraintEnd_toStartOf="@+id/second_picker"
+        app:layout_constraintStart_toEndOf="@+id/minutes_picker"
+        app:layout_constraintTop_toTopOf="@+id/minutes_picker" />
+
+    <TextView
+        android:id="@+id/title_hours"
+        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/hours"
+        app:layout_constraintEnd_toEndOf="@+id/hours_picker"
+        app:layout_constraintStart_toStartOf="@+id/hours_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+    <TextView
+        android:id="@+id/title_minutes"
+        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/minutes"
+        app:layout_constraintEnd_toEndOf="@+id/minutes_picker"
+        app:layout_constraintStart_toStartOf="@+id/minutes_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+    <TextView
+        android:id="@+id/title_seconds"
+        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/seconds"
+        app:layout_constraintEnd_toEndOf="@+id/second_picker"
+        app:layout_constraintStart_toStartOf="@+id/second_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+    <TextView
+        android:id="@+id/pause_queue_header"
+        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/pause_queue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/icon" />
 
-    <android.widget.Button
-        android:id="@+id/pause_button"
+    <ImageView
+        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="80dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/set_on_pause"
-        android:textColor="@color/strokeColor"
-        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_picker" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary"
+        app:srcCompat="@drawable/ic_time" />
 
-    <android.widget.Button
-        android:id="@+id/cancel_button"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_pause"
+        style="@style/Widget.Material3.Button.TonalButton.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_weight="1"
-        android:background="@color/transparent"
-        android:fontFamily="@font/regular"
+        android:layout_marginTop="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/pause"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/minutes_picker" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_cancel"
+        style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
         android:text="@string/cancel"
-        android:textColor="@color/strokeColor"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_picker" />
+        app:layout_constraintBottom_toBottomOf="@+id/button_pause"
+        app:layout_constraintEnd_toStartOf="@+id/button_pause"
+        app:layout_constraintTop_toTopOf="@+id/button_pause" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:padding="10dp"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content">-->
+
+<!--    <NumberPicker-->
+<!--        android:id="@+id/time_picker"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="40dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginEnd="40dp"-->
+<!--        app:tint="@color/purple"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/title" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/title"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:text="@string/choose_time"-->
+<!--        android:textSize="20sp"-->
+<!--        android:fontFamily="@font/bold_roboto"-->
+<!--        android:textColor="@color/strokeColor"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <android.widget.Button-->
+<!--        android:id="@+id/pause_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="1dp"-->
+<!--        android:layout_marginEnd="80dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="@color/transparent"-->
+<!--        android:fontFamily="@font/roboto_medium"-->
+<!--        android:text="@string/set_on_pause"-->
+<!--        android:textColor="@color/strokeColor"-->
+<!--        android:textSize="16sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/time_picker" />-->
+
+<!--    <android.widget.Button-->
+<!--        android:id="@+id/cancel_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="80dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:background="@color/transparent"-->
+<!--        android:fontFamily="@font/regular"-->
+<!--        android:text="@string/cancel"-->
+<!--        android:textColor="@color/strokeColor"-->
+<!--        android:textSize="16sp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/time_picker" />-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+

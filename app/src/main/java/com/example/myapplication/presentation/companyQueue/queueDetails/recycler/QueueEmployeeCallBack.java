@@ -3,14 +3,14 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.recycle
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 
-public class QueueEmployeeCallBack extends DiffUtil.ItemCallback<QueueEmployeeModel> {
+public class QueueEmployeeCallBack extends DiffUtil.ItemCallback<RecyclerEmployeeModel> {
     @Override
-    public boolean areItemsTheSame(@NonNull QueueEmployeeModel oldItem, @NonNull QueueEmployeeModel newItem) {
+    public boolean areItemsTheSame(@NonNull RecyclerEmployeeModel oldItem, @NonNull RecyclerEmployeeModel newItem) {
         return oldItem.id == newItem.id;
     }
 
     @Override
-    public boolean areContentsTheSame(@NonNull QueueEmployeeModel oldItem, @NonNull QueueEmployeeModel newItem) {
+    public boolean areContentsTheSame(@NonNull RecyclerEmployeeModel oldItem, @NonNull RecyclerEmployeeModel newItem) {
         return oldItem.compareTo(newItem);
     }
 }

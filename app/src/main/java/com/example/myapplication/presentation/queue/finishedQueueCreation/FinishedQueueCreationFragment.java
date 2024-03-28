@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.myapplication.databinding.FragmentFinishedQueueCreationBindin
 import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.mainFragment.CreateQueueFragment;
+import com.example.myapplication.presentation.queue.finishedQueueCreation.state.FinishedQueueState;
 
 import org.checkerframework.checker.index.qual.LengthOf;
 
@@ -56,7 +58,6 @@ public class FinishedQueueCreationFragment extends Fragment {
         initInfoBox();
         viewModel.addTimeCounterWorker(view);
         viewModel.delayQueueFinish(view);
-        viewModel.delayPauseAvailable(view);
         viewModel.getQrCode(Arguments.queueID);
         initSeeDetails();
 
@@ -83,9 +84,21 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void setupObserves(){
-        viewModel.image.observe(getViewLifecycleOwner(), uri-> {
-                Glide.with(this).load(uri).into(binding.qrCodeImage);
-            });
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof FinishedQueueState.Success){
+                Uri uri = ((FinishedQueueState.Success)state).data;
+                Glide.with(this)
+                        .load(uri)
+                        .into(binding.qrCodeImage);
+                binding.progressBar.setVisibility(View.GONE);
+
+            } else if (state instanceof FinishedQueueState.Loading){
+                binding.progressBar.setVisibility(View.VISIBLE);
+
+            } else if (state instanceof FinishedQueueState.Error){
+
+            }
+        });
     }
 
     private void initBackButtonPressed() {

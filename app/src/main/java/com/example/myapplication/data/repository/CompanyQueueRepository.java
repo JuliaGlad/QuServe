@@ -7,6 +7,7 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
+import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
@@ -26,6 +27,8 @@ import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -195,4 +198,14 @@ public class CompanyQueueRepository {
         });
     }
 
+    public Completable deleteQueue(String companyId, String queueId){
+        return Completable.create(emitter -> {
+            service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId).delete()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
 }

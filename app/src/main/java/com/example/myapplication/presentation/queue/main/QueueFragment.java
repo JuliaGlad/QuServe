@@ -110,7 +110,7 @@ public class QueueFragment extends Fragment {
 
         needToLoginQueueDialog.show();
 
-        Button ok = dialogView.findViewById(R.id.ok_button);
+        Button ok = dialogView.findViewById(R.id.button_ok);
 
         ok.setOnClickListener(view -> {
             needToLoginQueueDialog.dismiss();
@@ -163,8 +163,8 @@ public class QueueFragment extends Fragment {
 
         participateInQueueDialog.show();
 
-        Button cancel = dialogView.findViewById(R.id.cancel_button);
-        Button leave = dialogView.findViewById(R.id.leave_button);
+        Button cancel = dialogView.findViewById(R.id.button_cancel);
+        Button leave = dialogView.findViewById(R.id.button_leave);
 
         leave.setOnClickListener(view -> {
             viewModel.leaveQueue();
@@ -183,8 +183,8 @@ public class QueueFragment extends Fragment {
 
         ownQueueDialog.show();
 
-        Button cancel = dialogView.findViewById(R.id.cancel_button);
-        Button finish = dialogView.findViewById(R.id.finish_button);
+        Button cancel = dialogView.findViewById(R.id.button_cancel);
+        Button finish = dialogView.findViewById(R.id.button_finish);
 
         finish.setOnClickListener(view -> {
             viewModel.finishQueue();

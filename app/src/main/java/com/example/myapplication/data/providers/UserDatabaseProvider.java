@@ -2,7 +2,7 @@ package com.example.myapplication.data.providers;
 
 import android.util.Log;
 
-import com.example.myapplication.App;
+import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.entity.UserEntity;
 import com.example.myapplication.data.dto.UserDto;
 

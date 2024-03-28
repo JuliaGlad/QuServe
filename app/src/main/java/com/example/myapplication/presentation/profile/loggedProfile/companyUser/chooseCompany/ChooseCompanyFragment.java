@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.app.App;
 import com.example.myapplication.databinding.FragmentChooseCompanyBinding;
 import com.example.myapplication.domain.model.common.ImageTaskModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ChooseCompanyState;
@@ -116,6 +117,8 @@ public class ChooseCompanyFragment extends Fragment {
     private void initNavigation(String id) {
         switch (state) {
             case COMPANY_DETAILS:
+
+                App.changeState(COMPANY, id);
 
                 Intent intent = new Intent();
                 intent.putExtra(COMPANY_ID, id);

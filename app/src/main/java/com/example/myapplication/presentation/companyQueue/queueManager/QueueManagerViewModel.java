@@ -1,34 +1,25 @@
 package com.example.myapplication.presentation.companyQueue.queueManager;
 
-import android.util.Log;
-
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueManagerModel;
-import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
-
+import com.example.myapplication.presentation.companyQueue.queueManager.model.QueueManagerModel;
+import com.example.myapplication.presentation.companyQueue.queueManager.state.QueueManagerState;
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.listeners.ButtonItemListener;
 
 public class QueueManagerViewModel extends ViewModel {
 
-    private final List<ManagerItemModel> models = new ArrayList<>();
+    private final MutableLiveData<QueueManagerState> _state = new MutableLiveData<>(new QueueManagerState.Loading());
+    LiveData<QueueManagerState> state = _state;
 
-    private final MutableLiveData<List<ManagerItemModel>> _items = new MutableLiveData<>();
-    LiveData<List<ManagerItemModel>> items = _items;
-
-    public void getList(String companyId, Fragment fragment) {
+    public void getList(String companyId) {
         DI.getCompaniesQueuesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<CompanyQueueManagerModel>>() {
@@ -39,21 +30,18 @@ public class QueueManagerViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<CompanyQueueManagerModel> companyQueueManagerModels) {
+                        List<QueueManagerModel> list = new ArrayList<>();
                         for (int i = 0; i < companyQueueManagerModels.size(); i++) {
-                            String queueId = companyQueueManagerModels.get(i).getId();
-                            models.add(new ManagerItemModel(
-                                    i,
-                                    queueId,
-                                    companyQueueManagerModels.get(i).getName(),
-                                    companyQueueManagerModels.get(i).getWorkersCount(),
-                                    companyQueueManagerModels.get(i).getLocation(),
-                                    companyQueueManagerModels.get(i).getCity(),
-                                    () -> {
-                                        ((QueueManagerActivity)fragment.requireActivity()).openQueueDetails(companyId, queueId);
-                                    })
+                            CompanyQueueManagerModel current = companyQueueManagerModels.get(i);
+                            list.add(new QueueManagerModel(
+                                    current.getName(),
+                                    current.getId(),
+                                    current.getLocation(),
+                                    current.getCity(),
+                                    current.getWorkersCount())
                             );
                         }
-                        _items.postValue(models);
+                        _state.postValue(new QueueManagerState.Success(list));
                     }
 
                     @Override

@@ -23,7 +23,7 @@ import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.myapplication.App;
+import com.example.myapplication.app.App;
 import com.example.myapplication.data.dto.HistoryQueueDto;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
@@ -43,7 +43,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -350,34 +349,42 @@ public class ProfileRepository {
     }
 
     public Single<UserDto> getUserData() {
-        UserDto localUser = UserDatabaseProvider.getUser();
-        if (localUser != null) {
-            return Single.create(emitter -> {
-                emitter.onSuccess(localUser);
-            });
-        } else {
-            return
-                    Single.create(emitter -> {
-                        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
-                        docRef.addSnapshotListener((value, error) -> {
-                            if (value != null) {
+//        UserDto localUser = UserDatabaseProvider.getUser();
+//        if (localUser != null) {
+//            return Single.create(emitter -> {
+//                emitter.onSuccess(localUser);
+//            });
+//        } else {
+        return
+                Single.create(emitter -> {
+                    DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+
+                    service.auth.getCurrentUser().reload().addOnSuccessListener(unused -> {
+                        docRef.get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
                                 UserDto userDto = new UserDto(
-                                        value.getString(USER_NAME_KEY),
-                                        value.getString(GENDER_KEY),
-                                        value.getString(PHONE_NUMBER_KEY),
-                                        value.getString(EMAIL_KEY),
-                                        value.getString(BIRTHDAY_KEY),
-                                        value.getString(URI),
-                                        value.getString(BACKGROUND_IMAGE),
-                                        Boolean.TRUE.equals(value.getBoolean(OWN_QUEUE)),
-                                        Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE))
+                                        document.getString(USER_NAME_KEY),
+                                        document.getString(GENDER_KEY),
+                                        document.getString(PHONE_NUMBER_KEY),
+                                        document.getString(EMAIL_KEY),
+                                        document.getString(BIRTHDAY_KEY),
+                                        document.getString(URI),
+                                        document.getString(BACKGROUND_IMAGE),
+                                        Boolean.TRUE.equals(document.getBoolean(OWN_QUEUE)),
+                                        Boolean.TRUE.equals(document.getBoolean(PARTICIPATE_IN_QUEUE))
                                 );
+
                                 UserDatabaseProvider.insertUser(userDto);
                                 emitter.onSuccess(userDto);
                             }
                         });
+                    }).addOnFailureListener(e -> {
+                        emitter.onError(new Throwable(e.getMessage()));
                     });
-        }
+
+                });
+//        }
     }
 
     public Single<ImageDto> getBackgroundImage() {

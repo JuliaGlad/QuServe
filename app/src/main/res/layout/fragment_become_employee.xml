@@ -17,56 +17,107 @@
 
     <TextView
         android:id="@+id/header_title"
+        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:text="@string/do_you_want_to_become_employee_of"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
 
     <TextView
         android:id="@+id/company_name"
+        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
         android:text="Title"
-        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_title" />
 
-    <android.widget.Button
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_button"
-        android:fontFamily="@font/bold_roboto"
-        android:paddingStart="50dp"
-        android:paddingTop="30dp"
-        android:paddingEnd="50dp"
-        android:paddingBottom="30dp"
-        android:text="@string/yes"
-        android:textColor="@color/white"
+        app:cardBackgroundColor="@color/transparent"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/background_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/button_quad"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold_roboto"
+                android:text="@string/yes"
+                android:textColor="?colorPrimary"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/background_yes"
+                app:layout_constraintEnd_toEndOf="@+id/background_yes"
+                app:layout_constraintStart_toStartOf="@+id/background_yes"
+                app:layout_constraintTop_toTopOf="@+id/background_yes" />
 
 
-    <android.widget.Button
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/button_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/style_no_button"
-        android:fontFamily="@font/bold_roboto"
-        android:paddingStart="50dp"
-        android:paddingTop="30dp"
-        android:paddingEnd="50dp"
-        android:paddingBottom="30dp"
-        android:text="@string/no"
-        android:textColor="@color/white"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/background_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/button_quad_red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold_roboto"
+                android:text="@string/no"
+                android:textColor="?colorError"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/background_no"
+                app:layout_constraintEnd_toEndOf="@+id/background_no"
+                app:layout_constraintStart_toStartOf="@+id/background_no"
+                app:layout_constraintTop_toTopOf="@+id/background_no" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

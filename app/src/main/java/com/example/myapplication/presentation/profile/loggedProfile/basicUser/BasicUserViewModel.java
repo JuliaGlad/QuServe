@@ -74,7 +74,8 @@ public class BasicUserViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        Log.d("On error basic user", "errror");
+                        _state.postValue(new BasicUserState.Error());
                     }
                 });
     }

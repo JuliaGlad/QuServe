@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentJoinQueueBinding;
 import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.queue.JoinQueueFragment.joinQueue.model.JoinQueueModel;
+import com.example.myapplication.presentation.queue.JoinQueueFragment.joinQueue.state.JoinQueueState;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -45,34 +47,9 @@ public class JoinQueueFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (viewModel.checkUserID()) {
-            viewModel.signInAnonymously()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            viewModel.getQrCode(queueData);
-                            viewModel.getQueueData(queueData);
-                            setupObserves();
-                            initOkButton();
-                            initNoButton();
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-                    });
+            viewModel.signInAnonymously();
         } else {
-            viewModel.getQrCode(queueData);
-            viewModel.getQueueData(queueData);
-            setupObserves();
-            initOkButton();
-            initNoButton();
+            initUi();
         }
     }
 
@@ -105,18 +82,33 @@ public class JoinQueueFragment extends Fragment {
         binding.buttonNo.setOnClickListener(v -> requireActivity().finish());
     }
 
+    private void initUi(){
+        viewModel.getQueueData(queueData);
+        setupObserves();
+        initOkButton();
+        initNoButton();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
     private void setupObserves() {
-        viewModel.image.observe(getViewLifecycleOwner(), uri -> {
-           Glide.with(JoinQueueFragment.this).load(uri).into(binding.qrCodeImage);
+
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof JoinQueueState.Success){
+                JoinQueueModel model = ((JoinQueueState.Success)state).data;
+                Glide.with(JoinQueueFragment.this).load(model.getUri()).into(binding.qrCodeImage);
+                binding.queueName.setText(model.getName());
+            }
         });
 
-        viewModel.name.observe(getViewLifecycleOwner(), queueName -> {
-            binding.queueName.setText(queueName);
+        viewModel.isSignIn.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                initUi();
+            }
         });
+
     }
 }

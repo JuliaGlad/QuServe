@@ -3,7 +3,6 @@ package com.example.myapplication.presentation.queue.finishedQueueCreation;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
 
-import android.net.Uri;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -18,10 +17,9 @@ import androidx.work.WorkManager;
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.queue.QueueTimeModel;
-import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
-import com.example.myapplication.presentation.utils.workers.QueueTimeWorker;
+import com.example.myapplication.presentation.queue.finishedQueueCreation.state.FinishedQueueState;
 import com.example.myapplication.presentation.utils.workers.MidTimeWorker;
-import com.google.android.gms.tasks.Task;
+import com.example.myapplication.presentation.utils.workers.QueueTimeWorker;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +32,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FinishedQueueCreationViewModel extends ViewModel {
 
-    private final MutableLiveData<Uri> _image = new MutableLiveData<>();
-    public LiveData<Uri> image = _image;
+    private final MutableLiveData<FinishedQueueState> _state = new MutableLiveData<>(new FinishedQueueState.Loading());
+    LiveData<FinishedQueueState> state = _state;
 
     public void addTimeCounterWorker(View view){
         Constraints constraints = new Constraints.Builder()
@@ -93,20 +91,6 @@ public class FinishedQueueCreationViewModel extends ViewModel {
                 });
     }
 
-    public void delayPauseAvailable(View view){
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(false)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
-                .setConstraints(constraints)
-                .setInitialDelay(2, TimeUnit.HOURS)
-                .addTag("FinishQueueScheduler")
-                .build();
-
-        WorkManager.getInstance(view.getContext()).enqueue(request);
-    }
-
     public void getQrCode(String queueID) {
         DI.getQrCodeImageUseCase.invoke(queueID)
                 .subscribeOn(Schedulers.io())
@@ -118,7 +102,7 @@ public class FinishedQueueCreationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull ImageModel imageModel) {
-                        _image.postValue(imageModel.getImageUri());
+                        _state.postValue(new FinishedQueueState.Success(imageModel.getImageUri()));
                     }
 
                     @Override

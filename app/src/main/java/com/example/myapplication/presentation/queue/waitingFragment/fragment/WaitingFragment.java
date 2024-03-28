@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.queue.waitingFragment.fragment;
 
+import static com.example.myapplication.presentation.utils.Utils.EDIT_ESTIMATED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.EDIT_PEOPLE_BEFORE_YOU;
+
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,15 +17,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWaitingBinding;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.model.WaitingModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegate;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegateItem;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegate;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegateItem;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemModel;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.state.WaitingState;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
 
@@ -30,6 +45,7 @@ public class WaitingFragment extends Fragment {
 
     private WaitingViewModel viewModel;
     private FragmentWaitingBinding binding;
+    private List<DelegateItem> list = new ArrayList<>();;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
@@ -75,8 +91,8 @@ public class WaitingFragment extends Fragment {
 
         leaveQueueDialog.show();
 
-        Button leaveQueue = dialogView.findViewById(R.id.leave_button);
-        Button cancel = dialogView.findViewById(R.id.cancel_button);
+        Button leaveQueue = dialogView.findViewById(R.id.button_leave);
+        Button cancel = dialogView.findViewById(R.id.button_cancel);
         leaveQueue.setOnClickListener(viewLeave -> {
             viewModel.leaveQueue()
                     .subscribeOn(Schedulers.io())
@@ -108,16 +124,19 @@ public class WaitingFragment extends Fragment {
 
 
     private void setupObserves() {
-
-        viewModel.name.observe(getViewLifecycleOwner(), s -> {
-            binding.queueName.setText(s);
-        });
-
-        viewModel.items.observe(getViewLifecycleOwner(), mainAdapter::submitList);
-
-        viewModel.showLeaveDialog.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                showLeaveQueueDialog();
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof WaitingState.Success){
+                WaitingModel model = ((WaitingState.Success)state).data;
+                List<String> participantsList = model.getParticipants();
+                int peopleBeforeSize, midTime = 0;
+                for (int i = 0; i < participantsList.size(); i++) {
+                    if (viewModel.checkParticipantsIndex(participantsList, i)) {
+                        peopleBeforeSize = i + 1;
+                        midTime = Integer.parseInt(model.getMidTime()) * peopleBeforeSize;
+                        break;
+                    }
+                }
+                initRecycler(model.getId(), model.getParticipants().size(), midTime);
             }
         });
     }
@@ -134,5 +153,17 @@ public class WaitingFragment extends Fragment {
         return false;
     }
 
+    private void initRecycler(String queueId, int peopleBeforeSize, int midTime) {
+        buildList(new DelegateItem[]{
+                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
+                new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))
+        });
+    }
 
+    private void buildList(DelegateItem[] items) {
+        list = Arrays.asList(items);
+        mainAdapter.submitList(list);
+    }
 }

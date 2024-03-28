@@ -4,6 +4,9 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 public class Utils {
+    public static final String PAUSED_HOURS = "Paused_Hours";
+    public static final String PAUSED_MINUTES = "Paused_Minutes";
+    public static final String PAUSED_SECONDS = "Paused_Seconds";
     public static final String NAVIGATION = "NAVIGATION";
     public static final String DATE_LEFT = "Date";
     public static final String TIME = "Time";

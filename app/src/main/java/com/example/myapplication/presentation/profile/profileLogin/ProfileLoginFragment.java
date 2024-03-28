@@ -41,7 +41,6 @@ public class ProfileLoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        viewModel.checkCurrentUser(this);
         setupObservers();
         initSignUpButton();
         initEditText();

@@ -34,17 +34,6 @@ public class ProfileLoginViewModel extends ViewModel {
 
     private final MutableLiveData<String> _passwordError = new MutableLiveData<>(null);
     LiveData<String> passwordError = _passwordError;
-
-    public void checkCurrentUser(Fragment fragment) {
-        if (DI.checkAuthenticationUseCase.invoke()) {
-            Bundle bundle = new Bundle();
-            bundle.putString(STATE, BASIC);
-
-            NavHostFragment.findNavController(fragment)
-                    .navigate(R.id.action_navigation_profile_to_profileLoggedFragment, bundle);
-        }
-    }
-
     public void signIn(String email, String password, ProfileLoginFragment fragment) {
         if (!email.isEmpty() && !password.isEmpty()) {
             DI.signInWithEmailAndPasswordUseCase.invoke(email, password)

@@ -14,10 +14,12 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.queue.QueueModel;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.model.WaitingModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegateItem;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemDelegateItem;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.waitingDelegateItem.WaitingItemModel;
+import com.example.myapplication.presentation.queue.waitingFragment.fragment.state.WaitingState;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.DateFormat;
@@ -46,26 +48,8 @@ public class WaitingViewModel extends ViewModel {
     private int midTime = 0;
     private int peopleBeforeSize = 0;
 
-    private final MutableLiveData<List<DelegateItem>> _items = new MutableLiveData<>();
-    public LiveData<List<DelegateItem>> items = _items;
-
-    private final MutableLiveData<Boolean> _showLeaveDialog = new MutableLiveData<>();
-    public LiveData<Boolean> showLeaveDialog = _showLeaveDialog;
-
-    private final MutableLiveData<String> _name = new MutableLiveData<>();
-    public LiveData<String> name = _name;
-
-
-    private void initRecycler(String queueId, Fragment fragment) {
-        buildList(new DelegateItem[]{
-                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, fragment.getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, fragment.getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
-                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, fragment.getString(R.string.useful_tips), fragment.getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
-                new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> {
-                    _showLeaveDialog.postValue(true);
-                }))
-        });
-    }
+    private final MutableLiveData<WaitingState> _state = new MutableLiveData<>(new WaitingState.Loading());
+    LiveData<WaitingState> state = _state;
 
     public Completable leaveQueue() {
         return DI.removeParticipantById.invoke(queueId);
@@ -76,14 +60,20 @@ public class WaitingViewModel extends ViewModel {
                 .flatMapObservable(queueModel -> {
                     List<String> participantsList = queueModel.getParticipants();
                     for (int i = 0; i < participantsList.size(); i++) {
-                        if (DI.checkParticipantIndexUseCase.invoke(participantsList, i)) {
-                            peopleBeforeSize = i;
+                        if (checkParticipantsIndex(participantsList, i)) {
+                            peopleBeforeSize = i + 1;
                             midTime = Integer.parseInt(queueModel.getMidTime()) * peopleBeforeSize;
                             break;
                         }
                     }
-                    _name.postValue(queueModel.getName());
-                    initRecycler(queueModel.getId(), fragment);
+
+                    _state.postValue(new WaitingState.Success(new WaitingModel(
+                            queueModel.getName(),
+                            queueModel.getParticipants(),
+                            queueModel.getId(),
+                            queueModel.getMidTime()
+                    )));
+
                     queueId = queueModel.getId();
                     nameString = queueModel.getName();
                     return DI.addSnapshotQueueUseCase.invoke(queueId);
@@ -112,9 +102,8 @@ public class WaitingViewModel extends ViewModel {
                 });
     }
 
-    private void buildList(DelegateItem[] items) {
-        List<DelegateItem> list = new ArrayList<>(Arrays.asList(items));
-        _items.setValue(list);
+    public boolean checkParticipantsIndex(List<String> participants, int index){
+       return DI.checkParticipantIndexUseCase.invoke(participants, index);
     }
 
     public void updateParticipateInQueue() {

@@ -2,14 +2,14 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.recycle
 
 import android.net.Uri;
 
-public class QueueEmployeeModel {
+public class RecyclerEmployeeModel {
     int id;
     String employeeId;
     String name;
     String role;
     Uri uri;
 
-    public QueueEmployeeModel(int id, String employeeId, String name, String role, Uri uri) {
+    public RecyclerEmployeeModel(int id, String employeeId, String name, String role, Uri uri) {
         this.name = name;
         this.role = role;
         this.uri = uri;
@@ -17,7 +17,7 @@ public class QueueEmployeeModel {
         this.employeeId = employeeId;
     }
 
-    boolean compareTo(QueueEmployeeModel other){
+    boolean compareTo(RecyclerEmployeeModel other){
         return other.id == id;
     }
 }

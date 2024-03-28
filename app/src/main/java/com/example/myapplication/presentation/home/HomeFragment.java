@@ -4,39 +4,27 @@ import static android.os.Build.VERSION.SDK_INT;
 import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.multidex.BuildConfig;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.R;
+import com.example.myapplication.app.App;
 import com.example.myapplication.databinding.FragmentHomeBinding;
-import com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.protobuf.Api;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -48,10 +36,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Random;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomeFragment extends Fragment {
 
@@ -65,6 +49,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Log.d("APP STATE", App.getAppState().toString());
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
@@ -41,9 +40,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
-import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 
@@ -142,7 +139,12 @@ public class BasicUserFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof BasicUserState.Error) {
-
+                Log.d("Error state", "error");
+                binding.progressBar.setVisibility(View.GONE);
+                binding.connectionLost.getRoot().setVisibility(View.VISIBLE);
+                binding.connectionLost.buttonTryAgain.setOnClickListener(v -> {
+                    viewModel.retrieveUserNameData();
+                });
             }
         });
 

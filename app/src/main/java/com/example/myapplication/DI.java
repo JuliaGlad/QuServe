@@ -31,6 +31,7 @@ import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmploy
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.AddCompanyQueueParticipantsSizeSnapshot;
 import com.example.myapplication.domain.usecase.companyQueue.queues.CreateCompanyQueueDocumentUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteCompanyQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.FinishCompanyQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompaniesQueuesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueParticipantsListUseCase;
@@ -108,6 +109,7 @@ public class DI {
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
 
     //COMPANY QUEUE USECASE
+    public static DeleteCompanyQueueUseCase deleteCompanyQueueUseCase = new DeleteCompanyQueueUseCase();
     public static CreateCompanyQueueDocumentUseCase createCompanyQueueDocumentUseCase = new CreateCompanyQueueDocumentUseCase();
     public static GetCompaniesQueuesUseCase getCompaniesQueuesUseCase = new GetCompaniesQueuesUseCase();
     public static GetQueueWorkersListUseCase getQueueWorkersListUseCase = new GetQueueWorkersListUseCase();

@@ -1,6 +1,9 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment;
 
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
 
 import android.app.ActivityManager;
@@ -42,15 +45,21 @@ public class PausedQueueFragment extends Fragment {
     private PausedQueueFragmentViewModel viewModel;
     private FragmentPausedQueueBinding binding;
     private long timeMillis;
-    private int data;
+    private long hours = 0;
+    private long minutes = 0;
+    private long seconds = 0;
     private String timeLeft, queueId;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         if (getArguments() != null) {
-            data = getArguments().getInt(PAUSED_TIME);
-            timeMillis = data * 60000L;
+
+            hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
+            minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
+            seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
+
+            timeMillis = hours + minutes + seconds;
         } else {
             timeMillis = CURRENT_TIMER_TIME;
         }
@@ -107,8 +116,8 @@ public class PausedQueueFragment extends Fragment {
 
             stopPauseQueueDialog.show();
 
-            Button stop = dialogView.findViewById(R.id.stop_pause_button);
-            Button cancel = dialogView.findViewById(R.id.cancel_button);
+            Button stop = dialogView.findViewById(R.id.button_stop);
+            Button cancel = dialogView.findViewById(R.id.button_cancel);
 
             stop.setOnClickListener(view -> {
                 stopPauseQueueDialog.dismiss();
@@ -145,7 +154,7 @@ public class PausedQueueFragment extends Fragment {
             public void onTick(long millisUntilFinished) {
                 timeMillis = millisUntilFinished;
 
-                binding.indicator.setMax(data * 60000);
+                binding.indicator.setMax((int) (timeMillis * 60000));
                 binding.indicator.incrementProgressBy(1000);
                 updateTimer();
             }
@@ -164,7 +173,6 @@ public class PausedQueueFragment extends Fragment {
                             public void onComplete() {
                                 ((QueueDetailsActivity) requireActivity()).startNotificationForegroundService();
                                 initNotificationWorker();
-                                initPauseAvailableWorker();
                             }
 
                             @Override
@@ -189,26 +197,12 @@ public class PausedQueueFragment extends Fragment {
         WorkManager.getInstance(requireContext()).enqueue(request);
     }
 
-    private void initPauseAvailableWorker() {
-
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(false)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
-                .setConstraints(constraints)
-                .setInitialDelay(2, TimeUnit.HOURS)
-                .addTag("PauseAvailable")
-                .build();
-
-        WorkManager.getInstance(requireContext()).enqueue(request);
-    }
-
     private void updateTimer() {
-        int minutes = (int) (timeMillis / 1000) / 60;
-        int seconds = (int) (timeMillis / 1000) % 60;
+        long hours = (timeMillis / 1000) / 3600;
+        long minutes = (timeMillis / 1000) / 60;
+        long seconds = (timeMillis / 1000) % 60;
 
-        timeLeft = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        timeLeft = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
         binding.timer.setText(timeLeft);
     }
 

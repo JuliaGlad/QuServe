@@ -15,6 +15,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PausedQueueFragmentViewModel extends ViewModel {
 
+    String stringId;
+
     private final MutableLiveData<String> _queueId = new MutableLiveData<>(null);
     LiveData<String> queueId = _queueId;
 
@@ -29,6 +31,7 @@ public class PausedQueueFragmentViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
+                        stringId = queueIdAndNameModel.getId();
                         _queueId.postValue(queueIdAndNameModel.getId());
                     }
 
@@ -40,7 +43,7 @@ public class PausedQueueFragmentViewModel extends ViewModel {
     }
 
     public Completable continueQueue(){
-       return DI.continueQueueUseCase.invoke(_queueId.getValue());
+       return DI.continueQueueUseCase.invoke(stringId);
     }
 
 }

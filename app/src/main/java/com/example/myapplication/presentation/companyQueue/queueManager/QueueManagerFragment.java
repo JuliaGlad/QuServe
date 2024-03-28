@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,9 +21,12 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueManagerBinding;
+import com.example.myapplication.presentation.companyQueue.queueManager.model.QueueManagerModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemAdapter;
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
+import com.example.myapplication.presentation.companyQueue.queueManager.state.QueueManagerState;
 import com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.LinearLayoutManagerWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +55,7 @@ public class QueueManagerFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        viewModel.getList(companyId, this);
+        viewModel.getList(companyId);
 
         binding = FragmentQueueManagerBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -78,7 +82,7 @@ public class QueueManagerFragment extends Fragment {
 
             dialogFragment.onDismissListener(bundle -> {
                String city = bundle.getString(CITY_KEY);
-                filterList(city);
+               filterList(city);
             });
         });
 
@@ -104,11 +108,35 @@ public class QueueManagerFragment extends Fragment {
 
     private void setupObserves() {
 
-        viewModel.items.observe(getViewLifecycleOwner(), managerItemModels -> {
-            if (managerItemModels.size() != 0) {
-                models = managerItemModels;
-                adapter.submitList(managerItemModels);
-                binding.recyclerView.setAdapter(adapter);
+        viewModel.state.observe(getViewLifecycleOwner(), state -> {
+            if (state instanceof QueueManagerState.Success){
+                if (models.size() == 0) {
+                    List<QueueManagerModel> queueManagerModels = ((QueueManagerState.Success) state).data;
+                    for (int i = 0; i < queueManagerModels.size(); i++) {
+                        QueueManagerModel current = queueManagerModels.get(i);
+                        String queueId = current.getId();
+                        models.add(new ManagerItemModel(
+                                i,
+                                queueId,
+                                current.getName(),
+                                current.getWorkersCount(),
+                                current.getLocation(),
+                                current.getCity(),
+                                () -> {
+                                    ((QueueManagerActivity) requireActivity()).openQueueDetails(companyId, queueId);
+                                })
+                        );
+                    }
+                    binding.recyclerView.setAdapter(adapter);
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
+                    adapter.submitList(models);
+                    binding.progressBar.setVisibility(View.GONE);
+                }
+            } else if (state instanceof QueueManagerState.Loading){
+                binding.progressBar.setVisibility(View.VISIBLE);
+
+            } else if (state instanceof  QueueManagerState.Error){
+
             }
         });
     }
