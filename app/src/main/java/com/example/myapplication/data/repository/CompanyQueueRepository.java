@@ -32,6 +32,7 @@ import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -92,6 +93,8 @@ public class CompanyQueueRepository {
                                             document.getString(CITY_KEY),
                                             document.getString(WORKERS_COUNT))
                             ).collect(Collectors.toList()));
+                        } else {
+                            emitter.onSuccess(Collections.emptyList());
                         }
                     });
         });

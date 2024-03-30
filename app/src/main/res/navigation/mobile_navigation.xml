@@ -17,9 +17,9 @@
 
     <fragment
         android:id="@+id/navigation_queue"
-        android:name="com.example.myapplication.presentation.queue.main.QueueFragment"
+        android:name="com.example.myapplication.presentation.queue.main.ServiceFragment"
         android:label="@string/title_queue"
-        tools:layout="@layout/fragment_queue" >
+        tools:layout="@layout/fragment_service" >
         <action
             android:id="@+id/action_navigation_queue_to_navigation_profile"
             app:destination="@id/navigation_profile" />

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Intent;
@@ -20,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
+import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerActivity;
 import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerFragment;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
@@ -32,6 +34,7 @@ import com.example.myapplication.presentation.profile.loggedProfile.companyUser.
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.queue.main.queue.QueueActivity;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -75,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openQueueActivity(){
+        Intent intent = new Intent(this, QueueActivity.class);
+        startActivity(intent);
     }
 
     public void openCreateCompanyActivity(){
@@ -129,6 +137,26 @@ public class MainActivity extends AppCompatActivity {
     public void openCreateQueueActivity(){
         Intent intent = new Intent(this, CreateQueueActivity.class);
         intent.putExtra(PAGE_KEY, PAGE_1);
+        startActivity(intent);
+    }
+
+    public void openQueueManagerActivity(String companyId){
+        Intent intent = new Intent(this, QueueManagerActivity.class);
+        intent.putExtra(COMPANY_ID, companyId);
+        startActivity(intent);
+    }
+
+    public void openCreateCompanyQueueActivity(String companyId){
+        Intent intent = new Intent(this, CreateCompanyQueueActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        intent.putExtra(COMPANY_ID, companyId);
+        startActivity(intent);
+    }
+
+    public void openCompanyQueueDetailsActivity(String companyId, String queueId){
+        Intent intent = new Intent(this, CompanyQueueDetailsActivity.class);
+        intent.putExtra(COMPANY_ID, companyId);
+        intent.putExtra(QUEUE_ID, queueId);
         startActivity(intent);
     }
 

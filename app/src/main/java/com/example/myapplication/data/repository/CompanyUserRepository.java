@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,18 +137,22 @@ public class CompanyUserRepository {
                                 .document(service.auth.getCurrentUser().getUid())
                                 .collection(COMPANY)
                                 .get().addOnCompleteListener(task -> {
-                                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                    List<CompanyDto> dtoList = documents.stream().map(
-                                            document -> new CompanyDto(
-                                                    document.getId(),
-                                                    document.getString(URI),
-                                                    document.getString(COMPANY_NAME),
-                                                    document.getString(COMPANY_EMAIL),
-                                                    document.getString(COMPANY_PHONE),
-                                                    document.getString(COMPANY_SERVICE))
-                                    ).collect(Collectors.toList());
-                                    CompanyUserProvider.insertAllCompanies(dtoList);
-                                    emitter.onSuccess(dtoList);
+                                    if (task.isSuccessful()) {
+                                        List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                                        List<CompanyDto> dtoList = documents.stream().map(
+                                                document -> new CompanyDto(
+                                                        document.getId(),
+                                                        document.getString(URI),
+                                                        document.getString(COMPANY_NAME),
+                                                        document.getString(COMPANY_EMAIL),
+                                                        document.getString(COMPANY_PHONE),
+                                                        document.getString(COMPANY_SERVICE))
+                                        ).collect(Collectors.toList());
+                                        CompanyUserProvider.insertAllCompanies(dtoList);
+                                        emitter.onSuccess(dtoList);
+                                    } else {
+                                        emitter.onSuccess(Collections.emptyList());
+                                    }
                                 });
                     });
         }

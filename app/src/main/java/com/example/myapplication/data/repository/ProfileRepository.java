@@ -216,14 +216,26 @@ public class ProfileRepository {
         });
     }
 
-    public void updateOwnQueue(boolean value) {
+    public Completable updateOwnQueue(boolean value) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
-        docRef.update(OWN_QUEUE, value);
+        return Completable.create(emitter -> {
+            docRef.update(OWN_QUEUE, value).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
     }
 
-    public void updateParticipateInQueue(boolean value) {
+    public Completable updateParticipateInQueue(boolean value) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
-        docRef.update(PARTICIPATE_IN_QUEUE, value);
+        return Completable.create(emitter -> {
+            docRef.update(PARTICIPATE_IN_QUEUE, value).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
     }
 
     public Completable createAccount(String email, String password, String userName, String

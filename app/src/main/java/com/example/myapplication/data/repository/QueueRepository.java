@@ -30,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,7 @@ public class QueueRepository {
 
     public Single<List<QueueDto>> getQueuesList() {
         return Single.create(emitter -> {
+            Log.d("Get queue started", "started");
             service.fireStore.collection(QUEUE_LIST).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -89,6 +91,8 @@ public class QueueRepository {
                                             document.getString(PEOPLE_PASSED),
                                             document.getString(MID_TIME_WAITING))
                             ).collect(Collectors.toList()));
+                        } else {
+                            emitter.onSuccess(null);
                         }
                     });
         });
@@ -227,7 +231,7 @@ public class QueueRepository {
         });
     }
 
-    public void createQueueDocument(String queueID, String queueName, String queueTime) {
+    public Completable createQueueDocument(String queueID, String queueName, String queueTime) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
         ArrayList<String> arrayList = new ArrayList<>();
 
@@ -241,7 +245,13 @@ public class QueueRepository {
         userQueue.put(PEOPLE_PASSED, "0");
         userQueue.put(MID_TIME_WAITING, "0");
 
-        docRef.set(userQueue);
+       return Completable.create(emitter -> {
+           docRef.set(userQueue).addOnCompleteListener(task -> {
+               if (task.isSuccessful()){
+                    emitter.onComplete();
+               }
+           });
+       });
     }
 
     public Completable uploadBytesToFireStorage(String queueID, byte[] data) {

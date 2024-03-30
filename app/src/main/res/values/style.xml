@@ -31,6 +31,12 @@
         <item name="android:fontFamily">@font/bold_roboto</item>
     </style>
 
+    <style name="TextAppearance.Material3.BodyMedium.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/regular</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
     <style name="TextAppearance.Material3.TitleLarge.QuServe.Regular" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/regular</item>

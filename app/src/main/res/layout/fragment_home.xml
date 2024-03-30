@@ -7,15 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".presentation.home.HomeFragment">
 
+  <androidx.fragment.app.FragmentContainerView
+      android:id="@+id/home_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="340dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,12 +47,28 @@ public class CreateQueueViewModel extends ViewModel {
     public void initQueueData() {
         Arguments.queueID = generateID();
         createQueueDocument(Arguments.queueID);
-        generateQrCode(Arguments.queueID);
     }
 
     private void createQueueDocument(String queueID) {
-        DI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime);
-        DI.updateOwnQueueUseCase.invoke(true);
+        DI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime)
+                .andThen(DI.updateOwnQueueUseCase.invoke(true))
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        generateQrCode(Arguments.queueID);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
     private String generateID() {

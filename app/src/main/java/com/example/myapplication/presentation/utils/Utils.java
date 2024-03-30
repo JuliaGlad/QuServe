@@ -4,6 +4,8 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 public class Utils {
+    public static final String PARTICIPANT = "Participant";
+    public static final String OWNER = "Owner";
     public static final String PAUSED_HOURS = "Paused_Hours";
     public static final String PAUSED_MINUTES = "Paused_Minutes";
     public static final String PAUSED_SECONDS = "Paused_Seconds";

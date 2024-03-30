@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonDelegate;
@@ -117,9 +119,6 @@ public class ChooseCompanyFragment extends Fragment {
     private void initNavigation(String id) {
         switch (state) {
             case COMPANY_DETAILS:
-
-                App.changeState(COMPANY, id);
-
                 Intent intent = new Intent();
                 intent.putExtra(COMPANY_ID, id);
                 intent.putExtra(STATE, COMPANY);
@@ -144,7 +143,10 @@ public class ChooseCompanyFragment extends Fragment {
             String id = models.get(i).getId();
             delegates.add(new CompanyListItemDelegateItem(new CompanyListItemDelegateModel(
                     i, models.get(i).getName(),
-                    imageList.get(i), () -> initNavigation(id))
+                    imageList.get(i), () -> {
+                        App.changeState(COMPANY, id);
+                        initNavigation(id);
+                    })
             ));
         }
         mainAdapter.submitList(delegates);

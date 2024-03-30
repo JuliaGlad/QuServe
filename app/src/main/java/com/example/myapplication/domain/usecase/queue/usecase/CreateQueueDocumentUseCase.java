@@ -2,8 +2,10 @@ package com.example.myapplication.domain.usecase.queue.usecase;
 
 import com.example.myapplication.DI;
 
+import io.reactivex.rxjava3.core.Completable;
+
 public class CreateQueueDocumentUseCase {
-    public void invoke(String queueID, String queueName, String queueTime){
-        DI.queueRepository.createQueueDocument(queueID, queueName, queueTime);
+    public Completable invoke(String queueID, String queueName, String queueTime){
+        return DI.queueRepository.createQueueDocument(queueID, queueName, queueTime);
     }
 }

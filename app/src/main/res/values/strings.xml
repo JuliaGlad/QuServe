@@ -231,5 +231,20 @@
     <string name="minutes">Minutes</string>
     <string name="seconds">Seconds</string>
     <string name="pause">Pause</string>
-
+    <string name="queue">Queue</string>
+    <string name="restaurant">Dining in Restaurant</string>
+    <string name="on_board_catering">On-Board catering</string>
+    <string name="become_employee">Become employee</string>
+    <string name="scan_queue_s_qr_code_and_join_it">Scan queue`s qr-code and join it</string>
+    <string name="create_queue">Create Queue</string>
+    <string name="create_your_own_queue_so_people_can_join_it">Create your own queue so people can join it</string>
+    <string name="add_employees">Add employees</string>
+    <string name="queue_manager">Queue Manager</string>
+    <string name="home_advise_box_text">Here you will see all your active queues and actions</string>
+    <string name="company_owner">Company owner</string>
+    <string name="queue_owner">Queue owner</string>
+    <string name="queue_participant">Queue participant</string>
+    <string name="people_in_queue">People in queue:</string>
+    <string name="add_new_employees_to_your_company">Add new employees to your company</string>
+    <string name="create_new_company_queue_so_people_can_join_it">Create new company queue so people can join it</string>
 </resources>
