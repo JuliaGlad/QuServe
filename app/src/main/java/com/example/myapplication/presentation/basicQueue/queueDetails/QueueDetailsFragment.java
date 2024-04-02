@@ -1,7 +1,9 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -137,6 +139,7 @@ public class QueueDetailsFragment extends Fragment {
         dialogFragment.show(getActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
 
         dialogFragment.onDismissListener(bundle -> {
+            bundle.putString(QUEUE_ID, queueId);
             NavHostFragment.findNavController(QueueDetailsFragment.this)
                     .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
         });

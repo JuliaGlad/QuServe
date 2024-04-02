@@ -5,12 +5,14 @@ import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import androidx.work.WorkManager;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPausedQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
@@ -44,28 +47,34 @@ public class PausedQueueFragment extends Fragment {
 
     private PausedQueueFragmentViewModel viewModel;
     private FragmentPausedQueueBinding binding;
-    private long timeMillis;
-    private long hours = 0;
-    private long minutes = 0;
-    private long seconds = 0;
+    private long timeMillis, timeSelected;
     private String timeLeft, queueId;
+    private long progress = 0;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(PausedQueueFragmentViewModel.class);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         if (getArguments() != null) {
-
-            hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
-            minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
-            seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
+            queueId = getArguments().getString(QUEUE_ID);
+            long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
+            long minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
+            long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
 
             timeMillis = hours + minutes + seconds;
+            timeSelected = hours + minutes + seconds;
+            Log.d("Progress", String.valueOf(progress));
+            Log.d("Progress Max", String.valueOf(timeMillis));
         } else {
             timeMillis = CURRENT_TIMER_TIME;
         }
 
 
-        viewModel = new ViewModelProvider(this).get(PausedQueueFragmentViewModel.class);
         binding = FragmentPausedQueueBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -75,12 +84,14 @@ public class PausedQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupObserves();
-
         viewModel.getQueue();
         initBox();
+        binding.indicator.setMax((int) timeMillis);
+        binding.indicator.setProgress((int) timeMillis);
+        Log.d("Indicator Max on create", "" + binding.indicator.getMax());
         initBackButton();
-        startCountDown();
         initStopButton();
+        startCountDown();
     }
 
     private void initBox() {
@@ -110,40 +121,11 @@ public class PausedQueueFragment extends Fragment {
 
     private void initStopButton() {
         binding.buttonStopPause.setOnClickListener(v -> {
-            final View dialogView = getLayoutInflater().inflate(R.layout.dialog_stop_pause, null);
-            AlertDialog stopPauseQueueDialog = new AlertDialog.Builder(getContext())
-                    .setView(dialogView).create();
-
-            stopPauseQueueDialog.show();
-
-            Button stop = dialogView.findViewById(R.id.button_stop);
-            Button cancel = dialogView.findViewById(R.id.button_cancel);
-
-            stop.setOnClickListener(view -> {
-                stopPauseQueueDialog.dismiss();
-                viewModel.continueQueue()
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                NavHostFragment.findNavController(PausedQueueFragment.this)
-                                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
-                            }
-
-                            @Override
-                            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                            }
-                        });
-            });
-
-            cancel.setOnClickListener(view -> {
-                stopPauseQueueDialog.dismiss();
+            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId);
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+            dialogFragment.onDismissListener(bundle -> {
+                NavHostFragment.findNavController(PausedQueueFragment.this)
+                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
             });
         });
     }
@@ -152,33 +134,15 @@ public class PausedQueueFragment extends Fragment {
         new CountDownTimer(timeMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
+                progress += 300;
                 timeMillis = millisUntilFinished;
-
-                binding.indicator.setMax((int) (timeMillis * 60000));
-                binding.indicator.incrementProgressBy(1000);
+                binding.indicator.setProgress((int) (timeSelected - progress));
                 updateTimer();
             }
 
             @Override
             public void onFinish() {
-                viewModel.continueQueue()
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                ((QueueDetailsActivity) requireActivity()).startNotificationForegroundService();
-                                initNotificationWorker();
-                            }
-
-                            @Override
-                            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                            }
-                        });
+                viewModel.continueQueue(queueId);
             }
         }.start();
     }
@@ -199,7 +163,7 @@ public class PausedQueueFragment extends Fragment {
 
     private void updateTimer() {
         long hours = (timeMillis / 1000) / 3600;
-        long minutes = (timeMillis / 1000) / 60;
+        long minutes = ((timeMillis / 1000) % 3600) / 60;
         long seconds = (timeMillis / 1000) % 60;
 
         timeLeft = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
@@ -221,6 +185,14 @@ public class PausedQueueFragment extends Fragment {
     private void setupObserves() {
         viewModel.queueId.observe(getViewLifecycleOwner(), queueId -> {
             this.queueId = queueId;
+            startCountDown();
+        });
+
+        viewModel.isContinued.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                ((QueueDetailsActivity) requireActivity()).startNotificationForegroundService();
+                initNotificationWorker();
+            }
         });
     }
 }

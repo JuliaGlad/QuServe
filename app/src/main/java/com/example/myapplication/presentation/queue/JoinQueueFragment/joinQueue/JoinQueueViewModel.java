@@ -20,6 +20,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class JoinQueueViewModel extends ViewModel {
 
+    private final MutableLiveData<Boolean> _isUpdated = new MutableLiveData<>(false);
+    LiveData<Boolean> isUpdated = _isUpdated;
+
     private final MutableLiveData<JoinQueueState> _state = new MutableLiveData<>();
     LiveData<JoinQueueState> state = _state;
 
@@ -79,12 +82,26 @@ public class JoinQueueViewModel extends ViewModel {
 
     }
 
-    public Completable addToParticipantsList(String queueID) {
-        return DI.addToParticipantsListUseCase.invoke(queueID);
-    }
+    public void addToParticipantsList(String queueID) {
+        DI.addToParticipantsListUseCase.invoke(queueID)
+                .andThen(DI.updateParticipateInQueueUseCase.invoke(true))
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
 
-    public void updateParticipateInQueue(){
-        DI.updateParticipateInQueueUseCase.invoke(true);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _isUpdated.postValue(true);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
 }

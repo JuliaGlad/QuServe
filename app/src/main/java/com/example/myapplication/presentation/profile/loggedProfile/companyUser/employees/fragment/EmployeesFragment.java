@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.FragmentEmployeesBinding;
 import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.deleteEmployeeFromCompany.DeleteEmployeeFromCompanyDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.employeeQrCode.EmployeeQrCodeDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.model.EmployeeModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
@@ -29,9 +31,11 @@ import com.example.myapplication.presentation.profile.loggedProfile.companyUser.
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
 public class EmployeesFragment extends Fragment {
@@ -154,11 +158,41 @@ public class EmployeesFragment extends Fragment {
         binding.progressBar.setVisibility(View.GONE);
     }
 
+    private void removeEmployee(String userId, String role) {
+        for (int i = 0; i < basicList.size(); i++) {
+            if (basicList.get(i).getEmployeeId().equals(userId)) {
+                Log.d("Basic list size", "" + basicList.size());
+                basicList.remove(i);
+                Log.d("BasicList Size", "" + basicList.size());
+                break;
+            }
+        }
+
+        switch (role) {
+            case ADMIN:
+                for (int i = 0; i < adminList.size(); i++) {
+                    if (adminList.get(i).getEmployeeId().equals(userId)) {
+                        adminList.remove(i);
+                        break;
+                    }
+                }
+                break;
+            case WORKER:
+                for (int i = 0; i < workerList.size(); i++) {
+                    if (workerList.get(i).getEmployeeId().equals(userId)) {
+                        workerList.remove(i);
+                        break;
+                    }
+                }
+        }
+    }
+
     private void addToAdmins(String id) {
         for (int i = 0; i < workerList.size(); i++) {
             if (Objects.equals(workerList.get(i).getEmployeeId(), id)) {
                 adminList.add(workerList.get(i));
                 workerList.remove(i);
+                break;
             }
         }
     }
@@ -168,6 +202,7 @@ public class EmployeesFragment extends Fragment {
             if (adminList.get(i).getEmployeeId().equals(id)) {
                 workerList.add(adminList.get(i));
                 adminList.remove(i);
+                break;
             }
         }
     }
@@ -210,6 +245,10 @@ public class EmployeesFragment extends Fragment {
                         };
 
                         dialogFragment[0].onDismissListener(listener);
+                    }, () -> {
+
+                        showDeleteDialog(id, companyId);
+
                     }));
 
 
@@ -224,5 +263,12 @@ public class EmployeesFragment extends Fragment {
         });
     }
 
+    private void showDeleteDialog(String employeeId, String companyId) {
+        DeleteEmployeeFromCompanyDialogFragment dialogFragment = new DeleteEmployeeFromCompanyDialogFragment(employeeId, companyId);
+        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_EMPLOYEE_DIALOG");
+        dialogFragment.onDismissListener(bundle -> {
+            removeEmployee(employeeId, bundle.getString(EMPLOYEE_ROLE));
+        });
+    }
 
 }

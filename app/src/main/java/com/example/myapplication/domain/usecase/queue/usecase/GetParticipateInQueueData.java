@@ -6,6 +6,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class GetParticipateInQueueData {
     public boolean invoke(DocumentSnapshot value){
-        return value.getBoolean(PARTICIPATE_IN_QUEUE);
+        return Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE));
     }
 }

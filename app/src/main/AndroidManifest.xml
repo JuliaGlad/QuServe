@@ -56,7 +56,7 @@
             android:name=".presentation.companyQueue.createQueue.CreateCompanyQueueActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.profile.becomeEmployee.BecomeEmployeeActivity"
+            android:name=".presentation.employee.becomeEmployee.BecomeEmployeeActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity"

@@ -66,7 +66,6 @@ public class HomeBasisUserViewModel extends ViewModel {
                             isCompanyOwner = homeBasicUserBooleanModel.isCompanyOwner();
                             isQueueParticipant = homeBasicUserBooleanModel.isParticipateInQueue();
                             isQueueOwner = homeBasicUserBooleanModel.isOwnQueue();
-                            Log.d("queue owner", String.valueOf(isQueueOwner));
                             getCompanies();
                         }
                     }

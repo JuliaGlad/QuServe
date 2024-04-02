@@ -139,5 +139,10 @@
             android:id="@+id/action_chooseCityDialogFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_employee"
+        android:name="com.example.myapplication.presentation.employee.main.navFragment.EmployeeNavigationFragment"
+        android:label="fragment_employee_navigation"
+        tools:layout="@layout/fragment_employee_navigation" />
 
 </navigation>

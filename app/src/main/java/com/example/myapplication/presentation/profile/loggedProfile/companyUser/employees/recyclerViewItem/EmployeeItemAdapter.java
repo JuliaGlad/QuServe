@@ -85,6 +85,10 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
                         }
                     });
 
+            binding.buttonDelete.setOnClickListener(v -> {
+                model.deleteListener.onClick();
+            });
+
             binding.item.setOnClickListener(v -> {
                 model.listener.onClick();
             });

@@ -4,8 +4,6 @@ import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 
 import java.util.List;
 
-import myapplication.android.ui.listeners.ButtonItemListener;
-
 public class WorkerItemModel {
     int id;
     String name;
@@ -22,6 +20,6 @@ public class WorkerItemModel {
     }
 
     public boolean compareToOther(WorkerItemModel other){
-        return other.id == id;
+        return other.hashCode() == this.hashCode();
     }
 }

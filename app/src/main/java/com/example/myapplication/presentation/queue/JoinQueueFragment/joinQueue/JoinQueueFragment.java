@@ -55,26 +55,7 @@ public class JoinQueueFragment extends Fragment {
 
     private void initOkButton() {
         binding.buttonYes.setOnClickListener(view -> {
-            viewModel.addToParticipantsList(queueData)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            viewModel.updateParticipateInQueue();
-                            requireActivity().finish();
-                            ((JoinQueueActivity)requireActivity()).openWaitingActivity();
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-                            Log.e("Adding", "failed");
-                        }
-                    });
+            viewModel.addToParticipantsList(queueData);
         });
     }
 
@@ -101,6 +82,17 @@ public class JoinQueueFragment extends Fragment {
                 JoinQueueModel model = ((JoinQueueState.Success)state).data;
                 Glide.with(JoinQueueFragment.this).load(model.getUri()).into(binding.qrCodeImage);
                 binding.queueName.setText(model.getName());
+            } else if (state instanceof JoinQueueState.Loading){
+
+            } else if (state instanceof JoinQueueState.Error){
+
+            }
+        });
+
+        viewModel.isUpdated.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                requireActivity().finish();
+                ((JoinQueueActivity)requireActivity()).openWaitingActivity();
             }
         });
 

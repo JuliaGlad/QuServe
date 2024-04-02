@@ -2,6 +2,8 @@ package com.example.myapplication.presentation.queue.finishedQueueCreation;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.net.Uri;
@@ -23,6 +25,7 @@ import com.example.myapplication.databinding.FragmentFinishedQueueCreationBindin
 import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.mainFragment.CreateQueueFragment;
+import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.queue.finishedQueueCreation.state.FinishedQueueState;
 
 import org.checkerframework.checker.index.qual.LengthOf;
@@ -31,12 +34,16 @@ public class FinishedQueueCreationFragment extends Fragment {
 
     private FinishedQueueCreationViewModel viewModel;
     private FragmentFinishedQueueCreationBinding binding;
-    private String type;
+    private String type, name, companyId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getArguments().getString(STATE);
+        if (type.equals(COMPANY)){
+            name = getActivity().getIntent().getStringExtra(COMPANY_NAME);
+            companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        }
     }
 
     @Override
@@ -77,7 +84,7 @@ public class FinishedQueueCreationFragment extends Fragment {
                     break;
                 case COMPANY:
                     requireActivity().finish();
-                    ((CreateQueueActivity)requireActivity()).openCompanyQueueDetailsActivity();
+                    ((CreateCompanyQueueActivity)requireActivity()).openCompanyQueueDetailsActivity(companyId, name);
                     break;
             }
         });
@@ -105,7 +112,7 @@ public class FinishedQueueCreationFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Log.d("Back button pressed", "pressed");
+                Log.d("Back buttonWithDescription pressed", "pressed");
             }
         });
     }

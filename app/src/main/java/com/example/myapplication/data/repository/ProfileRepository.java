@@ -1,10 +1,15 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_PATH;
 import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.OWN_QUEUE;
@@ -13,32 +18,44 @@ import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KE
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.app.App;
+import com.example.myapplication.data.dto.ActiveEmployeeQueueDto;
 import com.example.myapplication.data.dto.HistoryQueueDto;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.UserDto;
+import com.example.myapplication.data.dto.UserEmployeeRoleDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.RuntimeExecutionException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +66,136 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
+
+    public Completable updateRole(String companyId, String userId, String role){
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(userId)
+                    .collection(EMPLOYEE)
+                    .document(companyId)
+                    .update(EMPLOYEE_ROLE, role).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable deleteActiveQueue(String companyId, String queueId, String userId){
+        return Completable.create(emitter -> {
+           service.fireStore
+                   .collection(USER_LIST)
+                   .document(userId)
+                   .collection(EMPLOYEE)
+                   .document(companyId)
+                   .collection(ACTIVE_QUEUES_LIST)
+                   .document(queueId)
+                   .delete().addOnCompleteListener(task -> {
+                       if (task.isSuccessful()){
+                           emitter.onComplete();
+                       }
+                   });
+        });
+    }
+
+    public Completable deleteEmployeeRole(String companyId, String userId) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(userId)
+                    .collection(EMPLOYEE)
+                    .document(companyId).delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Single<List<ActiveEmployeeQueueDto>> getActiveQueues(String companyId) {
+        return Single.create(emitter -> {
+            List<ActiveEmployeeQueueDto> dtos = new ArrayList<>();
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(EMPLOYEE)
+                    .document(companyId)
+                    .collection(ACTIVE_QUEUES_LIST)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> value = task.getResult().getDocuments();
+                            for (int i = 0; i < value.size(); i++) {
+                                DocumentSnapshot current = value.get(i);
+                                dtos.add(new ActiveEmployeeQueueDto(
+                                        current.getId(),
+                                        current.getString(QUEUE_NAME_KEY),
+                                        current.getString(QUEUE_LOCATION_KEY)
+                                ));
+                            }
+                            emitter.onSuccess(dtos);
+                        }
+                    });
+        });
+    }
+
+    public Single<List<UserEmployeeRoleDto>> getEmployeeRoles() {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(EMPLOYEE)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<UserEmployeeRoleDto> dtos = new ArrayList<>();
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
+                                DocumentSnapshot current = documentSnapshots.get(i);
+                                dtos.add(new UserEmployeeRoleDto(
+                                        current.getString(EMPLOYEE_ROLE),
+                                        current.getId(),
+                                        current.getString(COMPANY_PATH)
+                                ));
+                            }
+                            emitter.onSuccess(dtos);
+                        }
+                    });
+        });
+    }
+
+    public Single<Boolean> isEmployee() {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(EMPLOYEE)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onSuccess(task.getResult().size() > 0);
+                        }
+                    });
+        });
+    }
+
+    public Completable addEmployeeRole(String companyId, String companyPath) {
+        DocumentReference docRef = service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid())
+                .collection(EMPLOYEE)
+                .document(companyId);
+
+        Map<String, Object> employee = new HashMap<>();
+        employee.put(EMPLOYEE_ROLE, WORKER);
+        employee.put(COMPANY_PATH, companyPath);
+
+        return Completable.create(emitter -> {
+            docRef.set(employee).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public Single<List<HistoryQueueDto>> getHistoryList() {
         List<HistoryQueueDto> list = new ArrayList<>();
@@ -220,7 +367,8 @@ public class ProfileRepository {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
         return Completable.create(emitter -> {
             docRef.update(OWN_QUEUE, value).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
+                    UserDatabaseProvider.updateOwnQueue(value);
                     emitter.onComplete();
                 }
             });
@@ -231,7 +379,8 @@ public class ProfileRepository {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
         return Completable.create(emitter -> {
             docRef.update(PARTICIPATE_IN_QUEUE, value).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
+                    UserDatabaseProvider.updateParticipateInQueue(value);
                     emitter.onComplete();
                 }
             });
@@ -361,42 +510,42 @@ public class ProfileRepository {
     }
 
     public Single<UserDto> getUserData() {
-//        UserDto localUser = UserDatabaseProvider.getUser();
-//        if (localUser != null) {
-//            return Single.create(emitter -> {
-//                emitter.onSuccess(localUser);
-//            });
-//        } else {
-        return
-                Single.create(emitter -> {
-                    DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+        UserDto localUser = UserDatabaseProvider.getUser();
+        if (localUser != null) {
+            return Single.create(emitter -> {
+                emitter.onSuccess(localUser);
+            });
+        } else {
+            return
+                    Single.create(emitter -> {
+                        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
 
-                    service.auth.getCurrentUser().reload().addOnSuccessListener(unused -> {
-                        docRef.get().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                UserDto userDto = new UserDto(
-                                        document.getString(USER_NAME_KEY),
-                                        document.getString(GENDER_KEY),
-                                        document.getString(PHONE_NUMBER_KEY),
-                                        document.getString(EMAIL_KEY),
-                                        document.getString(BIRTHDAY_KEY),
-                                        document.getString(URI),
-                                        document.getString(BACKGROUND_IMAGE),
-                                        Boolean.TRUE.equals(document.getBoolean(OWN_QUEUE)),
-                                        Boolean.TRUE.equals(document.getBoolean(PARTICIPATE_IN_QUEUE))
-                                );
+                        service.auth.getCurrentUser().reload().addOnSuccessListener(unused -> {
+                            docRef.get().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    UserDto userDto = new UserDto(
+                                            document.getString(USER_NAME_KEY),
+                                            document.getString(GENDER_KEY),
+                                            document.getString(PHONE_NUMBER_KEY),
+                                            document.getString(EMAIL_KEY),
+                                            document.getString(BIRTHDAY_KEY),
+                                            document.getString(URI),
+                                            document.getString(BACKGROUND_IMAGE),
+                                            Boolean.TRUE.equals(document.getBoolean(OWN_QUEUE)),
+                                            Boolean.TRUE.equals(document.getBoolean(PARTICIPATE_IN_QUEUE))
+                                    );
 
-                                UserDatabaseProvider.insertUser(userDto);
-                                emitter.onSuccess(userDto);
-                            }
+                                    UserDatabaseProvider.insertUser(userDto);
+                                    emitter.onSuccess(userDto);
+                                }
+                            });
+                        }).addOnFailureListener(e -> {
+                            emitter.onError(new Throwable(e.getMessage()));
                         });
-                    }).addOnFailureListener(e -> {
-                        emitter.onError(new Throwable(e.getMessage()));
-                    });
 
-                });
-//        }
+                    });
+        }
     }
 
     public Single<ImageDto> getBackgroundImage() {

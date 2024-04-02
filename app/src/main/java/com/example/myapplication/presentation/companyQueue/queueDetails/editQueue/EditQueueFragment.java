@@ -3,6 +3,8 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.editQue
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,11 +21,15 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditQueueBinding;
+import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.models.EditQueueModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.models.EmployeeModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.state.EditQueueState;
 import com.example.myapplication.presentation.companyQueue.queueDetails.recycler.QueueEmployeeAdapter;
-import com.example.myapplication.presentation.companyQueue.queueDetails.recycler.RecyclerEmployeeModel;
+import com.example.myapplication.presentation.companyQueue.queueDetails.recycler.QueueEmployeeModel;
+import com.example.myapplication.presentation.dialogFragments.deleteWorkerFromQueue.DeleteWorkerFromQueueDialogFragment;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +39,34 @@ public class EditQueueFragment extends Fragment {
     private EditQueueViewModel viewModel;
     private FragmentEditQueueBinding binding;
     private String companyId, queueId, name, location;
+    List<QueueEmployeeModel> list = new ArrayList<>();
+    List<EmployeeModel> employees = new ArrayList<>();
     private final QueueEmployeeAdapter adapter = new QueueEmployeeAdapter();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         companyId = getArguments().getString(COMPANY_ID);
         queueId = getArguments().getString(QUEUE_ID);
+        if (getArguments().getString(WORKERS_LIST) != null){
+            String workers = getArguments().getString(WORKERS_LIST);
+            List<AddWorkerModel> models = new Gson().fromJson(workers,
+                    new TypeToken<List<AddWorkerModel>>(){}.getType());
+
+            for (int i = 0; i < models.size(); i++) {
+                AddWorkerModel current = models.get(i);
+                list.add(new QueueEmployeeModel(
+                        i,
+                        current.getId(),
+                        current.getName(),
+                        current.getRole(),
+                        () -> {
+
+                        }
+                ));
+            }
+        }
+
         viewModel = new ViewModelProvider(this).get(EditQueueViewModel.class);
         binding = FragmentEditQueueBinding.inflate(inflater, container, false);
 
@@ -52,7 +79,19 @@ public class EditQueueFragment extends Fragment {
         setupObserves();
         viewModel.getQueueData(companyId, queueId);
 
+        initAddButton();
         initSaveButton();
+    }
+
+    private void initAddButton() {
+        binding.buttonAdd.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(COMPANY_ID, companyId);
+            bundle.putString(QUEUE_ID, queueId);
+            bundle.putString(WORKERS_LIST, new Gson().toJson(employees));
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_editQueueFragment_to_addWorkersFragment, bundle);
+        });
     }
 
     private void initSaveButton() {
@@ -65,20 +104,24 @@ public class EditQueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof EditQueueState.Success){
 
-                List<RecyclerEmployeeModel> list = new ArrayList<>();
-
                 EditQueueModel model = ((EditQueueState.Success)state).data;
-                List<EmployeeModel> employees = model.getModels();
+                employees = model.getModels();
                 binding.header.setText(model.getName());
                 binding.locationEdit.setText(model.getLocation());
                 binding.recyclerView.setAdapter(adapter);
                 for (int i = 0; i < employees.size(); i++) {
                     EmployeeModel current = employees.get(i);
-                    list.add(new RecyclerEmployeeModel(i, current.getId(), current.getName(), current.getRole(), Uri.EMPTY));
+                    list.add(new QueueEmployeeModel(
+                            i,
+                            current.getId(),
+                            current.getName(),
+                            current.getRole(),
+                            () -> {
+                                showDeleteDialog(companyId, queueId, current.getId());
+                            }));
                 }
                 adapter.submitList(list);
                 binding.progressBar.setVisibility(View.GONE);
@@ -109,4 +152,23 @@ public class EditQueueFragment extends Fragment {
         });
 
     }
+
+    private void showDeleteDialog(String companyId, String queueId, String id) {
+        DeleteWorkerFromQueueDialogFragment dialogFragment = new DeleteWorkerFromQueueDialogFragment(companyId, queueId, id);
+        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_WORKER_FROM_QUEUE");
+        dialogFragment.onDismissListener(bundle -> {
+            removeEmployee(id);
+        });
+    }
+
+    private void removeEmployee(String id) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getEmployeeId().equals(id)){
+                list.remove(i);
+                break;
+            }
+        }
+    }
+
+
 }

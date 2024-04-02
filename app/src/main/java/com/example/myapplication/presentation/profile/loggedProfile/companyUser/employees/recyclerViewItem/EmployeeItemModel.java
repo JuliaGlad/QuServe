@@ -15,8 +15,9 @@ public class EmployeeItemModel {
     String companyId;
     ChangeRoleDialogFragment dialogFragment;
     ButtonItemListener listener;
+    ButtonItemListener deleteListener;
 
-    public EmployeeItemModel(int id, Fragment fragment, String name, String employeeId, String role, String companyId, ChangeRoleDialogFragment dialogFragment, ButtonItemListener listener) {
+    public EmployeeItemModel(int id, Fragment fragment, String name, String employeeId, String role, String companyId, ChangeRoleDialogFragment dialogFragment, ButtonItemListener listener, ButtonItemListener deleteListener) {
         this.id = id;
         this.fragment = fragment;
         this.name = name;
@@ -24,7 +25,12 @@ public class EmployeeItemModel {
         this.role = role;
         this.companyId = companyId;
         this.listener = listener;
+        this.deleteListener = deleteListener;
         this.dialogFragment = dialogFragment;
+    }
+
+    public ButtonItemListener getDeleteListener() {
+        return deleteListener;
     }
 
     public ChangeRoleDialogFragment getDialogFragment() {

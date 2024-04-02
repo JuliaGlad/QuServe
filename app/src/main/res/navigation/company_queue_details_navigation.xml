@@ -32,5 +32,16 @@
         <action
             android:id="@+id/action_editQueueFragment_to_companyQueueDetailsFragment"
             app:destination="@id/companyQueueDetailsFragment" />
+        <action
+            android:id="@+id/action_editQueueFragment_to_addWorkersFragment"
+            app:destination="@id/addWorkersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addWorkersFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.AddWorkersFragment"
+        android:label="AddWorkersFragment" >
+        <action
+            android:id="@+id/action_addWorkersFragment_to_editQueueFragment"
+            app:destination="@id/editQueueFragment" />
     </fragment>
 </navigation>

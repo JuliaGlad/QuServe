@@ -49,4 +49,17 @@
         app:layout_constraintStart_toEndOf="@+id/role_headline"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />
 
+    <ImageButton
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button_icons_background"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete"
+        app:tint="?colorPrimary" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

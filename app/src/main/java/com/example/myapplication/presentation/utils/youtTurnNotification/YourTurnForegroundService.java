@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.utils.youtTurnNotification;
 
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
 
@@ -10,6 +11,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -44,63 +46,27 @@ public class YourTurnForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String queueId = intent.getStringExtra(QUEUE_ID);
+        Log.d("Queue Id", queueId);
         setupNotification();
-        addDocumentSnapshot();
+        addDocumentSnapshot(queueId);
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void addDocumentSnapshot() {
-        DI.getQueueByParticipantIdUseCase.invoke()
+    private void addDocumentSnapshot(String queueId) {
+        DI.onParticipantServedUseCase.invoke(queueId)
+                .concatWith(DI.updateParticipateInQueueUseCase.invoke(false))
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueModel>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull QueueModel queueModel) {
-                        DI.addSnapshotQueueUseCase.invoke(queueModel.getId())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new Observer<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                    }
-
-                                    @Override
-                                    public void onNext(@NonNull DocumentSnapshot snapshot) {
-                                        DI.onParticipantServedUseCase.invoke(snapshot)
-                                                .subscribeOn(Schedulers.io())
-                                                .subscribe(new CompletableObserver() {
-                                                    @Override
-                                                    public void onSubscribe(@NonNull Disposable d) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onComplete() {
-                                                        stopForeground(true);
-                                                        stopSelf();
-                                                    }
-
-                                                    @Override
-                                                    public void onError(@NonNull Throwable e) {
-
-                                                    }
-                                                });
-                                    }
-
-                                    @Override
-                                    public void onError(@NonNull Throwable e) {
-
-                                    }
-
-                                    @Override
-                                    public void onComplete() {
-
-                                    }
-                                });
+                    public void onComplete() {
+                        stopForeground(true);
+                        stopSelf();
                     }
 
                     @Override
@@ -108,7 +74,6 @@ public class YourTurnForegroundService extends Service {
 
                     }
                 });
-
     }
 
     private void setupNotification() {
@@ -136,33 +101,33 @@ public class YourTurnForegroundService extends Service {
         }
     }
 
-    private void initNotificationWorker() {
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(false)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(HideNotificationWorker.class)
-                .setConstraints(constraints)
-                .setInitialDelay(5, TimeUnit.MINUTES)
-                .addTag("StopPause")
-                .build();
-
-        WorkManager.getInstance(getApplicationContext()).enqueue(request);
-    }
-
-    private void initPauseAvailableWorker() {
-
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(false)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
-                .setConstraints(constraints)
-                .setInitialDelay(2, TimeUnit.HOURS)
-                .addTag("PauseAvailable")
-                .build();
-
-        WorkManager.getInstance(getApplicationContext()).enqueue(request);
-    }
+//    private void initNotificationWorker() {
+//        Constraints constraints = new Constraints.Builder()
+//                .setRequiresDeviceIdle(false)
+//                .build();
+//
+//        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(HideNotificationWorker.class)
+//                .setConstraints(constraints)
+//                .setInitialDelay(5, TimeUnit.MINUTES)
+//                .addTag("StopPause")
+//                .build();
+//
+//        WorkManager.getInstance(getApplicationContext()).enqueue(request);
+//    }
+//
+//    private void initPauseAvailableWorker() {
+//
+//        Constraints constraints = new Constraints.Builder()
+//                .setRequiresDeviceIdle(false)
+//                .build();
+//
+//        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
+//                .setConstraints(constraints)
+//                .setInitialDelay(2, TimeUnit.HOURS)
+//                .addTag("PauseAvailable")
+//                .build();
+//
+//        WorkManager.getInstance(getApplicationContext()).enqueue(request);
+//    }
 
 }

@@ -1,13 +1,9 @@
 package com.example.myapplication.presentation.dialogFragments.pauseQueue;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.myapplication.DI;
-
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -19,7 +15,6 @@ public class PauseQueueViewModel extends ViewModel {
     LiveData<Boolean> isPaused = _isPaused;
 
     public void pauseQueue(int hours, int minutes, int seconds, String queueId) {
-        Log.d("QueueId", queueId);
         DI.pauseQueueUseCase.invoke(queueId, hours, minutes, seconds)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

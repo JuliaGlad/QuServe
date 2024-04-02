@@ -1,54 +1,23 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.main;
 
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.city;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.employeeModels;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueLocation;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueName;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueTime;
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
-import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.city;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.employeeModels;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueLocation;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueName;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueTime;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
-import android.os.Bundle;
 import android.os.Environment;
-import android.text.InputType;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.R;
 import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
-import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegateItem;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationModel;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegateItem;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerModel;
-import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -60,28 +29,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PipedReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.recycler.delegate.DelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextModel;
-import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
-import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonModel;
-import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
 
 public class CreateCompanyQueueViewModel extends ViewModel {
-
 
     private final MutableLiveData<Boolean> _isComplete = new MutableLiveData<>(false);
     LiveData<Boolean> isComplete = _isComplete;
@@ -95,14 +50,30 @@ public class CreateCompanyQueueViewModel extends ViewModel {
 
     void initQueueData(String companyId) {
         Arguments.queueID = generateID();
-        createQueueDocument(Arguments.queueID, companyId);
-        generateQrCode(Arguments.queueID);
+        createQueueDocument(Arguments.queueID, companyId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        generateQrCode(Arguments.queueID);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+
     }
 
-    private void createQueueDocument(String queueID, String companyId) {
-        DI.createCompanyQueueDocumentUseCase.invoke(
-                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels
-        );
+    private Completable createQueueDocument(String queueID, String companyId) {
+        return DI.createCompanyQueueDocumentUseCase.invoke(
+                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels);
     }
 
     private String generateID() {

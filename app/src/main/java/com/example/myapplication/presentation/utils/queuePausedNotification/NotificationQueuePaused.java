@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.utils.queuePausedNotification;
 import static com.example.myapplication.presentation.utils.Utils.INTENT_TIME_PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -30,13 +31,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationQueuePaused extends Service {
 
-    String time;
+    String time, queueId;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         time = intent.getStringExtra(INTENT_TIME_PAUSED);
+        queueId = intent.getStringExtra(QUEUE_ID);
         setupNotification();
-        getQueue();
+        addSnapshot(queueId);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -47,7 +49,6 @@ public class NotificationQueuePaused extends Service {
     }
 
     private void setupNotification() {
-
         Intent intent = new Intent(this, WaitingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
@@ -73,28 +74,6 @@ public class NotificationQueuePaused extends Service {
         }
     }
 
-    private void getQueue(){
-        DI.getQueueByParticipantIdUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull QueueModel queueModel) {
-                       addSnapshot(queueModel.getId());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-
-    }
-
     private void addSnapshot(String queueId){
         DI.addSnapshotQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
@@ -106,7 +85,7 @@ public class NotificationQueuePaused extends Service {
 
                     @Override
                     public void onNext(@NonNull DocumentSnapshot snapshot) {
-                        if (DI.onPausedUseCase.invoke(snapshot)){
+                        if (DI.onPausedUseCase.invoke(snapshot) || DI.onParticipantLeftUseCase.invoke(snapshot)){
                             stopForeground(true);
                             stopSelf();
                         }

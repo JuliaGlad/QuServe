@@ -62,7 +62,7 @@
 
         <include
             android:id="@+id/button_join_queue"
-            layout="@layout/service_queue_button_layout"
+            layout="@layout/button_with_description_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -74,7 +74,7 @@
 
         <include
             android:id="@+id/button_create_queue"
-            layout="@layout/service_queue_button_layout"
+            layout="@layout/button_with_description_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"

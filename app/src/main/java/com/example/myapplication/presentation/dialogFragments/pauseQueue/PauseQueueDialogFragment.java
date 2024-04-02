@@ -58,8 +58,6 @@ public class PauseQueueDialogFragment extends DialogFragment {
             minutes = binding.minutesPicker.getValue();
             seconds = binding.secondPicker.getValue();
 
-            Log.d("QueueId", queueId);
-
             viewModel.pauseQueue(hours, minutes, seconds, queueId);
         });
 
@@ -81,7 +79,7 @@ public class PauseQueueDialogFragment extends DialogFragment {
             bundle.putInt(PAUSED_MINUTES,minutes);
             bundle.putInt(PAUSED_SECONDS, seconds);
 
-            listener.handleDialogClose(null);
+            listener.handleDialogClose(bundle);
         }
     }
 

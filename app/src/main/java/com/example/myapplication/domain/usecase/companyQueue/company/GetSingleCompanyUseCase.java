@@ -15,7 +15,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class GetSingleCompanyUseCase {
     public Single<CompanyNameAndEmailModel> invoke(String companyId){
-
         return DI.companyUserRepository.getCompany().flatMap(companyDtos ->
                 Single.just(Objects.requireNonNull(companyDtos
                         .stream()

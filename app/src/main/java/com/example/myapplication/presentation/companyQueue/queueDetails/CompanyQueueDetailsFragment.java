@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -82,8 +83,11 @@ public class CompanyQueueDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setMainAdapter();
         setupObserves();
+        initBackButtonPressed();
+        initBackButton();
         initMenuButton();
     }
+
 
     @Override
     public void onResume() {
@@ -146,6 +150,12 @@ public class CompanyQueueDetailsFragment extends Fragment {
         binding.progressBar.setVisibility(View.GONE);
     }
 
+    private void initBackButton() {
+        binding.imageButton.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
+    }
+
     private void openEditQueueFragment() {
         Bundle bundle = new Bundle();
 
@@ -185,6 +195,15 @@ public class CompanyQueueDetailsFragment extends Fragment {
         viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             requireActivity().startActivity(intent);
+        });
+    }
+
+    private void initBackButtonPressed(){
+        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
         });
     }
 }

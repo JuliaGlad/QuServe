@@ -3,8 +3,10 @@ package com.example.myapplication.data.repository;
 import static com.example.myapplication.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
+import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
+import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
@@ -14,11 +16,15 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
+import static com.example.myapplication.presentation.utils.Utils.SECONDS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
@@ -42,7 +48,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class QueueRepository {
 
-    public Completable addQueueToHistory(String queueId, String name, String timeLeft, String date){
+    public Completable addQueueToHistory(String queueId, String name, String timeLeft, String date) {
         DocumentReference docRef = service.fireStore
                 .collection(USER_LIST)
                 .document(service.auth.getCurrentUser().getUid())
@@ -59,14 +65,14 @@ public class QueueRepository {
 
         return Completable.create(emitter -> {
             docRef.set(hashMap).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
             });
         });
     }
 
-    public void updateTimePassed(String queueId, int previous, int passed){
+    public void updateTimePassed(String queueId, int previous, int passed) {
         if (passed != 0) {
             DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
             docRef.update(MID_TIME_WAITING, String.valueOf((previous + 30) / passed));
@@ -75,7 +81,6 @@ public class QueueRepository {
 
     public Single<List<QueueDto>> getQueuesList() {
         return Single.create(emitter -> {
-            Log.d("Get queue started", "started");
             service.fireStore.collection(QUEUE_LIST).get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -116,7 +121,7 @@ public class QueueRepository {
     public Observable<DocumentSnapshot> addSnapshotListener(String queueId) {
         return Observable.create(emitter -> {
             service.fireStore.collection(QUEUE_LIST).document(queueId).addSnapshotListener((value, error) -> {
-                if (value != null){
+                if (value != null) {
                     emitter.onNext(value);
                 }
             });
@@ -126,7 +131,7 @@ public class QueueRepository {
     public Completable pauseQueue(String queueId, int hours, int minutes, int seconds) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            docRef.update(QUEUE_IN_PROGRESS, hours + "Hours_" + minutes + "Minutes_" + seconds + "Seconds_" + PAUSED).addOnCompleteListener(task -> {
+            docRef.update(QUEUE_IN_PROGRESS, hours + HOURS_DIVIDER + minutes + MINUTES_DIVIDER + seconds + SECONDS_DIVIDER + "_" + PAUSED).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
@@ -135,13 +140,8 @@ public class QueueRepository {
     }
 
     public Completable continueQueue(String queueId) {
-        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    emitter.onComplete();
-                }
-            });
+//          /
         });
     }
 
@@ -174,23 +174,26 @@ public class QueueRepository {
         });
     }
 
-    public Completable deleteQrCode(String queueId){
-       return Completable.create(emitter -> {
-           service.storageReference.child(QR_CODES).child(queueId + "/" + queueId + ".jpg")
-                   .delete().addOnCompleteListener(task -> {
-                       if (task.isSuccessful()){
+    public Completable deleteQrCode(String queueId) {
+        return Completable.create(emitter -> {
+            service.storageReference.child(QR_CODES).child(queueId + "/" + queueId + ".jpg")
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
-                       }
-                   });
-       });
+                        }
+                    });
+        });
     }
 
-    public Completable onParticipantServed(DocumentSnapshot value){
-        String userId  =service.auth.getCurrentUser().getUid();
+    public Completable onParticipantServed(String queueId) {
+        String userId = service.auth.getCurrentUser().getUid();
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            if (!value.get(QUEUE_IN_PROGRESS).equals(userId) && !value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(userId)){
-                emitter.onComplete();
-            }
+            docRef.addSnapshotListener((value, error) -> {
+                if (value != null && !value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(userId) && !value.getString(QUEUE_IN_PROGRESS).contains(userId)) {
+                    emitter.onComplete();
+                }
+            });
         });
     }
 
@@ -245,13 +248,13 @@ public class QueueRepository {
         userQueue.put(PEOPLE_PASSED, "0");
         userQueue.put(MID_TIME_WAITING, "0");
 
-       return Completable.create(emitter -> {
-           docRef.set(userQueue).addOnCompleteListener(task -> {
-               if (task.isSuccessful()){
+        return Completable.create(emitter -> {
+            docRef.set(userQueue).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
                     emitter.onComplete();
-               }
-           });
-       });
+                }
+            });
+        });
     }
 
     public Completable uploadBytesToFireStorage(String queueID, byte[] data) {

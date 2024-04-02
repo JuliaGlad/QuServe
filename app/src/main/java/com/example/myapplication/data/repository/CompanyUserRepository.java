@@ -19,9 +19,11 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
 
 import android.net.Uri;
 import android.util.Log;
@@ -32,10 +34,13 @@ import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -153,37 +158,6 @@ public class CompanyUserRepository {
                                     } else {
                                         emitter.onSuccess(Collections.emptyList());
                                     }
-                                });
-                    });
-        }
-    }
-
-    public Maybe<List<CompanyDto>> getMaybeCompany() {
-        List<CompanyDto> local = CompanyUserProvider.getCompanies();
-        if (local != null) {
-            return Maybe.create(emitter -> {
-                emitter.onSuccess(local);
-            });
-        } else {
-            return
-                    Maybe.create(emitter -> {
-                        service.fireStore
-                                .collection(USER_LIST)
-                                .document(service.auth.getCurrentUser().getUid())
-                                .collection(COMPANY)
-                                .get().addOnCompleteListener(task -> {
-                                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                    List<CompanyDto> dtoList = documents.stream().map(
-                                            document -> new CompanyDto(
-                                                    document.getId(),
-                                                    document.getString(URI),
-                                                    document.getString(COMPANY_NAME),
-                                                    document.getString(COMPANY_EMAIL),
-                                                    document.getString(COMPANY_PHONE),
-                                                    document.getString(COMPANY_SERVICE))
-                                    ).collect(Collectors.toList());
-                                    CompanyUserProvider.insertAllCompanies(dtoList);
-                                    emitter.onSuccess(dtoList);
                                 });
                     });
         }
@@ -319,7 +293,10 @@ public class CompanyUserRepository {
 
     public Completable addEmployee(String path, String name, String email) {
         return Completable.create(emitter -> {
-            DocumentReference docRef = service.fireStore.document(path).collection(EMPLOYEES).document(service.auth.getCurrentUser().getUid());
+            DocumentReference docRef = service.fireStore.document(path);
+            DocumentReference employeeRef = docRef
+                    .collection(EMPLOYEES)
+                    .document(service.auth.getCurrentUser().getUid());
 
             Map<String, Object> employee = new HashMap<>();
 
@@ -327,13 +304,37 @@ public class CompanyUserRepository {
             employee.put(EMPLOYEE_ROLE, WORKER);
             employee.put(EMPLOYEE_EMAIL, email);
 
-            docRef.set(employee).addOnCompleteListener(task -> {
+            employeeRef.set(employee).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
             });
         });
 
+    }
+
+    public Single<String> deleteEmployeeFromCompany(String userId, String companyId) {
+        return Single.create(emitter -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .collection(COMPANY)
+                    .document(companyId);
+
+            DocumentReference employeeRef = docRef
+                    .collection(EMPLOYEES)
+                    .document(userId);
+
+            employeeRef.get().addOnCompleteListener(task -> {
+                String role;
+                if (task.isSuccessful()) {
+                    role = task.getResult().getString(EMPLOYEE_ROLE);
+                    employeeRef.delete().addOnCompleteListener(taskDelete -> {
+                        emitter.onSuccess(role);
+                    });
+                }
+            });
+        });
     }
 
     public Completable uploadCompanyLogoToFireStorage(Uri uri, String companyId) {
@@ -357,7 +358,7 @@ public class CompanyUserRepository {
 
     }
 
-    public Single<ImageDto> getEmployeePhoto(String employeeId) {
+    public Single<ImageDto> getSingleEmployeePhoto(String employeeId) {
         return Single.create(emitter -> {
             StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + employeeId);
             try {

@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWaitingBinding;
+import com.example.myapplication.presentation.dialogFragments.leaveQueue.LeaveQueueDialogFragment;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.model.WaitingModel;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegate;
 import com.example.myapplication.presentation.queue.waitingFragment.fragment.recycler.items.leaveQueueItem.LeaveQueueDelegateItem;
@@ -37,6 +38,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
@@ -84,44 +86,13 @@ public class WaitingFragment extends Fragment {
         binding.recycler.setAdapter(mainAdapter);
     }
 
-    private void showLeaveQueueDialog() {
-        final View dialogView = getLayoutInflater().inflate(R.layout.dialog_leave_queue, null);
-        AlertDialog leaveQueueDialog = new AlertDialog.Builder(getContext())
-                .setView(dialogView).create();
-
-        leaveQueueDialog.show();
-
-        Button leaveQueue = dialogView.findViewById(R.id.button_leave);
-        Button cancel = dialogView.findViewById(R.id.button_cancel);
-        leaveQueue.setOnClickListener(viewLeave -> {
-            viewModel.leaveQueue()
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            viewModel.updateParticipateInQueue();
-                            leaveQueueDialog.dismiss();
-                            requireActivity().finish();
-                        }
-
-                        @Override
-                        public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                        }
-                    });
+    private void showLeaveQueueDialog(String queueId) {
+        LeaveQueueDialogFragment dialogFragment = new LeaveQueueDialogFragment(queueId);
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "LEAVE_QUEUE_DIALOG");
+        dialogFragment.onDismissListener(bundle -> {
+            requireActivity().finish();
         });
-
-        cancel.setOnClickListener(viewCancel -> {
-            leaveQueueDialog.dismiss();
-        });
-
     }
-
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
@@ -158,7 +129,7 @@ public class WaitingFragment extends Fragment {
                 new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
                 new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
                 new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
-                new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))
+                new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> showLeaveQueueDialog(queueId)))
         });
     }
 

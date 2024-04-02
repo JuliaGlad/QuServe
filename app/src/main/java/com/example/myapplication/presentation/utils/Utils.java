@@ -4,6 +4,12 @@ import android.graphics.Paint;
 import android.os.Bundle;
 
 public class Utils {
+    public static final String COMPANY_PATH = "CompanyPath";
+    public static final String ACTIVE_QUEUES_LIST = "ActiveQueues";
+    public static final String HOURS_DIVIDER = "H";
+    public static final String MINUTES_DIVIDER = "M";
+    public static final String SECONDS_DIVIDER = "S";
+    public static final String EMPLOYEE = "Employee";
     public static final String PARTICIPANT = "Participant";
     public static final String OWNER = "Owner";
     public static final String PAUSED_HOURS = "Paused_Hours";

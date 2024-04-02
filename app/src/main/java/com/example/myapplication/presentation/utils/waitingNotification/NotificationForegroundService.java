@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.utils.waitingNotification;
 import static com.example.myapplication.presentation.utils.Utils.INTENT_TIME_PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -33,7 +34,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class NotificationForegroundService extends Service {
 
     private String name = null;
-    private String time = "null";
+    private String time = null;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -60,14 +61,19 @@ public class NotificationForegroundService extends Service {
                     public void onNext(@NonNull DocumentSnapshot snapshot) {
                         if (!DI.onPausedUseCase.invoke(snapshot)) {
                             Intent intent = new Intent(NotificationForegroundService.this, NotificationQueuePaused.class);
+                            String timePaused = DI.getTimeProgressPausedUseCase.invoke(snapshot);
+                            intent.putExtra(QUEUE_ID, queueId);
+                            intent.putExtra(INTENT_TIME_PAUSED, timePaused);
                             startService(intent);
                         } else if (DI.onContainParticipantUseCase.invoke(snapshot)) {
                             stopForeground(true);
                             stopSelf();
-                            time = DI.getTimeProgressPausedUseCase.invoke(snapshot);
                             Intent intent = new Intent(NotificationForegroundService.this, YourTurnForegroundService.class);
-                            intent.putExtra(INTENT_TIME_PAUSED, time);
+                            intent.putExtra(QUEUE_ID, queueId);
                             startService(intent);
+                        } else if (DI.onParticipantLeftUseCase.invoke(snapshot)){
+                            stopForeground(true);
+                            stopSelf();
                         }
                     }
 
@@ -95,6 +101,7 @@ public class NotificationForegroundService extends Service {
                     @Override
                     public void onSuccess(@NonNull QueueModel queueModel) {
                         name = queueModel.getName();
+                        time = queueModel.getMidTime();
                         setupNotification();
                         addSnapshot(queueModel.getId());
                     }
@@ -113,7 +120,7 @@ public class NotificationForegroundService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentText("Estimated time waiting: 15 minutes")
+                .setContentText("Estimated time waiting:" + " " + time)
                 .setContentTitle(name)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setContentIntent(pendingIntent)

@@ -95,4 +95,25 @@ public class UserDatabaseProvider {
         }
     }
 
+    public static void updateOwnQueue(boolean isOwn){
+        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
+        if (entities.size() > 0) {
+            UserEntity entity = entities.get(0);
+
+            entity.ownQueue = isOwn;
+
+            App.getInstance().getDatabase().userDao().update(entity);
+        }
+    }
+
+    public static void updateParticipateInQueue(boolean isParticipant){
+        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
+        if (entities.size() > 0) {
+            UserEntity entity = entities.get(0);
+
+            entity.participateInQueue = isParticipant;
+
+            App.getInstance().getDatabase().userDao().update(entity);
+        }
+    }
 }

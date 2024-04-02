@@ -1,14 +1,15 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.main;
 
 import static android.os.Build.VERSION.SDK_INT;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.city;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.employeeModels;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueLocation;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueName;
-import static com.example.myapplication.presentation.companyQueue.createQueue.arguments.Arguments.queueTime;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.city;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.employeeModels;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueLocation;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueName;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueTime;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
@@ -28,14 +29,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -45,15 +43,12 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyQueueBinding;
-import com.example.myapplication.presentation.basicQueue.createQueue.mainFragment.CreateQueueFragment;
-import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegate;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegateItem;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationModel;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegate;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegateItem;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerModel;
-import com.example.myapplication.presentation.companyQueue.createQueue.map.MapActivity;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
@@ -292,6 +287,8 @@ public class CreateCompanyQueueFragment extends Fragment {
             if (aBoolean){
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, COMPANY);
+                bundle.putString(COMPANY_ID, companyId);
+                bundle.putString(COMPANY_NAME, queueName);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createCompanyQueueFragment_to_finishedQueueCreationFragment, bundle);

@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.dialogFragments.changeRole;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -20,6 +18,8 @@ public class ChangeRoleDialogViewModel extends ViewModel {
 
     public void updateField(String role, String employeeId, String companyId) {
         DI.updateRoleUseCase.invoke(role, employeeId, companyId)
+                .concatWith(DI.updateEmployeeRoleUseCase.invoke(companyId, employeeId, role))
+                .andThen(DI.removeAdminFromAllQueuesAsWorkerUseCase.invoke(companyId, employeeId, role))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

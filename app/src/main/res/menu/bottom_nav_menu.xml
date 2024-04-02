@@ -11,6 +11,11 @@
         android:title="@string/title_queue" />
 
     <item
+        android:id="@+id/navigation_employee"
+        android:icon="@drawable/state_employee_icon"
+        android:title="@string/employee"/>
+
+    <item
         android:id="@+id/profileLoggedFragment"
         android:icon="@drawable/state_profile_icon"
         android:title="@string/profile"/>

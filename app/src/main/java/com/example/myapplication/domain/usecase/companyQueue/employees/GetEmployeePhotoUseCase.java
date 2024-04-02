@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetEmployeePhotoUseCase {
     public Single<ImageModel> invoke(String employeeId) {
-        return DI.companyUserRepository.getEmployeePhoto(employeeId).flatMap(uri ->
+        return DI.companyUserRepository.getSingleEmployeePhoto(employeeId).flatMap(uri ->
                 Single.just(new ImageModel(uri.getImageUri())));
     }
 }

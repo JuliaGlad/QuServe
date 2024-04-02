@@ -10,7 +10,6 @@ import java.util.Objects;
 import io.reactivex.rxjava3.core.Single;
 
 public class GetQueueByAuthorUseCase {
-
     public Single<QueueIdAndNameModel> invoke() {
         return DI.queueRepository.getQueuesList().flatMap(queueDtos -> Single.just(Objects.requireNonNull(queueDtos
                 .stream()

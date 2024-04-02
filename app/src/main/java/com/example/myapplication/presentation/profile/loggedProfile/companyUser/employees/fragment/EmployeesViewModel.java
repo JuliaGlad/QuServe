@@ -44,7 +44,6 @@ public class EmployeesViewModel extends ViewModel {
                                     current.getRole()
                             ));
                         }
-                        Log.d("List before state", String.valueOf(list.size()));
                         _state.postValue(new EmployeeState.Success(list));
                     }
 

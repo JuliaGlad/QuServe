@@ -49,6 +49,7 @@ public class QueueManagerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(QueueManagerViewModel.class);
         companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        Log.d("CompanyId", companyId);
     }
 
     @Override

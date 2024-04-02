@@ -59,7 +59,7 @@ public class ChooseFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Log.d("On button back pressed", "pressed");
+                Log.d("On buttonWithDescription back pressed", "pressed");
             }
         });
     }
