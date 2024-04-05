@@ -66,7 +66,8 @@ public class AddWorkersViewModel extends ViewModel {
     }
 
     public void addEmployees(List<AddWorkerModel> chosen, String companyId, String queueId) {
-        DI.addListEmployeesToQueue.invoke(chosen, companyId, queueId)
+        DI.getQueueNameAndLocationById.invoke(companyId, queueId)
+                .flatMapCompletable(model ->  DI.addListEmployeesToQueue.invoke(chosen, companyId, queueId, model.getName(), model.getLocation()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

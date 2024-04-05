@@ -1,14 +1,12 @@
 package com.example.myapplication.presentation.employee.main.queueWorkerFragment;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
-import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.ActiveQueueModel;
+import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.QueueWorkerStateModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.state.QueueWorkerState;
 
@@ -26,12 +24,12 @@ public class QueueWorkerViewModel extends ViewModel {
     private final MutableLiveData<QueueWorkerState> _state = new MutableLiveData<>(new QueueWorkerState.Loading());
     LiveData<QueueWorkerState> state = _state;
 
-    public void getEmployeeActiveQueues(String path) {
-        DI.getCompanyForWorkerByPathUseCase.invoke(path)
-                .flatMap(companyForWorkerModel -> {
-                    companyId = companyForWorkerModel.getCompanyId();
-                    companyName = companyForWorkerModel.getCompanyName();
-                    return DI.getActiveQueuesUseCase.invoke(companyForWorkerModel.getCompanyId());
+    public void getEmployeeActiveQueues(String companyId) {
+        DI.getSingleCompanyUseCase.invoke(companyId)
+                .flatMap(companyNameAndEmailModel -> {
+                    this.companyId = companyId;
+                    companyName = companyNameAndEmailModel.getName();
+                    return DI.getActiveQueuesUseCase.invoke(companyId);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ActiveQueueEmployeeModel>>() {

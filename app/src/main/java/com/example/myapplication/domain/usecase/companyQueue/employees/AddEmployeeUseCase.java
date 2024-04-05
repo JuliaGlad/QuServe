@@ -5,7 +5,7 @@ import com.example.myapplication.DI;
 import io.reactivex.rxjava3.core.Completable;
 
 public class AddEmployeeUseCase {
-    public Completable invoke(String path, String email, String name) {
-        return DI.companyUserRepository.addEmployee(path, name, email);
+    public Completable invoke(String path, String name) {
+        return DI.companyUserRepository.addEmployee(path, name);
     }
 }

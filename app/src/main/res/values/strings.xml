@@ -257,4 +257,6 @@
     <string name="view_all_company_workers_and_assign_them_queues">View all company`s workers and assign them queues</string>
     <string name="are_you_sure_you_want_to_delete_this_employee_from_your_company">Are you sure you want to delete this employee from your company?</string>
     <string name="are_you_sure_you_want_to_delete_this_worker_from_your_queue">Are you sure you want to delete this worker from your queue?</string>
+    <string name="assigned_queues">Assigned queues:</string>
+    <string name="worker_details_advise_box_text">View and manage queues assigned to employee</string>
 </resources>

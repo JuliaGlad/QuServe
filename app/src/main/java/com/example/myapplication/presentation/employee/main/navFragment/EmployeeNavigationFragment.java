@@ -89,7 +89,6 @@ public class EmployeeNavigationFragment extends Fragment {
                 EmployeeRoleModel employeeRoleModel = roles.get(0);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(COMPANY_PATH, employeeRoleModel.getCompanyPath());
                 bundle.putString(COMPANY_ID, employeeRoleModel.getCompanyId());
 
                 switch (employeeRoleModel.getRole()){

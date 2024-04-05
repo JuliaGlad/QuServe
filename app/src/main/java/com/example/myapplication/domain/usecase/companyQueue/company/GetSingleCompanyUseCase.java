@@ -1,5 +1,7 @@
 package com.example.myapplication.domain.usecase.companyQueue.company;
 
+import static com.example.myapplication.DI.service;
+
 import android.util.Log;
 
 import com.example.myapplication.DI;
@@ -14,7 +16,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class GetSingleCompanyUseCase {
-    public Single<CompanyNameAndEmailModel> invoke(String companyId){
+    public Single<CompanyNameAndEmailModel> invoke(String companyId) {
         return DI.companyUserRepository.getCompany().flatMap(companyDtos ->
                 Single.just(Objects.requireNonNull(companyDtos
                         .stream()

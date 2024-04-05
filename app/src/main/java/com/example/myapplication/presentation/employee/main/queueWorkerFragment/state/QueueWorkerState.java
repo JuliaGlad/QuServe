@@ -1,9 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueWorkerFragment.state;
 
-import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.QueueWorkerStateModel;
-
-import java.util.List;
 
 public interface QueueWorkerState {
     class Success implements QueueWorkerState{

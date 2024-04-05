@@ -53,7 +53,7 @@ public class ManagerItemAdapter extends ListAdapter<ManagerItemModel, RecyclerVi
             binding.queueName.setText(model.queueName);
             binding.location.setText(model.location);
 
-            binding.queueManagerItem.setOnClickListener(v -> {
+            binding.queueItem.setOnClickListener(v -> {
                 model.listener.onClick();
             });
         }

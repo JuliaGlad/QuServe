@@ -26,6 +26,9 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.queue.main.queue.QueueActivity"
             android:exported="false" />
         <activity

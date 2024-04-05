@@ -1,6 +1,7 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
@@ -113,6 +114,32 @@ public class ProfileRepository {
         });
     }
 
+    public Single<List<ActiveEmployeeQueueDto>> getActiveQueuesByEmployeeId(String companyId, String employeeId){
+        return Single.create(emitter -> {
+            List<ActiveEmployeeQueueDto> dtos = new ArrayList<>();
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(employeeId)
+                    .collection(EMPLOYEE)
+                    .document(companyId)
+                    .collection(ACTIVE_QUEUES_LIST)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> value = task.getResult().getDocuments();
+                            for (int i = 0; i < value.size(); i++) {
+                                DocumentSnapshot current = value.get(i);
+                                dtos.add(new ActiveEmployeeQueueDto(
+                                        current.getId(),
+                                        current.getString(QUEUE_NAME_KEY),
+                                        current.getString(QUEUE_LOCATION_KEY)
+                                ));
+                            }
+                            emitter.onSuccess(dtos);
+                        }
+                    });
+        });
+    }
+
     public Single<List<ActiveEmployeeQueueDto>> getActiveQueues(String companyId) {
         return Single.create(emitter -> {
             List<ActiveEmployeeQueueDto> dtos = new ArrayList<>();
@@ -153,8 +180,7 @@ public class ProfileRepository {
                                 DocumentSnapshot current = documentSnapshots.get(i);
                                 dtos.add(new UserEmployeeRoleDto(
                                         current.getString(EMPLOYEE_ROLE),
-                                        current.getId(),
-                                        current.getString(COMPANY_PATH)
+                                        current.getId()
                                 ));
                             }
                             emitter.onSuccess(dtos);
@@ -177,7 +203,7 @@ public class ProfileRepository {
         });
     }
 
-    public Completable addEmployeeRole(String companyId, String companyPath) {
+    public Completable addEmployeeRole(String companyId) {
         DocumentReference docRef = service.fireStore
                 .collection(USER_LIST)
                 .document(service.auth.getCurrentUser().getUid())
@@ -186,7 +212,6 @@ public class ProfileRepository {
 
         Map<String, Object> employee = new HashMap<>();
         employee.put(EMPLOYEE_ROLE, WORKER);
-        employee.put(COMPANY_PATH, companyPath);
 
         return Completable.create(emitter -> {
             docRef.set(employee).addOnCompleteListener(task -> {

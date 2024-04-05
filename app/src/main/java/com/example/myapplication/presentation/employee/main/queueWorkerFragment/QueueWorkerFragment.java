@@ -1,8 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueWorkerFragment;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_PATH;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,39 +14,35 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueWorkerBinding;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.delegates.WorkerActiveQueueAdapter;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.delegates.WorkerActiveQueueModel;
-import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.ActiveQueueModel;
+import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.QueueWorkerStateModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.state.QueueWorkerState;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import myapplication.android.ui.listeners.ButtonItemListener;
 
 public class QueueWorkerFragment extends Fragment {
 
     private QueueWorkerViewModel viewModel;
     private FragmentQueueWorkerBinding binding;
-    private String companyPath;
+    private String companyId;
     private final WorkerActiveQueueAdapter adapter = new WorkerActiveQueueAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(QueueWorkerViewModel.class);
-        companyPath = getArguments().getString(COMPANY_PATH);
+        companyId = getArguments().getString(COMPANY_ID);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentQueueWorkerBinding.inflate(inflater, container, false);
-        viewModel.getEmployeeActiveQueues(companyPath);
+        viewModel.getEmployeeActiveQueues(companyId);
         return binding.getRoot();
     }
 

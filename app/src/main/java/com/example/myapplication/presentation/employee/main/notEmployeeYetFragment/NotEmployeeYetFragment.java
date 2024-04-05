@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.main.notEmployeeYetFragment;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,7 +57,7 @@ public class NotEmployeeYetFragment extends Fragment {
         becomeEmployeeLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), BecomeEmployeeActivity.class);
-                intent.putExtra(COMPANY, result.getContents());
+                intent.putExtra(COMPANY_ID, result.getContents());
                 requireActivity().startActivity(intent);
             }
         });

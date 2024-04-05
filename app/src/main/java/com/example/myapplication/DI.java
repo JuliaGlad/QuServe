@@ -11,10 +11,8 @@ import com.example.myapplication.domain.usecase.companyQueue.company.CreateCompa
 import com.example.myapplication.domain.usecase.companyQueue.company.DeleteCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.DeleteEmployeeFromCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompaniesLogosUseCase;
-import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyByStringPathUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyLogoUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyModelUseCase;
-import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyPathUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetSingleCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.UpdateApprovedUseCase;
@@ -23,18 +21,17 @@ import com.example.myapplication.domain.usecase.companyQueue.company.UpdateRoleU
 import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyBytesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.UploadCompanyLogoToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeSnapshotUseCase;
-import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeToQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddEmployeeUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.AddListEmployeesToQueue;
 import com.example.myapplication.domain.usecase.companyQueue.employees.DeleteEmployeeFromQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetAdminsUseCase;
-import com.example.myapplication.domain.usecase.companyQueue.employees.GetCompanyForWorkerByPathUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeePhotoUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeeQrCodeUseCase;
-import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesPhotosUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetEmployeesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.employees.GetSingleEmployeeUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.RemoveAdminFromAllQueuesAsWorkerUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.AddCompanyQueueParticipantsSizeSnapshot;
+import com.example.myapplication.domain.usecase.companyQueue.queues.AddEmployeeToListQueues;
 import com.example.myapplication.domain.usecase.companyQueue.queues.CreateCompanyQueueDocumentUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteCompanyQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteEmployeeFromAllQueuesUseCase;
@@ -58,6 +55,7 @@ import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteActiveQueueUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteEmployeeRoleUseCase;
+import com.example.myapplication.domain.usecase.profile.GetActiveQueuesByEmployeeIdUseCase;
 import com.example.myapplication.domain.usecase.profile.GetActiveQueuesUseCase;
 import com.example.myapplication.domain.usecase.profile.GetBackgroundImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetEmployeeRolesUseCase;
@@ -123,11 +121,11 @@ public class DI {
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
 
     //COMPANY QUEUE USECASE
+    public static AddEmployeeToListQueues addEmployeeToListQueues = new AddEmployeeToListQueues();
     public static RemoveAdminFromAllQueuesAsWorkerUseCase removeAdminFromAllQueuesAsWorkerUseCase = new RemoveAdminFromAllQueuesAsWorkerUseCase();
     public static AddListEmployeesToQueue addListEmployeesToQueue = new AddListEmployeesToQueue();
     public static DeleteEmployeeFromAllQueuesUseCase deleteEmployeeFromAllQueuesUseCase = new DeleteEmployeeFromAllQueuesUseCase();
     public static DeleteEmployeeFromQueueUseCase deleteEmployeeFromQueueUseCase = new DeleteEmployeeFromQueueUseCase();
-    public static AddEmployeeToQueueUseCase addEmployeeToQueueUseCase = new AddEmployeeToQueueUseCase();
     public static GetQueuesParticipantSizeAndNameUseCase getQueuesParticipantSizeAndNameUseCase = new GetQueuesParticipantSizeAndNameUseCase();
     public static DeleteCompanyQueueUseCase deleteCompanyQueueUseCase = new DeleteCompanyQueueUseCase();
     public static CreateCompanyQueueDocumentUseCase createCompanyQueueDocumentUseCase = new CreateCompanyQueueDocumentUseCase();
@@ -142,23 +140,21 @@ public class DI {
     public static UpdateQueueDataUseCase updateQueueDataUseCase = new UpdateQueueDataUseCase();
 
     //COMPANY USER USECASE
+    public static GetSingleEmployeeUseCase getSingleEmployeeUseCase = new GetSingleEmployeeUseCase();
     public static DeleteEmployeeFromCompanyUseCase deleteEmployeeFromCompanyUseCase = new DeleteEmployeeFromCompanyUseCase();
     public static UpdateApprovedUseCase updateApprovedUseCase = new UpdateApprovedUseCase();
     public static GetEmployeePhotoUseCase getEmployeePhotoUseCase = new GetEmployeePhotoUseCase();
-    public static GetEmployeesPhotosUseCase getEmployeesPhotosUseCase = new GetEmployeesPhotosUseCase();
     public static GetCompaniesLogosUseCase getCompaniesLogosUseCase = new GetCompaniesLogosUseCase();
     public static AddEmployeeSnapshotUseCase addEmployeeSnapshotUseCase = new AddEmployeeSnapshotUseCase();
     public static AddCompanySnapshotUseCase addCompanySnapshotUseCase = new AddCompanySnapshotUseCase();
     public static UpdateRoleUseCase updateRoleUseCase = new UpdateRoleUseCase();
     public static UploadCompanyBytesUseCase uploadCompanyBytesUseCase = new UploadCompanyBytesUseCase();
     public static CreateCompanyDocumentUseCase createCompanyDocumentUseCase = new CreateCompanyDocumentUseCase();
-    public static GetCompanyPathUseCase getCompanyPathUseCase = new GetCompanyPathUseCase();
     public static CheckCompanyExistUseCase checkCompanyExistUseCase = new CheckCompanyExistUseCase();
     public static GetCompanyUseCase getCompanyUseCase = new GetCompanyUseCase();
     public static GetSingleCompanyUseCase getSingleCompanyUseCase = new GetSingleCompanyUseCase();
     public static GetEmployeesUseCase getEmployeesUseCase = new GetEmployeesUseCase();
     public static GetEmployeeQrCodeUseCase getEmployeeQrCodeUseCase = new GetEmployeeQrCodeUseCase();
-    public static GetCompanyByStringPathUseCase getCompanyByStringPathUseCase = new GetCompanyByStringPathUseCase();
     public static AddEmployeeUseCase addEmployeeUseCase = new AddEmployeeUseCase();
     public static UploadCompanyLogoToFireStorageUseCase uploadCompanyLogoToFireStorageUseCase = new UploadCompanyLogoToFireStorageUseCase();
     public static GetCompanyLogoUseCase getCompanyLogoUseCase = new GetCompanyLogoUseCase();
@@ -167,7 +163,7 @@ public class DI {
     public static DeleteCompanyUseCase deleteCompanyUseCase = new DeleteCompanyUseCase();
 
     //PROFILE USECASE
-    public static GetCompanyForWorkerByPathUseCase getCompanyForWorkerByPathUseCase = new GetCompanyForWorkerByPathUseCase();
+    public static GetActiveQueuesByEmployeeIdUseCase getActiveQueuesByEmployeeIdUseCase = new GetActiveQueuesByEmployeeIdUseCase();
     public static UpdateEmployeeRoleUseCase updateEmployeeRoleUseCase = new UpdateEmployeeRoleUseCase();
     public static DeleteActiveQueueUseCase deleteActiveQueueUseCase = new DeleteActiveQueueUseCase();
     public static DeleteEmployeeRoleUseCase deleteEmployeeRoleUseCase = new DeleteEmployeeRoleUseCase();

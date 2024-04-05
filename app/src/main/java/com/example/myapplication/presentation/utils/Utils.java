@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.utils;
 
-import android.graphics.Paint;
-import android.os.Bundle;
-
 public class Utils {
+    public static final String ACTIVE_QUEUES_COUNT = "ActiveQueuesCount";
+    public static final String COMPANY_OWNER = "CompanyOwner";
+    public static final String COMPANY_LIST = "CompanyList";
     public static final String COMPANY_PATH = "CompanyPath";
     public static final String ACTIVE_QUEUES_LIST = "ActiveQueues";
     public static final String HOURS_DIVIDER = "H";
@@ -47,10 +47,10 @@ public class Utils {
     public static final String EMPLOYEES = "Employees";
     public static final String EMPLOYEE_NAME = "Name";
     public static final String EMPLOYEE_ROLE = "Role";
-    public static final String COMPANY_SERVICE = "COMPANY_SERVICE";
-    public static final String COMPANY_PHONE = "COMPANY_PHONE";
-    public static final String COMPANY_EMAIL = "COMPANY_EMAIL";
-    public static final String COMPANY_NAME = "COMPANY_NAME";
+    public static final String COMPANY_SERVICE = "CompanyService";
+    public static final String COMPANY_PHONE = "CompanyPhone";
+    public static final String COMPANY_EMAIL = "CompanyEmail";
+    public static final String COMPANY_NAME = "CompanyName";
     public static final String BASIC = "Basic";
     public static final String COMPANY = "Company";
     public static final String PROFILE_UPDATED_AT = "UpdatedAt";
@@ -84,8 +84,6 @@ public class Utils {
     public static final String GENDER_KEY = "Gender";
     public static final String BIRTHDAY_KEY = "Birthday";
     public static final String TAG_EXCEPTION = "Exception";
-    public static final String MALE_KEY = "Male";
-    public static final String FEMALE_KEY = "Female";
     public static final String PAGE_1 = "PAGE_1";
     public static final String PAGE_2 = "PAGE_2";
     public static final String PAGE_3 = "PAGE_3";
@@ -103,41 +101,3 @@ public class Utils {
     public static final String[] stringsTimeArray = {"NO_SET_LIFE_TIME", "3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS", "365 DAYS"};
     public static final String[] stringsServicesArray = {"Queue", "Dining", "On-Board catering"};
 }
-
-
-//case PAGE_3:
-//        buildList(new DelegateItem[]{
-//        new ProgressBarDelegateItem(new ProgressBarModel(1, 70)),
-//        new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.choose_queue_location, 24)),
-//        new EditTextDelegateItem(new EditTextModel(3, R.string.location, queueLocation, InputType.TYPE_CLASS_TEXT, false, stringLocation -> {
-//        })),
-//        new ButtonDelegateItem(new ButtonModel(4, R.string.open_map, () -> {
-//        NavHostFragment.findNavController(fragment).navigate(R.id.action_createQueueFragment_to_mapFragment);
-//        }))
-//        });
-//        break;
-// case PAGE_3:
-//                NavHostFragment.findNavController(fragment)
-//                        .navigate((NavDirections) CreateQueueFragmentDirections.actionCreateQueueFragmentSelf(PAGE.PAGE_2));
-//                break;
-//case PAGE_3:
-//        buildList(new DelegateItem[]{
-//        new ProgressBarDelegateItem(new ProgressBarModel(1, 50)),
-//        new InfoTextItemDelegateItem(new TextViewHeaderModel(2, R.string.invite_users_to_your_queue, 24)),
-//        new EditTextDelegateItem(new EditTextModel(3, R.string.name, InputType.TYPE_CLASS_NUMBER, true, stringInvitedUsers -> {
-//              invitedUser.add(Integer.parseInt(stringInvitedUsers));
-//        })),
-//          new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(4, () -> {
-//          List<DelegateItem> newItems = new ArrayList<>();
-//          newItems.addAll(_items.getValue());
-//          newItems.add(newItems.size()-1, new EditTextDelegateItem(new EditTextModel(5, R.string.name, InputType.TYPE_CLASS_NUMBER, true,
-//        stringInvitedUsers -> {
-//              invitedUser.add(Integer.parseInt(stringInvitedUsers));
-//        })));
-//              _items.setValue(newItems);
-//             }))
-//        });
-//        break;\
-
-
-

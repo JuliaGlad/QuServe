@@ -68,112 +68,10 @@ public class CreateCompanyAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _finished = new MutableLiveData<>(null);
     LiveData<String> finished = _finished;
 
-    public void onPageInit(String page) {
-        switch (page) {
-            case PAGE_1:
-
-                buildList(new DelegateItem[]{
-                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.enter_company_name, 24)),
-                        new EditTextDelegateItem(new EditTextModel(1, R.string.company_name, name, InputType.TYPE_CLASS_TEXT, true, stringName -> {
-                            name = stringName;
-                        }))
-                });
-                break;
-            case PAGE_2:
-                buildList(new DelegateItem[]{
-                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_work_email, 24)),
-                        new EditTextDelegateItem(new EditTextModel(1, R.string.work_email, email, InputType.TYPE_CLASS_TEXT, true, stringEmail -> {
-                            email = stringEmail;
-                        }))
-                });
-                break;
-            case PAGE_3:
-                buildList(new DelegateItem[]{
-                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_work_phone, 24)),
-                        new EditTextDelegateItem(new EditTextModel(1, R.string.work_phone_number, phoneNumber, InputType.TYPE_CLASS_PHONE, true, stringPhone -> {
-                            phoneNumber = stringPhone;
-                        }))
-                });
-                break;
-
-            case PAGE_4:
-                buildList(new DelegateItem[]{
-                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.choose_service, 24)),
-                        new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(1, R.array.services, R.string.select_item, serviceString -> {
-                            for (String item : stringsServicesArray) {
-                                if (serviceString.equals(item)) {
-                                    service = item;
-                                    break;
-                                }
-                            }
-                        }))
-                });
-                break;
-        }
-
-    }
-
-    public void navigateNext(String page, Fragment fragment) {
-        switch (page) {
-            case PAGE_1:
-                if (name == null) {
-                    Snackbar.make(fragment.getView(), "You field is required!", Snackbar.LENGTH_LONG).show();
-                } else {
-                    NavHostFragment.findNavController(fragment)
-                            .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_2));
-                }
-                break;
-            case PAGE_2:
-                if (email == null) {
-                    Snackbar.make(fragment.getView(), "You field is required!", Snackbar.LENGTH_LONG).show();
-                }
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_3));
-                break;
-            case PAGE_3:
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_4));
-                break;
-
-            case PAGE_4:
-                if (service == null) {
-                    Snackbar.make(fragment.getView(), "You field is required!", Snackbar.LENGTH_LONG).show();
-                } else {
-                    initQueueData(fragment);
-                }
-                break;
-        }
-    }
-
-    public void navigateBack(String page, Fragment fragment) {
-        switch (page) {
-            case PAGE_1:
-                setArgumentsNull();
-                fragment.requireActivity().finish();
-                break;
-            case PAGE_2:
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_1));
-                break;
-            case PAGE_3:
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_2));
-                break;
-            case PAGE_4:
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_3));
-                break;
-            case PAGE_5:
-                NavHostFragment.findNavController(fragment)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_4));
-        }
-    }
-
-    private void initQueueData(Fragment fragment) {
+    void initQueueData() {
         companyID = generateID();
-        String path = DI.getCompanyPathUseCase.invoke(companyID);
         createQueueDocument(companyID, name, email, phoneNumber, service);
-        generateQrCode(path, fragment);
+        generateQrCode();
     }
 
     private void createQueueDocument(String companyID, String name, String email, String phone, String companyService) {
@@ -202,13 +100,13 @@ public class CreateCompanyAccountViewModel extends ViewModel {
         phoneNumber = null;
     }
 
-    private void generateQrCode(String path, Fragment fragment) {
+    private void generateQrCode() {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         try {
 
-            BitMatrix bitMatrix = multiFormatWriter.encode(path, BarcodeFormat.QR_CODE, 300, 300);
+            BitMatrix bitMatrix = multiFormatWriter.encode(companyID, BarcodeFormat.QR_CODE, 300, 300);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
@@ -222,23 +120,6 @@ public class CreateCompanyAccountViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
-
-                            Data data = new Data.Builder()
-                                    .putString(COMPANY_ID, companyID)
-                                    .build();
-
-                            Constraints constraints = new Constraints.Builder()
-                                    .setRequiresDeviceIdle(false)
-                                    .build();
-
-                            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(QueueTimeWorker.class)
-                                    .setInputData(data)
-                                    .setConstraints(constraints)
-                                    .setInitialDelay(10, TimeUnit.MINUTES)
-                                    .build();
-
-                            WorkManager.getInstance(fragment.requireContext()).enqueue(request);
-
                             _finished.postValue(companyID);
                         }
 
@@ -251,11 +132,6 @@ public class CreateCompanyAccountViewModel extends ViewModel {
         } catch (WriterException e) {
             e.printStackTrace();
         }
-    }
-
-    private void buildList(DelegateItem[] items) {
-        List<DelegateItem> list = Arrays.asList(items);
-        _items.postValue(list);
     }
 
 }

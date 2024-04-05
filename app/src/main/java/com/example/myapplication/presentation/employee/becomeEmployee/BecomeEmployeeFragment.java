@@ -24,7 +24,7 @@ public class BecomeEmployeeFragment extends Fragment {
 
     private BecomeEmployeeViewModel viewModel;
     private FragmentBecomeEmployeeBinding binding;
-    private String path, companyId;
+    private String companyId;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,10 +32,10 @@ public class BecomeEmployeeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BecomeEmployeeViewModel.class);
         binding = FragmentBecomeEmployeeBinding.inflate(inflater, container, false);
 
-        path = getActivity().getIntent().getStringExtra(COMPANY);
+        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
 
-        if (path != null) {
-           viewModel.getCompany(path);
+        if (companyId != null) {
+           viewModel.getCompany(companyId);
         }
 
         return binding.getRoot();
@@ -52,7 +52,7 @@ public class BecomeEmployeeFragment extends Fragment {
 
     private void initYesButton() {
         binding.buttonYes.setOnClickListener(v -> {
-            viewModel.addEmployee(path, companyId);
+            viewModel.addEmployee(companyId);
         });
     }
 
@@ -72,10 +72,6 @@ public class BecomeEmployeeFragment extends Fragment {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_becomeEmployeeFragment_to_successfullyBecomeEmployeeFragment, bundle);
             }
-        });
-
-        viewModel.companyId.observe(getViewLifecycleOwner(), string -> {
-            companyId = string;
         });
 
         viewModel.companyName.observe(getViewLifecycleOwner(), string -> {

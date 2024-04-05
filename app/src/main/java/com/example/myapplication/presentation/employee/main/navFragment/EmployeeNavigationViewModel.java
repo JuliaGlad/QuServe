@@ -70,8 +70,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
                             UserEmployeeModel current = userEmployeeModels.get(i);
                             models.add(new EmployeeRoleModel(
                                     current.getRole(),
-                                    current.getCompanyId(),
-                                    current.getCompanyPath()
+                                    current.getCompanyId()
                             ));
                         }
                         _roles.postValue(models);

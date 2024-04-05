@@ -41,7 +41,7 @@ public class QueueAdminFragment extends Fragment {
         binding.buttonCompanyWorkers.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_employee_list, requireView().getContext().getTheme()));
 
         binding.buttonCompanyWorkers.item.setOnClickListener(v -> {
-
+            ((MainActivity)requireActivity()).openWorkerManagerActivity(companyId);
         });
     }
 

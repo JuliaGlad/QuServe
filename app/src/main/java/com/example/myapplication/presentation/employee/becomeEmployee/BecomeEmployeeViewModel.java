@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.domain.model.common.ImageModel;
+import com.example.myapplication.domain.model.company.CompanyNameAndEmailModel;
 import com.example.myapplication.domain.model.company.CompanyNameIdModel;
 import com.example.myapplication.domain.model.profile.UserEmailAndNameModel;
 import com.google.android.gms.tasks.Task;
@@ -26,22 +27,17 @@ public class BecomeEmployeeViewModel extends ViewModel {
     private final MutableLiveData<Uri> _image = new MutableLiveData<>();
     LiveData<Uri> image = _image;
 
-    private final MutableLiveData<String> _companyId = new MutableLiveData<>(null);
-    LiveData<String> companyId = _companyId;
-
     private final MutableLiveData<String> _companyName = new MutableLiveData<>();
     LiveData<String> companyName = _companyName;
 
     private final MutableLiveData<Boolean> _isEmployee = new MutableLiveData<>(false);
     LiveData<Boolean> isEmployee = _isEmployee;
 
-    public void getCompany(String path) {
-        DI.getCompanyByStringPathUseCase.invoke(path)
-                .flatMap(companyNameIdModel -> {
-                    _companyName.postValue(companyNameIdModel.getName());
-                    _companyId.postValue(companyNameIdModel.getId());
-                    name = companyNameIdModel.getName();
-                    return DI.getEmployeeQrCodeUseCase.invoke(companyNameIdModel.getId());
+    public void getCompany(String companyId) {
+        DI.getSingleCompanyUseCase.invoke(companyId)
+                .flatMap(companyNameAndEmailModel -> {
+                    _companyName.postValue(companyNameAndEmailModel.getName());
+                    return DI.getEmployeeQrCodeUseCase.invoke(companyId);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<ImageModel>() {
@@ -60,14 +56,13 @@ public class BecomeEmployeeViewModel extends ViewModel {
 
                     }
                 });
-
     }
 
-    public void addEmployee(String path, String companyId) {
+    public void addEmployee(String companyId) {
         DI.getUserEmailAndNameDataUseCase.invoke()
                 .flatMapCompletable(userEmailAndNameModel ->
-                        DI.addEmployeeUseCase.invoke(path, userEmailAndNameModel.getEmail(), userEmailAndNameModel.getName()))
-                .andThen(DI.addEmployeeRoleUseCase.invoke(companyId, path))
+                        DI.addEmployeeUseCase.invoke(companyId, userEmailAndNameModel.getName()))
+                .andThen(DI.addEmployeeRoleUseCase.invoke(companyId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

@@ -1,6 +1,7 @@
 package com.example.myapplication.domain.usecase.companyQueue.employees;
 
 import com.example.myapplication.DI;
+import com.example.myapplication.data.dto.EmployeeDto;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 
 import java.util.ArrayList;
@@ -13,7 +14,12 @@ public class GetEmployeesUseCase {
         List<EmployeeMainModel> list = new ArrayList<>();
         return DI.companyUserRepository.getEmployees(companyId).map(employeeDtos -> {
             for (int i = 0; i < employeeDtos.size(); i++) {
-                list.add(new EmployeeMainModel(employeeDtos.get(i).getName(), employeeDtos.get(i).getId(), employeeDtos.get(i).getRole()));
+                list.add(new EmployeeMainModel(
+                        employeeDtos.get(i).getName(),
+                        employeeDtos.get(i).getId(),
+                        employeeDtos.get(i).getRole(),
+                        employeeDtos.get(i).getActiveQueuesCount()
+                        ));
             }
             return list;
         });

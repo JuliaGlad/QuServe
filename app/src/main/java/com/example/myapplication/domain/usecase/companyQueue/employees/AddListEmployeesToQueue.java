@@ -9,7 +9,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Completable;
 
 public class AddListEmployeesToQueue {
-    public Completable invoke(List<AddWorkerModel> list, String companyId, String queueId){
-        return DI.companyQueueRepository.addListEmployeesToQueue(list, companyId, queueId);
+    public Completable invoke(List<AddWorkerModel> list, String companyId, String queueId, String queueName, String location){
+        return DI.companyQueueRepository.addListEmployeesToQueue(list, companyId, queueId, queueName, location);
     }
 }

@@ -2,7 +2,9 @@ package com.example.myapplication.presentation.companyQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 
 import androidx.activity.OnBackPressedCallback;

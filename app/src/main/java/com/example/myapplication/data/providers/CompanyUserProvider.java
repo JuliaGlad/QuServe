@@ -17,6 +17,7 @@ public class CompanyUserProvider {
             for (int i = 0; i < list.size(); i++) {
                 dtos.add(new CompanyDto(
                         list.get(i).companyId,
+                        list.get(i).ownerId,
                         list.get(i).logo,
                         list.get(i).name,
                         list.get(i).email,
@@ -33,6 +34,7 @@ public class CompanyUserProvider {
     public static void insertCompany(CompanyDto companyDto) {
         App.getInstance().getDatabase().companyDao().insertCompanyUser(new CompanyUserEntity(
                 companyDto.getId(),
+                companyDto.getOwnerId(),
                 companyDto.getCompanyName(),
                 companyDto.getCompanyPhone(),
                 companyDto.getCompanyEmail(),
@@ -46,6 +48,7 @@ public class CompanyUserProvider {
         for (int i = 0; i < list.size(); i++) {
             entities.add(new CompanyUserEntity(
                     list.get(i).getId(),
+                    list.get(i).getOwnerId(),
                     list.get(i).getCompanyName(),
                     list.get(i).getCompanyPhone(),
                     list.get(i).getCompanyEmail(),

@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.employee.main.queueWorkerFragment.model;
+package com.example.myapplication.presentation.employee.main;
 
 public class ActiveQueueModel {
     private final String id;

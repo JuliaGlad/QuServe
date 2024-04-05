@@ -1,13 +1,16 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.APPROVED;
 import static com.example.myapplication.presentation.utils.Utils.COMPANIES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMAIL;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_LIST;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_LOGO;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_OWNER;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_PHONE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_STATE;
@@ -62,7 +65,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class CompanyUserRepository {
 
     public Observable<DocumentSnapshot> addSnapshot(String companyId) {
-        DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId));
+        DocumentReference docRef = service.fireStore
+                .collection(COMPANY_LIST)
+                .document(companyId);
+
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
@@ -73,7 +79,12 @@ public class CompanyUserRepository {
     }
 
     public Observable<DocumentSnapshot> addEmployeeSnapshot(String companyId, String employeeId) {
-        DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId) + "/" + EMPLOYEES + "/" + employeeId);
+        DocumentReference docRef = service.fireStore
+                .collection(COMPANY_LIST)
+                .document(companyId)
+                .collection(EMPLOYEES)
+                .document(employeeId);
+
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
@@ -85,9 +96,7 @@ public class CompanyUserRepository {
 
     public Completable updateRole(String role, String employeeId, String companyId) {
         DocumentReference docRef = service.fireStore
-                .collection(USER_LIST)
-                .document(service.auth.getCurrentUser().getUid())
-                .collection(COMPANY)
+                .collection(COMPANY_LIST)
                 .document(companyId)
                 .collection(EMPLOYEES)
                 .document(employeeId);
@@ -110,24 +119,6 @@ public class CompanyUserRepository {
 
     }
 
-    public Single<CompanyDto> getCompanyByStringPath(String path) {
-        return Single.create(emitter -> {
-            service.fireStore.document(path).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    emitter.onSuccess(new CompanyDto(
-                            document.getId(),
-                            document.getString(URI),
-                            document.getString(COMPANY_NAME),
-                            document.getString(COMPANY_EMAIL),
-                            document.getString(COMPANY_PHONE),
-                            document.getString(COMPANY_SERVICE)
-                    ));
-                }
-            });
-        });
-    }
-
     public Single<List<CompanyDto>> getCompany() {
         List<CompanyDto> local = CompanyUserProvider.getCompanies();
         if (local != null) {
@@ -138,21 +129,22 @@ public class CompanyUserRepository {
             return
                     Single.create(emitter -> {
                         service.fireStore
-                                .collection(USER_LIST)
-                                .document(service.auth.getCurrentUser().getUid())
-                                .collection(COMPANY)
+                                .collection(COMPANY_LIST)
                                 .get().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                                        List<CompanyDto> dtoList = documents.stream().map(
-                                                document -> new CompanyDto(
+                                        List<CompanyDto> dtoList = documents.stream()
+                                                .filter(documentSnapshot ->
+                                                        documentSnapshot.getString(COMPANY_OWNER).equals(service.auth.getCurrentUser().getUid()))
+                                                .map(document -> new CompanyDto(
                                                         document.getId(),
+                                                        document.getString(COMPANY_OWNER),
                                                         document.getString(URI),
                                                         document.getString(COMPANY_NAME),
                                                         document.getString(COMPANY_EMAIL),
                                                         document.getString(COMPANY_PHONE),
                                                         document.getString(COMPANY_SERVICE))
-                                        ).collect(Collectors.toList());
+                                                ).collect(Collectors.toList());
                                         CompanyUserProvider.insertAllCompanies(dtoList);
                                         emitter.onSuccess(dtoList);
                                     } else {
@@ -178,7 +170,10 @@ public class CompanyUserRepository {
     }
 
     public void updateApproved(String companyId) {
-        DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId));
+        DocumentReference docRef = service.fireStore
+                .collection(COMPANY_LIST)
+                .document(companyId);
+
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 docRef.update(COMPANY_STATE, APPROVED);
@@ -189,13 +184,12 @@ public class CompanyUserRepository {
     public void createCompanyDocument(String companyID, String name, String email, String
             phone, String companyService) {
         DocumentReference docRef = service.fireStore
-                .collection(USER_LIST)
-                .document(service.auth.getCurrentUser().getUid())
-                .collection(COMPANY)
+                .collection(COMPANY_LIST)
                 .document(companyID);
 
         Map<String, Object> company = new HashMap<>();
 
+        company.put(COMPANY_OWNER, service.auth.getCurrentUser().getUid());
         company.put(COMPANY_NAME, name);
         company.put(COMPANY_EMAIL, email);
         company.put(COMPANY_PHONE, phone);
@@ -205,24 +199,19 @@ public class CompanyUserRepository {
 
         docRef.set(company);
 
-        CompanyUserProvider.insertCompany(new CompanyDto(companyID, String.valueOf(Uri.EMPTY), name, email, phone, companyService));
-    }
-
-    public String getCompanyPath(String companyID) {
-        return service.fireStore
-                .collection(USER_LIST)
-                .document(service.auth.getCurrentUser().getUid())
-                .collection(COMPANY)
-                .document(companyID)
-                .getPath();
+        CompanyUserProvider.insertCompany(new CompanyDto(
+                companyID,
+                service.auth.getCurrentUser().getUid(),
+                String.valueOf(Uri.EMPTY),
+                name, email,
+                phone, companyService)
+        );
     }
 
     public Single<List<EmployeeDto>> getAdmins(String companyId) {
         return Single.create(emitter -> {
             service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .collection(COMPANY)
+                    .collection(COMPANY_LIST)
                     .document(companyId)
                     .collection(EMPLOYEES)
                     .get().addOnCompleteListener(task -> {
@@ -234,8 +223,9 @@ public class CompanyUserRepository {
                                             .map(document -> new EmployeeDto(
                                                     document.getString(EMPLOYEE_NAME),
                                                     document.getId(),
-                                                    document.getString(EMPLOYEE_ROLE))
-                                            ).collect(Collectors.toList())
+                                                    document.getString(EMPLOYEE_ROLE),
+                                                    document.getString(ACTIVE_QUEUES_COUNT)
+                                            )).collect(Collectors.toList())
                             );
                         }
                     });
@@ -245,9 +235,7 @@ public class CompanyUserRepository {
     public Single<List<EmployeeDto>> getEmployees(String companyId) {
         return Single.create(emitter -> {
             service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .collection(COMPANY)
+                    .collection(COMPANY_LIST)
                     .document(companyId)
                     .collection(EMPLOYEES)
                     .get()
@@ -258,8 +246,9 @@ public class CompanyUserRepository {
                                     documents.stream().map(document -> new EmployeeDto(
                                             document.getString(EMPLOYEE_NAME),
                                             document.getId(),
-                                            document.getString(EMPLOYEE_ROLE))
-                                    ).collect(Collectors.toList()));
+                                            document.getString(EMPLOYEE_ROLE),
+                                            document.getString(ACTIVE_QUEUES_COUNT)
+                                    )).collect(Collectors.toList()));
                         }
                     });
         });
@@ -268,13 +257,17 @@ public class CompanyUserRepository {
     public Single<Boolean> checkCompany() {
         return Single.create(emitter -> {
             service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .collection(COMPANY)
+                    .collection(COMPANY_LIST)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            emitter.onSuccess(task.getResult().size() > 0);
+                            List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                            for (int i = 0; i < snapshots.size(); i++) {
+                                if (Objects.equals(snapshots.get(i).getString(COMPANY_OWNER), service.auth.getCurrentUser().getUid())) {
+                                    emitter.onSuccess(true);
+                                }
+                            }
+                            emitter.onSuccess(false);
                         }
                     });
         });
@@ -291,9 +284,12 @@ public class CompanyUserRepository {
         });
     }
 
-    public Completable addEmployee(String path, String name, String email) {
+    public Completable addEmployee(String companyId, String name) {
         return Completable.create(emitter -> {
-            DocumentReference docRef = service.fireStore.document(path);
+            DocumentReference docRef = service.fireStore
+                    .collection(COMPANY_LIST)
+                    .document(companyId);
+
             DocumentReference employeeRef = docRef
                     .collection(EMPLOYEES)
                     .document(service.auth.getCurrentUser().getUid());
@@ -302,7 +298,6 @@ public class CompanyUserRepository {
 
             employee.put(EMPLOYEE_NAME, name);
             employee.put(EMPLOYEE_ROLE, WORKER);
-            employee.put(EMPLOYEE_EMAIL, email);
 
             employeeRef.set(employee).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -315,13 +310,9 @@ public class CompanyUserRepository {
 
     public Single<String> deleteEmployeeFromCompany(String userId, String companyId) {
         return Single.create(emitter -> {
-            DocumentReference docRef = service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .collection(COMPANY)
-                    .document(companyId);
-
-            DocumentReference employeeRef = docRef
+            DocumentReference employeeRef = service.fireStore
+                    .collection(COMPANY_LIST)
+                    .document(companyId)
                     .collection(EMPLOYEES)
                     .document(userId);
 
@@ -344,7 +335,10 @@ public class CompanyUserRepository {
                 reference.putFile(uri)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId));
+                                DocumentReference docRef = service.fireStore
+                                        .collection(COMPANY_LIST)
+                                        .document(companyId);
+
                                 docRef.update(URI, String.valueOf(uri)).addOnCompleteListener(task1 -> {
                                     CompanyUserProvider.updateUri(companyId, String.valueOf(uri));
                                     emitter.onComplete();
@@ -377,36 +371,6 @@ public class CompanyUserRepository {
             }
         });
 
-    }
-
-    public Single<List<Task<Uri>>> getEmployeesPhotos(String companyId) {
-        return Single.create(emitter -> {
-            List<Task<Uri>> listTask = new ArrayList<>();
-            getEmployees(companyId)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(new SingleObserver<List<EmployeeDto>>() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onSuccess(@NonNull List<EmployeeDto> employeeDtos) {
-                            for (int i = 0; i < employeeDtos.size(); i++) {
-                                StorageReference local = service.storageReference
-                                        .child(PROFILE_IMAGES)
-                                        .child(PROFILE_PHOTO + employeeDtos.get(i).getId());
-                                listTask.add(local.getDownloadUrl());
-                            }
-                            emitter.onSuccess(listTask);
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                        }
-                    });
-        });
     }
 
     public Single<List<Task<Uri>>> getCompaniesLogos() {
@@ -459,7 +423,10 @@ public class CompanyUserRepository {
 
     public Completable updateCompanyData(String companyId, String companyName, String phone) {
         return Completable.create(emitter -> {
-            DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId));
+            DocumentReference docRef = service.fireStore
+                    .collection(COMPANY_LIST)
+                    .document(companyId);
+
             FieldValue timestamp = FieldValue.serverTimestamp();
             docRef.update(
                     COMPANY_NAME, companyName,
@@ -476,7 +443,10 @@ public class CompanyUserRepository {
 
     public Completable deleteCompany(String companyId) {
         return Completable.create(emitter -> {
-            DocumentReference docRef = service.fireStore.document(getCompanyPath(companyId));
+            DocumentReference docRef = service.fireStore
+                    .collection(COMPANY_LIST)
+                    .document(companyId);
+
             docRef.delete().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     CompanyUserProvider.deleteCompany(companyId);

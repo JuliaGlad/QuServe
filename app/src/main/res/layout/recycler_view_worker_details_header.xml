@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp">
+
+    <ImageView
+        android:id="@+id/employee_photo"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_round_add_photo_24" />
+
+    <TextView
+        android:id="@+id/employee_name"
+        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:text="Employee Name"
+        app:layout_constraintEnd_toStartOf="@+id/employee_photo"
+        app:layout_constraintTop_toTopOf="@+id/employee_photo" />
+
+    <TextView
+        android:id="@+id/employee_role"
+        style="@style/TextAppearance.Material3.BodyLarge.Dialog.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="Employee_role"
+        app:layout_constraintEnd_toStartOf="@+id/employee_photo"
+        app:layout_constraintTop_toBottomOf="@+id/employee_name" />
+</androidx.constraintlayout.widget.ConstraintLayout>

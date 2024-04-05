@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.employee.main.queueWorkerFragment.model;
 
+import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
+
 import java.util.List;
 
 public class QueueWorkerStateModel {

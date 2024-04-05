@@ -15,7 +15,7 @@ public class GetAdminsUseCase {
         List<EmployeeMainModel> list = new ArrayList<>();
         return DI.companyUserRepository.getAdmins(companyId).map(employeeDtos -> {
             for (int i = 0; i < employeeDtos.size(); i++) {
-                list.add(new EmployeeMainModel(employeeDtos.get(i).getName(), employeeDtos.get(i).getId(), ADMIN));
+                list.add(new EmployeeMainModel(employeeDtos.get(i).getName(), employeeDtos.get(i).getId(), ADMIN, "0"));
             }
             return list;
         });

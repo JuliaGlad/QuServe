@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.queue.main.basicUser;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
 import androidx.activity.result.ActivityResultLauncher;
 
@@ -75,7 +76,7 @@ public class BasicUserServiceFragment extends Fragment {
         becomeEmployeeLauncher = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), BecomeEmployeeActivity.class);
-                intent.putExtra(COMPANY, result.getContents());
+                intent.putExtra(COMPANY_ID, result.getContents());
                 requireActivity().startActivity(intent);
             }
         });

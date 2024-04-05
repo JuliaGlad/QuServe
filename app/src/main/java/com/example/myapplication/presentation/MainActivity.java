@@ -24,6 +24,7 @@ import com.example.myapplication.presentation.companyQueue.createQueue.CreateCom
 import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerActivity;
 import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerFragment;
+import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity;
@@ -78,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openWorkerManagerActivity(String companyId){
+        Intent intent = new Intent(this, WorkerManagerActivity.class);
+        intent.putExtra(COMPANY_ID, companyId);
+        startActivity(intent);
     }
 
     public void openQueueActivity(){

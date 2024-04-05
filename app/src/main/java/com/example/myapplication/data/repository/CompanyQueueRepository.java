@@ -1,13 +1,18 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANIES_QUEUES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_LIST;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEES;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
@@ -18,6 +23,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
@@ -29,6 +35,8 @@ import com.example.myapplication.data.dto.EmployeeDto;
 import com.example.myapplication.data.dto.WorkerDto;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
+import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
+import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -53,6 +61,55 @@ import io.reactivex.rxjava3.core.Single;
 
 public class CompanyQueueRepository {
 
+    public Completable addEmployeeToListQueues(List<ActiveQueueModel> queues, String companyId, String employeeId, String employeeName) {
+        return Completable.create(emitter -> {
+
+            CollectionReference collRef = service.fireStore
+                    .collection(QUEUE_LIST)
+                    .document(COMPANIES_QUEUES)
+                    .collection(companyId);
+
+            for (int i = 0; i < queues.size(); i++) {
+                ActiveQueueModel current = queues.get(i);
+                DocumentReference docRef = collRef.document(current.getId())
+                        .collection(WORKERS_LIST)
+                        .document(employeeId);
+
+                Map<String, Object> employee = new HashMap<>();
+                employee.put(EMPLOYEE_NAME, employeeName);
+
+                docRef.set(employee);
+
+                DocumentReference userDoc =
+                        service.fireStore
+                                .collection(USER_LIST)
+                                .document(employeeId)
+                                .collection(EMPLOYEE)
+                                .document(current.getId());
+
+                Map<String, Object> userRole = new HashMap<>();
+                userRole.put(QUEUE_LOCATION_KEY, current.getLocation());
+                userRole.put(QUEUE_NAME_KEY, current.getName());
+
+                userDoc.set(userRole);
+
+                DocumentReference companyEmployeeName = service.fireStore
+                        .collection(COMPANY_LIST)
+                        .document(companyId)
+                        .collection(EMPLOYEES)
+                        .document(employeeId);
+
+                companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
+                    if (taskGetEmployee.isSuccessful()){
+                        int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
+                        companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1));
+                    }
+                });
+            }
+            emitter.onComplete();
+        });
+    }
+
     public Completable removeAdminFromAllQueuesAsWorker(String companyId, String adminId, String role) {
         if (role.equals(ADMIN)) {
             CollectionReference collRef = service.fireStore
@@ -74,11 +131,11 @@ public class CompanyQueueRepository {
                 });
             });
         } else {
-           return Completable.create(CompletableEmitter::onComplete);
+            return Completable.create(CompletableEmitter::onComplete);
         }
     }
 
-    public Completable addListEmployeesToQueue(List<AddWorkerModel> list, String companyId, String queueId) {
+    public Completable addListEmployeesToQueue(List<AddWorkerModel> employee, String companyId, String queueId, String queueName, String location) {
         DocumentReference docRef = service.fireStore
                 .collection(QUEUE_LIST)
                 .document(COMPANIES_QUEUES)
@@ -86,27 +143,45 @@ public class CompanyQueueRepository {
                 .document(queueId);
 
         return Completable.create(emitter -> {
-            for (int i = 0; i < list.size(); i++) {
+            for (int i = 0; i < employee.size(); i++) {
+
+                AddWorkerModel current = employee.get(i);
+
                 DocumentReference workerDoc = docRef
                         .collection(WORKERS_LIST)
-                        .document(list.get(i).getId());
+                        .document(current.getId());
                 Map<String, Object> worker = new HashMap<>();
-                worker.put(EMPLOYEE_NAME, list.get(i).getName());
+                worker.put(EMPLOYEE_NAME, current.getName());
                 workerDoc.set(worker);
 
                 DocumentReference userEmployeeDoc =
                         service.fireStore
                                 .collection(USER_LIST)
-                                .document(list.get(i).getId())
+                                .document(current.getId())
                                 .collection(EMPLOYEE)
                                 .document(companyId)
                                 .collection(ACTIVE_QUEUES_LIST)
                                 .document(queueId);
 
                 Map<String, Object> activeQueue = new HashMap<>();
-                activeQueue.put(QUEUE_NAME_KEY, "Test");
-                activeQueue.put(QUEUE_LOCATION_KEY, "Test");
+                activeQueue.put(QUEUE_NAME_KEY, queueName);
+                activeQueue.put(QUEUE_LOCATION_KEY, location);
                 userEmployeeDoc.set(activeQueue);
+
+                DocumentReference companyEmployeeName = service.fireStore
+                        .collection(COMPANY_LIST)
+                        .document(companyId)
+                        .collection(EMPLOYEES)
+                        .document(current.getId());
+
+                companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
+                    if (taskGetEmployee.isSuccessful()){
+                        int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
+                        companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1)).addOnCompleteListener(taskActiveUpdate -> {
+                            emitter.onComplete();
+                        });
+                    }
+                });
             }
             emitter.onComplete();
         });
@@ -129,44 +204,27 @@ public class CompanyQueueRepository {
                                     int count = Integer.parseInt(Objects.requireNonNull(taskGet.getResult().getString(WORKERS_COUNT)));
                                     docRef.update(WORKERS_COUNT, String.valueOf(count - 1)).addOnCompleteListener(taskUpdate -> {
                                         if (taskUpdate.isSuccessful()) {
-                                            emitter.onComplete();
+                                            DocumentReference companyEmployeeName = service.fireStore
+                                                    .collection(COMPANY_LIST)
+                                                    .document(companyId)
+                                                    .collection(EMPLOYEES)
+                                                    .document(employeeId);
+
+                                                  companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
+                                                        if (taskGetEmployee.isSuccessful()){
+                                                           int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
+                                                           companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues - 1)).addOnCompleteListener(taskActiveUpdate -> {
+                                                               emitter.onComplete();
+                                                           });
+                                                        }
+                                                    });
+
                                         }
                                     });
                                 }
                             });
                         }
                     });
-        });
-    }
-
-    public Completable addEmployeeToQueue(String companyId, String queueId) {
-
-        DocumentReference docRef = service.fireStore
-                .collection(QUEUE_LIST)
-                .document(COMPANIES_QUEUES)
-                .collection(companyId)
-                .document(queueId);
-
-        return Completable.create(emitter -> {
-            DocumentReference workerDoc = docRef
-                    .collection(WORKERS_LIST)
-                    .document(service.auth.getCurrentUser().getUid());
-            Map<String, Object> worker = new HashMap<>();
-            worker.put(EMPLOYEE_NAME, service.auth.getCurrentUser().getDisplayName());
-            workerDoc.set(worker).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    docRef.get().addOnCompleteListener(taskGet -> {
-                        if (taskGet.isSuccessful()) {
-                            int count = Integer.parseInt(Objects.requireNonNull(taskGet.getResult().getString(WORKERS_COUNT)));
-                            docRef.update(WORKERS_COUNT, String.valueOf(count + 1)).addOnCompleteListener(taskUpdate -> {
-                                if (taskUpdate.isSuccessful()) {
-                                    emitter.onComplete();
-                                }
-                            });
-                        }
-                    });
-                }
-            });
         });
     }
 

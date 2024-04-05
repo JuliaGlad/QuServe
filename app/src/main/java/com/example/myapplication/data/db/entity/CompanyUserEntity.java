@@ -12,14 +12,16 @@ public class CompanyUserEntity {
 
     @NonNull
     public String companyId;
+    public String ownerId;
     public String name;
     public String phoneNumber;
     public String email;
     public String service;
     public String logo;
 
-    public CompanyUserEntity(String companyId, String name, String phoneNumber, String email, String service, String logo) {
+    public CompanyUserEntity(String companyId, String ownerId, String name, String phoneNumber, String email, String service, String logo) {
         this.companyId = companyId;
+        this.ownerId = ownerId;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -34,6 +36,10 @@ public class CompanyUserEntity {
     @NonNull
     public String getCompanyId() {
         return companyId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
     }
 
     public String getName() {
