@@ -13,6 +13,7 @@ import com.example.myapplication.domain.usecase.companyQueue.company.DeleteEmplo
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompaniesLogosUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyLogoUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyModelUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.company.GetEmployeeRoleCompanyUseCaseByEmployee;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.GetSingleCompanyUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.company.UpdateApprovedUseCase;
@@ -140,6 +141,7 @@ public class DI {
     public static UpdateQueueDataUseCase updateQueueDataUseCase = new UpdateQueueDataUseCase();
 
     //COMPANY USER USECASE
+    public static GetEmployeeRoleCompanyUseCaseByEmployee getCompanyNameUseCaseByEmployee = new GetEmployeeRoleCompanyUseCaseByEmployee();
     public static GetSingleEmployeeUseCase getSingleEmployeeUseCase = new GetSingleEmployeeUseCase();
     public static DeleteEmployeeFromCompanyUseCase deleteEmployeeFromCompanyUseCase = new DeleteEmployeeFromCompanyUseCase();
     public static UpdateApprovedUseCase updateApprovedUseCase = new UpdateApprovedUseCase();

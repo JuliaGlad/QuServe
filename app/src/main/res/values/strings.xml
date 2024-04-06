@@ -259,4 +259,5 @@
     <string name="are_you_sure_you_want_to_delete_this_worker_from_your_queue">Are you sure you want to delete this worker from your queue?</string>
     <string name="assigned_queues">Assigned queues:</string>
     <string name="worker_details_advise_box_text">View and manage queues assigned to employee</string>
+    <string name="scan_company_qr_code_and_join_their_team">Scan company`s qr-code and join their team</string>
 </resources>

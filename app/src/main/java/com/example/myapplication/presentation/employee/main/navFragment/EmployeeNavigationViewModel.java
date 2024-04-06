@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.employee.main.navFragment;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -73,6 +75,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
                                     current.getCompanyId()
                             ));
                         }
+                        Log.d("Roles size", String.valueOf(models.size()));
                         _roles.postValue(models);
                     }
 

@@ -15,6 +15,7 @@ public class GetEmployeeRolesUseCase {
         return DI.profileRepository.getEmployeeRoles().map(userEmployeeRoleDtos -> {
             for (int i = 0; i < userEmployeeRoleDtos.size(); i++) {
                 UserEmployeeRoleDto current = userEmployeeRoleDtos.get(i);
+
                 models.add(new UserEmployeeModel(current.getRole(), current.getCompanyId()));
             }
             return models;

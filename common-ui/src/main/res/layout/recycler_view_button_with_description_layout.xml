@@ -24,7 +24,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/qr_code"
             app:tint="?colorPrimary" />
 
         <TextView
@@ -49,7 +48,6 @@
             android:layout_marginEnd="20dp"
             android:fontFamily="@font/roboto_medium"
             android:paddingBottom="20dp"
-            android:text="@string/scan_queue_s_qr_code_and_join_it"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"
             app:layout_constraintTop_toBottomOf="@+id/head_line" />

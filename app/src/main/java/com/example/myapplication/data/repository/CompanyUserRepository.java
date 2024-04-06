@@ -134,8 +134,6 @@ public class CompanyUserRepository {
                                     if (task.isSuccessful()) {
                                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                                         List<CompanyDto> dtoList = documents.stream()
-                                                .filter(documentSnapshot ->
-                                                        documentSnapshot.getString(COMPANY_OWNER).equals(service.auth.getCurrentUser().getUid()))
                                                 .map(document -> new CompanyDto(
                                                         document.getId(),
                                                         document.getString(COMPANY_OWNER),
