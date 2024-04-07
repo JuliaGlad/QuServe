@@ -1,6 +1,11 @@
 package com.example.myapplication.presentation.utils.countdownTimer;
 
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
+import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
+import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,6 +17,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -41,9 +47,9 @@ public class TimerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        timeLeft = intent.getStringExtra("TIME_LEFT");
-        timeMillis = intent.getLongExtra("TIME_MILLIS", 0);
-        queueId = intent.getStringExtra("QUEUE_ID");
+        timeLeft = intent.getStringExtra(TIME_LEFT);
+        timeMillis = intent.getLongExtra(TIME_MILLIS, 0);
+        queueId = intent.getStringExtra(QUEUE_ID);
         setupNotification();
         startCountDown();
         return super.onStartCommand(intent, flags, startId);
@@ -57,8 +63,7 @@ public class TimerService extends Service {
 
     private Notification setupNotification() {
         Intent intent = new Intent(this, QueueDetailsActivity.class);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "TIMER_NOTIFICATION")
                 .setSmallIcon(R.drawable.baseline_hourglass_bottom_24)
@@ -69,6 +74,7 @@ public class TimerService extends Service {
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         createNotificationChannel(builder);
+
         return builder.build();
     }
 
@@ -93,44 +99,46 @@ public class TimerService extends Service {
 
             @Override
             public void onFinish() {
+                PROGRESS = 0;
                 stopForeground(true);
                 stopSelf();
 
-                DI.continueQueueUseCase.invoke(queueId)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(@NonNull Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                initNotificationWorker();
-                                initPauseAvailableWorker();
-                            }
-
-                            @Override
-                            public void onError(@NonNull Throwable e) {
-
-                            }
-                        });
+//                DI.continueQueueUseCase.invoke(queueId)
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe(new CompletableObserver() {
+//                            @Override
+//                            public void onSubscribe(@NonNull Disposable d) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onComplete() {
+//                                initNotificationWorker();
+//                            }
+//
+//                            @Override
+//                            public void onError(@NonNull Throwable e) {
+//
+//                            }
+//                        });
             }
 
         }.start();
     }
 
     private void updateTimer() {
-        int minutes = (int) (timeMillis / 1000) / 60;
-        int seconds = (int) (timeMillis / 1000) % 60;
-        timeLeft = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
+        long hours = (timeMillis / 1000) / 3600;
+        long minutes = ((timeMillis / 1000) % 3600) / 60;
+        long seconds = (timeMillis / 1000) % 60;
+
+        timeLeft = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
         CURRENT_TIMER_TIME = timeMillis;
     }
 
     private void updateNotification() {
         Notification notification = setupNotification();
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(5, notification);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(5, notification);
     }
 
     private void initNotificationWorker() {
@@ -142,21 +150,6 @@ public class TimerService extends Service {
                 .setConstraints(constraints)
                 .setInitialDelay(5, TimeUnit.MINUTES)
                 .addTag("StopPause")
-                .build();
-
-        WorkManager.getInstance(getApplicationContext()).enqueue(request);
-    }
-
-    private void initPauseAvailableWorker() {
-
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresDeviceIdle(false)
-                .build();
-
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(PauseAvailableWorker.class)
-                .setConstraints(constraints)
-                .setInitialDelay(2, TimeUnit.HOURS)
-                .addTag("PauseAvailable")
                 .build();
 
         WorkManager.getInstance(getApplicationContext()).enqueue(request);

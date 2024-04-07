@@ -1,5 +1,12 @@
 package com.example.myapplication.presentation.profile.profileLogin;
 
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +17,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -17,6 +25,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentProfileBinding;
 import com.example.myapplication.presentation.dialogFragments.checkEmail.CheckEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.resetPassword.ResetPasswordDialogFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
@@ -80,11 +89,26 @@ public class ProfileLoginFragment extends Fragment {
             if (password.isEmpty()) {
                 viewModel.sendPasswordError(getResources().getString(R.string.password_is_required));
             }
-            viewModel.signIn(email, password, this);
+            viewModel.signIn(email, password);
         });
     }
 
     private void setupObservers() {
+
+        viewModel.signedIn.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.logged_container, BasicUserFragment.class, null)
+                        .commit();
+            }
+        });
+
         viewModel.emailError.observe(getViewLifecycleOwner(), errorMessage -> {
             binding.textLayoutEmail.setError(errorMessage);
         });

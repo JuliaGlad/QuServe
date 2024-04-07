@@ -193,8 +193,6 @@ public class BasicUserFragment extends Fragment {
                 ((MainActivity) requireActivity()).openCreateCompanyActivity();
             }
             ));
-
-
         }
     }
 

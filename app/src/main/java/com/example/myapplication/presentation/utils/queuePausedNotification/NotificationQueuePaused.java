@@ -19,13 +19,11 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.queue.QueueModel;
-import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 

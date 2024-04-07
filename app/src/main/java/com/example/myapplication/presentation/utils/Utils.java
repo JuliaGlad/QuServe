@@ -1,6 +1,14 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String TIME_LEFT = "TimeLeft";
+    public static final String TIME_MILLIS = "TimeMillis";
+    public static final String PEOPLE_PASSED_15 = "PeoplePassed(15min)";
+    public static final String ANONYMOUS = "Anonymous";
+    public static final String APP_STATE = "AppState";
+    public static final String APP_PREFERENCES = "AppPreferences";
+    public static final String EMPLOYEE_DATA = "EmployeeData";
+    public static final String WAITER_DATA = "WaiterData";
     public static final String ACTIVE_QUEUES_COUNT = "ActiveQueuesCount";
     public static final String COMPANY_OWNER = "CompanyOwner";
     public static final String COMPANY_LIST = "CompanyList";
@@ -57,6 +65,8 @@ public class Utils {
     public static final String MID_TIME_WAITING = "MidTimeWaiting";
     public static boolean PAUSE_AVAILABLE = true;
     public static long CURRENT_TIMER_TIME = 0;
+    public static String PROGRESS_MAX = "ProgressMax";
+    public static int PROGRESS = 0;
     public static final String INTENT_TIME_PAUSED = "TIME_PAUSED";
     public static final String OWN_QUEUE = "OwnQueue";
     public static final String PARTICIPATE_IN_QUEUE = "ParticipateInQueue";

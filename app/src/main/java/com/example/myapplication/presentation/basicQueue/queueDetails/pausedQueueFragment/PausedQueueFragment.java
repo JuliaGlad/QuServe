@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.ActivityManager;
@@ -47,9 +48,8 @@ public class PausedQueueFragment extends Fragment {
 
     private PausedQueueFragmentViewModel viewModel;
     private FragmentPausedQueueBinding binding;
-    private long timeMillis, timeSelected;
+    private long timeMillis;
     private String timeLeft, queueId;
-    private long progress = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +60,9 @@ public class PausedQueueFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
+        binding = FragmentPausedQueueBinding.inflate(inflater, container, false);
+
         if (getArguments() != null) {
             queueId = getArguments().getString(QUEUE_ID);
             long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
@@ -67,15 +70,11 @@ public class PausedQueueFragment extends Fragment {
             long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
 
             timeMillis = hours + minutes + seconds;
-            timeSelected = hours + minutes + seconds;
-            Log.d("Progress", String.valueOf(progress));
-            Log.d("Progress Max", String.valueOf(timeMillis));
+            PROGRESS = (int) timeMillis;
         } else {
             timeMillis = CURRENT_TIMER_TIME;
         }
 
-
-        binding = FragmentPausedQueueBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -84,18 +83,18 @@ public class PausedQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupObserves();
-        viewModel.getQueue();
+       // viewModel.getQueue();
         initBox();
-        binding.indicator.setMax((int) timeMillis);
-        binding.indicator.setProgress((int) timeMillis);
-        Log.d("Indicator Max on create", "" + binding.indicator.getMax());
+        Log.d("Progress", String.valueOf(PROGRESS));
+        binding.indicator.setMax((int) PROGRESS);
+        binding.indicator.setProgress(PROGRESS);
         initBackButton();
         initStopButton();
         startCountDown();
     }
 
     private void initBox() {
-        binding.layoutBox.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_stars, getActivity().getTheme()));
+        binding.layoutBox.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sparkles, getActivity().getTheme()));
         binding.layoutBox.body.setText(R.string.have_a_little_rest_and_then_come_back);
     }
 
@@ -109,7 +108,7 @@ public class PausedQueueFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (!checkForegroundServiceRunning()) {
-            ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId);
+           ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId);
         }
     }
 
@@ -134,9 +133,8 @@ public class PausedQueueFragment extends Fragment {
         new CountDownTimer(timeMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                progress += 300;
                 timeMillis = millisUntilFinished;
-                binding.indicator.setProgress((int) (timeSelected - progress));
+                binding.indicator.setProgress((int) (timeMillis - 1000));
                 updateTimer();
             }
 
@@ -183,10 +181,10 @@ public class PausedQueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.queueId.observe(getViewLifecycleOwner(), queueId -> {
-            this.queueId = queueId;
-            startCountDown();
-        });
+//        viewModel.queueId.observe(getViewLifecycleOwner(), queueId -> {
+//            this.queueId = queueId;
+//            startCountDown();
+//        });
 
         viewModel.isContinued.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {

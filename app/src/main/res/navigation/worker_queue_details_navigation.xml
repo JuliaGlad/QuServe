@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/worker_queue_details_navigation"
+    app:startDestination="@id/workerQueueDetailsFragment">
+
+    <fragment
+        android:id="@+id/pauseWorkerQueueFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.pauseQueue.PauseWorkerQueueFragment"
+        tools:layout="fragment_pause_queue">
+        <action
+            android:id="@+id/action_pauseWorkerQueueFragment_to_workerQueueDetailsFragment"
+            app:destination="@id/workerQueueDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/workerQueueDetailsFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsFragment"
+        android:label="fragment_worker_queue_details"
+        tools:layout="@layout/fragment_worker_queue_details" >
+        <action
+            android:id="@+id/action_workerQueueDetailsFragment_to_pauseWorkerQueueFragment"
+            app:destination="@id/pauseWorkerQueueFragment" />
+        <action
+            android:id="@+id/action_workerQueueDetailsFragment_to_workerParticipantsListFragment"
+            app:destination="@id/participantsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/participantsListFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.queueDetails.participantsList.CompanyQueueParticipantsListFragment"
+        android:label="fragment_company_queue_participants_list"
+        tools:layout="@layout/fragment_company_queue_participants_list" >
+        <action
+            android:id="@+id/action_participantsListFragment_to_workerQueueDetailsFragment"
+            app:destination="@id/workerQueueDetailsFragment" />
+    </fragment>
+</navigation>

@@ -29,12 +29,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  */
 public class ProfileLoginViewModel extends ViewModel {
 
+    private final MutableLiveData<Boolean> _signedIn = new MutableLiveData<>(false);
+    LiveData<Boolean> signedIn = _signedIn;
+
     private final MutableLiveData<String> _emailError = new MutableLiveData<>(null);
     LiveData<String> emailError = _emailError;
 
     private final MutableLiveData<String> _passwordError = new MutableLiveData<>(null);
     LiveData<String> passwordError = _passwordError;
-    public void signIn(String email, String password, ProfileLoginFragment fragment) {
+
+
+    public void signIn(String email, String password) {
         if (!email.isEmpty() && !password.isEmpty()) {
             DI.signInWithEmailAndPasswordUseCase.invoke(email, password)
                     .subscribeOn(Schedulers.io())
@@ -46,22 +51,12 @@ public class ProfileLoginViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString(STATE, BASIC);
-
-                            FragmentManager fragmentManager = fragment.getActivity().getSupportFragmentManager();
-
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.logged_container, BasicUserFragment.class, bundle)
-                                    .commit();
-
+                            _signedIn.postValue(true);
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
                             Log.e("Exception", e.getMessage());
-                            Snackbar.make(fragment.requireView(), e.getMessage(), BaseTransientBottomBar.LENGTH_LONG).show();
                         }
                     });
         }

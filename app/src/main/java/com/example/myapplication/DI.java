@@ -37,12 +37,17 @@ import com.example.myapplication.domain.usecase.companyQueue.queues.CreateCompan
 import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteCompanyQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteEmployeeFromAllQueuesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompaniesQueuesUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyInProgressModelUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueMidTmeModelUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueParticipantsListUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueFinishTimeModelUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueByIdUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueNameAndLocationById;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueWorkersListUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueuesParticipantSizeAndNameUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.NextCompanyQueueParticipantUpdateListUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.PauseCompanyQueueUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateCompanyQueueMidTimeUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateQueueDataUseCase;
 import com.example.myapplication.domain.usecase.profile.AddEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
@@ -108,7 +113,6 @@ import com.example.myapplication.domain.usecase.queue.usecase.OnParticipantLeftU
 import com.example.myapplication.domain.usecase.queue.usecase.OnPausedUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.PauseQueueUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.RemoveParticipantById;
-import com.example.myapplication.domain.usecase.queue.usecase.UpdateInProgressUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UpdateMidTimeUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadBytesToFireStorageUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.UploadFileToFireStorageUseCase;
@@ -122,6 +126,11 @@ public class DI {
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
 
     //COMPANY QUEUE USECASE
+    public static GetCompanyInProgressModelUseCase getCompanyInProgressModelUseCase = new GetCompanyInProgressModelUseCase();
+    public static PauseCompanyQueueUseCase pauseCompanyQueueUseCase = new PauseCompanyQueueUseCase();
+    public static UpdateCompanyQueueMidTimeUseCase updateCompanyQueueMidTimeUseCase = new UpdateCompanyQueueMidTimeUseCase();
+    public static GetCompanyQueueMidTmeModelUseCase getCompanyQueueMidTmeModelUseCase = new GetCompanyQueueMidTmeModelUseCase();
+    public static GetCompanyQueueFinishTimeModelUseCase getCompanyQueueTimeModelUseCase = new GetCompanyQueueFinishTimeModelUseCase();
     public static AddEmployeeToListQueues addEmployeeToListQueues = new AddEmployeeToListQueues();
     public static RemoveAdminFromAllQueuesAsWorkerUseCase removeAdminFromAllQueuesAsWorkerUseCase = new RemoveAdminFromAllQueuesAsWorkerUseCase();
     public static AddListEmployeesToQueue addListEmployeesToQueue = new AddListEmployeesToQueue();
@@ -216,7 +225,6 @@ public class DI {
     public static ContinueQueueUseCase continueQueueUseCase = new ContinueQueueUseCase();
     public static PauseQueueUseCase pauseQueueUseCase = new PauseQueueUseCase();
     public static onParticipantServedUseCase onParticipantServedUseCase = new onParticipantServedUseCase();
-    public static UpdateInProgressUseCase updateInProgressUseCase = new UpdateInProgressUseCase();
     public static GetQueueTimeModelUseCase getQueueTimeModelUseCase = new GetQueueTimeModelUseCase();
     public static FinishQueueUseCase finishQueueUseCase = new FinishQueueUseCase();
     public static GetQueueByAuthorUseCase getQueueByAuthorUseCase = new GetQueueByAuthorUseCase();

@@ -1,5 +1,10 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
+import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -45,9 +50,9 @@ public class QueueDetailsActivity extends AppCompatActivity {
 
     public void startTimerForegroundService(long time, String timeLeft, String queueId){
         Intent intent = new Intent(this, TimerService.class);
-        intent.putExtra("TIME_MILLIS", time);
-        intent.putExtra("QUEUE_ID", queueId);
-        intent.putExtra("TIME_LEFT", timeLeft);
+        intent.putExtra(TIME_MILLIS, time);
+        intent.putExtra(QUEUE_ID, queueId);
+        intent.putExtra(TIME_LEFT, timeLeft);
         startService(intent);
     }
 

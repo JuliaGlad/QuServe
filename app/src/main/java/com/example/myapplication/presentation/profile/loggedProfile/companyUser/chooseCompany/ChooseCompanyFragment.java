@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany;
 
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
@@ -8,7 +10,9 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_MANAGER;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -138,15 +142,17 @@ public class ChooseCompanyFragment extends Fragment {
         }
     }
 
-    private void initRecycler(){
+    private void initRecycler() {
         for (int i = 0; i < models.size(); i++) {
             String id = models.get(i).getId();
             delegates.add(new CompanyListItemDelegateItem(new CompanyListItemDelegateModel(
                     i, models.get(i).getName(),
                     imageList.get(i), () -> {
-                        App.changeState(COMPANY, id);
-                        initNavigation(id);
-                    })
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
+                sharedPreferences.edit().putString(COMPANY_ID, id).apply();
+                initNavigation(id);
+            })
             ));
         }
         mainAdapter.submitList(delegates);

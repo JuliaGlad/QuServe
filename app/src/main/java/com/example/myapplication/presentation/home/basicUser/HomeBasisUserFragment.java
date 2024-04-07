@@ -36,9 +36,9 @@ import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicU
 import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
 import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
-import com.example.myapplication.presentation.queue.JoinQueueFragment.JoinQueueActivity;
-import com.example.myapplication.presentation.queue.main.ScanCode;
-import com.example.myapplication.presentation.queue.main.queue.QueueActivity;
+import com.example.myapplication.presentation.service.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.service.main.ScanCode;
+import com.example.myapplication.presentation.service.main.queue.QueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -91,7 +91,7 @@ public class HomeBasisUserFragment extends Fragment {
 
         viewModel.getQueueById.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                Log.d("Got", "get queue by id");
+                Log.d("Got", "get service by id");
                 viewModel.getQueueByParticipantId();
             }
         });

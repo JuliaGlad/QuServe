@@ -35,7 +35,7 @@
     <color name="colorTonal">#D6E9F8</color>
     <color name="colorBoxStroke">#CAE2F5</color>
     <color name="colorBox">#E4F2FF</color>
-    <color name="colorTextDisabled"></color>
+    <color name="colorTextDisabled">#AEC1D1</color>
 
     //OLD
     <color name="iconDialogColor">@color/background</color>

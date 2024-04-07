@@ -28,10 +28,13 @@ public class QueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<QueueDetailsState> _state = new MutableLiveData<>(new QueueDetailsState.Loading());
     LiveData<QueueDetailsState> state = _state;
 
+    private final MutableLiveData<Boolean> _isPaused = new MutableLiveData<>(false);
+    LiveData<Boolean> isPaused = _isPaused;
+
     private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>();
     public LiveData<Uri> pdfUri = _pdfUri;
 
-    public void getQueue(Fragment fragment) {
+    public void getQueue() {
         DI.getQueueInProgressModelUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueInProgressModel>() {
@@ -43,7 +46,7 @@ public class QueueDetailsViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull QueueInProgressModel queueInProgressModel) {
                         if (queueInProgressModel.getInProgress().contains("Paused")) {
-                            NavHostFragment.findNavController(fragment).navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
+                            _isPaused.postValue(true);
                         }
 
                     }

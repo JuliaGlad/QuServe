@@ -1,8 +1,15 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.privacySettings;
 
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL;
 import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +97,8 @@ public class PrivacySettingsFragment extends Fragment {
             DeleteAccountDialogFragment dialogFragment = new DeleteAccountDialogFragment();
             dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_ACCOUNT_DIALOG");
             DialogDismissedListener listener = bundle -> {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
                 requireActivity().finish();
             };
             dialogFragment.onDismissListener(listener);

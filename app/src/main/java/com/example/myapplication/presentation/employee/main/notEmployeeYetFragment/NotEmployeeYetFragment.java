@@ -1,8 +1,12 @@
 package com.example.myapplication.presentation.employee.main.notEmployeeYetFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,10 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentNotEmployeeYetBinding;
+import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
 import com.example.myapplication.presentation.employee.becomeEmployee.BecomeEmployeeActivity;
-import com.example.myapplication.presentation.queue.main.ScanCode;
+import com.example.myapplication.presentation.service.main.ScanCode;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -49,7 +55,12 @@ public class NotEmployeeYetFragment extends Fragment {
 
     private void initBecomeEmployee() {
         binding.buttonBecomeEmployee.setOnClickListener(v -> {
-            setBecomeEmployeeScanOptions();
+            if (getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, null).equals(ANONYMOUS)) {
+                NeedAccountDialogFragment needAccountDialogFragment = new NeedAccountDialogFragment();
+                needAccountDialogFragment.show(getActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
+            } else {
+                setBecomeEmployeeScanOptions();
+            }
         });
     }
 

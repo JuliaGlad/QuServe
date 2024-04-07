@@ -20,7 +20,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.domain.model.queue.QueueModel;
-import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
 import com.example.myapplication.presentation.utils.youtTurnNotification.YourTurnForegroundService;
 import com.google.firebase.firestore.DocumentSnapshot;

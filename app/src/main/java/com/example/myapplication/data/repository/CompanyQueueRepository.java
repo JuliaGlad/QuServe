@@ -13,8 +13,12 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEES;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
+import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
+import static com.example.myapplication.presentation.utils.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
+import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED_15;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME_KEY;
@@ -22,6 +26,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
+import static com.example.myapplication.presentation.utils.Utils.SECONDS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
@@ -60,6 +65,22 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class CompanyQueueRepository {
+
+    public Completable pauseQueue(String queueId, String companyId, int hours, int minutes, int seconds) {
+        DocumentReference docRef = service.fireStore
+                .collection(QUEUE_LIST)
+                .document(COMPANIES_QUEUES)
+                .collection(companyId)
+                .document(queueId);
+
+        return Completable.create(emitter -> {
+            docRef.update(QUEUE_IN_PROGRESS, hours + HOURS_DIVIDER + minutes + MINUTES_DIVIDER + seconds + SECONDS_DIVIDER + "_" + PAUSED).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public Completable addEmployeeToListQueues(List<ActiveQueueModel> queues, String companyId, String employeeId, String employeeName) {
         return Completable.create(emitter -> {
@@ -100,7 +121,7 @@ public class CompanyQueueRepository {
                         .document(employeeId);
 
                 companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-                    if (taskGetEmployee.isSuccessful()){
+                    if (taskGetEmployee.isSuccessful()) {
                         int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
                         companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1));
                     }
@@ -175,7 +196,7 @@ public class CompanyQueueRepository {
                         .document(current.getId());
 
                 companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-                    if (taskGetEmployee.isSuccessful()){
+                    if (taskGetEmployee.isSuccessful()) {
                         int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
                         companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1)).addOnCompleteListener(taskActiveUpdate -> {
                             emitter.onComplete();
@@ -210,14 +231,14 @@ public class CompanyQueueRepository {
                                                     .collection(EMPLOYEES)
                                                     .document(employeeId);
 
-                                                  companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-                                                        if (taskGetEmployee.isSuccessful()){
-                                                           int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
-                                                           companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues - 1)).addOnCompleteListener(taskActiveUpdate -> {
-                                                               emitter.onComplete();
-                                                           });
-                                                        }
+                                            companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
+                                                if (taskGetEmployee.isSuccessful()) {
+                                                    int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
+                                                    companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues - 1)).addOnCompleteListener(taskActiveUpdate -> {
+                                                        emitter.onComplete();
                                                     });
+                                                }
+                                            });
 
                                         }
                                     });
@@ -292,6 +313,7 @@ public class CompanyQueueRepository {
                                             document.getString(COMPANY),
                                             document.getString(QUEUE_IN_PROGRESS),
                                             document.getString(PEOPLE_PASSED),
+                                            document.getString(PEOPLE_PASSED_15),
                                             document.getString(MID_TIME_WAITING),
                                             document.getString(QUEUE_LOCATION_KEY),
                                             document.getString(CITY_KEY),
@@ -317,6 +339,7 @@ public class CompanyQueueRepository {
                         document.getString(COMPANY),
                         document.getString(QUEUE_IN_PROGRESS),
                         document.getString(PEOPLE_PASSED),
+                        document.getString(PEOPLE_PASSED_15),
                         document.getString(MID_TIME_WAITING),
                         document.getString(QUEUE_LOCATION_KEY),
                         document.getString(CITY_KEY),
@@ -351,6 +374,38 @@ public class CompanyQueueRepository {
                         emitter.onComplete();
                     });
         });
+    }
+
+    public Completable updateMidTime(String queueId, String companyId, int previous, int passed15) {
+        return Completable.create(emitter -> {
+            if (passed15 != 0) {
+                DocumentReference docRef = service.fireStore
+                        .collection(QUEUE_LIST)
+                        .document(COMPANIES_QUEUES)
+                        .collection(companyId)
+                        .document(queueId);
+
+                int midTimeLast15Minutes = 15 / passed15;
+                int newMid = 0;
+                if (previous != 0) {
+                    newMid = (previous + midTimeLast15Minutes) / 2;
+                } else {
+                    newMid = midTimeLast15Minutes;
+                }
+                docRef.update(MID_TIME_WAITING, String.valueOf((newMid)),
+                                PEOPLE_PASSED_15, "0")
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable("Error", task.getException()));
+                            }
+                        });
+            } else {
+                emitter.onComplete();
+            }
+        });
+
     }
 
     public void updateInProgressUseCase(String queueId, String companyId, String name, int passed) {
@@ -419,9 +474,26 @@ public class CompanyQueueRepository {
 
     public Completable deleteQueue(String companyId, String queueId) {
         return Completable.create(emitter -> {
-            service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId).delete()
+            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId);
+            docRef.delete()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
+                            docRef.collection(WORKERS_LIST)
+                                    .get().addOnCompleteListener(taskWorkers -> {
+                                        if (taskWorkers.isSuccessful()){
+                                            List<DocumentSnapshot> documentSnapshots = taskWorkers.getResult().getDocuments();
+                                            for (int i = 0; i < documentSnapshots.size(); i++) {
+                                                service.fireStore
+                                                        .collection(USER_LIST)
+                                                        .document(documentSnapshots.get(i).getId())
+                                                        .collection(EMPLOYEES)
+                                                        .document(companyId)
+                                                        .collection(ACTIVE_QUEUES_LIST)
+                                                        .document(queueId)
+                                                        .delete();
+                                            }
+                                        }
+                                    });
                             emitter.onComplete();
                         }
                     });

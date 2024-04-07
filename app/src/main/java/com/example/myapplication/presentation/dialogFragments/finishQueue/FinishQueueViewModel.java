@@ -25,6 +25,7 @@ public class FinishQueueViewModel extends ViewModel {
             case BASIC:
                 DI.deleteQrCodeUseCase.invoke(queueId)
                         .concatWith(DI.finishQueueUseCase.invoke(queueId))
+                        .andThen(DI.updateOwnQueueUseCase.invoke(false))
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override

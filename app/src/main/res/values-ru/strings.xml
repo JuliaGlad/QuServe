@@ -60,6 +60,8 @@
     <string name="system">Системная</string>
     <string name="addition">ко всем возможностям приложения</string>
     <string name="failed_to_login">Ошибка входа!</string>
+    <string name="you_need_an_account_to_perform_this_action">You need an account to perform this action</string>
+    <string name="you_need_an_account_to_perform_this_action">You need an account to perform this action</string>
     <string name="update_email">Изменить email</string>
     <string name="change_password">Изменить пароль</string>
     <string name="update_password">Обновление пароля</string>
@@ -258,4 +260,9 @@
     <string name="assigned_queues">Assigned queues:</string>
     <string name="worker_details_advise_box_text">View and manage queues assigned to employee</string>
     <string name="scan_company_qr_code_and_join_their_team">Scan company`s qr-code and join their team</string>
+    <string name="become_worker_description">Become company worker and serve different queues</string>
+    <string name="cooker">Cooker</string>
+    <string name="waiter">Waiter</string>
+    <string name="become_cooker_description">Become restaurant cook, make dishes, easily communicate with waiters and serve people</string>
+    <string name="become_waiter_description">Become restaurant waiter and serve visitor </string>
 </resources>

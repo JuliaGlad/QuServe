@@ -15,9 +15,7 @@ public class App extends Application {
     public static App instance;
     private LocalDatabase database;
 
-    private static final MutableLiveData<AppState> appState = new MutableLiveData<>(new AppState.BasicState());
-
-    @Override
+        @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
@@ -26,20 +24,6 @@ public class App extends Application {
 
     }
 
-    public static AppState getAppState(){
-        return appState.getValue();
-    }
-
-    public static void changeState(String state, String companyId){
-        switch (state){
-            case BASIC:
-                appState.postValue(new AppState.BasicState());
-                break;
-            case COMPANY:
-                appState.postValue(new AppState.CompanyState(companyId));
-                break;
-        }
-    }
 
     public static App getInstance() {
         return instance;

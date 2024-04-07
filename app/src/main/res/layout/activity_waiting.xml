@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.queue.waitingFragment.fragment.WaitingActivity">
+    tools:context=".presentation.service.waitingFragment.fragment.WaitingActivity">
 
     <fragment
         android:id="@+id/waitingFragment"
-        android:name="com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingFragment"
+        android:name="com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

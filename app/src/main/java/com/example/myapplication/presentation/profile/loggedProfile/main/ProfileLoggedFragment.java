@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.profile.loggedProfile.main;
 
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
@@ -7,6 +10,7 @@ import static com.example.myapplication.presentation.utils.Utils.NAVIGATION;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,7 @@ import com.example.myapplication.databinding.FragmentProfileLoggedBinding;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment;
+
 /*
  * @author j.gladkikh
  */
@@ -40,18 +45,9 @@ public class ProfileLoggedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-            viewModel = new ViewModelProvider(this).get(ProfileLoggedFragmentViewModel.class);
-            try {
-                type = getArguments().getString(STATE);
-            } catch (IllegalArgumentException e) {
-                type = getActivity().getIntent().getStringExtra(STATE);
-            } catch (NullPointerException e){
-                if (!viewModel.checkAuth()) {
-                    type = NAVIGATION;
-                } else {
-                    type = BASIC;
-                }
-            }
+        viewModel = new ViewModelProvider(this).get(ProfileLoggedFragmentViewModel.class);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        type = sharedPreferences.getString(APP_STATE, ANONYMOUS);
     }
 
 
@@ -66,14 +62,14 @@ public class ProfileLoggedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-            setView();
+        setView();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if (!viewModel.checkAuth() || viewModel.isNull()) {
-            type = NAVIGATION;
+            type = ANONYMOUS;
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
             fragmentManager
@@ -94,19 +90,14 @@ public class ProfileLoggedFragment extends Fragment {
                     break;
 
                 case COMPANY:
-                    String companyId = getArguments().getString(COMPANY_ID);
-                    Bundle bundle = new Bundle();
-                    id = companyId;
-                    bundle.putString(COMPANY_ID, companyId);
-
                     fragmentManager
                             .beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.logged_container, CompanyUserFragment.class, bundle)
+                            .replace(R.id.logged_container, CompanyUserFragment.class, null)
                             .commit();
                     break;
 
-                case NAVIGATION:
+                case ANONYMOUS:
                     fragmentManager
                             .beginTransaction()
                             .setReorderingAllowed(true)

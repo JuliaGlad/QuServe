@@ -6,6 +6,7 @@ public class CompanyQueueDto {
     private final String workersCount;
     private final String midTime;
     private final String passed;
+    private final String passed15;
     private final String inProgress;
     private final List<Object> participants;
     private final String location;
@@ -16,7 +17,7 @@ public class CompanyQueueDto {
     private final String companyId;
 
     public CompanyQueueDto(List<Object> participants, String id, String name, String time,
-                           String companyId, String inProgress, String passed,
+                           String companyId, String inProgress, String passed, String passed15,
                            String midTime, String location, String city, String workersCount) {
 
         this.participants = participants;
@@ -26,10 +27,15 @@ public class CompanyQueueDto {
         this.inProgress = inProgress;
         this.companyId = companyId;
         this.passed = passed;
+        this.passed15 = passed15;
         this.midTime = midTime;
         this.location = location;
         this.city = city;
         this.workersCount = workersCount;
+    }
+
+    public String getPassedLast15Minutes() {
+        return passed15;
     }
 
     public String getCity() {

@@ -15,8 +15,6 @@ import static com.example.myapplication.presentation.utils.Utils.stringsServices
 
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +32,7 @@ import androidx.work.WorkManager;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyAccountBinding;
-import com.example.myapplication.presentation.utils.workers.QueueTimeWorker;
+import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
@@ -263,7 +261,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 .setRequiresDeviceIdle(false)
                 .build();
 
-        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(QueueTimeWorker.class)
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(BasicQueueFinishWorker.class)
                 .setInputData(data)
                 .setConstraints(constraints)
                 .setInitialDelay(10, TimeUnit.MINUTES)

@@ -9,6 +9,7 @@ import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITIN
 import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
+import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED_15;
 import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
@@ -21,10 +22,6 @@ import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
-import android.util.Log;
-
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.QueueDto;
@@ -36,7 +33,6 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,11 +68,31 @@ public class QueueRepository {
         });
     }
 
-    public void updateTimePassed(String queueId, int previous, int passed) {
-        if (passed != 0) {
-            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
-            docRef.update(MID_TIME_WAITING, String.valueOf((previous + 30) / passed));
-        }
+    public Completable updateMidTime(String queueId, int previous, int passed15) {
+        return Completable.create(emitter -> {
+            if (passed15 != 0) {
+                DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+                int midTimeLast15Minutes = 15 / passed15;
+                int newMid = 0;
+                if (previous != 0) {
+                    newMid = (previous + midTimeLast15Minutes) / 2;
+                } else {
+                    newMid = midTimeLast15Minutes;
+                }
+                docRef.update(MID_TIME_WAITING, String.valueOf((newMid)),
+                                PEOPLE_PASSED_15, "0")
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable("Error", task.getException()));
+                            }
+                        });
+            } else {
+                emitter.onComplete();
+            }
+        });
+
     }
 
     public Single<List<QueueDto>> getQueuesList() {
@@ -94,6 +110,7 @@ public class QueueRepository {
                                             document.getString(QUEUE_AUTHOR_KEY),
                                             document.getString(QUEUE_IN_PROGRESS),
                                             document.getString(PEOPLE_PASSED),
+                                            document.getString(PEOPLE_PASSED_15),
                                             document.getString(MID_TIME_WAITING))
                             ).collect(Collectors.toList()));
                         } else {
@@ -105,16 +122,23 @@ public class QueueRepository {
 
     public Completable nextParticipantUpdateList(String queueId, String name, int passed) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+
         return Completable.create(emitter -> {
-            docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name))
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            updateInProgress(queueId, name, passed);
-                            emitter.onComplete();
-                        } else {
-                            emitter.onError(new Throwable("Failed" + task.getException()));
-                        }
-                    });
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(name),
+                                    PEOPLE_PASSED, String.valueOf(Integer.parseInt(task.getResult().getString(PEOPLE_PASSED)) + 1),
+                                    PEOPLE_PASSED_15, String.valueOf(passed + 1))
+                            .addOnCompleteListener(taskUpdate -> {
+                                if (taskUpdate.isSuccessful()) {
+                                    updateInProgress(queueId, name);
+                                    emitter.onComplete();
+                                } else {
+                                    emitter.onError(new Throwable("Failed " + taskUpdate.getException()));
+                                }
+                            });
+                }
+            });
         });
     }
 
@@ -141,14 +165,13 @@ public class QueueRepository {
 
     public Completable continueQueue(String queueId) {
         return Completable.create(emitter -> {
-//          /
+
         });
     }
 
-    public void updateInProgress(String queueId, String name, int peoplePassed) {
+    public void updateInProgress(String queueId, String name) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         docRef.update(QUEUE_IN_PROGRESS, name);
-        docRef.update(PEOPLE_PASSED, String.valueOf(peoplePassed + 1));
     }
 
     public Completable removeParticipantById(String queueId) {
@@ -246,6 +269,7 @@ public class QueueRepository {
         userQueue.put(QUEUE_PARTICIPANTS_LIST, arrayList);
         userQueue.put(QUEUE_IN_PROGRESS, "No one");
         userQueue.put(PEOPLE_PASSED, "0");
+        userQueue.put(PEOPLE_PASSED_15, "0");
         userQueue.put(MID_TIME_WAITING, "0");
 
         return Completable.create(emitter -> {

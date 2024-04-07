@@ -7,8 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.DI;
-import com.example.myapplication.app.App;
-import com.example.myapplication.app.AppState;
 import com.example.myapplication.domain.model.profile.UserEmployeeModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 
@@ -22,18 +20,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EmployeeNavigationViewModel extends ViewModel {
 
-    private final MutableLiveData<AppState> _appState = new MutableLiveData<>();
-    LiveData<AppState> appState = _appState;
-
-    private final MutableLiveData<Boolean> _isEmployee = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> _isEmployee = new MutableLiveData<>(null);
     LiveData<Boolean> isEmployee = _isEmployee;
 
     private final MutableLiveData<List<EmployeeRoleModel>> _roles = new MutableLiveData<>();
     LiveData<List<EmployeeRoleModel>> roles = _roles;
-
-    public void getAppState(){
-        _appState.postValue(App.getAppState());
-    }
 
     public void isEmployee(){
         DI.isEmployeeUseCase.isEmployee()

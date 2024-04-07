@@ -15,24 +15,13 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.work.Constraints;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.example.myapplication.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.domain.model.queue.QueueModel;
-import com.example.myapplication.presentation.queue.waitingFragment.fragment.WaitingActivity;
-import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
-import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import java.util.concurrent.TimeUnit;
+import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.Observer;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 

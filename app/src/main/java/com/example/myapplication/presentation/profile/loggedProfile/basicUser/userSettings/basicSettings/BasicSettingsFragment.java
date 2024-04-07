@@ -2,6 +2,12 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.u
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -114,6 +120,11 @@ public class BasicSettingsFragment extends Fragment {
                         LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
                         dialogFragment.show(getActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
                         DialogDismissedListener listener = bundle -> {
+
+                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                            sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
+                            sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+
                             getActivity().finish();
                         };
                         dialogFragment.onDismissListener(listener);

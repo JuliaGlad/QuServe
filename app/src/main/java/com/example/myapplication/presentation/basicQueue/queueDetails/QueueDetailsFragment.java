@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
@@ -65,7 +66,7 @@ public class QueueDetailsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(QueueDetailsViewModel.class);
         binding = FragmentQueueDetailsBinding.inflate(inflater, container, false);
 
-        viewModel.getQueue(this);
+        viewModel.getQueue();
         viewModel.getQueueRecycler();
 
         return binding.getRoot();
@@ -81,6 +82,13 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void setupObserves() {
+
+        viewModel.isPaused.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
+            }
+        });
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof QueueDetailsState.Success){
@@ -134,12 +142,13 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void showTimePickerDialog(String queueId) {
-        PauseQueueDialogFragment dialogFragment = new PauseQueueDialogFragment(queueId);
+        PauseQueueDialogFragment dialogFragment = new PauseQueueDialogFragment(queueId, null, BASIC);
 
         dialogFragment.show(getActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
 
         dialogFragment.onDismissListener(bundle -> {
             bundle.putString(QUEUE_ID, queueId);
+            bundle.putString(APP_STATE, BASIC);
             NavHostFragment.findNavController(QueueDetailsFragment.this)
                     .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
         });

@@ -1,11 +1,16 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser;
 
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -59,7 +64,8 @@ public class CompanyUserFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        companyId = getArguments().getString(COMPANY_ID);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        companyId = sharedPreferences.getString(COMPANY_ID, null);
 
         viewModel = new ViewModelProvider(this).get(CompanyUserViewModel.class);
         viewModel.getCompany(companyId);
@@ -81,6 +87,11 @@ public class CompanyUserFragment extends Fragment {
 
         if (Arguments.isDeleted) {
             Arguments.isDeleted = false;
+
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
+            sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             fragmentManager
                     .beginTransaction()
@@ -116,11 +127,16 @@ public class CompanyUserFragment extends Fragment {
                     ((MainActivity) requireActivity()).openEditCompanyActivity(companyId);
                 })));
 
-                delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_group, R.string.employees, () -> {
-                    ((MainActivity) requireActivity()).openEmployeesActivity(companyId);
-                })));
+//                delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_group, R.string.employees, () -> {
+//                    ((MainActivity) requireActivity()).openEmployeesActivity(companyId);
+//                })));
 
                 delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_person_filled_24, R.string.go_to_my_profile, () -> {
+
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
+                    sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager
                             .beginTransaction()
@@ -143,6 +159,11 @@ public class CompanyUserFragment extends Fragment {
         viewModel.isExist.observe(getViewLifecycleOwner(), aBoolean -> {
             isExist = aBoolean;
             if (!aBoolean) {
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
+                sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()

@@ -24,14 +24,18 @@ import myapplication.android.ui.listeners.DialogDismissedListener;
 
 public class PauseQueueDialogFragment extends DialogFragment {
 
-    private final String queueId;
     private DialogDismissedListener listener;
+    private final String queueId;
+    private final String companyId;
+    private final String type;
     private int hours = 0;
     private int minutes = 0;
     private int seconds = 0;
     boolean isPaused = false;
 
-    public PauseQueueDialogFragment(String queueId){
+    public PauseQueueDialogFragment(String queueId, String companyId, String type){
+        this.type = type;
+        this.companyId = companyId;
         this.queueId = queueId;
     }
 
@@ -58,7 +62,7 @@ public class PauseQueueDialogFragment extends DialogFragment {
             minutes = binding.minutesPicker.getValue();
             seconds = binding.secondPicker.getValue();
 
-            viewModel.pauseQueue(hours, minutes, seconds, queueId);
+            viewModel.pauseQueue(hours, minutes, seconds, queueId, companyId, type);
         });
 
         binding.buttonCancel.setOnClickListener(v -> {

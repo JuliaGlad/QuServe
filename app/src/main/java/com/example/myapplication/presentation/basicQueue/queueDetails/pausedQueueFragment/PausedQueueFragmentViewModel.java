@@ -18,30 +18,6 @@ public class PausedQueueFragmentViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isContinued = new MutableLiveData<>(false);
     LiveData<Boolean> isContinued = _isContinued;
 
-    private final MutableLiveData<String> _queueId = new MutableLiveData<>(null);
-    LiveData<String> queueId = _queueId;
-
-    public void getQueue(){
-        DI.getQueueByAuthorUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueIdAndNameModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
-                        _queueId.postValue(queueIdAndNameModel.getId());
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-    }
-
     public void continueQueue(String queueId){
         DI.continueQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())

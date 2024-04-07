@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentQueueWorkerBinding;
+import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.delegates.WorkerActiveQueueAdapter;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.delegates.WorkerActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
@@ -72,7 +73,7 @@ public class QueueWorkerFragment extends Fragment {
                     current.getName(),
                     current.getLocation(),
                     () -> {
-
+                        ((MainActivity)requireActivity()).openQueueWorkerDetailsActivity(current.getId(), companyId);
                     }
             ));
         }

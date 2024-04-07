@@ -1,10 +1,12 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.fragment;
 
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,7 +55,7 @@ public class EmployeesFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(EmployeesViewModel.class);
         binding = FragmentEmployeesBinding.inflate(inflater, container, false);
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        companyId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         viewModel.getEmployees(companyId);
         return binding.getRoot();
     }

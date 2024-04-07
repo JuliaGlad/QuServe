@@ -76,7 +76,6 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setAdapter();
         setupObserves();
-
     }
 
     private void setAdapter() {
@@ -89,7 +88,6 @@ public class DifferentRolesEmployeeFragment extends Fragment {
     private void initRecycler(List<DifferentRoleModel> roleModels) {
         final List<DelegateItem> delegates = new ArrayList<>();
         delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(1, R.drawable.work_together_employee_wall_paper)));
-
         delegates.addAll(addDelegates(roleModels));
         mainAdapter.submitList(delegates);
     }

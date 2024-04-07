@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_queue"
-        android:name="com.example.myapplication.presentation.queue.main.ServiceFragment"
+        android:name="com.example.myapplication.presentation.service.main.ServiceFragment"
         android:label="@string/title_queue"
         tools:layout="@layout/fragment_service" >
         <action
@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_navigation_queue_to_createAccount"
             app:destination="@id/createAccount" />
+        <action
+            android:id="@+id/action_navigation_queue_to_becomeEmployeeOptionsFragment"
+            app:destination="@id/becomeEmployeeOptionsFragment" />
     </fragment>
 
     <fragment
@@ -98,22 +101,6 @@
 <!--    </fragment>-->
 
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
-
-        <action
-            android:id="@+id/action_mapFragment_to_createQueueFragment"
-            app:destination="@id/createQueueFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/queueDetailsFragment"
-        android:name="com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsFragment"
-        android:label="fragment_queue_details"
-        tools:layout="@layout/fragment_queue_details" />
-    <fragment
         android:id="@+id/chooseFragment"
         android:name="com.example.myapplication.presentation.profile.createAccount.chooseFragment.ChooseFragment"
         android:label="fragment_choose"
@@ -121,15 +108,6 @@
         <action
             android:id="@+id/action_chooseFragment_to_profileLoggedFragment"
             app:destination="@id/profileLoggedFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/basicUserFragment"
-        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment"
-        android:label="fragment_basic_user"
-        tools:layout="@layout/fragment_basic_user" >
-        <action
-            android:id="@+id/action_basicUserFragment_to_settingsFragment"
-            app:destination="@id/basicSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/chooseCityDialogFragment"
@@ -144,5 +122,10 @@
         android:name="com.example.myapplication.presentation.employee.main.navFragment.EmployeeNavigationFragment"
         android:label="fragment_employee_navigation"
         tools:layout="@layout/fragment_employee_navigation" />
+    <fragment
+        android:id="@+id/becomeEmployeeOptionsFragment"
+        android:name="com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsFragment"
+        android:label="fragment_become_employee_options"
+        tools:layout="@layout/fragment_become_employee_options" />
 
 </navigation>
