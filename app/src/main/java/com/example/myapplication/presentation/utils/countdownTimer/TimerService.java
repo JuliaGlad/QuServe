@@ -1,9 +1,11 @@
 package com.example.myapplication.presentation.utils.countdownTimer;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
 import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
 
@@ -17,7 +19,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -25,11 +26,13 @@ import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
-import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
+import com.example.myapplication.presentation.utils.backToWorkNotification.NotificationGoBackToWork;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -41,7 +44,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class TimerService extends Service {
 
-    private String timeLeft, queueId;
+    private String timeLeft, queueId, type;
     private long timeMillis;
     private CountDownTimer timer;
 
@@ -50,6 +53,7 @@ public class TimerService extends Service {
         timeLeft = intent.getStringExtra(TIME_LEFT);
         timeMillis = intent.getLongExtra(TIME_MILLIS, 0);
         queueId = intent.getStringExtra(QUEUE_ID);
+        type = intent.getStringExtra(STATE);
         setupNotification();
         startCountDown();
         return super.onStartCommand(intent, flags, startId);
@@ -62,7 +66,16 @@ public class TimerService extends Service {
     }
 
     private Notification setupNotification() {
-        Intent intent = new Intent(this, QueueDetailsActivity.class);
+        Intent intent = null;
+        switch (type){
+            case BASIC:
+                intent = new Intent(this, QueueDetailsActivity.class);
+                break;
+            case COMPANY:
+                intent = new Intent(this, WorkerQueueDetailsActivity.class);
+                break;
+        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "TIMER_NOTIFICATION")
@@ -103,24 +116,28 @@ public class TimerService extends Service {
                 stopForeground(true);
                 stopSelf();
 
-//                DI.continueQueueUseCase.invoke(queueId)
-//                        .subscribeOn(Schedulers.io())
-//                        .subscribe(new CompletableObserver() {
-//                            @Override
-//                            public void onSubscribe(@NonNull Disposable d) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onComplete() {
-//                                initNotificationWorker();
-//                            }
-//
-//                            @Override
-//                            public void onError(@NonNull Throwable e) {
-//
-//                            }
-//                        });
+                QueueDI.continueQueueUseCase.invoke(queueId)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(@NonNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Intent intent = new Intent(TimerService.this, NotificationGoBackToWork.class);
+                                intent.putExtra(STATE, type);
+                                startService(intent);
+
+                                initNotificationWorker();
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+
+                            }
+                        });
             }
 
         }.start();

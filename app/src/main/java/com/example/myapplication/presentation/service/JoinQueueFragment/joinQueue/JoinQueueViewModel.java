@@ -1,12 +1,14 @@
 package com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.common.ImageModel;
-import com.example.myapplication.domain.model.queue.QueueNameModel;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue.model.JoinQueueModel;
 import com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue.state.JoinQueueState;
 
@@ -14,7 +16,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class JoinQueueViewModel extends ViewModel {
@@ -29,12 +30,11 @@ public class JoinQueueViewModel extends ViewModel {
     LiveData<Boolean> isSignIn = _isSignIn;
 
     public boolean checkUserID() {
-        return DI.checkUserIdUseCase.invoke();
-
+        return QueueDI.checkUserIdUseCase.invoke();
     }
 
     public void signInAnonymously() {
-        DI.signInAnonymouslyUseCase.invoke().subscribeOn(Schedulers.io())
+        QueueDI.signInAnonymouslyUseCase.invoke().subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
@@ -53,14 +53,10 @@ public class JoinQueueViewModel extends ViewModel {
                 });
     }
 
-    public void getQueueData(String queueID) {
-        DI.getQueueByQueueIdUseCase.invoke(queueID)
-                .zipWith(DI.getQrCodeImageUseCase.invoke(queueID), new BiFunction<QueueNameModel, ImageModel, JoinQueueModel>() {
-                    @Override
-                    public JoinQueueModel apply(QueueNameModel queueNameModel, ImageModel imageModel) throws Throwable {
-                        return new JoinQueueModel(queueNameModel.getName(), imageModel.getImageUri());
-                    }
-                })
+    public void getQueueData(String path) {
+        QueueDI.getQueueByPathUseCase.invoke(path)
+                .flatMap(model -> QueueDI.getQrCodeImageUseCase.invoke(model.getQueueId()),
+                        (queueNameModel, imageModel) -> new JoinQueueModel(queueNameModel.getName(), imageModel.getImageUri()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<JoinQueueModel>() {
                     @Override
@@ -70,6 +66,7 @@ public class JoinQueueViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull JoinQueueModel joinQueueModel) {
+                        Log.d("Join queueModel", joinQueueModel.getName());
                         _state.postValue(new JoinQueueState.Success(joinQueueModel));
                     }
 
@@ -81,9 +78,9 @@ public class JoinQueueViewModel extends ViewModel {
 
     }
 
-    public void addToParticipantsList(String queueID) {
-        DI.addToParticipantsListUseCase.invoke(queueID)
-                .andThen(DI.updateParticipateInQueueUseCase.invoke(true))
+    public void addToParticipantsList(String path) {
+        QueueDI.addToParticipantsListUseCase.invoke(path)
+                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke(path,true))
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

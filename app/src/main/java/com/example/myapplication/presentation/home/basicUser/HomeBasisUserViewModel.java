@@ -1,12 +1,15 @@
 package com.example.myapplication.presentation.home.basicUser;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CommonCompanyDI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.domain.model.common.CommonCompanyModel;
 import com.example.myapplication.domain.model.company.CompanyNameIdModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.example.myapplication.domain.model.queue.QueueModel;
@@ -44,8 +47,8 @@ public class HomeBasisUserViewModel extends ViewModel {
     LiveData<HomeBasicUserState> state = _state;
 
     public void getUserBooleanData() {
-        DI.checkCompanyExistUseCase.invoke()
-                .zipWith(DI.getUserBooleanDataUseCase.invoke(), (companyBoolean, userBooleanDataModel) ->
+        CommonCompanyDI.checkAnyCompanyExistUseCase.invoke()
+                .zipWith(ProfileDI.getUserBooleanDataUseCase.invoke(), (companyBoolean, userBooleanDataModel) ->
                         new HomeBasicUserBooleanModel(
                                 userBooleanDataModel.isOwnQueue(),
                                 userBooleanDataModel.isParticipateInQueue(),
@@ -79,19 +82,44 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     public void getCompanies() {
         if (isCompanyOwner) {
-            DI.getCompanyUseCase.invoke()
+//            CompanyQueueUserDI.getCompanyUseCase.invoke()
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe(new SingleObserver<List<CompanyNameIdModel>>() {
+//                        @Override
+//                        public void onSubscribe(@NonNull Disposable d) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onSuccess(@NonNull List<CompanyNameIdModel> companyNameIdModels) {
+//                            for (int i = 0; i < companyNameIdModels.size(); i++) {
+//                                CompanyNameIdModel current = companyNameIdModels.get(i);
+//                                companies.add(new CompanyBasicUserModel(current.getId(), current.getName()));
+//                            }
+//                            _getCompanies.postValue(true);
+//                        }
+//
+//                        @Override
+//                        public void onError(@NonNull Throwable e) {
+//
+//                        }
+//                    });
+            CommonCompanyDI.getAllServiceCompaniesUseCase.invoke()
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new SingleObserver<List<CompanyNameIdModel>>() {
+                    .subscribe(new SingleObserver<List<CommonCompanyModel>>() {
                         @Override
                         public void onSubscribe(@NonNull Disposable d) {
 
                         }
 
                         @Override
-                        public void onSuccess(@NonNull List<CompanyNameIdModel> companyNameIdModels) {
-                            for (int i = 0; i < companyNameIdModels.size(); i++) {
-                                CompanyNameIdModel current = companyNameIdModels.get(i);
-                                companies.add(new CompanyBasicUserModel(current.getId(), current.getName()));
+                        public void onSuccess(@NonNull List<CommonCompanyModel> commonCompanyModels) {
+                            for (CommonCompanyModel model : commonCompanyModels) {
+                                companies.add(new CompanyBasicUserModel(
+                                        model.getCompanyId(),
+                                        model.getCompanyName(),
+                                        model.getService()
+                                ));
                             }
                             _getCompanies.postValue(true);
                         }
@@ -108,7 +136,8 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     public void getQueueByParticipantId() {
         if (isQueueParticipant) {
-            DI.getQueueByParticipantIdUseCase.invoke()
+            ProfileDI.getParticipantQueuePathUseCase.invoke()
+                    .flatMap(path -> QueueDI.getQueueByParticipantPathUseCase.invoke(path))
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<QueueModel>() {
                         @Override
@@ -137,7 +166,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     public void getQueueByAuthorId() {
         if (isQueueOwner) {
-            DI.getQueueByAuthorUseCase.invoke()
+            QueueDI.getQueueByAuthorUseCase.invoke()
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<QueueIdAndNameModel>() {
                         @Override

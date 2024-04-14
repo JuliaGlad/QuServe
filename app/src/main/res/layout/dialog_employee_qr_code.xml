@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:text="Show this qr-code to your new employee who are looking forward to join your company"
+        android:text="@string/show_this_qr_code_to_your_new_employee_who_are_looking_forward_to_join_your_company"
         app:layout_constraintEnd_toEndOf="@+id/qr_code"
         app:layout_constraintStart_toStartOf="@+id/qr_code"
         app:layout_constraintTop_toBottomOf="@+id/qr_code" />

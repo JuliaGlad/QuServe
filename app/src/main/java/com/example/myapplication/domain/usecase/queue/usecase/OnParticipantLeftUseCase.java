@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.queue.usecase;
 
-import static com.example.myapplication.DI.service;
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
 
 import com.google.firebase.firestore.DocumentSnapshot;

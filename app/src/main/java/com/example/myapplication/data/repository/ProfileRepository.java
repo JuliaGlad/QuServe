@@ -1,12 +1,9 @@
 package com.example.myapplication.data.repository;
 
-import static com.example.myapplication.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_PATH;
 import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL_KEY;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
@@ -14,6 +11,7 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.GENDER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.OWN_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PHONE_NUMBER_KEY;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_IMAGES;
@@ -31,8 +29,6 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.myapplication.app.App;
 import com.example.myapplication.data.dto.ActiveEmployeeQueueDto;
 import com.example.myapplication.data.dto.HistoryQueueDto;
@@ -41,34 +37,30 @@ import com.example.myapplication.data.dto.UserDto;
 import com.example.myapplication.data.dto.UserEmployeeRoleDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.RuntimeExecutionException;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProfileRepository {
 
-    public Completable updateRole(String companyId, String userId, String role){
+    public Completable updateRole(String companyId, String userId, String role) {
         return Completable.create(emitter -> {
             service.fireStore
                     .collection(USER_LIST)
@@ -76,27 +68,27 @@ public class ProfileRepository {
                     .collection(EMPLOYEE)
                     .document(companyId)
                     .update(EMPLOYEE_ROLE, role).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
                         }
                     });
         });
     }
 
-    public Completable deleteActiveQueue(String companyId, String queueId, String userId){
+    public Completable deleteActiveQueue(String companyId, String queueId, String userId) {
         return Completable.create(emitter -> {
-           service.fireStore
-                   .collection(USER_LIST)
-                   .document(userId)
-                   .collection(EMPLOYEE)
-                   .document(companyId)
-                   .collection(ACTIVE_QUEUES_LIST)
-                   .document(queueId)
-                   .delete().addOnCompleteListener(task -> {
-                       if (task.isSuccessful()){
-                           emitter.onComplete();
-                       }
-                   });
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(userId)
+                    .collection(EMPLOYEE)
+                    .document(companyId)
+                    .collection(ACTIVE_QUEUES_LIST)
+                    .document(queueId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
         });
     }
 
@@ -114,7 +106,7 @@ public class ProfileRepository {
         });
     }
 
-    public Single<List<ActiveEmployeeQueueDto>> getActiveQueuesByEmployeeId(String companyId, String employeeId){
+    public Single<List<ActiveEmployeeQueueDto>> getActiveQueuesByEmployeeId(String companyId, String employeeId) {
         return Single.create(emitter -> {
             List<ActiveEmployeeQueueDto> dtos = new ArrayList<>();
             service.fireStore
@@ -328,33 +320,32 @@ public class ProfileRepository {
 
     public Completable deleteAccount(String password) {
         return Completable.create(emitter -> {
-            AuthCredential authCredential = EmailAuthProvider.getCredential(service.auth.getCurrentUser().getEmail(), password);
+            AuthCredential authCredential = EmailAuthProvider.getCredential(Objects.requireNonNull(service.auth.getCurrentUser().getEmail()), password);
             service.auth.getCurrentUser().reauthenticate(authCredential)
                     .addOnCompleteListener(auth -> {
                         if (auth.isSuccessful()) {
-                            service.fireStore
+
+                            DocumentReference docRef = service.fireStore
                                     .collection(USER_LIST)
-                                    .document(service.auth.getCurrentUser().getUid())
-                                    .delete().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
+                                    .document(service.auth.getCurrentUser().getUid());
+
+
+                            docRef.get().addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    docRef.delete().addOnCompleteListener(taskDelete -> {
+                                        if (taskDelete.isSuccessful()) {
                                             service.auth.getCurrentUser().delete()
                                                     .addOnCompleteListener(taskNew -> {
                                                         if (taskNew.isSuccessful()) {
                                                             UserDatabaseProvider.deleteUser();
                                                             CompanyUserProvider.deleteAll();
                                                             emitter.onComplete();
-                                                        } else {
-                                                            Log.d("Error", taskNew.getException().getMessage());
                                                         }
                                                     });
-                                        } else {
-                                            Log.d("Error", task.getException().getMessage());
                                         }
                                     });
-
-
-                        } else {
-                            Log.d("Error", auth.getException().getMessage());
+                                }
+                            });
                         }
                     });
 
@@ -400,12 +391,13 @@ public class ProfileRepository {
         });
     }
 
-    public Completable updateParticipateInQueue(boolean value) {
+    public Completable updateParticipateInQueue(String path, boolean value) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
         return Completable.create(emitter -> {
-            docRef.update(PARTICIPATE_IN_QUEUE, value).addOnCompleteListener(task -> {
+            docRef.update(PARTICIPATE_IN_QUEUE, value,
+                    PARTICIPANT_QUEUE_PATH, path).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    UserDatabaseProvider.updateParticipateInQueue(value);
+                    UserDatabaseProvider.updateParticipateInQueue(path, value);
                     emitter.onComplete();
                 }
             });
@@ -423,6 +415,7 @@ public class ProfileRepository {
 
                     Map<String, Object> user = new HashMap<>();
                     user.put(OWN_QUEUE, false);
+                    user.put(PARTICIPANT_QUEUE_PATH, "");
                     user.put(PARTICIPATE_IN_QUEUE, false);
                     user.put(USER_NAME_KEY, userName);
                     user.put(PHONE_NUMBER_KEY, "");
@@ -434,8 +427,13 @@ public class ProfileRepository {
 
                     docRef.set(user).addOnCompleteListener(task1 -> {
                         if (task.isSuccessful()) {
-                            UserDto userDto = new UserDto(userName, "", "", email, "", String.valueOf(Uri.EMPTY), String.valueOf(Uri.EMPTY), false, false);
+                            UserDto userDto = new UserDto(
+                                    userName, "", "",
+                                    email, "", String.valueOf(Uri.EMPTY),
+                                    String.valueOf(Uri.EMPTY), "", false, false);
+
                             UserDatabaseProvider.insertUser(userDto);
+
                             emitter.onComplete();
                         }
                     });
@@ -557,6 +555,7 @@ public class ProfileRepository {
                                             document.getString(BIRTHDAY_KEY),
                                             document.getString(URI),
                                             document.getString(BACKGROUND_IMAGE),
+                                            document.getString(PARTICIPANT_QUEUE_PATH),
                                             Boolean.TRUE.equals(document.getBoolean(OWN_QUEUE)),
                                             Boolean.TRUE.equals(document.getBoolean(PARTICIPATE_IN_QUEUE))
                                     );

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.partici
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -61,8 +62,18 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setMainAdapter();
         setupObserves();
+        handleButtonBackPressed();
         initBackButton();
         initNextParticipantButton();
+    }
+
+    private void handleButtonBackPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(CompanyQueueParticipantsListFragment.this).popBackStack();
+            }
+        });
     }
 
     private void initNextParticipantButton() {

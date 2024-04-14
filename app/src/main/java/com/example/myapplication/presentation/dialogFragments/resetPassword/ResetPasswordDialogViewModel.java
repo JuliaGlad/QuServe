@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 
 import io.reactivex.rxjava3.core.Single;
 
@@ -14,7 +15,7 @@ public class ResetPasswordDialogViewModel extends ViewModel {
     LiveData<String> emailError = _emailError;
 
     public Single<Boolean> sendResetPasswordEmail(String checkingEmail) {
-        return DI.sendResetPasswordEmailUseCase.invoke(checkingEmail);
+        return ProfileDI.sendResetPasswordEmailUseCase.invoke(checkingEmail);
     }
 
     public void sendEmailError(String errorMessage){

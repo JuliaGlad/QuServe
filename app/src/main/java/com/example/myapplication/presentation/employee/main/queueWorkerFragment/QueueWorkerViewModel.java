@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.model.QueueWorkerStateModel;
@@ -25,11 +27,11 @@ public class QueueWorkerViewModel extends ViewModel {
     LiveData<QueueWorkerState> state = _state;
 
     public void getEmployeeActiveQueues(String companyId) {
-        DI.getSingleCompanyUseCase.invoke(companyId)
+        CompanyQueueUserDI.getSingleCompanyUseCase.invoke(companyId)
                 .flatMap(companyNameAndEmailModel -> {
                     this.companyId = companyId;
                     companyName = companyNameAndEmailModel.getName();
-                    return DI.getActiveQueuesUseCase.invoke(companyId);
+                    return ProfileDI.getActiveQueuesUseCase.invoke(companyId);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ActiveQueueEmployeeModel>>() {

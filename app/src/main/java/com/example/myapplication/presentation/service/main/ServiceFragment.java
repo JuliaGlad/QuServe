@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentServiceBinding;
 import com.example.myapplication.presentation.service.main.basicUser.BasicUserServiceFragment;
 import com.example.myapplication.presentation.service.main.queueCompanyOwner.CompanyQueueServiceFragment;
+import com.example.myapplication.presentation.service.main.restaurantService.ServiceRestaurant;
 
 public class ServiceFragment extends Fragment {
     private FragmentServiceBinding binding;
@@ -65,6 +67,15 @@ public class ServiceFragment extends Fragment {
                         .replace(R.id.service_container, CompanyQueueServiceFragment.class, bundle)
                         .setReorderingAllowed(true)
                         .commit();
+                break;
+            case RESTAURANT:
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.service_container, ServiceRestaurant.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
+
+                break;
         }
     }
 

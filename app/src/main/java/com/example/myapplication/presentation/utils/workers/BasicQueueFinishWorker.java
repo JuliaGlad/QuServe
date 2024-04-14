@@ -9,7 +9,9 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -26,9 +28,9 @@ public class BasicQueueFinishWorker extends Worker {
     public Result doWork() {
         Data data = getInputData();
         String queueId = data.getString(QUEUE_ID);
-        DI.deleteQrCodeUseCase.invoke(queueId)
-                .concatWith(DI.finishQueueUseCase.invoke(queueId))
-                .andThen(DI.updateOwnQueueUseCase.invoke(false))
+        QueueDI.deleteQrCodeUseCase.invoke(queueId)
+//                .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
+                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

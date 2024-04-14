@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.queue.QueueSizeModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.participantsList.state.CompanyParticipantsState;
 
@@ -31,10 +32,10 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
     LiveData<Boolean> addParticipant = _addParticipant;
 
     public void nextParticipant(String queueId, String companyId) {
-        DI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
+        CompanyQueueDI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
                 .concatMapCompletable(queueParticipantsListModel -> {
                     String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
-                    return DI.nextParticipantUseCompanyUseCase.invoke(queueId, companyId, name, peoplePassed);
+                    return CompanyQueueDI.nextParticipantUseCompanyUseCase.invoke(queueId, companyId, name, peoplePassed);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
@@ -56,7 +57,7 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
     }
 
     public void getParticipantsList(String queueId, String companyId) {
-        DI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
+        CompanyQueueDI.getCompanyQueueParticipantsListUseCase.invoke(queueId, companyId)
                 .flatMapObservable(queueParticipantsListModel -> {
 
                     if (!queueParticipantsListModel.getParticipants().equals(Collections.emptyList())) {
@@ -67,7 +68,7 @@ public class CompanyQueueParticipantsListViewModel extends ViewModel {
 
                     _state.postValue(new CompanyParticipantsState.Success(queueParticipantsListModel.getParticipants()));
 
-                    return DI. addCompanyQueueParticipantsSizeSnapshot.invoke(companyId, queueParticipantsListModel.getId());
+                    return CompanyQueueDI.addCompanyQueueParticipantsSizeSnapshot.invoke(companyId, queueParticipantsListModel.getId());
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {

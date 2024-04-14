@@ -1,9 +1,8 @@
 package com.example.myapplication.presentation.utils.waitingNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.INTENT_TIME_PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -17,8 +16,10 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
@@ -32,7 +33,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationForegroundService extends Service {
-
     private String name = null;
     private String time = null;
 
@@ -48,8 +48,8 @@ public class NotificationForegroundService extends Service {
         return null;
     }
 
-    private void addSnapshot(String queueId) {
-        DI.addSnapshotQueueUseCase.invoke(queueId)
+    private void addSnapshot(String path) {
+        QueueDI.addSnapshotQueueUseCase.invoke(path)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
@@ -59,19 +59,17 @@ public class NotificationForegroundService extends Service {
 
                     @Override
                     public void onNext(@NonNull DocumentSnapshot snapshot) {
-                        if (!DI.onPausedUseCase.invoke(snapshot)) {
+                        if (!QueueDI.onPausedUseCase.invoke(snapshot)) {
                             Intent intent = new Intent(NotificationForegroundService.this, NotificationQueuePaused.class);
-                            String timePaused = DI.getTimeProgressPausedUseCase.invoke(snapshot);
-                            intent.putExtra(QUEUE_ID, queueId);
-                            intent.putExtra(INTENT_TIME_PAUSED, timePaused);
+                            intent.putExtra(PARTICIPANT_QUEUE_PATH, path);
                             startService(intent);
-                        } else if (DI.onContainParticipantUseCase.invoke(snapshot)) {
+                        } else if (QueueDI.onContainParticipantUseCase.invoke(snapshot)) {
                             stopForeground(true);
                             stopSelf();
                             Intent intent = new Intent(NotificationForegroundService.this, YourTurnForegroundService.class);
-                            intent.putExtra(QUEUE_ID, queueId);
+                            intent.putExtra(PARTICIPANT_QUEUE_PATH, path);
                             startService(intent);
-                        } else if (DI.onParticipantLeftUseCase.invoke(snapshot)){
+                        } else if (QueueDI.onParticipantLeftUseCase.invoke(snapshot)) {
                             stopForeground(true);
                             stopSelf();
                         }
@@ -90,7 +88,11 @@ public class NotificationForegroundService extends Service {
     }
 
     private void getQueueByParticipantId() {
-        DI.getQueueByParticipantIdUseCase.invoke()
+        ProfileDI.getParticipantQueuePathUseCase.invoke()
+                .flatMap(path -> {
+                    addSnapshot(path);
+                    return QueueDI.getQueueByParticipantPathUseCase.invoke(path);
+                })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueModel>() {
                     @Override
@@ -103,7 +105,7 @@ public class NotificationForegroundService extends Service {
                         name = queueModel.getName();
                         time = queueModel.getMidTime();
                         setupNotification();
-                        addSnapshot(queueModel.getId());
+
                     }
 
                     @Override

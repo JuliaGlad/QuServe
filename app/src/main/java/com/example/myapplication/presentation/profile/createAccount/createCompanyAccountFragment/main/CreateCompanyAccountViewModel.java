@@ -4,6 +4,9 @@ import static com.example.myapplication.presentation.profile.createAccount.creat
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.name;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.phoneNumber;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.service;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.stringsServicesArray;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -12,7 +15,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CommonCompanyDI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.domain.model.restaurant.RestaurantEmailNameModel;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -26,6 +33,7 @@ import java.util.Random;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
@@ -40,20 +48,64 @@ public class CreateCompanyAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _finished = new MutableLiveData<>(null);
     LiveData<String> finished = _finished;
 
-    void initQueueData() {
-        companyID = generateID();
-        createQueueDocument(companyID, name, email, phoneNumber, service);
-        generateQrCode();
+    void initData() {
+        createDocument(name, email, phoneNumber, service);
     }
 
-    private void createQueueDocument(String companyID, String name, String email, String phone, String companyService) {
-        DI.createCompanyDocumentUseCase.invoke(companyID, name, email, phone, companyService);
+    private void createDocument(String name, String email, String phone, String companyService) {
+
+        if (companyService.equals(stringsServicesArray[0])) {
+            companyID = generateID(COMPANY);
+            CompanyQueueUserDI.createCompanyDocumentUseCase.invoke(companyID, name, email, phone, companyService)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            generateQrCode();
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+                    });
+
+
+        } else if (companyService.equals(stringsServicesArray[1])) {
+            companyID = generateID(RESTAURANT);
+            RestaurantDI.createRestaurantDocumentUseCase.invoke(companyID, name, email, phone)
+                    .concatWith(CommonCompanyDI.setCompanyUserUseCase.invoke(companyID, name, RESTAURANT))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            generateQrCode();
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+                    });
+        }
+
+
     }
 
-    private String generateID() {
+    private String generateID(String title) {
         Random rand = new Random();
         int id = rand.nextInt(90000000) + 10000000;
-        return "@COMPANY_" + id;
+        return "@" + title + "_" + id;
     }
 
     private Completable uploadImageToFireStorage(Bitmap qrCode, String companyId) {
@@ -62,10 +114,10 @@ public class CreateCompanyAccountViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        return DI.uploadCompanyBytesUseCase.invoke(companyId, data);
+        return CompanyQueueUserDI.uploadCompanyBytesUseCase.invoke(companyId, data);
     }
 
-    public void setArgumentsNull(){
+    public void setArgumentsNull() {
         name = null;
         service = null;
         email = null;
@@ -82,7 +134,7 @@ public class CreateCompanyAccountViewModel extends ViewModel {
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            uploadImageToFireStorage(qrCode,companyID)
+            uploadImageToFireStorage(qrCode, companyID)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/restaurant_table_navigation"
+    app:startDestination="@id/restaurantTableDetailsFragment">
+
+    <fragment
+        android:id="@+id/restaurantTableDetailsFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.RestaurantTableDetailsFragment"
+        android:label="fragment_restaurant_table_details"
+        tools:layout="@layout/fragment_restaurant_table_details" />
+</navigation>

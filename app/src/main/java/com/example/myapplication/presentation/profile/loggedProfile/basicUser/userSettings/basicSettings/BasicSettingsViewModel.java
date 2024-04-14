@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.model.SettingsUserModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.state.BasicSettingsState;
 
@@ -19,8 +20,8 @@ public class BasicSettingsViewModel extends ViewModel {
     LiveData<BasicSettingsState> state = _state;
 
     public void retrieveUserData() {
-        DI.getProfileImageUseCase.invoke()
-                .zipWith(DI.getUserEmailAndNameDataUseCase.invoke(), (imageModel, userEmailAndNameModel) ->
+        ProfileDI.getProfileImageUseCase.invoke()
+                .zipWith(ProfileDI.getUserEmailAndNameDataUseCase.invoke(), (imageModel, userEmailAndNameModel) ->
                         new SettingsUserModel(userEmailAndNameModel.getName(), userEmailAndNameModel.getEmail(), imageModel.getImageUri()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<SettingsUserModel>() {

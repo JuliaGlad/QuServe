@@ -8,6 +8,7 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.NAVIGATION;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -85,11 +86,13 @@ public class ProfileLoggedFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         if (type != null) {
             switch (type) {
+
                 case BASIC:
                     setBasicLayout(fragmentManager);
                     break;
 
                 case COMPANY:
+                case RESTAURANT:
                     fragmentManager
                             .beginTransaction()
                             .setReorderingAllowed(true)

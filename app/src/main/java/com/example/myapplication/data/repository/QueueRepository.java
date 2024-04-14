@@ -1,6 +1,6 @@
 package com.example.myapplication.data.repository;
 
-import static com.example.myapplication.DI.service;
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
@@ -95,6 +95,28 @@ public class QueueRepository {
 
     }
 
+    public Single<QueueDto> getQueueByParticipantPath(String path){
+        DocumentReference docRef = service.fireStore.document(path);
+       return Single.create(emitter -> {
+           docRef.get().addOnCompleteListener(task -> {
+               if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    emitter.onSuccess(new QueueDto(
+                            (List<Object>) document.get(QUEUE_PARTICIPANTS_LIST),
+                            document.getId(),
+                            document.getString(QUEUE_NAME_KEY),
+                            document.getString(QUEUE_LIFE_TIME_KEY),
+                            document.getString(QUEUE_AUTHOR_KEY),
+                            document.getString(QUEUE_IN_PROGRESS),
+                            document.getString(PEOPLE_PASSED),
+                            document.getString(PEOPLE_PASSED_15),
+                            document.getString(MID_TIME_WAITING))
+                    );
+               }
+           });
+       });
+    }
+
     public Single<List<QueueDto>> getQueuesList() {
         return Single.create(emitter -> {
             service.fireStore.collection(QUEUE_LIST).get()
@@ -142,9 +164,9 @@ public class QueueRepository {
         });
     }
 
-    public Observable<DocumentSnapshot> addSnapshotListener(String queueId) {
+    public Observable<DocumentSnapshot> addSnapshotListener(String path) {
         return Observable.create(emitter -> {
-            service.fireStore.collection(QUEUE_LIST).document(queueId).addSnapshotListener((value, error) -> {
+            service.fireStore.document(path).addSnapshotListener((value, error) -> {
                 if (value != null) {
                     emitter.onNext(value);
                 }
@@ -165,7 +187,12 @@ public class QueueRepository {
 
     public Completable continueQueue(String queueId) {
         return Completable.create(emitter -> {
-
+            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+            docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
         });
     }
 
@@ -174,9 +201,9 @@ public class QueueRepository {
         docRef.update(QUEUE_IN_PROGRESS, name);
     }
 
-    public Completable removeParticipantById(String queueId) {
+    public Completable removeParticipantById(String path) {
         return Completable.create(emitter -> {
-            DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+            DocumentReference docRef = service.fireStore.document(path);
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(service.auth.getCurrentUser().getUid()))
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -208,9 +235,9 @@ public class QueueRepository {
         });
     }
 
-    public Completable onParticipantServed(String queueId) {
+    public Completable onParticipantServed(String path) {
         String userId = service.auth.getCurrentUser().getUid();
-        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        DocumentReference docRef = service.fireStore.document(path);
         return Completable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null && !value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(userId) && !value.getString(QUEUE_IN_PROGRESS).contains(userId)) {
@@ -235,8 +262,8 @@ public class QueueRepository {
         });
     }
 
-    public Observable<Integer> addPeopleBeforeDocumentSnapshot(String queueId, int previousSize) {
-        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+    public Observable<Integer> addPeopleBeforeDocumentSnapshot(String path, int previousSize) {
+        DocumentReference docRef = service.fireStore.document(path);
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
                 List<String> peopleBeforeYou;
@@ -257,8 +284,9 @@ public class QueueRepository {
         });
     }
 
-    public Completable createQueueDocument(String queueID, String queueName, String queueTime) {
+    public Single<String> createQueueDocument(String queueID, String queueName, String queueTime) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
+        String path = docRef.getPath();
         ArrayList<String> arrayList = new ArrayList<>();
 
         Map<String, Object> userQueue = new HashMap<>();
@@ -272,10 +300,10 @@ public class QueueRepository {
         userQueue.put(PEOPLE_PASSED_15, "0");
         userQueue.put(MID_TIME_WAITING, "0");
 
-        return Completable.create(emitter -> {
+        return Single.create(emitter -> {
             docRef.set(userQueue).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    emitter.onComplete();
+                    emitter.onSuccess(path);
                 }
             });
         });
@@ -311,8 +339,8 @@ public class QueueRepository {
         });
     }
 
-    public Completable addToParticipantsList(String queueId) {
-        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+    public Completable addToParticipantsList(String path) {
+        DocumentReference docRef = service.fireStore.document(path);
         return Completable.create(emitter -> {
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayUnion(service.auth.getCurrentUser().getUid()))
                     .addOnCompleteListener(task -> {

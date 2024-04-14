@@ -1,8 +1,5 @@
 package com.example.myapplication.presentation;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
@@ -12,12 +9,10 @@ import static com.example.myapplication.presentation.utils.Utils.STATE;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,7 +27,6 @@ import com.example.myapplication.presentation.companyQueue.queueManager.QueueMan
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
@@ -42,6 +36,7 @@ import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueue
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
 import com.example.myapplication.presentation.service.main.queue.QueueActivity;
+import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -87,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
         recreate();
     }
 
+    public void openRestaurantLocationsActivity(){
+        Intent intent = new Intent(this, LocationsActivity.class);
+        startActivity(intent);
+    }
+
     public void openQueueWorkerDetailsActivity(String queueId, String companyId){
         Intent intent = new Intent(this, WorkerQueueDetailsActivity.class);
         intent.putExtra(QUEUE_ID, queueId);
@@ -124,12 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void openBasicSettingsActivity(){
         Intent intent = new Intent(this, BasicSettingsActivity.class);
-        startActivity(intent);
-    }
-
-    public void openEmployeesActivity(String id) {
-        Intent intent = new Intent(this, EmployeeMainActivity.class);
-        intent.putExtra(COMPANY_ID, id);
         startActivity(intent);
     }
 

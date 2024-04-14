@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.companyQueue.employees;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 
 import io.reactivex.rxjava3.core.Completable;
 

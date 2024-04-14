@@ -1,11 +1,12 @@
 package com.example.myapplication.presentation.service.waitingFragment.fragment;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.model.WaitingModel;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.state.WaitingState;
 
@@ -21,15 +22,22 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WaitingViewModel extends ViewModel {
 
-    private String queueId, nameString;
+    private String queueId, nameString, queuePath;
     private int midTime = 0;
     private int peopleBeforeSize = 0;
+
+    private final MutableLiveData<Boolean> _isAdded = new MutableLiveData<>(false);
+    LiveData<Boolean> isAdded = _isAdded;
 
     private final MutableLiveData<WaitingState> _state = new MutableLiveData<>(new WaitingState.Loading());
     LiveData<WaitingState> state = _state;
 
-    public void getQueue(Fragment fragment) {
-        DI.getQueueByParticipantIdUseCase.invoke()
+    public void getQueue() {
+        ProfileDI.getParticipantQueuePathUseCase.invoke()
+                .flatMap(path -> {
+                    queuePath = path;
+                    return QueueDI.getQueueByParticipantPathUseCase.invoke(queuePath);
+                })
                 .flatMapObservable(queueModel -> {
                     List<String> participantsList = queueModel.getParticipants();
                     for (int i = 0; i < participantsList.size(); i++) {
@@ -43,18 +51,18 @@ public class WaitingViewModel extends ViewModel {
                     _state.postValue(new WaitingState.Success(new WaitingModel(
                             queueModel.getName(),
                             queueModel.getParticipants(),
-                            queueModel.getId(),
+                            queuePath,
                             queueModel.getMidTime()
                     )));
 
                     queueId = queueModel.getId();
                     nameString = queueModel.getName();
-                    return DI.addSnapshotQueueUseCase.invoke(queueId);
+                    return QueueDI.addSnapshotQueueUseCase.invoke(queuePath);
                 })
                 .flatMapCompletable(documentSnapshot -> {
                     String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
                     String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                    return DI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
+                    return QueueDI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
@@ -65,7 +73,7 @@ public class WaitingViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        fragment.requireActivity().finish();
+                        _isAdded.postValue(true);
                     }
 
                     @Override
@@ -75,8 +83,8 @@ public class WaitingViewModel extends ViewModel {
                 });
     }
 
-    public boolean checkParticipantsIndex(List<String> participants, int index){
-       return DI.checkParticipantIndexUseCase.invoke(participants, index);
+    public boolean checkParticipantsIndex(List<String> participants, int index) {
+        return QueueDI.checkParticipantIndexUseCase.invoke(participants, index);
     }
 
 }

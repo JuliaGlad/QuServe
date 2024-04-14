@@ -137,7 +137,7 @@
     <string name="next_pause_will_be_available_only_in_2_hours">Next pause will be available only in 2 hours!</string>
     <string name="stop_pause">Stop pause</string>
     <string name="paused">Paused</string>
-    <string name="queue_paused_content_text">Queue was paused for </string>
+    <string name="queue_paused_content_text">Queue was paused. Please, wait until it restore work </string>
     <string name="no_internet_connection">No internet connection!</string>
     <string name="check_your_network_and_try_again">Check your network and try again!</string>
     <string name="retry">Retry</string>
@@ -182,7 +182,7 @@
 
     <string-array name="services">
         <item>Queue</item>
-        <item>Dining</item>
+        <item>Restaurant</item>
         <item>On-board catering</item>
     </string-array>
 
@@ -266,4 +266,36 @@
     <string name="become_cooker_description">Become restaurant cook, make dishes, easily communicate with waiters and serve people</string>
     <string name="become_waiter_description">Become restaurant waiter and serve visitor </string>
     <string name="you_need_an_account_to_perform_this_action">You need an account to perform this action</string>
+    <string name="choose_company_service">Choose company service</string>
+    <string name="you_don_t_have_a_company_of_this_service_yet">You don`t have a company of this service yet!</string>
+    <string name="create_company">Create company</string>
+    <string name="choose_another_service_or_create_a_new_company">Choose another service or create a new company</string>
+    <string name="edit_restaurant">Edit restaurant</string>
+    <string name="delete_restaurant">Delete restaurant</string>
+    <string name="are_you_sure_you_want_to_delete_your_restaurant">Are you sure you want to delete your restaurant?</string>
+    <string name="locations">Locations</string>
+    <string name="restaurant_menu">Restaurant Menu</string>
+    <string name="you_don_t_have_any_restaurant_locations_yet">You don`t have any restaurant locations yet!</string>
+    <string name="add_location">Add Location</string>
+    <string name="create_your_first_location_and_assign_employees">Create your first location and assign employees</string>
+    <string name="waiters">Waiters</string>
+    <string name="cooks">Cooks</string>
+    <string name="table_list">Table List</string>
+    <string name="add_cooker">Add cooker</string>
+    <string name="add_waiter">Add waiter</string>
+    <string name="manage_your_restaurant_s_tables_and_view_active_orders">Manage your restaurant`s tables and view active orders</string>
+    <string name="table">Table №</string>
+    <string name="add_table_number">Add table number:</string>
+    <string name="table_number">Table number</string>
+    <string name="add_table">Add table</string>
+    <string name="new_table_was_added">New table was added!</string>
+    <string name="show_the_visitors_this_qr_code_so_that_they_can_place_an_order_for_this_table">Show the visitors this qr code so that they can place an order for this table</string>
+    <string name="view_order">View order</string>
+    <string name="view_details_of_active_order_on_this_table">View details of active order on this table</string>
+    <string name="delete_table">Delete table</string>
+    <string name="are_you_sure_you_want_to_delete_this_table">Are you sure you want to delete this table?</string>
+    <string name="menu">Menu</string>
+    <string name="show_this_qr_code_to_your_new_employee_who_are_looking_forward_to_join_your_company">Show this qr-code to your new employee who are looking forward to join your company</string>
+    <string name="show_this_qr_code_to_the_new_cook_who_looking_forward_to_join_your_restaurant">Show this qr-code to the new cook who looking forward to join your restaurant</string>
+    <string name="show_this_qr_code_to_the_new_waiter_who_looking_forward_to_join_your_restaurant">Show this qr-code to the new waiter who looking forward to join your restaurant</string>
 </resources>

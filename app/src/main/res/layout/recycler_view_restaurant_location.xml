@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
+    app:cardCornerRadius="40dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/transparent"
+    android:layout_marginBottom="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurfaceContainerLow">
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/liquid_blue_background_30"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/title_waiters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/regular"
+            android:text="@string/waiters"
+            android:textColor="?colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/location"
+            app:layout_constraintTop_toBottomOf="@+id/location" />
+
+        <TextView
+            android:id="@+id/title_cookers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/regular"
+            android:paddingBottom="24dp"
+            android:text="@string/cooks"
+            android:textColor="?colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/title_waiters"
+            app:layout_constraintTop_toBottomOf="@+id/title_waiters" />
+
+        <ImageView
+            android:id="@+id/first_cooker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/title_cookers"
+            app:layout_constraintTop_toTopOf="@+id/title_cookers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="?colorPrimaryContainer" />
+
+
+        <ImageView
+            android:id="@+id/first_waiter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@+id/title_waiters"
+            app:layout_constraintTop_toTopOf="@+id/title_waiters"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="?colorPrimaryContainer" />
+
+        <ImageView
+            android:id="@+id/second_cook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/first_cooker"
+            app:layout_constraintTop_toTopOf="@id/title_cookers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#8EC8E4" />
+
+        <ImageView
+            android:id="@+id/second_waiter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            app:layout_constraintStart_toEndOf="@+id/first_waiter"
+            app:layout_constraintTop_toTopOf="@+id/first_waiter"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#8EC8E4" />
+
+        <ImageView
+            android:id="@+id/third_cook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toEndOf="@+id/second_cook"
+            app:layout_constraintTop_toTopOf="@+id/title_cookers"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#5EA8CC" />
+
+        <ImageView
+            android:id="@+id/third_waiter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-12dp"
+            app:layout_constraintStart_toEndOf="@+id/second_waiter"
+            app:layout_constraintTop_toTopOf="@+id/second_waiter"
+            app:srcCompat="@drawable/ic_circle"
+            app:tint="#5EA8CC" />
+
+        <TextView
+            android:id="@+id/cooks_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="+33"
+            android:fontFamily="@font/regular"
+            android:textColor="?colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/second_cook"
+            app:layout_constraintStart_toEndOf="@+id/third_cook"
+            app:layout_constraintTop_toTopOf="@+id/second_cook" />
+
+
+        <TextView
+            android:id="@+id/waiter_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="+33"
+            android:fontFamily="@font/regular"
+            android:textColor="?colorOnSurface"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/third_waiter"
+            app:layout_constraintStart_toEndOf="@+id/third_waiter"
+            app:layout_constraintTop_toTopOf="@+id/third_waiter" />
+
+        <TextView
+            android:id="@+id/location"
+            style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="Moscow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

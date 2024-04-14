@@ -4,16 +4,16 @@ public class CompanyListModel {
 
     private final String id;
     private final String name;
-    private final String uri;
+    private final String service;
 
-    public CompanyListModel(String id, String name, String uri) {
+    public CompanyListModel(String id, String service, String name) {
         this.id = id;
         this.name = name;
-        this.uri = uri;
+        this.service = service;
     }
 
-    public String getUri() {
-        return uri;
+    public String getService() {
+        return service;
     }
 
     public String getName() {

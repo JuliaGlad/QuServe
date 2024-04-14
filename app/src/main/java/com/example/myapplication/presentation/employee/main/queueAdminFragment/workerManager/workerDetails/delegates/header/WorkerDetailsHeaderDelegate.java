@@ -2,7 +2,6 @@ package com.example.myapplication.presentation.employee.main.queueAdminFragment.
 
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -10,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewWorkerDetailsHeaderBinding;
 import com.example.myapplication.domain.model.common.ImageModel;
@@ -51,7 +51,7 @@ public class WorkerDetailsHeaderDelegate implements AdapterDelegate {
             binding.employeeName.setText(model.getName());
             binding.employeeRole.setText(model.getRole());
 
-            DI.getEmployeePhotoUseCase.invoke(model.getEmployeeId())
+            CompanyQueueUserDI.getEmployeePhotoUseCase.invoke(model.getEmployeeId())
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<ImageModel>() {
                         @Override

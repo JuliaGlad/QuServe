@@ -18,6 +18,8 @@ public class StopPauseDialogFragment extends DialogFragment {
 
     private StopPauseViewModel viewModel;
     private DialogDismissedListener listener;
+    private final String type;
+    private final String companyId;
     private final String queueId;
     private boolean isStopped;
 
@@ -25,8 +27,10 @@ public class StopPauseDialogFragment extends DialogFragment {
         this.listener = listener;
     }
 
-    public StopPauseDialogFragment(String queueId) {
+    public StopPauseDialogFragment(String queueId, String companyId, String type) {
         this.queueId = queueId;
+        this.companyId = companyId;
+        this.type = type;
     }
 
     @NonNull
@@ -40,7 +44,7 @@ public class StopPauseDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonStop.setOnClickListener(v -> {
-            viewModel.continueQueue(queueId);
+            viewModel.continueQueue(queueId, companyId, type);
         });
 
         binding.buttonCancel.setOnClickListener(v -> {

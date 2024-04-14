@@ -6,6 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Arguments {
-    static String queueName, queueTime, queueLocation, city;
+    static String queueId, queueName, queueTime, queueLocation, city;
     static List<EmployeeModel> employeeModels = new ArrayList<>();
 }

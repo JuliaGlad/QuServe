@@ -1,21 +1,10 @@
 package com.example.myapplication.presentation.utils.timerWorker;
 
 import android.content.Context;
-import android.os.CountDownTimer;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-import com.example.myapplication.DI;
-
-import java.util.Locale;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class TimerWorker extends Worker {
 

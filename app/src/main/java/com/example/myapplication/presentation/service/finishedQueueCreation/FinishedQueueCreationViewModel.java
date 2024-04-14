@@ -1,15 +1,12 @@
 package com.example.myapplication.presentation.service.finishedQueueCreation;
 
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.TIME;
-
-import android.os.Bundle;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.queue.QueueTimeModel;
 import com.example.myapplication.presentation.service.finishedQueueCreation.state.FinishedQueueState;
@@ -28,7 +25,7 @@ public class FinishedQueueCreationViewModel extends ViewModel {
     LiveData<FinishedQueueState> state = _state;
 
     public void delayBasicQueueFinish() {
-        DI.getQueueTimeModelUseCase.invoke()
+        QueueDI.getQueueTimeModelUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueTimeModel>() {
                     @Override
@@ -50,7 +47,7 @@ public class FinishedQueueCreationViewModel extends ViewModel {
     }
 
     public void getQrCode(String queueID) {
-        DI.getQrCodeImageUseCase.invoke(queueID)
+        QueueDI.getQrCodeImageUseCase.invoke(queueID)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<ImageModel>() {
                     @Override
@@ -71,7 +68,7 @@ public class FinishedQueueCreationViewModel extends ViewModel {
     }
 
     public void delayCompanyQueueFinish(String queueId, String companyId) {
-        DI.getCompanyQueueTimeModelUseCase.invoke(queueId, companyId)
+        CompanyQueueDI.getCompanyQueueTimeModelUseCase.invoke(queueId, companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<String>() {
                     @Override
@@ -81,7 +78,6 @@ public class FinishedQueueCreationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull String time) {
-
                         _queue.postValue(time);
                     }
 

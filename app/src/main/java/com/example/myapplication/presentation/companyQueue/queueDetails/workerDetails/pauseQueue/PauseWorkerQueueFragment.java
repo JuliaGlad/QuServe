@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.pauseQueue;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
@@ -31,6 +32,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPauseQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment.PausedQueueFragment;
+import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
 import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
@@ -80,7 +82,7 @@ public class PauseWorkerQueueFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (!checkForegroundServiceRunning()) {
-            ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, PROGRESS);
+            ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, PROGRESS, COMPANY);
         }
     }
 
@@ -123,7 +125,7 @@ public class PauseWorkerQueueFragment extends Fragment {
 
     private void initStopButton() {
         binding.buttonStopPause.setOnClickListener(v -> {
-            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId);
+            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
             dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
             dialogFragment.onDismissListener(bundle -> {
                 NavHostFragment.findNavController(this).popBackStack();
@@ -164,6 +166,11 @@ public class PauseWorkerQueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-
+        viewModel.isContinued.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                ((WorkerQueueDetailsActivity)requireActivity()).startNotificationForegroundService(COMPANY);
+                initNotificationWorker();
+            }
+        });
     }
 }

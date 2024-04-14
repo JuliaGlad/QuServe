@@ -12,7 +12,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -50,8 +52,11 @@ public class CreateQueueViewModel extends ViewModel {
     }
 
     private void createQueueDocument(String queueID) {
-        DI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime)
-                .andThen(DI.updateOwnQueueUseCase.invoke(true))
+        QueueDI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime)
+                .flatMapCompletable(path -> {
+                    generateQrCode(path);
+                    return ProfileDI.updateOwnQueueUseCase.invoke(true);
+                })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -61,12 +66,12 @@ public class CreateQueueViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        generateQrCode(Arguments.queueID);
+                        Log.d("Successfully created", "created");
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        Log.d("Error creating document", e.getMessage());
                     }
                 });
     }
@@ -83,11 +88,11 @@ public class CreateQueueViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        return DI.uploadBytesToFireStorageUseCase.invoke(queueID, data);
+        return QueueDI.uploadBytesToFireStorageUseCase.invoke(queueID, data);
     }
 
     private void uploadPdfToFireStorage(File file, String queueID) {
-        DI.uploadFileToFireStorageUseCase.invoke(file, queueID).subscribeOn(Schedulers.io())
+        QueueDI.uploadFileToFireStorageUseCase.invoke(file, queueID).subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -106,19 +111,19 @@ public class CreateQueueViewModel extends ViewModel {
                 });
     }
 
-    private void generateQrCode(String queueID) {
+    private void generateQrCode(String path) {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         try {
 
-            BitMatrix bitMatrix = multiFormatWriter.encode(queueID, BarcodeFormat.QR_CODE, 300, 300);
+            BitMatrix bitMatrix = multiFormatWriter.encode(path, BarcodeFormat.QR_CODE, 300, 300);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            createPdfDocument(qrCode, queueID);
+            createPdfDocument(qrCode, path);
 
-            uploadImageToFireStorage(qrCode, queueID)
+            uploadImageToFireStorage(qrCode, path)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override

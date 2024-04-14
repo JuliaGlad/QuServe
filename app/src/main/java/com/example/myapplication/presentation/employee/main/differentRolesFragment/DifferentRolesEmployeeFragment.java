@@ -1,7 +1,11 @@
 package com.example.myapplication.presentation.employee.main.differentRolesFragment;
 
+import static com.example.myapplication.presentation.utils.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -24,6 +28,8 @@ import com.example.myapplication.presentation.employee.main.differentRolesFragme
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.delegate.CompanyEmployeeModel;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.model.DifferentRoleModel;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.state.DifferentRoleState;
+import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
+import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegate;
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonModel;
@@ -96,7 +102,31 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         List<CompanyEmployeeDelegateItem> delegates = new ArrayList<>();
         for (int i = 0; i < roleModels.size(); i++) {
             DifferentRoleModel current = roleModels.get(i);
-            delegates.add(new CompanyEmployeeDelegateItem(new CompanyEmployeeModel(i + 2, current.getCompanyId(), current.getCompanyName(), current.getRole(), () -> {})));
+            String role = current.getRole();
+            String companyId = current.getCompanyId();
+            delegates.add(new CompanyEmployeeDelegateItem(new CompanyEmployeeModel(i + 2, companyId, current.getCompanyName(), role,
+                    () -> {
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(COMPANY_ID, companyId);
+
+                        switch (role){
+                            case WORKER:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.employee_nav_container, QueueWorkerFragment.class, bundle)
+                                        .commit();
+                                break;
+                            case ADMIN:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
+                                        .commit();
+                                break;
+                        }
+                    }
+            )));
 
         }
         return delegates;
@@ -104,12 +134,12 @@ public class DifferentRolesEmployeeFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof DifferentRoleState.Success){
-                List<DifferentRoleModel> models = ((DifferentRoleState.Success)state).data;
+            if (state instanceof DifferentRoleState.Success) {
+                List<DifferentRoleModel> models = ((DifferentRoleState.Success) state).data;
                 initRecycler(models);
-            } else if (state instanceof DifferentRoleState.Loading){
+            } else if (state instanceof DifferentRoleState.Loading) {
 
-            } else if (state instanceof DifferentRoleState.Error){
+            } else if (state instanceof DifferentRoleState.Error) {
 
             }
         });

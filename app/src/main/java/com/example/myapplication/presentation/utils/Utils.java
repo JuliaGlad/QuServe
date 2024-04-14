@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String COMPANY_QUEUE = "Queue";
+    public static final String PARTICIPANT_QUEUE_PATH = "ParticipantQueuePath";
     public static final String TIME_LEFT = "TimeLeft";
     public static final String TIME_MILLIS = "TimeMillis";
     public static final String PEOPLE_PASSED_15 = "PeoplePassed(15min)";
@@ -109,5 +111,5 @@ public class Utils {
     public static final String YOUR_TURN_CHANNEL_NAME = "Your turn";
     public static final String PAUSED = "Paused";
     public static final String[] stringsTimeArray = {"NO_SET_LIFE_TIME", "3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS", "365 DAYS"};
-    public static final String[] stringsServicesArray = {"Queue", "Dining", "On-Board catering"};
+    public static final String[] stringsServicesArray = {"Queue", "Restaurant", "On-Board catering"};
 }

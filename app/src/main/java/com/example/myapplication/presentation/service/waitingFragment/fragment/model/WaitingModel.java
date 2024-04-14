@@ -6,12 +6,12 @@ public class WaitingModel {
     private final String name;
     private final String midTime;
     private final List<String> participants;
-    private final String id;
+    private final String path;
 
-    public WaitingModel(String name, List<String> participants, String id, String midTime) {
+    public WaitingModel(String name, List<String> participants, String path, String midTime) {
         this.name = name;
         this.participants = participants;
-        this.id = id;
+        this.path = path;
         this.midTime = midTime;
     }
 
@@ -25,7 +25,7 @@ public class WaitingModel {
         return participants;
     }
 
-    public String getId() {
-        return id;
+    public String getPath() {
+        return path;
     }
 }

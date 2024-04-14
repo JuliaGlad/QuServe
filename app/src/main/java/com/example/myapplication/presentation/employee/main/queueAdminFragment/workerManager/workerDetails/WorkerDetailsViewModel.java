@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.company.CompanyNameIdModel;
-import com.example.myapplication.domain.model.company.EmployeeMainModel;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
-import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.model.WorkerDetailsModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.state.WorkerDetailsState;
 
 import java.util.ArrayList;
@@ -18,7 +16,6 @@ import java.util.List;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WorkerDetailsViewModel extends ViewModel {
@@ -27,7 +24,7 @@ public class WorkerDetailsViewModel extends ViewModel {
     LiveData<WorkerDetailsState> state = _state;
 
     public void getEmployeeData(String companyId, String employeeId) {
-        DI.getActiveQueuesByEmployeeIdUseCase.invoke(companyId, employeeId)
+        ProfileDI.getActiveQueuesByEmployeeIdUseCase.invoke(companyId, employeeId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ActiveQueueEmployeeModel>>() {
                     @Override

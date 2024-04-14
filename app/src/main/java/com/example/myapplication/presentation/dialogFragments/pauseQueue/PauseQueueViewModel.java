@@ -6,7 +6,11 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.myapplication.DI;
+
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
+
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -20,7 +24,7 @@ public class PauseQueueViewModel extends ViewModel {
     public void pauseQueue(int hours, int minutes, int seconds, String queueId, String companyId, String type) {
         switch (type){
             case BASIC:
-                DI.pauseQueueUseCase.invoke(queueId, hours, minutes, seconds)
+                QueueDI.pauseQueueUseCase.invoke(queueId, hours, minutes, seconds)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override
@@ -41,7 +45,7 @@ public class PauseQueueViewModel extends ViewModel {
                 break;
 
             case COMPANY:
-                DI.pauseCompanyQueueUseCase.invoke(queueId, companyId, hours, minutes, seconds)
+                CompanyQueueDI.pauseCompanyQueueUseCase.invoke(queueId, companyId, hours, minutes, seconds)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override

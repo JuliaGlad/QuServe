@@ -2,9 +2,12 @@ package com.example.myapplication.presentation.companyQueue.createQueue.map;
 
 
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,12 +36,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mapFragment;
     private MapViewModel viewModel;
     private FragmentMapBinding binding;
-    private String location, city;
+    private String location, city, state;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        state = getArguments().getString(STATE);
         viewModel = new ViewModelProvider(this).get(MapViewModel.class);
     }
 
@@ -81,11 +85,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void initChooseBottomSheetButton() {
         binding.chooseButton.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString(PAGE_KEY, PAGE_3);
-            bundle.putString(QUEUE_LOCATION_KEY, location);
-            bundle.putString(CITY_KEY, city);
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_mapFragment_to_createCompanyQueueFragment, bundle);
+            switch (state){
+                case COMPANY:
+                    bundle.putString(PAGE_KEY, PAGE_3);
+                    bundle.putString(QUEUE_LOCATION_KEY, location);
+                    bundle.putString(CITY_KEY, city);
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_mapFragment_to_createCompanyQueueFragment, bundle);
+                    break;
+                case LOCATION:
+                    bundle.putString(QUEUE_LOCATION_KEY, location);
+                    bundle.putString(CITY_KEY, city);
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_mapFragment_to_addLocationFragment, bundle);
+                    break;
+            }
+
+
         });
     }
 

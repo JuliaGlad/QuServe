@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 import com.example.myapplication.domain.model.profile.UserBooleanDataModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -23,7 +24,7 @@ public class QueueViewModel extends ViewModel {
     LiveData<Boolean> isParticipateInQueue = _isParticipateInQueue;
 
     public void getUserData() {
-        DI.getUserBooleanDataUseCase.invoke()
+        ProfileDI.getUserBooleanDataUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<UserBooleanDataModel>() {
                     @Override
@@ -46,11 +47,11 @@ public class QueueViewModel extends ViewModel {
     }
 
     public boolean checkAuthentication(){
-        return DI.checkAuthenticationUseCase.invoke();
+        return ProfileDI.checkAuthenticationUseCase.invoke();
     }
 
     private void addSnapshot() {
-        DI.addSnapshotProfileUseCase.invoke()
+        ProfileDI.addSnapshotProfileUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
@@ -61,9 +62,9 @@ public class QueueViewModel extends ViewModel {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull DocumentSnapshot snapshot) {
                         if (snapshot != null) {
-                            if (DI.checkBooleanDataUseCase.invoke(snapshot, Boolean.TRUE.equals(_isOwnQueue.getValue()), Boolean.TRUE.equals(_isParticipateInQueue.getValue()))) {
-                                _isOwnQueue.postValue(DI.getOwnQueueData.invoke(snapshot));
-                                _isParticipateInQueue.postValue(DI.getParticipateInQueueData.invoke(snapshot));
+                            if (ProfileDI.checkBooleanDataUseCase.invoke(snapshot, Boolean.TRUE.equals(_isOwnQueue.getValue()), Boolean.TRUE.equals(_isParticipateInQueue.getValue()))) {
+                                _isOwnQueue.postValue(ProfileDI.getOwnQueueData.invoke(snapshot));
+                                _isParticipateInQueue.postValue(ProfileDI.getParticipateInQueueData.invoke(snapshot));
                             }
                         }
                     }

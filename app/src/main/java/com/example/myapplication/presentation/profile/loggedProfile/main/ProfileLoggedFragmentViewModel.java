@@ -2,16 +2,17 @@ package com.example.myapplication.presentation.profile.loggedProfile.main;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 
 public class ProfileLoggedFragmentViewModel extends ViewModel {
 
     public boolean checkAuth() {
-        return DI.checkAuthenticationUseCase.invoke();
+        return ProfileDI.checkAuthenticationUseCase.invoke();
     }
 
     public boolean isNull() {
-        return DI.isNullUseCase.invoke();
+        return ProfileDI.isNullUseCase.invoke();
     }
 
 }

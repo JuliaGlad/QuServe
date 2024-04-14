@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.utils.backToWorkNotification;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
 
@@ -16,11 +19,15 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.R;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
 
 public class NotificationGoBackToWork extends Service {
 
+    String type = null;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        type = intent.getStringExtra(STATE);
         setupNotification();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -33,7 +40,16 @@ public class NotificationGoBackToWork extends Service {
 
     private void setupNotification() {
 
-        Intent intent = new Intent(this, QueueDetailsActivity.class);
+        Intent intent = null;
+        switch (type) {
+            case BASIC:
+                intent = new Intent(this, QueueDetailsActivity.class);
+                break;
+            case COMPANY:
+                intent = new Intent(this, WorkerQueueDetailsActivity.class);
+                break;
+        }
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, YOUR_TURN_CHANNEL_ID)

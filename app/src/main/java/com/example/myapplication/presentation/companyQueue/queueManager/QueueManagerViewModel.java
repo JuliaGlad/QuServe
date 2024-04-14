@@ -3,7 +3,9 @@ package com.example.myapplication.presentation.companyQueue.queueManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import com.example.myapplication.DI;
+
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueManagerModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.model.QueueManagerModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.state.QueueManagerState;
@@ -20,7 +22,7 @@ public class QueueManagerViewModel extends ViewModel {
     LiveData<QueueManagerState> state = _state;
 
     public void getList(String companyId) {
-        DI.getCompaniesQueuesUseCase.invoke(companyId)
+        CompanyQueueDI.getCompaniesQueuesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<CompanyQueueManagerModel>>() {
                     @Override

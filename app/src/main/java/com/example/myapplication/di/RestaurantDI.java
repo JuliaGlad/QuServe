@@ -1,0 +1,56 @@
+package com.example.myapplication.di;
+
+import com.example.myapplication.domain.model.common.SetRestaurantUserUseCase;
+import com.example.myapplication.domain.usecase.restaurant.AddRestaurantTablesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.AddRestaurantSnapshotUseCase;
+import com.example.myapplication.domain.usecase.restaurant.CreateRestaurantDocumentUseCase;
+import com.example.myapplication.domain.usecase.restaurant.CreateRestaurantLocationDocumentUseCase;
+import com.example.myapplication.domain.usecase.restaurant.DeleteRestaurantUseCase;
+import com.example.myapplication.domain.usecase.restaurant.DeleteTableQrCodeJpgUseCase;
+import com.example.myapplication.domain.usecase.restaurant.DeleteTableQrCodePdfUseCase;
+import com.example.myapplication.domain.usecase.restaurant.DeleteTableUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetCookQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetRestaurantEditModel;
+import com.example.myapplication.domain.usecase.restaurant.GetRestaurantLocationsUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetRestaurantTablesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetRestaurantsLogosUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetRestaurantsUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetSingleRestaurantLogoUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetSingleRestaurantUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetSingleTableByIdUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetTableQrCodeJpgUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetTableQrCodePdfUseCase;
+import com.example.myapplication.domain.usecase.restaurant.GetWaiterQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UpdateRestaurantDataUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UploadCookQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UploadRestaurantLogoUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UploadTableQrCodeJpgUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UploadTableQrCodePdfUseCase;
+import com.example.myapplication.domain.usecase.restaurant.UploadWaiterQrCodeUseCase;
+
+public class RestaurantDI {
+    public static GetCookQrCodeUseCase getCookQrCodeUseCase = new GetCookQrCodeUseCase();
+    public static GetWaiterQrCodeUseCase getWaiterQrCodeUseCase = new GetWaiterQrCodeUseCase();
+    public static UploadCookQrCodeUseCase uploadCookQrCodeUseCase = new UploadCookQrCodeUseCase();
+    public static UploadWaiterQrCodeUseCase uploadWaiterQrCodeUseCase = new UploadWaiterQrCodeUseCase();
+    public static AddRestaurantSnapshotUseCase addRestaurantSnapshotUseCase = new AddRestaurantSnapshotUseCase();
+    public static CreateRestaurantDocumentUseCase createRestaurantDocumentUseCase = new CreateRestaurantDocumentUseCase();
+    public static GetSingleRestaurantUseCase getSingleRestaurantUseCase = new GetSingleRestaurantUseCase();
+    public static GetSingleRestaurantLogoUseCase getSingleRestaurantLogoUseCase = new GetSingleRestaurantLogoUseCase();
+    public static GetRestaurantEditModel getRestaurantEditModel = new GetRestaurantEditModel();
+    public static UpdateRestaurantDataUseCase updateRestaurantDataUseCase = new UpdateRestaurantDataUseCase();
+    public static UploadRestaurantLogoUseCase uploadRestaurantLogoUseCase = new UploadRestaurantLogoUseCase();
+    public static DeleteRestaurantUseCase deleteRestaurantUseCase = new DeleteRestaurantUseCase();
+    public static GetRestaurantLocationsUseCase getRestaurantLocationsUseCase = new GetRestaurantLocationsUseCase();
+    public static CreateRestaurantLocationDocumentUseCase createRestaurantLocationDocumentUseCase = new CreateRestaurantLocationDocumentUseCase();
+    public static AddRestaurantTablesUseCase addRestaurantTablesUseCase = new AddRestaurantTablesUseCase();
+    public static UploadTableQrCodeJpgUseCase uploadTableQrCodeJpgUseCase = new UploadTableQrCodeJpgUseCase();
+    public static UploadTableQrCodePdfUseCase uploadTableQrCodePdfUseCase = new UploadTableQrCodePdfUseCase();
+    public static GetRestaurantTablesUseCase getRestaurantTablesUseCase = new GetRestaurantTablesUseCase();
+    public static GetTableQrCodeJpgUseCase getTableQrCodeJpgUseCase = new GetTableQrCodeJpgUseCase();
+    public static GetSingleTableByIdUseCase getSingleTableByIdUseCase = new GetSingleTableByIdUseCase();
+    public static GetTableQrCodePdfUseCase getTableQrCodePdfUseCase = new GetTableQrCodePdfUseCase();
+    public static DeleteTableUseCase deleteTableUseCase = new DeleteTableUseCase();
+    public static DeleteTableQrCodeJpgUseCase deleteTableQrCodeJpgUseCase = new DeleteTableQrCodeJpgUseCase();
+    public static DeleteTableQrCodePdfUseCase deleteTableQrCodePdfUseCase = new DeleteTableQrCodePdfUseCase();
+}

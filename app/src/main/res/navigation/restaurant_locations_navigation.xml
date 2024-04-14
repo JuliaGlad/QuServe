@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/restaurant_locations_navigation"
+    app:startDestination="@id/locationsFragment">
+
+    <fragment
+        android:id="@+id/locationsFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.locations.LocationsFragment"
+        android:label="fragment_locations"
+        tools:layout="@layout/fragment_locations" >
+        <action
+            android:id="@+id/action_locationsFragment_to_addLocationFragment"
+            app:destination="@id/addLocationFragment" />
+        <action
+            android:id="@+id/action_locationsFragment_to_noLocationsYetFragment"
+            app:destination="@id/noLocationsYetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addLocationFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationFragment"
+        android:label="fragment_add_location"
+        tools:layout="@layout/fragment_add_location" >
+        <action
+            android:id="@+id/action_addLocationFragment_to_locationsFragment"
+            app:destination="@id/locationsFragment" />
+        <action
+            android:id="@+id/action_addLocationFragment_to_noLocationsYetFragment"
+            app:destination="@id/noLocationsYetFragment" />
+        <action
+            android:id="@+id/action_addLocationFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noLocationsYetFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.noLocationsYet.NoLocationsYetFragment"
+        android:label="NoLocationsYetFragment" >
+        <action
+            android:id="@+id/action_noLocationsYetFragment_to_addLocationFragment"
+            app:destination="@id/addLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_addLocationFragment"
+            app:destination="@id/addLocationFragment" />
+    </fragment>
+</navigation>

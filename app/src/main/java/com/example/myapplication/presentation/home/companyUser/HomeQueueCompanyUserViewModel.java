@@ -1,13 +1,11 @@
 package com.example.myapplication.presentation.home.companyUser;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.company.CompanyQueueManagerModel;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueParticipantsSizeAndNameModel;
 import com.example.myapplication.presentation.home.companyUser.models.QueueCompanyHomeModel;
 import com.example.myapplication.presentation.home.companyUser.state.HomeQueueCompanyState;
@@ -26,7 +24,7 @@ public class HomeQueueCompanyUserViewModel extends ViewModel {
     LiveData<HomeQueueCompanyState> state = _state;
 
     public void getQueues(String companyId){
-        DI.getQueuesParticipantSizeAndNameUseCase.invoke(companyId)
+        CompanyQueueDI.getQueuesParticipantSizeAndNameUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<CompanyQueueParticipantsSizeAndNameModel>>() {
                     @Override

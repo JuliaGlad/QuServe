@@ -1,0 +1,41 @@
+package com.example.myapplication.presentation.utils.constants;
+
+public class Restaurant {
+    public static final String CATEGORY_NAME = "CategoryName";
+    public static final String CATEGORY_DISHES ="Dishes";
+    public static final String COOKS = "Cooks";
+    public static final String WAITERS = "Waiters";
+    public static final String COOK_QR_CODE = "Cook";
+    public static final String WAITER_QR_CODE = "Waiter";
+    public static final String NECESSARY_CHOICES = "NecessaryChoices";
+    public static final String NECESSARY_CHOICE_VARIANT = "Variants";
+    public static final String INGREDIENT_TO_REMOVE="IngredientsToRemove";
+    public static final String TOPPINGS = "Toppings";
+    public static final String DISH_NAME = "DishName";
+    public static final String INGREDIENTS = "Ingredients";
+    public static final String DISH_WEIGHT_OR_COUNT = "Weight/Count";
+    public static final String DISH_PRICE = "DishPrice";
+    public static final String DISH_ESTIMATED_TIME_COOKING = "EstimatedTimeCooking";
+    public static final String RESTAURANT_MENUS_PATH = "RestaurantMenus/";
+    public static final String CATEGORY_COUNT = "CategoriesCount";
+    public static final String RESTAURANT_MENU_CATEGORIES = "Categories";
+    public static final String RESTAURANT_MENU = "Menu";
+    public static final String TABLE_QR_CODES = "Table_QrCodes/";
+    public static final String TABLE_ID = "TableId";
+    public static final String TABLE_NUMBER = "TableNumber";
+    public static final String TABLE_LIST = "TablesList";
+    public static final String LOCATION_ID = "LocationId";
+    public static final String LOCATION_CITY = "City";
+    public static final String LOCATION = "Location";
+    public static final String COOKS_COUNT = "Cooks";
+    public static final String WAITERS_COUNT = "Waiters";
+    public static final String RESTAURANT_LOCATION = "Locations";
+    public static final String RESTAURANT_LOGO = "Restaurant_Logo";
+    public static final String RESTAURANT_PATH = "Restaurant/";
+    public static final String RESTAURANT = "Restaurant";
+    public static final String RESTAURANT_LIST = "RestaurantList";
+    public static final String RESTAURANT_NAME = "Name";
+    public static final String RESTAURANT_EMAIL = "Email";
+    public static final String RESTAURANT_PHONE = "PhoneNumber";
+    public static final String RESTAURANT_OWNER = "Owner";
+}

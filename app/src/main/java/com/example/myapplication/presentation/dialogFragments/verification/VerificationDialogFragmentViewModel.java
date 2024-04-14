@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -22,7 +23,7 @@ public class VerificationDialogFragmentViewModel extends ViewModel {
     }
 
     private void checkVerification(){
-        DI.checkVerificationUseCase.invoke()
+        ProfileDI.checkVerificationUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Boolean>() {
                     @Override

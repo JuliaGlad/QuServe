@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -17,7 +18,7 @@ public class DeleteCompanyDialogViewModel extends ViewModel {
     LiveData<Boolean> isDeleted = _isDeleted;
 
     public void deleteCompany(String companyId) {
-        DI.deleteCompanyUseCase.invoke(companyId)
+        CompanyQueueUserDI.deleteCompanyUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

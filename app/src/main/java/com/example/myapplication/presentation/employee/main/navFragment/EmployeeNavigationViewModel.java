@@ -6,7 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 import com.example.myapplication.domain.model.profile.UserEmployeeModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 
@@ -27,7 +28,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
     LiveData<List<EmployeeRoleModel>> roles = _roles;
 
     public void isEmployee(){
-        DI.isEmployeeUseCase.isEmployee()
+        ProfileDI.isEmployeeUseCase.isEmployee()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Boolean>() {
                     @Override
@@ -48,7 +49,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
     }
 
     public void getRoles(){
-        DI.getEmployeeRolesUseCase.invoke()
+        ProfileDI.getEmployeeRolesUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<UserEmployeeModel>>() {
                     @Override

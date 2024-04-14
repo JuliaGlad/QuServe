@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -21,9 +23,9 @@ public class AlreadyOwnQueueViewModel extends ViewModel {
     LiveData<Boolean> isFinished = _isFinished;
 
     public void finishQueue() {
-        DI.deleteQrCodeUseCase.invoke(queueId)
-                .concatWith(DI.finishQueueUseCase.invoke(queueId))
-                .andThen(DI.updateOwnQueueUseCase.invoke(false))
+        QueueDI.deleteQrCodeUseCase.invoke(queueId)
+                .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
+                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -45,7 +47,7 @@ public class AlreadyOwnQueueViewModel extends ViewModel {
 
 
     public void getQueueData() {
-        DI.getQueueByAuthorUseCase.invoke()
+        QueueDI.getQueueByAuthorUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueIdAndNameModel>() {
                     @Override

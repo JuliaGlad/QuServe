@@ -1,16 +1,15 @@
 package com.example.myapplication.presentation.profile.createAccount.firstFragment;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -33,10 +32,10 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
 
     public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
-        DI.createAccountUseCase.invoke(email, password, userName, String.valueOf(uri))
+        ProfileDI.createAccountUseCase.invoke(email, password, userName, String.valueOf(uri))
                 .concatWith(
-                        DI.uploadProfileImageToFireStorageUseCase.invoke(uri)
-                                .andThen(DI.sendVerificationEmailUseCase.invoke())
+                        ProfileDI.uploadProfileImageToFireStorageUseCase.invoke(uri)
+                                .andThen(ProfileDI.sendVerificationEmailUseCase.invoke())
                 )
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
+    app:strokeColor="@color/transparent"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="?colorSurfaceContainerLow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/food_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/sushi_image" />
+
+        <TextView
+            android:id="@+id/food_title"
+            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sushi"
+            android:layout_marginTop="30dp"
+            app:layout_constraintEnd_toEndOf="@+id/food_image"
+            app:layout_constraintStart_toStartOf="@+id/food_image"
+            app:layout_constraintTop_toBottomOf="@+id/food_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
+

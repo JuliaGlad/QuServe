@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewAddWorkerItemBinding;
 import com.example.myapplication.domain.model.common.ImageModel;
@@ -55,7 +56,7 @@ public class AddWorkerAdapter extends ListAdapter<AddWorkerRecyclerModel, Recycl
 
             binding.employeeName.setText(model.getName());
 
-            DI.getEmployeePhotoUseCase.invoke(model.getUserId())
+            CompanyQueueUserDI.getEmployeePhotoUseCase.invoke(model.getUserId())
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<ImageModel>() {
                         @Override

@@ -52,7 +52,7 @@ public class FinishedQueueCreationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         type = getArguments().getString(STATE);
-        queueId = getActivity().getIntent().getStringExtra(QUEUE_ID);
+        queueId = getArguments().getString(QUEUE_ID);
         if (type.equals(COMPANY)) {
             name = getActivity().getIntent().getStringExtra(COMPANY_NAME);
             companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
@@ -116,7 +116,11 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void setupCompanyObserves() {
-        viewModel.queue.observe(getViewLifecycleOwner(), this::addFinishCompanyQueueDelayWorker);
+        viewModel.queue.observe(getViewLifecycleOwner(), time -> {
+            if (time != null){
+                addFinishCompanyQueueDelayWorker(time);
+            }
+        });
     }
 
     private void initInfoBox() {
@@ -133,7 +137,7 @@ public class FinishedQueueCreationFragment extends Fragment {
                     break;
                 case COMPANY:
                     requireActivity().finish();
-                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, name);
+                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, queueId);
                     break;
             }
         });
@@ -194,7 +198,6 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void addFinishCompanyQueueDelayWorker(String time) {
-
         if (!time.equals(stringsTimeArray[0])) {
             List<String> list = Arrays.asList(time.split(" "));
             int number = Integer.parseInt(list.get(0));

@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.companyQueue.queues;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueNameModel;
 
 import java.util.Objects;

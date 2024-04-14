@@ -10,10 +10,11 @@ public class UserDto {
     private final String birthday;
     private final String uri;
     private final String background;
+    private final String participantQueuePath;
     private final boolean ownQueue;
     private final boolean participateInQueue;
 
-    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, boolean ownQueue, boolean participateInQueue) {
+    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -21,8 +22,13 @@ public class UserDto {
         this.birthday = birthday;
         this.uri = uri;
         this.background = background;
+        this.participantQueuePath = participantQueuePath;
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
+    }
+
+    public String getParticipantQueuePath() {
+        return participantQueuePath;
     }
 
     public String getBackground() {

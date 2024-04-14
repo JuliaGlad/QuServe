@@ -7,7 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 import com.example.myapplication.domain.model.company.WorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.models.EditQueueModel;
@@ -39,8 +40,8 @@ public class EditQueueViewModel extends ViewModel {
     LiveData<List<QueueEmployeeModel>> items = _items;
 
     public void getQueueData(String companyId, String queueId) {
-        Single.zip(DI.getQueueNameAndLocationById.invoke(companyId, queueId),
-                        DI.getQueueWorkersListUseCase.invoke(companyId, queueId), DI.getAdminsUseCase.invoke(companyId),
+        Single.zip(CompanyQueueDI.getQueueNameAndLocationById.invoke(companyId, queueId),
+                        CompanyQueueDI.getQueueWorkersListUseCase.invoke(companyId, queueId), CompanyQueueDI.getAdminsUseCase.invoke(companyId),
                         (companyQueueNameAndLocationModel, workerModels, adminModels) -> {
                             List<EmployeeModel> list = new ArrayList<>();
                             for (int i = 0; i < workerModels.size(); i++) {
@@ -78,7 +79,7 @@ public class EditQueueViewModel extends ViewModel {
     }
 
     public void saveData(String companyId, String queueId, String name, String location) {
-        DI.updateQueueDataUseCase.invoke(companyId, queueId, name, location)
+        CompanyQueueDI.updateQueueDataUseCase.invoke(companyId, queueId, name, location)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

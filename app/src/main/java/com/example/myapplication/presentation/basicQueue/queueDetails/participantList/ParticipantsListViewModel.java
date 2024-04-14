@@ -3,16 +3,15 @@ package com.example.myapplication.presentation.basicQueue.queueDetails.participa
 
 import android.util.Log;
 
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.queue.QueueSizeModel;
 import com.example.myapplication.presentation.basicQueue.queueDetails.participantList.state.ParticipantsListState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -40,7 +39,7 @@ public class ParticipantsListViewModel extends ViewModel {
     public LiveData<List<DelegateItem>> item = _items;
 
     public void getParticipantsList() {
-        DI.getParticipantsListUseCase.invoke()
+        QueueDI.getParticipantsListUseCase.invoke()
                 .flatMapObservable(queueParticipantsListModel -> {
                     if (queueParticipantsListModel.getParticipants().equals("[]")) {
                         participantsSize = 0;
@@ -52,7 +51,7 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     _state.postValue(new ParticipantsListState.Success(queueParticipantsListModel.getParticipants()));
 
-                    return DI.addQueueSizeModelSnapShot.invoke(queueParticipantsListModel.getId());
+                    return QueueDI.addQueueSizeModelSnapShot.invoke(queueParticipantsListModel.getId());
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<QueueSizeModel>() {
@@ -88,11 +87,11 @@ public class ParticipantsListViewModel extends ViewModel {
     }
 
     public void nextParticipant() {
-        DI.getParticipantsListUseCase.invoke()
+        QueueDI.getParticipantsListUseCase.invoke()
                 .flatMapCompletable(queueParticipantsListModel -> {
                     String name = queueParticipantsListModel.getParticipants().get(0).replace("[", "").replace("]", "");
                     String id = queueParticipantsListModel.getId();
-                    return DI.nextParticipantUseCase.invoke(id, name, peoplePassed);
+                    return QueueDI.nextParticipantUseCase.invoke(id, name, peoplePassed);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

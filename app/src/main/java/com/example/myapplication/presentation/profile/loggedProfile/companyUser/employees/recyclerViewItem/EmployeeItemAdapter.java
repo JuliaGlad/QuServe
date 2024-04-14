@@ -1,6 +1,5 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 
 import android.net.Uri;
@@ -13,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewEmployeeItemBinding;
 import com.example.myapplication.domain.model.common.ImageModel;
@@ -23,7 +23,6 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.listeners.DialogDismissedListener;
 
 public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, RecyclerView.ViewHolder> {
 
@@ -56,7 +55,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
             binding.employeeName.setText(model.getName());
             binding.role.setText(model.role);
 
-            DI.getEmployeePhotoUseCase.invoke(model.employeeId)
+            CompanyQueueUserDI.getEmployeePhotoUseCase.invoke(model.employeeId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<ImageModel>() {
                         @Override
@@ -96,7 +95,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
         }
 
         private void addSnapshot(EmployeeItemModel model) {
-            DI.addEmployeeSnapshotUseCase.invoke(model.companyId, model.employeeId)
+            CompanyQueueUserDI.addEmployeeSnapshotUseCase.invoke(model.companyId, model.employeeId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<DocumentSnapshot>() {
                         @Override

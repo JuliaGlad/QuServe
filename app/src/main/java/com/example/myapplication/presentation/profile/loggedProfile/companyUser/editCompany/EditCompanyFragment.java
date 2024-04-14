@@ -1,10 +1,17 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PDF;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,24 +42,34 @@ public class EditCompanyFragment extends Fragment {
 
     private EditCompanyViewModel viewModel;
     private FragmentEditCompanyBinding binding;
-    private String companyId, name, phone;
+    private String companyId, state, name, phone;
     private Uri imageUri = Uri.EMPTY;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(EditCompanyViewModel.class);
+
         setActivityResultLauncher();
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        companyId = sharedPreferences.getString(COMPANY_ID, null);
+        state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
+
+        switch (state){
+            case COMPANY:
+                viewModel.getCompanyData(companyId);
+                break;
+            case RESTAURANT:
+                viewModel.getRestaurantData(companyId);
+                break;
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        viewModel = new ViewModelProvider(this).get(EditCompanyViewModel.class);
         binding = FragmentEditCompanyBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -60,7 +77,7 @@ public class EditCompanyFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
-        viewModel.getCompanyData(companyId);
+
         initChangeLogo();
         initBackButton();
         initSaveButton();
@@ -108,7 +125,16 @@ public class EditCompanyFragment extends Fragment {
         binding.buttonSave.setOnClickListener(v -> {
             name = binding.editLayoutCompanyName.getText().toString();
             phone = binding.editLayoutCompanyPhone.getText().toString();
-            viewModel.updateData(companyId, name, phone, imageUri);
+            switch (state){
+                case COMPANY:
+                    viewModel.updateData(companyId, name, phone, imageUri);
+                    break;
+                case RESTAURANT:
+                    viewModel.updateRestaurantData(companyId, name, phone, imageUri);
+                    break;
+            }
+
+
         });
     }
 

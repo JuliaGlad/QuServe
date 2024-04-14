@@ -9,6 +9,7 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.example.myapplication.presentation.companyQueue.createQueue.chooseWor
 import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.state.ChooseWorkersState;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -61,6 +63,36 @@ public class ChooseWorkersFragment extends Fragment {
         } catch (NullPointerException e) {
             Log.d("Chosen is null", e.getMessage());
         }
+
+        initSearchView();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void filterList(String newText) {
+        List<WorkerItemModel> filteredList = new ArrayList<>();
+
+        for (WorkerItemModel model : workerItems) {
+            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                filteredList.add(model);
+            }
+        }
+
+        adapter.submitList(filteredList);
     }
 
     @Override
@@ -77,7 +109,7 @@ public class ChooseWorkersFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void navigateBack(Bundle bundle){
+    private void navigateBack(Bundle bundle) {
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_chooseWorkersFragment_to_createCompanyQueueFragment, bundle);
     }
@@ -90,6 +122,7 @@ public class ChooseWorkersFragment extends Fragment {
             navigateBack(bundle);
         });
     }
+
 
     private void initBackButtonPressed() {
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
@@ -145,7 +178,7 @@ public class ChooseWorkersFragment extends Fragment {
 
             } else if (state instanceof ChooseWorkersState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
-            } else if (state instanceof ChooseWorkersState.Error){
+            } else if (state instanceof ChooseWorkersState.Error) {
 
             }
         });

@@ -1,12 +1,11 @@
 package com.example.myapplication.presentation.employee.main.differentRolesFragment;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.EmployeeRoleCompanyModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.model.DifferentRoleModel;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -31,7 +29,7 @@ public class DifferentRolesEmployeeViewModel extends ViewModel {
         for (int i = 0; i < models.size(); i++) {
             ids.add(models.get(i).getCompanyId());
         }
-        DI.getCompanyNameUseCaseByEmployee.invoke(ids)
+        CompanyQueueUserDI.getCompanyNameUseCaseByEmployee.invoke(ids)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<EmployeeRoleCompanyModel>>() {
                     @Override

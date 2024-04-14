@@ -1,38 +1,22 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.R;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.common.ImageModel;
-import com.example.myapplication.domain.model.company.CompanyQueueNameModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.model.CompanyQueueDetailModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.state.CompanyQueueDetailsState;
 
-import io.reactivex.rxjava3.functions.BiFunction;
-import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonModel;
-import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailsButtonDelegateItem;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.recycler.delegate.DelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 
 public class CompanyQueueDetailsViewModel extends ViewModel {
 
@@ -43,8 +27,8 @@ public class CompanyQueueDetailsViewModel extends ViewModel {
     public LiveData<Uri> pdfUri = _pdfUri;
 
     public void getQueueRecycler(String queueId, String companyId) {
-        DI.getQueueByIdUseCase.invoke(companyId, queueId)
-                .zipWith(DI.getQrCodeImageUseCase.invoke(queueId), (companyQueueNameModel, imageModel) -> new CompanyQueueDetailModel(
+        CompanyQueueDI.getQueueByIdUseCase.invoke(companyId, queueId)
+                .zipWith(QueueDI.getQrCodeImageUseCase.invoke(queueId), (companyQueueNameModel, imageModel) -> new CompanyQueueDetailModel(
                         companyQueueNameModel.getQueueId(),
                         companyQueueNameModel.getName(),
                         imageModel.getImageUri()
@@ -69,7 +53,7 @@ public class CompanyQueueDetailsViewModel extends ViewModel {
     }
 
     void getQrCodePdf(String queueId) {
-        DI.getQrCodePdfUseCase.invoke(queueId)
+        QueueDI.getQrCodePdfUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<ImageModel>() {
                     @Override

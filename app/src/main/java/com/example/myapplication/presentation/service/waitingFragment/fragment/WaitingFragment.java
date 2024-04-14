@@ -39,8 +39,7 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 public class WaitingFragment extends Fragment {
 
     private WaitingViewModel viewModel;
-    private FragmentWaitingBinding binding;
-    private List<DelegateItem> list = new ArrayList<>();;
+    private FragmentWaitingBinding binding;;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
@@ -48,7 +47,7 @@ public class WaitingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(WaitingViewModel.class);
         binding = FragmentWaitingBinding.inflate(inflater, container, false);
-        viewModel.getQueue(this);
+        viewModel.getQueue();
         return binding.getRoot();
     }
 
@@ -79,8 +78,8 @@ public class WaitingFragment extends Fragment {
         binding.recycler.setAdapter(mainAdapter);
     }
 
-    private void showLeaveQueueDialog(String queueId) {
-        LeaveQueueDialogFragment dialogFragment = new LeaveQueueDialogFragment(queueId);
+    private void showLeaveQueueDialog() {
+        LeaveQueueDialogFragment dialogFragment = new LeaveQueueDialogFragment();
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "LEAVE_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             requireActivity().finish();
@@ -88,6 +87,13 @@ public class WaitingFragment extends Fragment {
     }
 
     private void setupObserves() {
+
+        viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                requireActivity().finish();
+            }
+        });
+
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof WaitingState.Success){
                 WaitingModel model = ((WaitingState.Success)state).data;
@@ -100,7 +106,7 @@ public class WaitingFragment extends Fragment {
                         break;
                     }
                 }
-                initRecycler(model.getId(), model.getParticipants().size(), midTime);
+                initRecycler(model.getPath(), model.getParticipants().size(), midTime);
             }
         });
     }
@@ -117,17 +123,17 @@ public class WaitingFragment extends Fragment {
         return false;
     }
 
-    private void initRecycler(String queueId, int peopleBeforeSize, int midTime) {
+    private void initRecycler(String path, int peopleBeforeSize, int midTime) {
         buildList(new DelegateItem[]{
-                new WaitingItemDelegateItem(new WaitingItemModel(2, queueId, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, queueId, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
-                new WaitingItemDelegateItem(new WaitingItemModel(4, queueId, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
-                new LeaveQueueDelegateItem(new LeaveQueueModel(4, () -> showLeaveQueueDialog(queueId)))
+                new WaitingItemDelegateItem(new WaitingItemModel(2, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), String.valueOf(midTime), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, path, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(4, path, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
+                new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))
         });
     }
 
     private void buildList(DelegateItem[] items) {
-        list = Arrays.asList(items);
+        List<DelegateItem> list = Arrays.asList(items);
         mainAdapter.submitList(list);
     }
 }

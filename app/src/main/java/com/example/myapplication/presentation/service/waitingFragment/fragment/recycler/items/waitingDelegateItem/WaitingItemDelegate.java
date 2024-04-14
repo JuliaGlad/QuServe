@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.databinding.RecyclerViewWaitingItemBinding;
+import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Observer;
@@ -49,7 +50,7 @@ public class WaitingItemDelegate implements AdapterDelegate {
             binding.description.setText(model.descriptionText);
 
             if (model.editable && model.flag.equals(EDIT_PEOPLE_BEFORE_YOU)) {
-                DI.addPeopleBeforeYouSnapshot.invoke(model.queueID, model.size)
+                QueueDI.addPeopleBeforeYouSnapshot.invoke(model.path, model.size)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new Observer<Integer>() {
                             @Override

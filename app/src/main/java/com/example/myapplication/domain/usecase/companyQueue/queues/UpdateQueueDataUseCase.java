@@ -1,8 +1,6 @@
 package com.example.myapplication.domain.usecase.companyQueue.queues;
 
-import com.example.myapplication.DI;
-
-import java.io.DataInput;
+import com.example.myapplication.di.DI;
 
 import io.reactivex.rxjava3.core.Completable;
 

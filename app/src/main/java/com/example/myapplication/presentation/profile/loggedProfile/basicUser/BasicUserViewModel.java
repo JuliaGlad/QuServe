@@ -7,9 +7,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CommonCompanyDI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.domain.model.common.CommonCompanyModel;
 import com.example.myapplication.domain.model.common.ImageModel;
-import com.example.myapplication.domain.model.company.CompanyNameIdModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserDataModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BooleanData;
@@ -21,6 +24,7 @@ import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
@@ -45,7 +49,7 @@ public class BasicUserViewModel extends ViewModel {
     LiveData<BasicUserState> state = _state;
 
     public void retrieveUserNameData() {
-        Single.zip(DI.getProfileImageUseCase.invoke(), DI.getUserEmailAndNameDataUseCase.invoke(), DI.checkCompanyExistUseCase.invoke(),
+        Single.zip(ProfileDI.getProfileImageUseCase.invoke(), ProfileDI.getUserEmailAndNameDataUseCase.invoke(), CommonCompanyDI.checkAnyCompanyExistUseCase.invoke(),
                         (imageModel, userEmailAndNameModel, aBoolean) ->
                                 new BasicUserDataModel(
                                         userEmailAndNameModel.getName(),
@@ -81,7 +85,7 @@ public class BasicUserViewModel extends ViewModel {
     }
 
     public void uploadToFireStorage(Uri uri) {
-        DI.uploadBackgroundImageUseCase.invoke(uri)
+        ProfileDI.uploadBackgroundImageUseCase.invoke(uri)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -101,13 +105,18 @@ public class BasicUserViewModel extends ViewModel {
                 });
     }
 
+    // if (!aBoolean) {
+//        return null;
+//    } else {
+//        return new BooleanData(true, companyNameIdModels);
+//    }
     public void isCompanyExist() {
-        DI.checkCompanyExistUseCase.invoke()
-                .flatMap(aBoolean -> DI.getCompanyUseCase.invoke(), (aBoolean, companyNameIdModels) -> {
+        CommonCompanyDI.checkAnyCompanyExistUseCase.invoke()
+                .flatMap(aBoolean -> CommonCompanyDI.getAllServiceCompaniesUseCase.invoke(), (aBoolean, commonCompanyModels) -> {
                     if (!aBoolean) {
                         return null;
                     } else {
-                        return new BooleanData(true, companyNameIdModels);
+                        return new BooleanData(true, commonCompanyModels);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -121,7 +130,7 @@ public class BasicUserViewModel extends ViewModel {
                     public void onSuccess(@NonNull BooleanData booleanData) {
                         if (booleanData != null) {
                             if (booleanData.getList().size() == 1) {
-                                _companyId.postValue(booleanData.getList().get(0).getId());
+                                _companyId.postValue(booleanData.getList().get(0).getCompanyId());
                                 _checked.postValue(true);
                             }
                         }
@@ -136,7 +145,7 @@ public class BasicUserViewModel extends ViewModel {
     }
 
     public void setBackground() {
-        DI.getBackgroundImageUseCase.invoke()
+        ProfileDI.getBackgroundImageUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<ImageModel>() {
                     @Override

@@ -3,10 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.chooseCity;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +12,12 @@ import android.view.Window;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FullScreenChooseCityDialogBinding;
 import com.example.myapplication.presentation.dialogFragments.chooseCity.cityRecyclerItem.CityItemAdapter;
 import com.example.myapplication.presentation.dialogFragments.chooseCity.cityRecyclerItem.CityItemModel;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;

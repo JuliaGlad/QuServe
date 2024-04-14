@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.example.myapplication.presentation.employee.main.queueAdminFragment.w
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.model.CompanyEmployeeModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.recycler.WorkerManagerAdapter;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.recycler.WorkerManagerModel;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class WorkerManagerFragment extends Fragment {
     private FragmentWorkerManagerBinding binding;
     private final WorkerManagerAdapter adapter = new WorkerManagerAdapter();
     private String companyId;
+    List<WorkerManagerModel> models;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,12 +57,39 @@ public class WorkerManagerFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        initSearchView();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void filterList(String newText) {
+        List<WorkerManagerModel> filteredList = new ArrayList<>();
+        for (WorkerManagerModel model : models) {
+            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                filteredList.add(model);
+            }
+        }
+        adapter.submitList(filteredList);
     }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof WorkerManagerState.Success) {
-                List<WorkerManagerModel> models = new ArrayList<>();
+                models = new ArrayList<>();
                 List<CompanyEmployeeModel> previous = ((WorkerManagerState.Success) state).data;
                 for (int i = 0; i < previous.size(); i++) {
                     CompanyEmployeeModel current = previous.get(i);

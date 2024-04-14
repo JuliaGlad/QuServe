@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment;
 
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
@@ -83,9 +84,7 @@ public class PausedQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         setupObserves();
-       // viewModel.getQueue();
         initBox();
-        Log.d("Progress", String.valueOf(PROGRESS));
         binding.indicator.setMax((int) PROGRESS);
         binding.indicator.setProgress(PROGRESS);
         initBackButton();
@@ -107,8 +106,8 @@ public class PausedQueueFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!checkForegroundServiceRunning()) {
-           ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId);
+        if (!checkForegroundServiceRunning() && timeMillis != 0) {
+           ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, BASIC);
         }
     }
 
@@ -120,7 +119,7 @@ public class PausedQueueFragment extends Fragment {
 
     private void initStopButton() {
         binding.buttonStopPause.setOnClickListener(v -> {
-            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId);
+            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
             dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
             dialogFragment.onDismissListener(bundle -> {
                 NavHostFragment.findNavController(PausedQueueFragment.this)
@@ -181,15 +180,13 @@ public class PausedQueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-//        viewModel.queueId.observe(getViewLifecycleOwner(), queueId -> {
-//            this.queueId = queueId;
-//            startCountDown();
-//        });
 
         viewModel.isContinued.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                ((QueueDetailsActivity) requireActivity()).startNotificationForegroundService();
+                ((QueueDetailsActivity) requireActivity()).startNotificationForegroundService(BASIC);
                 initNotificationWorker();
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
             }
         });
     }

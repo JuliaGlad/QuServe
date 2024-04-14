@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.basicQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
 import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
 
@@ -43,16 +44,18 @@ public class QueueDetailsActivity extends AppCompatActivity {
     }
 
 
-    public void startNotificationForegroundService(){
+    public void startNotificationForegroundService(String type){
         Intent intent = new Intent(this, NotificationGoBackToWork.class);
+        intent.putExtra(STATE, type);
         startService(intent);
     }
 
-    public void startTimerForegroundService(long time, String timeLeft, String queueId){
+    public void startTimerForegroundService(long time, String timeLeft, String queueId, String type){
         Intent intent = new Intent(this, TimerService.class);
         intent.putExtra(TIME_MILLIS, time);
         intent.putExtra(QUEUE_ID, queueId);
         intent.putExtra(TIME_LEFT, timeLeft);
+        intent.putExtra(STATE, type);
         startService(intent);
     }
 

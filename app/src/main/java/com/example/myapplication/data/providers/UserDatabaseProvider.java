@@ -28,6 +28,7 @@ public class UserDatabaseProvider {
                         userDto.getBirthday(),
                         userDto.getUri(),
                         userDto.getBackground(),
+                        userDto.getParticipantQueuePath(),
                         userDto.isOwnQueue(),
                         userDto.isParticipateInQueue()
                 )
@@ -47,6 +48,7 @@ public class UserDatabaseProvider {
                     entity.birthday,
                     entity.uri,
                     entity.background,
+                    entity.participantQueuePath,
                     entity.ownQueue,
                     entity.participateInQueue
             );
@@ -106,11 +108,11 @@ public class UserDatabaseProvider {
         }
     }
 
-    public static void updateParticipateInQueue(boolean isParticipant){
+    public static void updateParticipateInQueue(String path, boolean isParticipant){
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
-
+            entity.participantQueuePath = path;
             entity.participateInQueue = isParticipant;
 
             App.getInstance().getDatabase().userDao().update(entity);

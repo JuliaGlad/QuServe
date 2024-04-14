@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -21,9 +22,9 @@ public class BasicQueueMidTimeWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        DI.getQueueMidTimeModel.invoke()
+        QueueDI.getQueueMidTimeModel.invoke()
                 .flatMapCompletable(queueMidTimeModel ->
-                        DI.updateMidTimeUseCase.invoke(queueMidTimeModel.getId(), queueMidTimeModel.getMidTime(), queueMidTimeModel.getPassed15Minutes()))
+                        QueueDI.updateMidTimeUseCase.invoke(queueMidTimeModel.getId(), queueMidTimeModel.getMidTime(), queueMidTimeModel.getPassed15Minutes()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

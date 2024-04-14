@@ -2,7 +2,7 @@ package com.example.myapplication.presentation.service.waitingFragment.fragment.
 
 public class WaitingItemModel {
     int id;
-    String queueID;
+    String path;
     int size;
     int drawable;
     String headerText;
@@ -10,9 +10,9 @@ public class WaitingItemModel {
     boolean editable;
     String flag;
 
-    public WaitingItemModel(int id, String queueID, int size, String headerText, String descriptionText, int drawable, boolean editable, String flag) {
+    public WaitingItemModel(int id, String path, int size, String headerText, String descriptionText, int drawable, boolean editable, String flag) {
         this.id = id;
-        this.queueID = queueID;
+        this.path = path;
         this.size = size;
         this.headerText = headerText;
         this.descriptionText = descriptionText;

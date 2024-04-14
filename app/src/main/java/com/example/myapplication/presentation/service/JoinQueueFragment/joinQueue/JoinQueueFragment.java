@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.service.JoinQueueFragment.joinQue
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

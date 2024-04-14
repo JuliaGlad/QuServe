@@ -1,6 +1,5 @@
 package com.example.myapplication.presentation.utils.queuePausedNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.INTENT_TIME_PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
@@ -17,8 +16,9 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -29,12 +29,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationQueuePaused extends Service {
 
-    String time, queueId;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        time = intent.getStringExtra(INTENT_TIME_PAUSED);
-        queueId = intent.getStringExtra(QUEUE_ID);
+        String queueId = intent.getStringExtra(QUEUE_ID);
         setupNotification();
         addSnapshot(queueId);
         return super.onStartCommand(intent, flags, startId);
@@ -52,7 +49,7 @@ public class NotificationQueuePaused extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentText(getString(R.string.queue_paused_content_text) + " " + time )
+                .setContentText(getString(R.string.queue_paused_content_text))
                 .setContentTitle(getString(R.string.paused))
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setContentIntent(pendingIntent)
@@ -73,7 +70,7 @@ public class NotificationQueuePaused extends Service {
     }
 
     private void addSnapshot(String queueId){
-        DI.addSnapshotQueueUseCase.invoke(queueId)
+        QueueDI.addSnapshotQueueUseCase.invoke(queueId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
@@ -83,7 +80,7 @@ public class NotificationQueuePaused extends Service {
 
                     @Override
                     public void onNext(@NonNull DocumentSnapshot snapshot) {
-                        if (DI.onPausedUseCase.invoke(snapshot) || DI.onParticipantLeftUseCase.invoke(snapshot)){
+                        if (QueueDI.onPausedUseCase.invoke(snapshot) || QueueDI.onParticipantLeftUseCase.invoke(snapshot)){
                             stopForeground(true);
                             stopSelf();
                         }

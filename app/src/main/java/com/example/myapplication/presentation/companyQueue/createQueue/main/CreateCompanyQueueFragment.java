@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.companyQueue.createQueue.main;
 import static android.os.Build.VERSION.SDK_INT;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.city;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.employeeModels;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueId;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueLocation;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueName;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueTime;
@@ -16,6 +17,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
@@ -43,9 +45,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyQueueBinding;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegate;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationDelegateItem;
-import com.example.myapplication.presentation.companyQueue.createQueue.delegates.chooseLocation.LocationModel;
+import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationDelegate;
+import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationModel;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegate;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegateItem;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerModel;
@@ -164,8 +166,12 @@ public class CreateCompanyQueueFragment extends Fragment {
                 itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
                 itemList.add(new LocationDelegateItem(new LocationModel(2, queueLocation, () -> {
                     if (checkSelfMapPermission()) {
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(STATE, COMPANY);
+
                         NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_createCompanyQueueFragment_to_mapFragment);
+                                .navigate(R.id.action_createCompanyQueueFragment_to_mapFragment, bundle);
                     }
                 })));
                 break;
@@ -288,6 +294,7 @@ public class CreateCompanyQueueFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, COMPANY);
                 bundle.putString(COMPANY_ID, companyId);
+                bundle.putString(QUEUE_ID, queueId);
                 bundle.putString(COMPANY_NAME, queueName);
 
                 NavHostFragment.findNavController(this)

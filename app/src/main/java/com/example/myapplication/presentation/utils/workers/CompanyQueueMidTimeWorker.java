@@ -10,7 +10,8 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -29,8 +30,8 @@ public class CompanyQueueMidTimeWorker extends Worker {
         String queueId = data.getString(QUEUE_ID);
         String companyId = data.getString(COMPANY_ID);
 
-        DI.getCompanyQueueMidTmeModelUseCase.invoke(queueId, companyId)
-                .flatMapCompletable(model -> DI.updateCompanyQueueMidTimeUseCase.invoke(queueId, companyId, model.getMidTime(), model.getPassed15Minutes()))
+        CompanyQueueDI.getCompanyQueueMidTmeModelUseCase.invoke(queueId, companyId)
+                .flatMapCompletable(model -> CompanyQueueDI.updateCompanyQueueMidTimeUseCase.invoke(queueId, companyId, model.getMidTime(), model.getPassed15Minutes()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

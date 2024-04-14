@@ -39,7 +39,7 @@ public class SuccessfullyBecomeEmployeeFragment extends Fragment {
     }
 
     private void initSeeDetailsButton() {
-
+        requireActivity().finish();
     }
 
     private void handleButtonBackPressed(){

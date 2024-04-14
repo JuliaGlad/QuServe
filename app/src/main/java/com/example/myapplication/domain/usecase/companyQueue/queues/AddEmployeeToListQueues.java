@@ -1,8 +1,7 @@
 package com.example.myapplication.domain.usecase.companyQueue.queues;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
-import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
 
 import java.util.List;
 

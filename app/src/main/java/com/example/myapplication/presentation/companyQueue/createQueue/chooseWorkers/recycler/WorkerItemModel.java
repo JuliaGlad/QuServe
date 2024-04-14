@@ -22,4 +22,24 @@ public class WorkerItemModel {
     public boolean compareToOther(WorkerItemModel other){
         return other.hashCode() == this.hashCode();
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getWorkerId() {
+        return workerId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public List<EmployeeModel> getChosen() {
+        return chosen;
+    }
 }

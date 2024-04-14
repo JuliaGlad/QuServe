@@ -35,6 +35,7 @@ import com.example.myapplication.databinding.FragmentCreateCompanyAccountBinding
 import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -211,7 +212,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 if (service == null) {
                     Snackbar.make(requireView(), "You field is required!", Snackbar.LENGTH_LONG).show();
                 } else {
-                    viewModel.initQueueData();
+                    viewModel.initData();
                 }
                 break;
         }

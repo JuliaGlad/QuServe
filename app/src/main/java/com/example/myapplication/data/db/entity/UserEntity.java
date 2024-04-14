@@ -18,10 +18,11 @@ public class UserEntity {
     public String birthday;
     public String uri;
     public String background;
+    public String participantQueuePath;
     public boolean ownQueue;
     public boolean participateInQueue;
 
-    public UserEntity( String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, boolean ownQueue, boolean participateInQueue) {
+    public UserEntity( String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -30,6 +31,7 @@ public class UserEntity {
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
         this.uri = uri;
+        this.participantQueuePath = participantQueuePath;
         this.background = background;
     }
 }

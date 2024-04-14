@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddWorkersBinding;
+import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.recycler.WorkerItemModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler.AddWorkerAdapter;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler.AddWorkerRecyclerModel;
@@ -38,6 +40,7 @@ public class AddWorkersFragment extends Fragment {
     private FragmentAddWorkersBinding binding;
     private String companyId, queueId;
     private List<EmployeeModel> alreadyChosen = new ArrayList<>();
+    private List<AddWorkerRecyclerModel> recyclerItems = new ArrayList<>();
     private final AddWorkerAdapter adapter = new AddWorkerAdapter();
     private final List<AddWorkerModel> chosen = new ArrayList<>();
 
@@ -63,8 +66,35 @@ public class AddWorkersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        initSearchView();
         initOkButton();
         initButtonBack();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void filterList(String newText) {
+        List<AddWorkerRecyclerModel> filteredList = new ArrayList<>();
+        for (AddWorkerRecyclerModel model : recyclerItems) {
+            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                filteredList.add(model);
+            }
+        }
+        adapter.submitList(filteredList);
     }
 
     private void initButtonBack() {
@@ -98,7 +128,7 @@ public class AddWorkersFragment extends Fragment {
             if (state instanceof AddWorkersState.Success) {
 
                 List<AddWorkerModel> models = ((AddWorkersState.Success) state).data;
-                List<AddWorkerRecyclerModel> recyclerItems = new ArrayList<>();
+                recyclerItems = new ArrayList<>();
 
                 List<String> ids = new ArrayList<>();
                 for (int i = 0; i < alreadyChosen.size(); i++) {

@@ -2,6 +2,8 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.e
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.google.common.base.StandardSystemProperty.USER_NAME;
+
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -130,7 +132,6 @@ public class EditProfileFragment extends Fragment {
             email = binding.editLayoutEmail.getText().toString();
             gender = binding.editLayoutGender.getText().toString();
             birthday = binding.editLayoutData.getText().toString();
-            Log.d("Birthday", birthday);
             viewModel.saveData(name, phone, gender, birthday, imageUri, this);
         });
     }

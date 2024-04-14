@@ -33,7 +33,7 @@ public class ParticipantListDelegate implements AdapterDelegate {
         }
 
         void bind(ParticipantListModel model) {
-
+            binding.participant.setText(model.text);
         }
     }
 }

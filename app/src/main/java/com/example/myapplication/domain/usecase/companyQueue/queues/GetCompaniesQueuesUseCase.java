@@ -1,13 +1,10 @@
 package com.example.myapplication.domain.usecase.companyQueue.queues;
 
-import android.util.Log;
-
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueManagerModel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import io.reactivex.rxjava3.core.Single;
 

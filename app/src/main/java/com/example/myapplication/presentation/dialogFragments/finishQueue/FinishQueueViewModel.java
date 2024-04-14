@@ -7,10 +7,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -23,9 +25,9 @@ public class FinishQueueViewModel extends ViewModel {
     public void finishQueue(String queueId, String type, String companyId) {
         switch (type){
             case BASIC:
-                DI.deleteQrCodeUseCase.invoke(queueId)
-                        .concatWith(DI.finishQueueUseCase.invoke(queueId))
-                        .andThen(DI.updateOwnQueueUseCase.invoke(false))
+                QueueDI.deleteQrCodeUseCase.invoke(queueId)
+                        .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
+                        .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override
@@ -45,8 +47,8 @@ public class FinishQueueViewModel extends ViewModel {
                         });
                 break;
             case COMPANY:
-                DI.deleteQrCodeUseCase.invoke(queueId)
-                        .concatWith(DI.deleteCompanyQueueUseCase.invoke(companyId, queueId))
+                QueueDI.deleteQrCodeUseCase.invoke(queueId)
+                        .concatWith(CompanyQueueDI.deleteCompanyQueueUseCase.invoke(companyId, queueId))
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override

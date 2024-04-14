@@ -6,10 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
-import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.model.EmployeeStateModel;
-import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.state.ChooseWorkersState;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.state.AddWorkersState;
 
@@ -31,7 +32,7 @@ public class AddWorkersViewModel extends ViewModel {
     LiveData<AddWorkersState> state = _state;
 
     public void getEmployees(String companyId) {
-        DI.getEmployeesUseCase.invoke(companyId)
+        CompanyQueueUserDI.getEmployeesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<EmployeeMainModel>>() {
                     @Override
@@ -66,8 +67,8 @@ public class AddWorkersViewModel extends ViewModel {
     }
 
     public void addEmployees(List<AddWorkerModel> chosen, String companyId, String queueId) {
-        DI.getQueueNameAndLocationById.invoke(companyId, queueId)
-                .flatMapCompletable(model ->  DI.addListEmployeesToQueue.invoke(chosen, companyId, queueId, model.getName(), model.getLocation()))
+        CompanyQueueDI.getQueueNameAndLocationById.invoke(companyId, queueId)
+                .flatMapCompletable(model ->  CompanyQueueDI.addListEmployeesToQueue.invoke(chosen, companyId, queueId, model.getName(), model.getLocation()))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

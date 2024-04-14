@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.model.EmployeeStateModel;
 import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.state.ChooseWorkersState;
@@ -23,7 +24,7 @@ public class ChooseWorkersViewModel extends ViewModel {
     LiveData<ChooseWorkersState> state = _state;
 
     public void getEmployees(String companyId) {
-        DI.getEmployeesUseCase.invoke(companyId)
+        CompanyQueueUserDI.getEmployeesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<EmployeeMainModel>>() {
                     @Override

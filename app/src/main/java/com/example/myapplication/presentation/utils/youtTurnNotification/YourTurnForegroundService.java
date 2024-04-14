@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.utils.youtTurnNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
 
@@ -11,13 +11,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -35,16 +36,16 @@ public class YourTurnForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String queueId = intent.getStringExtra(QUEUE_ID);
-        Log.d("Queue Id", queueId);
+        String path = intent.getStringExtra(PARTICIPANT_QUEUE_PATH);
         setupNotification();
-        addDocumentSnapshot(queueId);
+        addDocumentSnapshot(path);
         return super.onStartCommand(intent, flags, startId);
     }
 
-    private void addDocumentSnapshot(String queueId) {
-        DI.onParticipantServedUseCase.invoke(queueId)
-                .concatWith(DI.updateParticipateInQueueUseCase.invoke(false))
+    private void addDocumentSnapshot(String path) {
+        QueueDI.onParticipantServedUseCase.invoke(path)
+                .concatWith(QueueDI.removeParticipantById.invoke(path))
+                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke("", false))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

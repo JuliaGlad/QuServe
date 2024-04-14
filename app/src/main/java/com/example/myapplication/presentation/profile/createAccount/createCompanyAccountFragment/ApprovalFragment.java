@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,7 @@ public class ApprovalFragment extends Fragment {
         );
 
         binding.buttonOk.setOnClickListener(v -> {
-            requireActivity().finish();
+            finish();
         });
     }
 
@@ -42,8 +44,14 @@ public class ApprovalFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(requireActivity(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                finish();
             }
         });
+    }
+
+    private void finish() {
+        Intent intent = new Intent();
+        getActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
     }
 }

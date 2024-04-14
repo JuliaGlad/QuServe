@@ -18,12 +18,7 @@ public class LeaveQueueDialogFragment extends DialogFragment {
 
     private LeaveQueueDialogViewModel viewModel;
     private DialogDismissedListener listener;
-    private final String queueId;
     private boolean isLeft;
-
-    public LeaveQueueDialogFragment(String queueId) {
-        this.queueId = queueId;
-    }
 
     @NonNull
     @Override
@@ -37,7 +32,7 @@ public class LeaveQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonLeave.setOnClickListener(v -> {
-            viewModel.leaveQueue(queueId);
+            viewModel.leaveQueue();
         });
 
         binding.buttonCancel.setOnClickListener(v -> {

@@ -6,10 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.domain.model.company.CompanyNameIdModel;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
-import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.main.state.WorkerManagerState;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.model.CompanyEmployeeModel;
 
@@ -19,7 +18,6 @@ import java.util.List;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WorkerManagerViewModel extends ViewModel {
@@ -28,7 +26,7 @@ public class WorkerManagerViewModel extends ViewModel {
     LiveData<WorkerManagerState> state = _state;
 
     public void getEmployees(String companyId) {
-        DI.getEmployeesUseCase.invoke(companyId)
+        CompanyQueueUserDI.getEmployeesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<EmployeeMainModel>>() {
                     @Override

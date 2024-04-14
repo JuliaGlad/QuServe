@@ -1,25 +1,22 @@
 package com.example.myapplication.data.repository;
 
-import static com.example.myapplication.DI.service;
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANIES_QUEUES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_LIST;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEES;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED_15;
-import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
@@ -28,33 +25,24 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
 import static com.example.myapplication.presentation.utils.Utils.SECONDS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
-import android.service.autofill.SaveInfo;
-import android.util.Log;
-
 import com.example.myapplication.data.dto.CompanyQueueDto;
-import com.example.myapplication.data.dto.EmployeeDto;
 import com.example.myapplication.data.dto.WorkerDto;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
-import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -65,6 +53,22 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class CompanyQueueRepository {
+
+    public Completable continueCompanyQueue(String queueId, String companyId){
+        DocumentReference docRef = service.fireStore
+                .collection(QUEUE_LIST)
+                .document(COMPANIES_QUEUES)
+                .collection(companyId)
+                .document(queueId);
+
+        return Completable.create(emitter -> {
+            docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public Completable pauseQueue(String queueId, String companyId, int hours, int minutes, int seconds) {
         DocumentReference docRef = service.fireStore
@@ -249,9 +253,9 @@ public class CompanyQueueRepository {
         });
     }
 
-    public Completable createCompanyQueueDocument(String queueID, String city, String disableTime, String queueName, String location, String companyId, List<EmployeeModel> workers) {
+    public Single<String> createCompanyQueueDocument(String queueID, String city, String disableTime, String queueName, String location, String companyId, List<EmployeeModel> workers) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueID);
-
+        String path = docRef.getPath();
         ArrayList<String> arrayList = new ArrayList<>();
 
         Map<String, Object> companyQueue = new HashMap<>();
@@ -267,7 +271,7 @@ public class CompanyQueueRepository {
         companyQueue.put(QUEUE_LOCATION_KEY, location);
         companyQueue.put(WORKERS_COUNT, String.valueOf(workers.size()));
 
-        return Completable.create(emitter -> {
+        return Single.create(emitter -> {
             docRef.set(companyQueue).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     for (int i = 0; i < workers.size(); i++) {
@@ -292,7 +296,7 @@ public class CompanyQueueRepository {
                         activeQueue.put(QUEUE_LOCATION_KEY, location);
                         userEmployeeDoc.set(activeQueue);
                     }
-                    emitter.onComplete();
+                    emitter.onSuccess(path);
                 }
             });
         });

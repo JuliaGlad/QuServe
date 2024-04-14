@@ -4,6 +4,8 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Intent;
@@ -26,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserBinding;
 import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
@@ -51,7 +54,7 @@ public class BasicUserFragment extends Fragment {
     private final MainAdapter mainAdapter = new MainAdapter();
     private boolean companyExist = false;
     String companyId = null;
-    private ActivityResultLauncher<Intent> activityResultLauncher, chooseCompanyLauncher;
+    private ActivityResultLauncher<Intent> activityResultLauncher, chooseCompanyLauncher, createCompanyLauncher;
     private List<DelegateItem> list = new ArrayList<>();
 
     @Override
@@ -61,7 +64,10 @@ public class BasicUserFragment extends Fragment {
 
         setActivityResultLauncher();
         setChooseCompanyLauncher();
+        setCreateCompanyLauncher();
     }
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -82,11 +88,11 @@ public class BasicUserFragment extends Fragment {
         initBackground();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        viewModel.isCompanyExist();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        viewModel.isCompanyExist();
+//    }
 
     private void initBackground() {
         binding.background.setOnClickListener(v -> {
@@ -155,8 +161,7 @@ public class BasicUserFragment extends Fragment {
 
     private void updateItem() {
         if (list.size() > 0) {
-            List<DelegateItem> listNew = new ArrayList<>();
-            listNew.addAll(list);
+            List<DelegateItem> listNew = new ArrayList<>(list);
             listNew.remove(listNew.size() - 1);
             listNew.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {
                 ((MainActivity) requireActivity()).openChooseCompanyActivity(COMPANY_DETAILS);
@@ -164,8 +169,6 @@ public class BasicUserFragment extends Fragment {
             mainAdapter.submitList(listNew);
         }
     }
-
-
 
     private void initRecycler(Uri uri, String name, String email) {
         list = Arrays.asList(new MainItemDelegateItem(new MainItemModel(1, uri, name, email, BASIC, null)),
@@ -185,12 +188,14 @@ public class BasicUserFragment extends Fragment {
         if (companyExist) {
             return new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {
                 Intent intent = new Intent(requireActivity(), ChooseCompanyActivity.class);
-                intent.putExtra(STATE, COMPANY_DETAILS);
                 chooseCompanyLauncher.launch(intent);
             }));
         } else {
             return new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_add_business_24, R.string.add_company, () -> {
-                ((MainActivity) requireActivity()).openCreateCompanyActivity();
+//                ((MainActivity) requireActivity()).openCreateCompanyActivity();
+                Intent intent = new Intent(requireActivity(), CreateCompanyActivity.class);
+                intent.putExtra(PAGE_KEY, PAGE_1);
+                createCompanyLauncher.launch(intent);
             }
             ));
         }
@@ -207,28 +212,29 @@ public class BasicUserFragment extends Fragment {
                 });
     }
 
-    private void setChooseCompanyLauncher() {
-        chooseCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+    private void setCreateCompanyLauncher() {
+        createCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK){
-                        Intent data = result.getData();
-                        if (data != null){
-
-                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString(COMPANY_ID, data.getStringExtra(COMPANY_ID));
-
-                            fragmentManager
-                                    .beginTransaction()
-                                    .setReorderingAllowed(true)
-                                    .replace(R.id.logged_container, CompanyUserFragment.class, bundle)
-                                    .commit();
-                        }
+                    if (result.getResultCode() == RESULT_OK) {
+                        companyExist = true;
+                        updateItem();
                     }
                 });
     }
 
+    private void setChooseCompanyLauncher() {
+        chooseCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager
+                                .beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.logged_container, CompanyUserFragment.class, null)
+                                .commit();
+                    }
+                });
+    }
 
     private void setActivityResultLauncher() {
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -244,6 +250,5 @@ public class BasicUserFragment extends Fragment {
                     }
                 });
     }
-
 
 }

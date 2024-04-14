@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.queue.usecase;
-import static com.example.myapplication.DI.service;
-import com.example.myapplication.DI;
+import static com.example.myapplication.di.DI.service;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.queue.QueueParticipantsListModel;
 
 import java.util.Objects;

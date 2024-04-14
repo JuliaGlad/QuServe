@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 
 public class ApprovedWorker extends Worker {
 
@@ -20,7 +21,7 @@ public class ApprovedWorker extends Worker {
     @Override
     public Result doWork() {
         String companyId = getInputData().getString(COMPANY_ID);
-        DI.updateApprovedUseCase.invoke(companyId);
+        CompanyQueueUserDI.updateApprovedUseCase.invoke(companyId);
         return Result.success();
     }
 }

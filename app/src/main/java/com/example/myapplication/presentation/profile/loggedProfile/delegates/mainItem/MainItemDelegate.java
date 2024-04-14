@@ -1,13 +1,16 @@
 package com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMAIL;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.URI;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueUserDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.databinding.RecyclerViewUserProfileMainItemBinding;
+import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.RestaurantDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -70,14 +76,16 @@ public class MainItemDelegate implements AdapterDelegate {
 
             if (model.type.equals(BASIC)) {
                 addProfileSnapshot(model);
-            } else {
+            } else if (model.type.equals(COMPANY)) {
                 addCompanySnapshot(model);
+            } else if (model.type.equals(RESTAURANT)) {
+                addRestaurantSnapshot(model);
             }
 
         }
 
-        private void addCompanySnapshot(MainItemModel model) {
-            DI.addCompanySnapshotUseCase.invoke(model.companyId)
+        private void addRestaurantSnapshot(MainItemModel model) {
+            RestaurantDI.addRestaurantSnapshotUseCase.invoke(model.companyId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<DocumentSnapshot>() {
                         @Override
@@ -86,15 +94,15 @@ public class MainItemDelegate implements AdapterDelegate {
                         }
 
                         @Override
-                        public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
-                            if (!Objects.equals(documentSnapshot.getString(COMPANY_NAME), model.name)) {
-                                binding.name.setText(documentSnapshot.getString(COMPANY_NAME));
+                        public void onNext(@NonNull DocumentSnapshot snapshot) {
+                            if (!Objects.equals(snapshot.getString(RESTAURANT_NAME), model.name)) {
+                                binding.name.setText(snapshot.getString(RESTAURANT_NAME));
                             }
-                            if (!Objects.equals(documentSnapshot.getString(COMPANY_EMAIL), model.email)) {
-                                binding.yourEmail.setText(documentSnapshot.getString(COMPANY_EMAIL));
+                            if (!Objects.equals(snapshot.getString(RESTAURANT_EMAIL), model.email)) {
+                                binding.yourEmail.setText(snapshot.getString(RESTAURANT_EMAIL));
                             }
 
-                            DI.getCompanyLogoUseCase.invoke(model.companyId)
+                            RestaurantDI.getSingleRestaurantLogoUseCase.invoke(model.companyId)
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new SingleObserver<ImageModel>() {
                                         @Override
@@ -119,12 +127,62 @@ public class MainItemDelegate implements AdapterDelegate {
                                         }
                                     });
 
-//                            if (!String.valueOf(model.uri).equals(documentSnapshot.getString(URI))) {
-//                                Glide.with(itemView.getContext())
-//                                        .load(documentSnapshot.getString(URI))
-//                                        .apply(RequestOptions.circleCropTransform())
-//                                        .into(binding.profilePhoto);
-//                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+
+        private void addCompanySnapshot(MainItemModel model) {
+            CompanyQueueUserDI.addCompanySnapshotUseCase.invoke(model.companyId)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Observer<DocumentSnapshot>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
+                            if (!Objects.equals(documentSnapshot.getString(COMPANY_NAME), model.name)) {
+                                binding.name.setText(documentSnapshot.getString(COMPANY_NAME));
+                            }
+                            if (!Objects.equals(documentSnapshot.getString(COMPANY_EMAIL), model.email)) {
+                                binding.yourEmail.setText(documentSnapshot.getString(COMPANY_EMAIL));
+                            }
+
+                            CompanyQueueUserDI.getCompanyLogoUseCase.invoke(model.companyId)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe(new SingleObserver<ImageModel>() {
+                                        @Override
+                                        public void onSubscribe(@NonNull Disposable d) {
+
+                                        }
+
+                                        @Override
+                                        public void onSuccess(@NonNull ImageModel imageModel) {
+                                            Uri uri = imageModel.getImageUri();
+                                            if (!uri.equals(model.uri)) {
+                                                Glide.with(itemView.getContext())
+                                                        .load(uri)
+                                                        .apply(RequestOptions.circleCropTransform())
+                                                        .into(binding.profilePhoto);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onError(@NonNull Throwable e) {
+
+                                        }
+                                    });
                         }
 
                         @Override
@@ -140,7 +198,7 @@ public class MainItemDelegate implements AdapterDelegate {
         }
 
         private void addProfileSnapshot(MainItemModel model) {
-            DI.addSnapshotProfileUseCase.invoke()
+            ProfileDI.addSnapshotProfileUseCase.invoke()
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<DocumentSnapshot>() {
                         @Override
@@ -156,7 +214,7 @@ public class MainItemDelegate implements AdapterDelegate {
                                 binding.name.setText(snapshot.getString(USER_NAME_KEY));
                             }
 
-                            DI.getProfileImageUseCase.invoke()
+                            ProfileDI.getProfileImageUseCase.invoke()
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new SingleObserver<ImageModel>() {
                                         @Override
@@ -167,7 +225,7 @@ public class MainItemDelegate implements AdapterDelegate {
                                         @Override
                                         public void onSuccess(@NonNull ImageModel imageModel) {
                                             Uri uri = imageModel.getImageUri();
-                                            if (!uri.equals(model.uri)){
+                                            if (!uri.equals(model.uri)) {
                                                 Glide.with(itemView.getContext())
                                                         .load(uri)
                                                         .apply(RequestOptions.circleCropTransform())

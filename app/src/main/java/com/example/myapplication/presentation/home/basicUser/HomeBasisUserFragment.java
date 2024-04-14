@@ -1,8 +1,10 @@
 package com.example.myapplication.presentation.home.basicUser;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,9 +28,11 @@ import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.Al
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegate;
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonModel;
+
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
+
 import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegate;
 import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonModel;
@@ -84,14 +88,12 @@ public class HomeBasisUserFragment extends Fragment {
     private void setupObserves() {
         viewModel.getCompanies.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                Log.d("Got", "get companies");
                 viewModel.getQueueByAuthorId();
             }
         });
 
         viewModel.getQueueById.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                Log.d("Got", "get service by id");
                 viewModel.getQueueByParticipantId();
             }
         });
@@ -100,7 +102,6 @@ public class HomeBasisUserFragment extends Fragment {
             if (state instanceof HomeBasicUserState.Success) {
                 HomeBasicUserModel model = ((HomeBasicUserState.Success) state).data;
                 if (model != null) {
-                    Log.d("Got", "home success");
                     initUserRecycler(model.getModels(), model.getParticipateQueue(), model.getOwnQueue());
                 } else {
                     initUserNoActionsRecycler();
@@ -117,18 +118,18 @@ public class HomeBasisUserFragment extends Fragment {
 
     private void initUserRecycler(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
         List<DelegateItem> delegates = new ArrayList<>();
-        List<DelegateItem> actions = getActionDelegates(companies, participate, own);
+        List<HomeActionButtonDelegateItem> actions = getActionDelegates(companies, participate, own);
         delegates.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.join_queue, R.string.create_queue, R.drawable.qr_code, R.drawable.ic_add_queue,
-                (ButtonItemListener) () -> {
+                () -> {
                     if (participate == null) {
                         setJoinQueueScanOptions();
                     } else {
                         showAlreadyParticipateDialog();
                     }
                 },
-                (ButtonItemListener) () -> {
-                    if (own == null){
-                        ((MainActivity)requireActivity()).openCreateQueueActivity();
+                () -> {
+                    if (own == null) {
+                        ((MainActivity) requireActivity()).openCreateQueueActivity();
                     } else {
                         showAlreadyOwnDialog();
                     }
@@ -143,27 +144,35 @@ public class HomeBasisUserFragment extends Fragment {
         binding.progressBar.setVisibility(View.GONE);
     }
 
-    private List<DelegateItem> getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
-        List<DelegateItem> delegates = new ArrayList<>();
+    private List<HomeActionButtonDelegateItem> getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
+        List<HomeActionButtonDelegateItem> delegates = new ArrayList<>();
 
         if (companies != null && companies.size() > 0) {
-            for (int i = 0; i < companies.size(); i++) {
-                CompanyBasicUserModel current = companies.get(i);
-                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(i + 1, current.getName(), R.string.company_owner, OWNER, () -> {
+            for (CompanyBasicUserModel current : companies) {
+                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, OWNER,
+                        () -> {
+                            String service = current.getService();
+                            switch (service) {
+                                case COMPANY_QUEUE:
 
-                })));
+                                    break;
+                                case RESTAURANT:
+
+                                    break;
+                            }
+                        })));
             }
         }
 
         if (participate != null) {
             delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, participate.getName(), R.string.queue_participant, PARTICIPANT, () -> {
-                ((MainActivity)requireActivity()).openQueueWaitingActivity();
+                ((MainActivity) requireActivity()).openQueueWaitingActivity();
             })));
         }
 
         if (own != null) {
             delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, own.getName(), R.string.queue_owner, OWNER, () -> {
-                ((MainActivity)requireActivity()).openQueueDetailsActivity();
+                ((MainActivity) requireActivity()).openQueueDetailsActivity();
             })));
         }
 
@@ -175,7 +184,7 @@ public class HomeBasisUserFragment extends Fragment {
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.home_advise_box_text)),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.join_queue, R.string.scan_queue_s_qr_code_and_join_it, R.drawable.qr_code, this::setJoinQueueScanOptions)),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.create_queue, R.string.create_your_own_queue_so_people_can_join_it, R.drawable.ic_add_queue, () -> {
-                    ((MainActivity)requireActivity()).openCreateQueueActivity();
+                    ((MainActivity) requireActivity()).openCreateQueueActivity();
                 }))
         });
 

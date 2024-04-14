@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.CompanyQueueManagerModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
@@ -28,7 +29,7 @@ public class AddQueueViewModel extends ViewModel {
     LiveData<AddQueueState> state = _state;
 
     public void getCompanyQueues(String companyId, List<String> ids) {
-        DI.getCompaniesQueuesUseCase.invoke(companyId)
+        CompanyQueueDI.getCompaniesQueuesUseCase.invoke(companyId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<CompanyQueueManagerModel>>() {
                     @Override
@@ -62,7 +63,7 @@ public class AddQueueViewModel extends ViewModel {
     }
 
     public void addEmployeeToQueue(List<ActiveQueueModel> models, String companyId, String employeeId, String employeeName){
-       DI.addEmployeeToListQueues.invoke(models, companyId, employeeId, employeeName)
+       CompanyQueueDI.addEmployeeToListQueues.invoke(models, companyId, employeeId, employeeName)
                .subscribeOn(Schedulers.io())
                .subscribe(new CompletableObserver() {
                    @Override

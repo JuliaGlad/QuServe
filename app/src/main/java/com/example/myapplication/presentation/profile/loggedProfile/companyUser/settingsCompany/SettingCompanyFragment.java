@@ -1,7 +1,17 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany;
 
+import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +27,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentSettingCompanyBinding;
 import com.example.myapplication.presentation.dialogFragments.aboutUs.AboutUsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.deleteCompany.DeleteCompanyDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.deleteRestaurant.DeleteRestaurantDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.help.HelpDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.Arguments;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.model.CompanyUserModel;
@@ -31,6 +42,8 @@ import com.example.myapplication.presentation.profile.loggedProfile.delegates.us
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.userItemDelegate.SettingsUserItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.userItemDelegate.SettingsUserItemModel;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,25 +55,37 @@ public class SettingCompanyFragment extends Fragment {
 
     private SettingCompanyViewModel viewModel;
     private FragmentSettingCompanyBinding binding;
-    private String companyId;
+    private String companyId, state;
+    private int deleteTextId = 0;
     private final List<DelegateItem> delegates = new ArrayList<>();
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        viewModel = new ViewModelProvider(this).get(SettingCompanyViewModel.class);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
+        companyId = sharedPreferences.getString(COMPANY_ID, null);
+
+        switch (state){
+            case COMPANY:
+                deleteTextId = R.string.delete_company;
+                viewModel.getCompany(companyId);
+                break;
+            case RESTAURANT:
+                deleteTextId = R.string.delete_restaurant;
+                viewModel.getRestaurant(companyId);
+                break;
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        viewModel = new ViewModelProvider(this).get(SettingCompanyViewModel.class);
         binding = FragmentSettingCompanyBinding.inflate(inflater, container, false);
-
-        viewModel.getCompany(companyId);
-
         return binding.getRoot();
     }
 
@@ -94,19 +119,42 @@ public class SettingCompanyFragment extends Fragment {
             AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
             dialogFragment.show(getActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
         })));
-        delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, R.string.delete_company, () -> {
-
-            DeleteCompanyDialogFragment dialogFragment = new DeleteCompanyDialogFragment(companyId);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_COMPANY_DIALOG");
-            DialogDismissedListener listener = bundle -> {
-                Arguments.isDeleted = true;
-                requireActivity().finish();
-            };
-            dialogFragment.onDismissListener(listener);
+        delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, deleteTextId, () -> {
+            showDeleteDialog();
         })));
 
         mainAdapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);
+    }
+
+    private void showDeleteDialog() {
+        switch (state){
+            case COMPANY:
+                DeleteCompanyDialogFragment dialogFragment = new DeleteCompanyDialogFragment(companyId);
+                dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_COMPANY_DIALOG");
+                DialogDismissedListener listener = bundle -> {
+                    Intent intent = new Intent();
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    requireActivity().finish();
+                };
+                dialogFragment.onDismissListener(listener);
+                break;
+            case RESTAURANT:
+                DeleteRestaurantDialogFragment dialogFragmentRestaurant = new DeleteRestaurantDialogFragment(companyId);
+                dialogFragmentRestaurant.show(getActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_DIALOG");
+                dialogFragmentRestaurant.onDismissListener(bundle -> {
+                    Intent intent = new Intent();
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    requireActivity().finish();
+                });
+                break;
+        }
+    }
+
+    private void setPreferencesToBasic() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+        sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
     }
 
     private void setupObserves(){

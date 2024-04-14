@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.main;
 
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.city;
+import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueId;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.employeeModels;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueLocation;
 import static com.example.myapplication.presentation.companyQueue.createQueue.main.Arguments.queueName;
@@ -16,8 +17,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.DI;
-import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
+import com.example.myapplication.di.CompanyQueueDI;
+import com.example.myapplication.di.DI;
+import com.example.myapplication.di.QueueDI;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -33,6 +35,7 @@ import java.util.Random;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -49,31 +52,30 @@ public class CreateCompanyQueueViewModel extends ViewModel {
     }
 
     void initQueueData(String companyId) {
-        Arguments.queueID = generateID();
-        createQueueDocument(Arguments.queueID, companyId)
-                .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        generateQrCode(Arguments.queueID);
-                    }
-
-                    @Override
-                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                    }
-                });
-
+        queueId = generateID();
+        createQueueDocument(queueId, companyId);
     }
 
-    private Completable createQueueDocument(String queueID, String companyId) {
-        return DI.createCompanyQueueDocumentUseCase.invoke(
-                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels);
+    private void createQueueDocument(String queueID, String companyId) {
+       CompanyQueueDI.createCompanyQueueDocumentUseCase.invoke(
+                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels)
+               .subscribeOn(Schedulers.io())
+               .subscribe(new SingleObserver<String>() {
+                   @Override
+                   public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                   }
+
+                   @Override
+                   public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull String path) {
+                       generateQrCode(path, queueID);
+                   }
+
+                   @Override
+                   public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                   }
+               });
     }
 
     private String generateID() {
@@ -88,11 +90,11 @@ public class CreateCompanyQueueViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        return DI.uploadBytesToFireStorageUseCase.invoke(queueID, data);
+        return QueueDI.uploadBytesToFireStorageUseCase.invoke(queueID, data);
     }
 
     private void uploadPdfToFireStorage(File file, String queueID) {
-        DI.uploadFileToFireStorageUseCase.invoke(file, queueID)
+        QueueDI.uploadFileToFireStorageUseCase.invoke(file, queueID)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -112,19 +114,19 @@ public class CreateCompanyQueueViewModel extends ViewModel {
                 });
     }
 
-    private void generateQrCode(String queueID) {
+    private void generateQrCode(String path, String queueId) {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         try {
 
-            BitMatrix bitMatrix = multiFormatWriter.encode(queueID, BarcodeFormat.QR_CODE, 300, 300);
+            BitMatrix bitMatrix = multiFormatWriter.encode(path, BarcodeFormat.QR_CODE, 300, 300);
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            createPdfDocument(qrCode, queueID);
+            createPdfDocument(qrCode, path);
 
-            uploadImageToFireStorage(qrCode, queueID)
+            uploadImageToFireStorage(qrCode, queueId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override

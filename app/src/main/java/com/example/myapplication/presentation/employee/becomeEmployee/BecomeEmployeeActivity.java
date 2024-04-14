@@ -22,7 +22,7 @@ public class BecomeEmployeeActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.container_become_employee);
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
