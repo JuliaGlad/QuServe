@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String VARIANT_KEY = "VariantKey";
     public static final String COMPANY_QUEUE = "Queue";
     public static final String PARTICIPANT_QUEUE_PATH = "ParticipantQueuePath";
     public static final String TIME_LEFT = "TimeLeft";
@@ -101,6 +102,10 @@ public class Utils {
     public static final String PAGE_3 = "PAGE_3";
     public static final String PAGE_4 = "PAGE_4";
     public static final String PAGE_5 = "PAGE_5";
+    public static final String PAGE_6 = "PAGE_6";
+    public static final String PAGE_7 = "PAGE_7";
+    public static final String PAGE_8 = "PAGE_8";
+    public static final String PAGE_9 = "PAGE_9";
     public static final String PAUSED_TIME = "Time on Pause";
     public static final String EDIT_ESTIMATED_TIME = "Edit estimated time";
     public static final String EDIT_PEOPLE_BEFORE_YOU = "Edit people before you";

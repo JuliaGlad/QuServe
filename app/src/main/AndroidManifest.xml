@@ -26,6 +26,24 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantMenu.dishDetails.addRequiredChoice.AddRequiredChoiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantMenu.dishDetails.DishDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantMenu.addDish.AddDishActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantMenu.RestaurantMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantMenu.AddCategory.AddMenuCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.restaurantLocation.locationDetails.tableList.tableDetails.RestaurantTableDetailsActivity"
             android:exported="false" />
         <activity

@@ -1,17 +1,26 @@
 package myapplication.android.ui.recycler.ui.items.items.horizontalRecycler;
 
-import myapplication.android.ui.recycler.delegate.DelegateItem;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class HorizontalRecyclerModel {
     int id;
-    DelegateItem[] items;
+    ListAdapter adapter;
+    List items;
 
-    public HorizontalRecyclerModel(int id, DelegateItem[] items) {
+    public HorizontalRecyclerModel(int id, List items, ListAdapter adapter) {
         this.id = id;
+        this.adapter = adapter;
         this.items = items;
     }
 
-    public DelegateItem[] getItems() {
+    public ListAdapter<Object, RecyclerView.ViewHolder> getAdapter() {
+        return adapter;
+    }
+
+    public List getItems() {
         return items;
     }
 

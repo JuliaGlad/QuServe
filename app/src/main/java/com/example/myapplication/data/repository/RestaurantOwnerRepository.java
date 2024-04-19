@@ -11,7 +11,6 @@ import static com.example.myapplication.presentation.utils.Utils.PDF;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS_COUNT;
@@ -24,8 +23,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_CITY;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.NECESSARY_CHOICES;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.NECESSARY_CHOICE_VARIANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.REQUIRED_CHOICES;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
@@ -40,6 +39,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_QR_CODES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPINGS;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER_QR_CODE;
 
@@ -49,12 +49,13 @@ import android.util.Log;
 import com.example.myapplication.data.dto.CategoryDto;
 import com.example.myapplication.data.dto.DishDto;
 import com.example.myapplication.data.dto.ImageDto;
+import com.example.myapplication.data.dto.ImageTaskNameDto;
 import com.example.myapplication.data.dto.LocationDto;
-import com.example.myapplication.data.dto.NecessaryChoiceDto;
+import com.example.myapplication.data.dto.RequiredChoiceDto;
 import com.example.myapplication.data.dto.RestaurantDto;
 import com.example.myapplication.data.dto.TableDto;
-import com.example.myapplication.presentation.restaurantMenu.model.NecessaryChoiceModel;
-import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.data.dto.ToppingDto;
+import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -80,78 +81,113 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantOwnerRepository {
 
-    public Single<List<Task<Uri>>> getNecessaryChoicesImages(String restaurantId, String dishId, List<String> names){
+    public Completable deleteToppingImage(String restaurantId, String dishId, String name){
+        return Completable.create(emitter -> {
+            service.storageReference
+                    .child(RESTAURANT_MENUS_PATH)
+                    .child(restaurantId + "/")
+                    .child(dishId + "/")
+                    .child(TOPPINGS + "/")
+                    .child(name + JPG)
+                    .delete().addOnCompleteListener(task -> {
+                       emitter.onComplete();
+                    });
+        });
+    }
 
-        List<Task<Uri>> tasks = new ArrayList<>();
+    public Completable deleteTopping(String restaurantId, String categoryId, String dishId, String name){
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(TOPPINGS)
+                    .document(name)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
 
+    public Completable updateDishData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount){
+       return Completable.create(emitter -> {
+           service.fireStore
+                   .collection(RESTAURANT_LIST)
+                   .document(restaurantId)
+                   .collection(RESTAURANT_MENU)
+                   .document(categoryId)
+                   .collection(CATEGORY_DISHES)
+                   .document(dishId)
+                   .update(DISH_NAME, name,
+                           INGREDIENTS, ingredients,
+                           DISH_PRICE, price,
+                           DISH_WEIGHT_OR_COUNT, weightOrCount)
+                   .addOnCompleteListener(task -> {
+                        emitter.onComplete();
+                   });
+       });
+    }
+
+    public Single<ImageDto> getSingleDishImage(String restaurantId, String dishId) {
         return Single.create(emitter -> {
-            for (String name: names) {
-                StorageReference reference = service.storageReference
-                        .child(RESTAURANT_MENUS_PATH)
-                        .child(restaurantId + "/")
-                        .child(dishId + "/")
-                        .child(NECESSARY_CHOICES + "/")
-                        .child(name + JPG);
-                tasks.add(reference.getDownloadUrl());
+            service.storageReference
+                    .child(RESTAURANT_MENUS_PATH)
+                    .child(restaurantId + "/")
+                    .child(dishId + "/")
+                    .child(dishId + JPG)
+                    .getDownloadUrl().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onSuccess(new ImageDto(task.getResult()));
+                        }
+                    });
+        });
+    }
+
+    public Single<List<ImageTaskNameDto>> getToppingsImages(String restaurantId, String dishId, List<String> names) {
+        List<ImageTaskNameDto> tasks = new ArrayList<>();
+        return Single.create(emitter -> {
+            if (names != null && names.size() > 0) {
+                for (String name : names) {
+                    StorageReference reference = service.storageReference
+                            .child(RESTAURANT_MENUS_PATH)
+                            .child(restaurantId + "/")
+                            .child(dishId + "/")
+                            .child(TOPPINGS + "/")
+                            .child(name + JPG);
+                    tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), name));
+                }
             }
             emitter.onSuccess(tasks);
         });
     }
 
-    public Single<List<Task<Uri>>> getToppingsImages(String restaurantId, String dishId, List<String> names){
-        List<Task<Uri>> tasks = new ArrayList<>();
+    public Single<List<ImageTaskNameDto>> getDishesImages(String restaurantId, List<DishMenuOwnerModel> dishes) {
+        List<ImageTaskNameDto> tasks = new ArrayList<>();
 
         return Single.create(emitter -> {
-            for (String name: names) {
+            for (DishMenuOwnerModel current : dishes) {
+                String dishId = current.getDishId();
                 StorageReference reference = service.storageReference
                         .child(RESTAURANT_MENUS_PATH)
                         .child(restaurantId + "/")
-                        .child(dishId + "/")
-                        .child(TOPPINGS + "/")
-                        .child(name + JPG);
-                tasks.add(reference.getDownloadUrl());
+                        .child(current.getDishId() + "/")
+                        .child(dishId + JPG);
+
+                tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), dishId));
             }
+
             emitter.onSuccess(tasks);
         });
     }
 
-    public Single<List<Task<Uri>>> getIngredientsToRemoveImages(String restaurantId, String dishId, List<String> names){
-        List<Task<Uri>> tasks = new ArrayList<>();
+    public Single<List<ImageTaskNameDto>> getCategoriesImages(String restaurantId, List<String> categoriesNames) {
 
-        return Single.create(emitter -> {
-            for (String name: names) {
-                StorageReference reference = service.storageReference
-                        .child(RESTAURANT_MENUS_PATH)
-                        .child(restaurantId + "/")
-                        .child(dishId + "/")
-                        .child(INGREDIENT_TO_REMOVE + "/")
-                        .child(name + JPG);
-                tasks.add(reference.getDownloadUrl());
-            }
-            emitter.onSuccess(tasks);
-        });
-    }
-
-    public Single<List<Task<Uri>>> getDishesImages(String restaurantId, String dishId, List<String> dishNames){
-        List<Task<Uri>> tasks = new ArrayList<>();
-
-        return Single.create(emitter -> {
-            for (String name : dishNames) {
-                StorageReference reference = service.storageReference
-                        .child(RESTAURANT_MENUS_PATH)
-                        .child(restaurantId + "/")
-                        .child(dishId + "/")
-                        .child(name + JPG);
-
-                tasks.add(reference.getDownloadUrl());
-            }
-            emitter.onSuccess(tasks);
-        });
-    }
-
-    public Single<List<Task<Uri>>> getCategoriesImages(String restaurantId, List<String> categoriesNames){
-
-        List<Task<Uri>> tasks = new ArrayList<>();
+        List<ImageTaskNameDto> tasks = new ArrayList<>();
 
         return Single.create(emitter -> {
             for (String category : categoriesNames) {
@@ -159,7 +195,7 @@ public class RestaurantOwnerRepository {
                         .child(RESTAURANT_MENUS_PATH)
                         .child(restaurantId + "/")
                         .child(category + JPG);
-                tasks.add(reference.getDownloadUrl());
+                tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), category));
             }
             emitter.onSuccess(tasks);
         });
@@ -178,38 +214,46 @@ public class RestaurantOwnerRepository {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                             List<DishDto> dtos = new ArrayList<>();
-                            List<NecessaryChoiceDto> choices = new ArrayList<>();
                             for (DocumentSnapshot current : snapshots) {
-
-                                collRef.document(current.getId()).collection(NECESSARY_CHOICES)
-                                        .get().addOnCompleteListener(taskChoices -> {
-                                            if (taskChoices.isSuccessful()) {
-                                                List<DocumentSnapshot> snapshotChoices = taskChoices.getResult().getDocuments();
-                                                for (int i = 0; i < snapshotChoices.size(); i++) {
-                                                    DocumentSnapshot currentChoice = snapshotChoices.get(i);
-                                                    choices.add(new NecessaryChoiceDto(
-                                                            currentChoice.getId(),
-                                                            (List<String>) currentChoice.get(NECESSARY_CHOICE_VARIANT)
-                                                    ));
-                                                }
-                                            }
-                                        });
-
                                 dtos.add(new DishDto(
                                         current.getId(),
                                         current.getString(DISH_NAME),
-                                        (List<String>) current.get(INGREDIENTS),
+                                        current.getString(INGREDIENTS),
                                         current.getString(DISH_WEIGHT_OR_COUNT),
                                         current.getString(DISH_PRICE),
                                         current.getString(DISH_ESTIMATED_TIME_COOKING),
-                                        choices,
-                                        (List<String>) current.get(INGREDIENT_TO_REMOVE),
-                                        (List<String>) current.get(TOPPINGS)
+                                        (List<String>) current.get(INGREDIENT_TO_REMOVE)
                                 ));
                             }
                             emitter.onSuccess(dtos);
                         } else {
                             emitter.onSuccess(Collections.emptyList());
+                        }
+                    });
+        });
+    }
+
+    public Single<DishDto> getSingleDishById(String restaurantId, String categoryId, String dishId) {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            emitter.onSuccess(new DishDto(
+                                    dishId,
+                                    document.getString(DISH_NAME),
+                                    document.getString(INGREDIENTS),
+                                    document.getString(DISH_WEIGHT_OR_COUNT),
+                                    document.getString(DISH_PRICE),
+                                    document.getString(DISH_ESTIMATED_TIME_COOKING),
+                                    (List<String>) document.get(INGREDIENT_TO_REMOVE)
+                            ));
                         }
                     });
         });
@@ -242,12 +286,12 @@ public class RestaurantOwnerRepository {
         });
     }
 
-    public Completable uploadDishImage(String restaurantId, String dishId, String dishName, Uri uri) {
+    public Completable uploadDishImage(String restaurantId, String dishId, Uri uri) {
         StorageReference reference = service.storageReference
                 .child(RESTAURANT_MENUS_PATH)
                 .child(restaurantId + "/")
                 .child(dishId + "/")
-                .child(dishName + JPG);
+                .child(dishId + JPG);
 
         return Completable.create(emitter -> {
             reference.putFile(uri)
@@ -259,69 +303,66 @@ public class RestaurantOwnerRepository {
         });
     }
 
-    public Completable addCompanyDish(
-            String restaurantId,
-            String categoryName,
-            String dishId,
-            String name,
-            List<String> ingredients,
-            String weightCount,
-            String price,
-            String estimatedTimeCooking,
-            List<NecessaryChoiceModel> necessaryChoices,
-            List<VariantsModel> toRemove,
-            List<VariantsModel> toppings) {
-
-        DocumentReference menu = service.fireStore
-                .collection(RESTAURANT_LIST)
-                .document(restaurantId)
-                .collection(RESTAURANT_MENU)
-                .document(categoryName)
-                .collection(CATEGORY_DISHES)
-                .document(dishId);
-
-        HashMap<String, Object> dish = new HashMap<>();
-        dish.put(DISH_NAME, name);
-        dish.put(INGREDIENTS, ingredients.toString().split(","));
-        dish.put(DISH_WEIGHT_OR_COUNT, weightCount);
-        dish.put(DISH_PRICE, price);
-        dish.put(DISH_ESTIMATED_TIME_COOKING, estimatedTimeCooking);
-        if (toppings.size() != 0) {
-            ArrayList<String> names = new ArrayList<>();
-            for (VariantsModel current : toppings) {
-                names.add(current.getName());
-            }
-            dish.put(TOPPINGS, names);
-        }
-        if (toRemove.size() != 0) {
-            ArrayList<String> names = new ArrayList<>();
-            for (VariantsModel current : toRemove) {
-                names.add(current.getName());
-            }
-            dish.put(INGREDIENT_TO_REMOVE, names);
-        }
-
+    public Completable addIngredientsToRemove(String restaurantId, String categoryId, String dishId, List<String> variantsNames) {
         return Completable.create(emitter -> {
-            menu.set(dish).addOnCompleteListener(task -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId);
+
+            docRef.update(INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(variantsNames)).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
-                    if (necessaryChoices.size() > 0) {
-                        CollectionReference collRef = menu.collection(NECESSARY_CHOICES);
-                        for (NecessaryChoiceModel current : necessaryChoices) {
+    public Completable addTopping(String restaurantId, String categoryId, String dishId, String name, String price) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(TOPPINGS)
+                    .document(name);
 
-                            DocumentReference docRef = collRef.document(current.getName());
-                            List<VariantsModel> variantsModels = current.getVariants();
-                            List<String> variantNames = new ArrayList<>();
+            HashMap<String, Object> topping = new HashMap<>();
+            topping.put(TOPPING_PRICE, price);
 
-                            for (VariantsModel currentModel : variantsModels) {
-                                variantNames.add(currentModel.getName());
-                            }
+            docRef.set(topping).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
-                            HashMap<String, List<String>> variants = new HashMap<>();
-                            variants.put(NECESSARY_CHOICE_VARIANT, variantNames);
+    public Completable addRequiredChoice(String restaurantId, String categoryId, String dishId, String name, List<String> variantsNames) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(name);
 
-                            docRef.set(variants);
-                        }
+            HashMap<String, Object> variants = new HashMap<>();
+            variants.put(CHOICE_VARIANT, "empty");
+
+            docRef.set(variants).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (int j = 0; j < variantsNames.size(); j++) {
+                        docRef.update(CHOICE_VARIANT, FieldValue.arrayUnion(variantsNames.get(j)));
                     }
                     emitter.onComplete();
                 }
@@ -329,70 +370,164 @@ public class RestaurantOwnerRepository {
         });
     }
 
-    public Completable uploadToRemoveImages(List<VariantsModel> toRemove, String restaurantId, String dishId) {
-        StorageReference basic = service.storageReference
-                .child(RESTAURANT_MENUS_PATH)
-                .child(restaurantId + "/")
-                .child(dishId + "/")
-                .child(INGREDIENT_TO_REMOVE + "/");
+    public Single<List<String>> getToRemove(String restaurantId, String categoryId, String dishId) {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<String> toRemove = (List<String>) task.getResult().get(INGREDIENT_TO_REMOVE);
+                            if (toRemove != null) {
+                                emitter.onSuccess(toRemove);
+                            } else {
+                                emitter.onSuccess(Collections.emptyList());
+                            }
+                        }
+                    });
 
-        return Completable.create(emitter -> {
-            for (VariantsModel models : toRemove) {
-                basic.child(models.getName() + JPG).putFile(models.getUri());
-            }
-            emitter.onComplete();
         });
     }
 
-    public Completable uploadToppingImages(List<VariantsModel> toppings, String restaurantId, String dishId) {
-        StorageReference basic = service.storageReference
-                .child(RESTAURANT_MENUS_PATH)
-                .child(restaurantId + "/")
-                .child(dishId + "/")
-                .child(TOPPINGS + "/");
+    public Single<List<ToppingDto>> getToppings(String restaurantId, String categoryId, String dishId) {
+        return Single.create(emitter -> {
+            CollectionReference collRef =
+                    service.fireStore
+                            .collection(RESTAURANT_LIST)
+                            .document(restaurantId)
+                            .collection(RESTAURANT_MENU)
+                            .document(categoryId)
+                            .collection(CATEGORY_DISHES)
+                            .document(dishId)
+                            .collection(TOPPINGS);
 
-        return Completable.create(emitter -> {
-            for (VariantsModel models : toppings) {
-                basic.child(models.getName() + JPG).putFile(models.getUri());
-            }
-            emitter.onComplete();
-        });
-    }
-
-    public Completable uploadNecessaryChoiceImages(List<NecessaryChoiceModel> necessaryChoices, String restaurantId, String dishId) {
-
-        StorageReference basic = service.storageReference
-                .child(RESTAURANT_MENUS_PATH)
-                .child(restaurantId + "/")
-                .child(dishId + "/")
-                .child(NECESSARY_CHOICES + "/");
-
-        return Completable.create(emitter -> {
-            for (NecessaryChoiceModel current : necessaryChoices) {
-
-                String choiceName = current.getName();
-                List<VariantsModel> models = current.getVariants();
-
-                for (VariantsModel model : models) {
-                    basic.child(choiceName + "/")
-                            .child(model.getName() + JPG)
-                            .putFile(model.getUri());
+            collRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    List<ToppingDto> dtos = new ArrayList<>();
+                    List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                    for (DocumentSnapshot snapshot: snapshots) {
+                        dtos.add(new ToppingDto(snapshot.getId(), snapshot.getString(TOPPING_PRICE)));
+                    }
+                    emitter.onSuccess(dtos);
+                } else {
+                    emitter.onSuccess(Collections.emptyList());
                 }
-            }
-            emitter.onComplete();
-        });
+            });
 
+        });
     }
 
-    public Completable uploadCategoryImage(Uri uri, String restaurantId, String categoryName) {
+    public Single<List<RequiredChoiceDto>> getRequiredChoices(String restaurantId, String categoryId, String dishId) {
+        List<RequiredChoiceDto> choices = new ArrayList<>();
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .get().addOnCompleteListener(taskChoices -> {
+                        if (taskChoices.isSuccessful()) {
+                            List<DocumentSnapshot> snapshotChoices = taskChoices.getResult().getDocuments();
+                            for (int i = 0; i < snapshotChoices.size(); i++) {
+                                DocumentSnapshot currentChoice = snapshotChoices.get(i);
+                                List<String> variants = (List<String>) currentChoice.get(CHOICE_VARIANT) ;
+                                choices.add(new RequiredChoiceDto(
+                                        currentChoice.getId(),
+                                        variants
+                                ));
+                            }
+                            emitter.onSuccess(choices);
+                        } else {
+                            emitter.onSuccess(Collections.emptyList());
+                        }
+                    });
+        });
+    }
+
+    public Completable addCompanyDish(
+            String restaurantId,
+            String categoryId,
+            String dishId,
+            String name,
+            String ingredients,
+            String weightCount,
+            String price,
+            String estimatedTimeCooking) {
+
+        DocumentReference menu = service.fireStore
+                .collection(RESTAURANT_LIST)
+                .document(restaurantId)
+                .collection(RESTAURANT_MENU)
+                .document(categoryId)
+                .collection(CATEGORY_DISHES)
+                .document(dishId);
+
         return Completable.create(emitter -> {
-            StorageReference reference = service.storageReference
+
+            HashMap<String, Object> dish = new HashMap<>();
+            dish.put(DISH_NAME, name);
+            dish.put(INGREDIENTS, ingredients);
+            dish.put(DISH_WEIGHT_OR_COUNT, weightCount);
+            dish.put(DISH_PRICE, price);
+            dish.put(DISH_ESTIMATED_TIME_COOKING, estimatedTimeCooking);
+            dish.put(TOPPINGS, Collections.emptyList());
+            dish.put(INGREDIENT_TO_REMOVE, Collections.emptyList());
+
+
+            menu.set(dish).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
+
+    public Completable uploadToppingImage(String name, Uri uri, String restaurantId, String dishId) {
+        StorageReference basic = service.storageReference
+                .child(RESTAURANT_MENUS_PATH)
+                .child(restaurantId + "/")
+                .child(dishId + "/")
+                .child(TOPPINGS + "/")
+                .child(name + JPG);
+
+        return Completable.create(emitter -> {
+            basic.putFile(uri).addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
+
+    public Completable uploadBytesCategoryImage(byte[] bytes, String restaurantId, String categoryName) {
+
+        return Completable.create(emitter -> {
+            service.storageReference
                     .child(RESTAURANT_MENUS_PATH)
                     .child(restaurantId + "/")
-                    .child(categoryName + JPG);
+                    .child(categoryName + JPG)
+                    .putBytes(bytes).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
 
-            reference.putFile(uri)
-                    .addOnCompleteListener(task -> {
+    public Completable uploadUriCategoryImage(Uri uri, String restaurantId, String categoryName) {
+        return Completable.create(emitter -> {
+            service.storageReference
+                    .child(RESTAURANT_MENUS_PATH)
+                    .child(restaurantId + "/")
+                    .child(categoryName + JPG)
+                    .putFile(uri).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
                         }
@@ -415,12 +550,7 @@ public class RestaurantOwnerRepository {
                 if (task.isSuccessful()) {
                     menu.get().addOnCompleteListener(taskGet -> {
                         if (taskGet.isSuccessful()) {
-                            try {
-                                String count = taskGet.getResult().getString(CATEGORY_COUNT);
-                                menu.update(CATEGORY_COUNT, String.valueOf(Integer.parseInt(count) + 1));
-                            } catch (NullPointerException e) {
-                                menu.update(CATEGORY_COUNT, "1");
-                            }
+                            emitter.onComplete();
                         }
                     });
                 }

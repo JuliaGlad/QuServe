@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main;
 
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.email;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.name;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.phoneNumber;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.service;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.email;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.name;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.phoneNumber;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.service;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.stringsServicesArray;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
@@ -17,9 +17,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.CommonCompanyDI;
 import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
 import com.example.myapplication.di.RestaurantDI;
-import com.example.myapplication.domain.model.restaurant.RestaurantEmailNameModel;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -33,7 +31,6 @@ import java.util.Random;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.DelegateItem;

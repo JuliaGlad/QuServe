@@ -14,6 +14,9 @@ import static com.example.myapplication.presentation.utils.Utils.stringsTimeArra
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,13 +63,12 @@ public class CreateQueueFragment extends Fragment {
     private CreateQueueViewModel viewModel;
     private FragmentCreateQueueBinding binding;
     private MainAdapter mainAdapter = new MainAdapter();
-
     private String page;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        viewModel = new ViewModelProvider(requireActivity()).get(CreateQueueViewModel.class);
         try {
             page = CreateQueueFragmentArgs.fromBundle(getArguments()).getPage();
         }catch (IllegalArgumentException e){
@@ -77,11 +79,8 @@ public class CreateQueueFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        viewModel = new ViewModelProvider(requireActivity()).get(CreateQueueViewModel.class);
         binding = FragmentCreateQueueBinding.inflate(inflater, container, false);
         onPageInit(page, getResources().getStringArray(R.array.lifetime));
-
         initBackButtonPressed();
 
         return binding.getRoot();
@@ -100,7 +99,6 @@ public class CreateQueueFragment extends Fragment {
         initNextButton();
         initCloseButton();
         initBackButton();
-
         setupObserves();
     }
 

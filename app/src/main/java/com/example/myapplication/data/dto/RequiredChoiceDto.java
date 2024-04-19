@@ -2,11 +2,11 @@ package com.example.myapplication.data.dto;
 
 import java.util.List;
 
-public class NecessaryChoiceDto {
+public class RequiredChoiceDto {
     private final String name;
     private final List<String> variantsName;
 
-    public NecessaryChoiceDto(String name, List<String> variantsName) {
+    public RequiredChoiceDto(String name, List<String> variantsName) {
         this.name = name;
         this.variantsName = variantsName;
     }

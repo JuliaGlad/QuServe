@@ -1,24 +1,26 @@
 package com.example.myapplication.presentation.utils.constants;
 
 public class Restaurant {
+    public static final String DISH_ID = "DishId";
+    public static final String TOPPING_PRICE = "ToppingPrice";
+    public static final String CATEGORY_ID = "CategoryId";
+    public static final String CHOICE_NAME = "Name";
     public static final String CATEGORY_NAME = "CategoryName";
     public static final String CATEGORY_DISHES ="Dishes";
     public static final String COOKS = "Cooks";
     public static final String WAITERS = "Waiters";
     public static final String COOK_QR_CODE = "Cook";
     public static final String WAITER_QR_CODE = "Waiter";
-    public static final String NECESSARY_CHOICES = "NecessaryChoices";
-    public static final String NECESSARY_CHOICE_VARIANT = "Variants";
+    public static final String REQUIRED_CHOICES = "RequiredChoices";
+    public static final String CHOICE_VARIANT = "Variants";
     public static final String INGREDIENT_TO_REMOVE="IngredientsToRemove";
     public static final String TOPPINGS = "Toppings";
     public static final String DISH_NAME = "DishName";
     public static final String INGREDIENTS = "Ingredients";
-    public static final String DISH_WEIGHT_OR_COUNT = "Weight/Count";
+    public static final String DISH_WEIGHT_OR_COUNT = "WeightOrCount";
     public static final String DISH_PRICE = "DishPrice";
     public static final String DISH_ESTIMATED_TIME_COOKING = "EstimatedTimeCooking";
     public static final String RESTAURANT_MENUS_PATH = "RestaurantMenus/";
-    public static final String CATEGORY_COUNT = "CategoriesCount";
-    public static final String RESTAURANT_MENU_CATEGORIES = "Categories";
     public static final String RESTAURANT_MENU = "Menu";
     public static final String TABLE_QR_CODES = "Table_QrCodes/";
     public static final String TABLE_ID = "TableId";

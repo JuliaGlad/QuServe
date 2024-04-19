@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main;
 
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.email;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.name;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.phoneNumber;
-import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.arguments.service;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.email;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.name;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.phoneNumber;
+import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.service;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
@@ -35,7 +35,6 @@ import com.example.myapplication.databinding.FragmentCreateCompanyAccountBinding
 import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

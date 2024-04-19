@@ -121,7 +121,6 @@ public class ChangeRoleDialogFragment extends DialogFragment {
                 binding.secondAdminFeature,
                 binding.constraintLayoutAdmin
         );
-
         newRole = WORKER;
     }
 

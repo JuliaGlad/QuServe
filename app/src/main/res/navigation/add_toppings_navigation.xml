@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_toppings_navigation.xml"
+    app:startDestination="@id/addToppingFragment">
+
+    <fragment
+        android:id="@+id/addToppingFragment"
+        android:name="com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.AddToppingFragment"
+        android:label="AddToppingFragment" >
+        <action
+            android:id="@+id/action_addToppingFragment_self"
+            app:destination="@id/addToppingFragment" />
+
+        <argument android:name="page"
+            app:argType="string"/>
+
+        <argument android:name="categoryId"
+            app:argType="string"/>
+
+        <argument android:name="dishId"
+            app:argType="string"/>
+
+    </fragment>
+</navigation>

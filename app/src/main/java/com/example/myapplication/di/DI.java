@@ -16,4 +16,5 @@ public class DI {
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
     public static RestaurantOwnerRepository restaurantOwnerRepository = new RestaurantOwnerRepository();
     public static CommonCompanyRepository commonCompanyRepository = new CommonCompanyRepository();
+
 }

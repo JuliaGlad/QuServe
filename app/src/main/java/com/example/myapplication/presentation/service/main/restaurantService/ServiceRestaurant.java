@@ -46,7 +46,7 @@ public class ServiceRestaurant extends Fragment {
     private void initRecycler() {
         buildList(new ServiceRestaurantButtonModel[]{
                 new ServiceRestaurantButtonModel(1, R.drawable.menu_background, getString(R.string.restaurant_menu), () -> {
-
+                    ((MainActivity)requireActivity()).openRestaurantMenuActivity();
                 }),
                 new ServiceRestaurantButtonModel(2, R.drawable.location_background, getString(R.string.locations), () -> {
                     ((MainActivity)requireActivity()).openRestaurantLocationsActivity();

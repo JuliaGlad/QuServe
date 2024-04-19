@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
@@ -41,7 +42,9 @@ public class HorizontalRecyclerDelegate implements AdapterDelegate {
         }
 
         void bind(HorizontalRecyclerModel model){
-
+            ListAdapter adapter = model.adapter;
+            binding.recyclerView.setAdapter(adapter);
+            adapter.submitList(model.items);
         }
     }
 }

@@ -1,4 +1,5 @@
 <resources>
+    <string name="you_dont_have_any_dishes_in_this_category_yet">You don`t have dishes in this category yet!</string>
     <string name="current_location">Current Location</string>
     <string name="app_name" translatable="false">Smart Queue</string>
     <string name="title_home">Home</string>

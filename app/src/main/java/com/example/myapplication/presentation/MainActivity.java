@@ -34,6 +34,7 @@ import com.example.myapplication.presentation.profile.loggedProfile.companyUser.
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
 import com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
 import com.example.myapplication.presentation.service.main.queue.QueueActivity;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
@@ -80,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openRestaurantMenuActivity(){
+        Intent intent = new Intent(this, RestaurantMenuActivity.class);
+        startActivity(intent);
     }
 
     public void openRestaurantLocationsActivity(){

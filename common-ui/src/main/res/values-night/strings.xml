@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="you_dont_have_any_dishes_in_this_category_yet">You don`t have dishes in this category yet!</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>
     <string name="title_queue">Очередь</string>

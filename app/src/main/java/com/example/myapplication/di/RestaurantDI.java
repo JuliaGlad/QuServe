@@ -1,8 +1,7 @@
 package com.example.myapplication.di;
 
-import com.example.myapplication.domain.model.common.SetRestaurantUserUseCase;
-import com.example.myapplication.domain.usecase.restaurant.AddRestaurantTablesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.AddRestaurantSnapshotUseCase;
+import com.example.myapplication.domain.usecase.restaurant.AddRestaurantTablesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.CreateRestaurantDocumentUseCase;
 import com.example.myapplication.domain.usecase.restaurant.CreateRestaurantLocationDocumentUseCase;
 import com.example.myapplication.domain.usecase.restaurant.DeleteRestaurantUseCase;
@@ -13,8 +12,6 @@ import com.example.myapplication.domain.usecase.restaurant.GetCookQrCodeUseCase;
 import com.example.myapplication.domain.usecase.restaurant.GetRestaurantEditModel;
 import com.example.myapplication.domain.usecase.restaurant.GetRestaurantLocationsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.GetRestaurantTablesUseCase;
-import com.example.myapplication.domain.usecase.restaurant.GetRestaurantsLogosUseCase;
-import com.example.myapplication.domain.usecase.restaurant.GetRestaurantsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.GetSingleRestaurantLogoUseCase;
 import com.example.myapplication.domain.usecase.restaurant.GetSingleRestaurantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.GetSingleTableByIdUseCase;
@@ -27,8 +24,35 @@ import com.example.myapplication.domain.usecase.restaurant.UploadRestaurantLogoU
 import com.example.myapplication.domain.usecase.restaurant.UploadTableQrCodeJpgUseCase;
 import com.example.myapplication.domain.usecase.restaurant.UploadTableQrCodePdfUseCase;
 import com.example.myapplication.domain.usecase.restaurant.UploadWaiterQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddDishUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddIngredientsToRemoveUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddRequiredChoicesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddToppingUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteToppingImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteToppingUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetCategoriesImagesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetCategoriesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetDishesImagesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetDishesMenuOwnerModelsUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetIngredientsToRemoveUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetRequiredChoicesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishByIdUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsImagesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UpdateDishDataUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryBytesImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryUriImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UploadDishImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UploadToppingImage;
 
 public class RestaurantDI {
+    public static DeleteToppingUseCase deleteToppingUseCase = new DeleteToppingUseCase();
+    public static DeleteToppingImageUseCase deleteToppingImageUseCase = new DeleteToppingImageUseCase();
+    public static UpdateDishDataUseCase updateDishDataUseCase = new UpdateDishDataUseCase();
+    public static GetSingleDishImageUseCase getSingleDishImageUseCase = new GetSingleDishImageUseCase();
+    public static GetSingleDishByIdUseCase getSingleDishByIdUseCase = new GetSingleDishByIdUseCase();
     public static GetCookQrCodeUseCase getCookQrCodeUseCase = new GetCookQrCodeUseCase();
     public static GetWaiterQrCodeUseCase getWaiterQrCodeUseCase = new GetWaiterQrCodeUseCase();
     public static UploadCookQrCodeUseCase uploadCookQrCodeUseCase = new UploadCookQrCodeUseCase();
@@ -53,4 +77,21 @@ public class RestaurantDI {
     public static DeleteTableUseCase deleteTableUseCase = new DeleteTableUseCase();
     public static DeleteTableQrCodeJpgUseCase deleteTableQrCodeJpgUseCase = new DeleteTableQrCodeJpgUseCase();
     public static DeleteTableQrCodePdfUseCase deleteTableQrCodePdfUseCase = new DeleteTableQrCodePdfUseCase();
+    public static AddDishUseCase addDishUseCase = new AddDishUseCase();
+    public static AddMenuCategoryUseCase addMenuCategoryUseCase = new AddMenuCategoryUseCase();
+    public static GetCategoriesImagesUseCase getCategoriesImagesUseCase = new GetCategoriesImagesUseCase();
+    public static GetCategoriesUseCase getCategoriesUseCase = new GetCategoriesUseCase();
+    public static GetDishesImagesUseCase getDishesImagesUseCase = new GetDishesImagesUseCase();
+    public static GetDishesMenuOwnerModelsUseCase getDishesMenuOwnerModelsUseCase = new GetDishesMenuOwnerModelsUseCase();
+    public static GetToppingsImagesUseCase getToppingsImagesUseCase = new GetToppingsImagesUseCase();
+    public static UploadCategoryBytesImageUseCase uploadCategoryBytesImageUseCase = new UploadCategoryBytesImageUseCase();
+    public static UploadDishImageUseCase uploadDishImageUseCase = new UploadDishImageUseCase();
+    public static UploadToppingImage uploadToppingImage = new UploadToppingImage();
+    public static UploadCategoryUriImageUseCase uploadCategoryUriImageUseCase = new UploadCategoryUriImageUseCase();
+    public static GetToppingsUseCase getToppingsUseCase = new GetToppingsUseCase();
+    public static GetIngredientsToRemoveUseCase getIngredientsToRemoveUseCase = new GetIngredientsToRemoveUseCase();
+    public static GetRequiredChoicesUseCase getRequiredChoicesUseCase = new GetRequiredChoicesUseCase();
+    public static AddToppingUseCase addToppingUseCase = new AddToppingUseCase();
+    public static AddIngredientsToRemoveUseCase addIngredientsToRemoveUseCase = new AddIngredientsToRemoveUseCase();
+    public static AddRequiredChoicesUseCase addRequiredChoicesUseCase = new AddRequiredChoicesUseCase();
 }

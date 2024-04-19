@@ -67,8 +67,6 @@ public class BasicUserFragment extends Fragment {
         setCreateCompanyLauncher();
     }
 
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -88,12 +86,6 @@ public class BasicUserFragment extends Fragment {
         initBackground();
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        viewModel.isCompanyExist();
-//    }
-
     private void initBackground() {
         binding.background.setOnClickListener(v -> {
             initImagePicker();
@@ -107,7 +99,6 @@ public class BasicUserFragment extends Fragment {
     }
 
     private void setAdapter() {
-
         mainAdapter.addDelegate(new MainItemDelegate());
         mainAdapter.addDelegate(new ServiceItemDelegate());
 
@@ -145,12 +136,7 @@ public class BasicUserFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof BasicUserState.Error) {
-                Log.d("Error state", "error");
-                binding.progressBar.setVisibility(View.GONE);
-                binding.connectionLost.getRoot().setVisibility(View.VISIBLE);
-                binding.connectionLost.buttonTryAgain.setOnClickListener(v -> {
-                    viewModel.retrieveUserNameData();
-                });
+
             }
         });
 
@@ -192,7 +178,6 @@ public class BasicUserFragment extends Fragment {
             }));
         } else {
             return new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_add_business_24, R.string.add_company, () -> {
-//                ((MainActivity) requireActivity()).openCreateCompanyActivity();
                 Intent intent = new Intent(requireActivity(), CreateCompanyActivity.class);
                 intent.putExtra(PAGE_KEY, PAGE_1);
                 createCompanyLauncher.launch(intent);
