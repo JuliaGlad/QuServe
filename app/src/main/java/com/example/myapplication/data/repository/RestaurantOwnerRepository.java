@@ -13,6 +13,7 @@ import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK_QR_CODE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ESTIMATED_TIME_COOKING;
@@ -69,6 +70,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -81,7 +83,131 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantOwnerRepository {
 
-    public Completable deleteToppingImage(String restaurantId, String dishId, String name){
+    public Completable updateRequiredChoiceName(String restaurantId, String categoryId, String dishId, String choiceId, String name){
+        return Completable.create(emitter -> {
+           service.fireStore
+                   .collection(RESTAURANT_LIST)
+                   .document(restaurantId)
+                   .collection(RESTAURANT_MENU)
+                   .document(categoryId)
+                   .collection(CATEGORY_DISHES)
+                   .document(dishId)
+                   .collection(REQUIRED_CHOICES)
+                   .document(choiceId)
+                   .update(CHOICE_NAME, name)
+                   .addOnCompleteListener(task -> {
+                       if (task.isSuccessful()){
+                           emitter.onComplete();
+                       }
+                   });
+        });
+    }
+
+    public Completable addNewRequiredChoiceVariant(String restaurantId, String categoryId, String dishId, String choiceId, String newVariant){
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId)
+                    .update(CHOICE_VARIANT, FieldValue.arrayUnion(newVariant))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable updateVariant(String restaurantId, String categoryId, String dishId, String choiceId, String previousVariant, String newVariant) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId);
+
+            docRef.update(CHOICE_VARIANT, FieldValue.arrayRemove(previousVariant), CHOICE_VARIANT, FieldValue.arrayUnion(newVariant))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable deleteRequiredChoiceVariant(String restaurantId, String categoryId, String dishId, String choiceId, String variant) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId)
+                    .update(CHOICE_VARIANT, FieldValue.arrayRemove(variant))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable deleteRequiredChoiceById(String restaurantId, String categoryId, String dishId, String choiceId) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Single<RequiredChoiceDto> getSingleRequireChoiceById(String restaurantId, String categoryId, String dishId, String choiceId) {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot snapshot = task.getResult();
+                            emitter.onSuccess(new RequiredChoiceDto(
+                                    snapshot.getId(),
+                                    snapshot.getString(CHOICE_NAME),
+                                    (List<String>) snapshot.get(CHOICE_VARIANT)
+                            ));
+                        }
+                    });
+        });
+    }
+
+    public Completable deleteToppingImage(String restaurantId, String dishId, String name) {
         return Completable.create(emitter -> {
             service.storageReference
                     .child(RESTAURANT_MENUS_PATH)
@@ -90,12 +216,12 @@ public class RestaurantOwnerRepository {
                     .child(TOPPINGS + "/")
                     .child(name + JPG)
                     .delete().addOnCompleteListener(task -> {
-                       emitter.onComplete();
+                        emitter.onComplete();
                     });
         });
     }
 
-    public Completable deleteTopping(String restaurantId, String categoryId, String dishId, String name){
+    public Completable deleteTopping(String restaurantId, String categoryId, String dishId, String name) {
         return Completable.create(emitter -> {
             service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -107,30 +233,30 @@ public class RestaurantOwnerRepository {
                     .collection(TOPPINGS)
                     .document(name)
                     .delete().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
                         }
                     });
         });
     }
 
-    public Completable updateDishData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount){
-       return Completable.create(emitter -> {
-           service.fireStore
-                   .collection(RESTAURANT_LIST)
-                   .document(restaurantId)
-                   .collection(RESTAURANT_MENU)
-                   .document(categoryId)
-                   .collection(CATEGORY_DISHES)
-                   .document(dishId)
-                   .update(DISH_NAME, name,
-                           INGREDIENTS, ingredients,
-                           DISH_PRICE, price,
-                           DISH_WEIGHT_OR_COUNT, weightOrCount)
-                   .addOnCompleteListener(task -> {
+    public Completable updateDishData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .update(DISH_NAME, name,
+                            INGREDIENTS, ingredients,
+                            DISH_PRICE, price,
+                            DISH_WEIGHT_OR_COUNT, weightOrCount)
+                    .addOnCompleteListener(task -> {
                         emitter.onComplete();
-                   });
-       });
+                    });
+        });
     }
 
     public Single<ImageDto> getSingleDishImage(String restaurantId, String dishId) {
@@ -337,7 +463,7 @@ public class RestaurantOwnerRepository {
             topping.put(TOPPING_PRICE, price);
 
             docRef.set(topping).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
             });
@@ -345,6 +471,9 @@ public class RestaurantOwnerRepository {
     }
 
     public Completable addRequiredChoice(String restaurantId, String categoryId, String dishId, String name, List<String> variantsNames) {
+        Random rand = new Random();
+        int id = rand.nextInt(90000000) + 10000000;
+        String choiceId = "@" + id;
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -354,10 +483,11 @@ public class RestaurantOwnerRepository {
                     .collection(CATEGORY_DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
-                    .document(name);
+                    .document(choiceId);
 
             HashMap<String, Object> variants = new HashMap<>();
             variants.put(CHOICE_VARIANT, "empty");
+            variants.put(CHOICE_NAME, name);
 
             docRef.set(variants).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -409,7 +539,7 @@ public class RestaurantOwnerRepository {
                 if (task.isSuccessful()) {
                     List<ToppingDto> dtos = new ArrayList<>();
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
-                    for (DocumentSnapshot snapshot: snapshots) {
+                    for (DocumentSnapshot snapshot : snapshots) {
                         dtos.add(new ToppingDto(snapshot.getId(), snapshot.getString(TOPPING_PRICE)));
                     }
                     emitter.onSuccess(dtos);
@@ -437,9 +567,10 @@ public class RestaurantOwnerRepository {
                             List<DocumentSnapshot> snapshotChoices = taskChoices.getResult().getDocuments();
                             for (int i = 0; i < snapshotChoices.size(); i++) {
                                 DocumentSnapshot currentChoice = snapshotChoices.get(i);
-                                List<String> variants = (List<String>) currentChoice.get(CHOICE_VARIANT) ;
+                                List<String> variants = (List<String>) currentChoice.get(CHOICE_VARIANT);
                                 choices.add(new RequiredChoiceDto(
                                         currentChoice.getId(),
+                                        currentChoice.getString(CHOICE_NAME),
                                         variants
                                 ));
                             }
@@ -499,7 +630,7 @@ public class RestaurantOwnerRepository {
 
         return Completable.create(emitter -> {
             basic.putFile(uri).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
             });

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dish_details_navigation.xml"
+    app:startDestination="@id/dishDetailsFragment">
+
+    <fragment
+        android:id="@+id/dishDetailsFragment"
+        android:name="com.example.myapplication.presentation.restaurantMenu.dishDetails.DishDetailsFragment"
+        android:label="fragment_dish_details"
+        tools:layout="@layout/fragment_dish_details" >
+        <action
+            android:id="@+id/action_dishDetailsFragment_to_editRequiredChoiceFragment"
+            app:destination="@id/editRequiredChoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editRequiredChoiceFragment"
+        android:name="com.example.myapplication.presentation.restaurantMenu.dishDetails.editRequiredChoice.EditRequiredChoiceFragment"
+        android:label="fragment_edit_required_choice"
+        tools:layout="@layout/fragment_edit_required_choice" >
+        <action
+            android:id="@+id/action_editRequiredChoiceFragment_to_dishDetailsFragment"
+            app:destination="@id/dishDetailsFragment" />
+    </fragment>
+</navigation>

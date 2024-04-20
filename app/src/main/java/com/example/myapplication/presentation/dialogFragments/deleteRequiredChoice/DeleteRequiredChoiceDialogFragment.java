@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.dialogFragments.deleteEmployeeFromCompany;
+package com.example.myapplication.presentation.dialogFragments.deleteRequiredChoice;
 
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 
@@ -13,21 +13,24 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.DialogDeleteCheckBinding;
+import com.example.myapplication.presentation.dialogFragments.deleteEmployeeFromCompany.DeleteEmployeeFromCompanyViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.checkerframework.checker.units.qual.A;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
-public class DeleteEmployeeFromCompanyDialogFragment extends DialogFragment {
-
-    DeleteEmployeeFromCompanyViewModel viewModel;
+public class DeleteRequiredChoiceDialogFragment extends DialogFragment {
+    DeleteRequiredChoiceViewModel viewModel;
     DialogDismissedListener listener;
-    private final String employeeId;
-    private final String companyId;
-    String role = null;
+    private String restaurantId, categoryId, dishId, choiceId;
+    private boolean isDelete = false;
 
-    public DeleteEmployeeFromCompanyDialogFragment(String employeeId, String companyId) {
-        this.employeeId = employeeId;
-        this.companyId = companyId;
+    public DeleteRequiredChoiceDialogFragment(String restaurantId, String categoryId, String dishId, String choiceId) {
+        this.restaurantId = restaurantId;
+        this.categoryId = categoryId;
+        this.dishId = dishId;
+        this.choiceId = choiceId;
     }
 
     @NonNull
@@ -36,14 +39,14 @@ public class DeleteEmployeeFromCompanyDialogFragment extends DialogFragment {
 
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         DialogDeleteCheckBinding binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this).get(DeleteEmployeeFromCompanyViewModel.class);
-        
-        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_this_employee_from_your_company));
-        
+        viewModel = new ViewModelProvider(this).get(DeleteRequiredChoiceViewModel.class);
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_this_choice));
+
         setupObserves();
 
         binding.buttonDelete.setOnClickListener(v -> {
-            viewModel.deleteEmployee(employeeId, companyId);
+            viewModel.deleteChoice(restaurantId, categoryId, dishId, choiceId);
         });
 
         binding.buttonCancel.setOnClickListener(v -> {
@@ -56,12 +59,8 @@ public class DeleteEmployeeFromCompanyDialogFragment extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (listener != null && role != null){
-
-            Bundle bundle = new Bundle();
-            bundle.putString(EMPLOYEE_ROLE, role);
-
-            listener.handleDialogClose(bundle);
+        if (listener != null && isDelete){
+            listener.handleDialogClose(null);
         }
     }
 
@@ -70,11 +69,11 @@ public class DeleteEmployeeFromCompanyDialogFragment extends DialogFragment {
     }
 
     private void setupObserves(){
-       viewModel.role.observe(this, role -> {
-           if (role != null){
-               this.role = role;
-               dismiss();
-           }
-       });
+        viewModel.isChoiceDelete.observe(this, aBoolean -> {
+            if (aBoolean){
+                isDelete = true;
+                dismiss();
+            }
+        });
     }
 }

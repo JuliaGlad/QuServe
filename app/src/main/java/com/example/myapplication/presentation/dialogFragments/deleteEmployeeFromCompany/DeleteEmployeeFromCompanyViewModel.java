@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.CompanyQueueDI;
 import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
 import com.example.myapplication.di.ProfileDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;

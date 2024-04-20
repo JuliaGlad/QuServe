@@ -27,8 +27,11 @@ import com.example.myapplication.domain.usecase.restaurant.UploadWaiterQrCodeUse
 import com.example.myapplication.domain.usecase.restaurant.menu.AddDishUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddIngredientsToRemoveUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddNewRequireChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddRequiredChoicesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddToppingUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteRequiredChoiceByIdUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteRequiredChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteToppingImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteToppingUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetCategoriesImagesUseCase;
@@ -39,15 +42,24 @@ import com.example.myapplication.domain.usecase.restaurant.menu.GetIngredientsTo
 import com.example.myapplication.domain.usecase.restaurant.menu.GetRequiredChoicesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishByIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishImageUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleRequiredChoiceByIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsImagesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UpdateDishDataUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UpdateRequiredChoiceNameUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UpdateRequiredChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryBytesImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryUriImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadDishImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadToppingImage;
 
 public class RestaurantDI {
+    public static UpdateRequiredChoiceNameUseCase updateRequiredChoiceNameUseCase = new UpdateRequiredChoiceNameUseCase();
+    public static AddNewRequireChoiceVariantUseCase addNewRequireChoiceVariantUseCase = new AddNewRequireChoiceVariantUseCase();
+    public static UpdateRequiredChoiceVariantUseCase updateRequiredChoiceVariantUseCase = new UpdateRequiredChoiceVariantUseCase();
+    public static DeleteRequiredChoiceVariantUseCase deleteRequiredChoiceVariantUseCase = new DeleteRequiredChoiceVariantUseCase();
+    public static DeleteRequiredChoiceByIdUseCase deleteRequiredChoiceByIdUseCase = new DeleteRequiredChoiceByIdUseCase();
+    public static GetSingleRequiredChoiceByIdUseCase getSingleRequiredChoiceByIdUseCase = new GetSingleRequiredChoiceByIdUseCase();
     public static DeleteToppingUseCase deleteToppingUseCase = new DeleteToppingUseCase();
     public static DeleteToppingImageUseCase deleteToppingImageUseCase = new DeleteToppingImageUseCase();
     public static UpdateDishDataUseCase updateDishDataUseCase = new UpdateDishDataUseCase();

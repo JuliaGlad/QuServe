@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.utils.constants;
 
 public class Restaurant {
+    public static final String CHOICE_ID = "ChoiceId";
     public static final String DISH_ID = "DishId";
     public static final String TOPPING_PRICE = "ToppingPrice";
     public static final String CATEGORY_ID = "CategoryId";

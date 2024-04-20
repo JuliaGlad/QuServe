@@ -9,11 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.databinding.DialogDeleteRestaurantBinding;
-import com.github.dhaval2404.imagepicker.listener.DismissListener;
+import com.example.myapplication.R;
+import com.example.myapplication.databinding.DialogDeleteCheckBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
 public class DeleteRestaurantDialogFragment extends DialogFragment {
@@ -36,7 +35,9 @@ public class DeleteRestaurantDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(DeleteRestaurantViewModel.class);
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        DialogDeleteRestaurantBinding binding = DialogDeleteRestaurantBinding.inflate(getLayoutInflater());
+        DialogDeleteCheckBinding binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_your_restaurant));
 
         setupObserves();
 

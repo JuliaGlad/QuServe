@@ -331,4 +331,8 @@
     <string name="enter_topping_price">Enter topping price:</string>
     <string name="add_topping_photo">Add topping photo</string>
     <string name="are_you_sure_you_want_to_delete_this_topping_from_this_dish">Are you sure you want to delete this topping from this dish?</string>
+    <string name="delete_choice">Delete choice</string>
+    <string name="are_you_sure_you_want_to_delete_this_choice">Are you sure you want to delete this choice?</string>
+    <string name="add_new_variant">Add new variant</string>
+    <string name="new_variant_name">New variant name</string>
 </resources>

@@ -82,7 +82,6 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.isPaused.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
                 NavHostFragment.findNavController(this)

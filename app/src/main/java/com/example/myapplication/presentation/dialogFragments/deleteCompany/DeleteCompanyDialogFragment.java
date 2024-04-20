@@ -1,25 +1,16 @@
 package com.example.myapplication.presentation.dialogFragments.deleteCompany;
 
-import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.DialogDeleteCompanyLayoutBinding;
-import com.example.myapplication.databinding.DialogDeleteLayoutBinding;
-import com.example.myapplication.presentation.dialogFragments.deleteAccount.DeleteAccountDialogViewModel;
+import com.example.myapplication.databinding.DialogDeleteCheckBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
@@ -27,7 +18,7 @@ import myapplication.android.ui.listeners.DialogDismissedListener;
 public class DeleteCompanyDialogFragment extends DialogFragment {
 
     private DeleteCompanyDialogViewModel viewModel;
-    private DialogDeleteCompanyLayoutBinding binding;
+    private DialogDeleteCheckBinding binding;
     private DialogDismissedListener listener;
     private boolean isDeleted = false;
 
@@ -44,7 +35,9 @@ public class DeleteCompanyDialogFragment extends DialogFragment {
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         viewModel = new ViewModelProvider(this).get(DeleteCompanyDialogViewModel.class);
-        binding = DialogDeleteCompanyLayoutBinding.inflate(getLayoutInflater());
+        binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_your_company));
 
         setupObserves();
 

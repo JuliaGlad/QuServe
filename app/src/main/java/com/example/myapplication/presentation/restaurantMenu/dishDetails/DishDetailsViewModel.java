@@ -59,7 +59,7 @@ public class DishDetailsViewModel extends ViewModel {
                     return RestaurantDI.getRequiredChoicesUseCase.invoke(restaurantId, categoryId, dishId);
                 }).flatMap(requiredChoiceModels -> {
                     for (RequiredChoiceModel current : requiredChoiceModels) {
-                        models.add(new RequiredChoiceDishDetailsModel(current.getName(), current.getVariantsName()));
+                        models.add(new RequiredChoiceDishDetailsModel(current.getId(), current.getName(), current.getVariantsName()));
                     }
                     return RestaurantDI.getToppingsUseCase.invoke(restaurantId, categoryId, dishId);
                 }).flatMap(toppingsModels -> {

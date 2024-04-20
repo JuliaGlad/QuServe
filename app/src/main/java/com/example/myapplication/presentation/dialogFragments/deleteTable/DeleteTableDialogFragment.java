@@ -9,7 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.databinding.DialogDeleteTableBinding;
+import com.example.myapplication.R;
+import com.example.myapplication.databinding.DialogDeleteCheckBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
@@ -37,8 +38,10 @@ public class DeleteTableDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(DeleteTableViewModel.class);
-        DialogDeleteTableBinding binding = DialogDeleteTableBinding.inflate(getLayoutInflater());
+        DialogDeleteCheckBinding binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_this_table));
 
         setupObserves();
 

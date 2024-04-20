@@ -13,10 +13,7 @@ public class GetRequiredChoicesUseCase {
     public Single<List<RequiredChoiceModel>> invoke(String restaurantId, String categoryId, String dishId){
         return DI.restaurantOwnerRepository.getRequiredChoices(restaurantId, categoryId, dishId).map(requiredChoiceDtos ->
                 requiredChoiceDtos.stream()
-                        .map(requiredChoiceDto -> {
-                            Log.e("Variant 0", requiredChoiceDto.getVariantsName().get(0));
-                            return new RequiredChoiceModel(requiredChoiceDto.getName(), requiredChoiceDto.getVariantsName());
-                        })
+                        .map(requiredChoiceDto -> new RequiredChoiceModel(requiredChoiceDto.getId(), requiredChoiceDto.getName(), requiredChoiceDto.getVariantsName()))
                         .collect(Collectors.toList()));
     }
 }

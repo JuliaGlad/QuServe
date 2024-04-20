@@ -9,7 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.databinding.DialogDeleteToppingBinding;
+import com.example.myapplication.R;
+import com.example.myapplication.databinding.DialogDeleteCheckBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
@@ -17,7 +18,6 @@ import myapplication.android.ui.listeners.DialogDismissedListener;
 public class DeleteToppingDialogFragment extends DialogFragment {
 
     private DeleteToppingViewModel viewModel;
-    private DialogDeleteToppingBinding binding;
     private DialogDismissedListener listener;
     private String restaurantId, categoryId, dishId, name;
     private boolean isDeleted = false;
@@ -37,8 +37,10 @@ public class DeleteToppingDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(DeleteToppingViewModel.class);
-        binding = DialogDeleteToppingBinding.inflate(getLayoutInflater());
+        DialogDeleteCheckBinding binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_this_topping_from_this_dish));
 
         setupObserves();
 

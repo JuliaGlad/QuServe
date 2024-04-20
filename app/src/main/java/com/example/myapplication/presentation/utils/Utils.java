@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+
     public static final String VARIANT_KEY = "VariantKey";
     public static final String COMPANY_QUEUE = "Queue";
     public static final String PARTICIPANT_QUEUE_PATH = "ParticipantQueuePath";

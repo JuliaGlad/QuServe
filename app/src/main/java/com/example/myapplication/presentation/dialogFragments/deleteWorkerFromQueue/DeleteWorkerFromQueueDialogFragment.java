@@ -9,7 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.databinding.DialogDeleteFromQueueBinding;
+import com.example.myapplication.R;
+import com.example.myapplication.databinding.DialogDeleteCheckBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
@@ -34,8 +35,10 @@ public class DeleteWorkerFromQueueDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         viewModel = new ViewModelProvider(this).get(DeleteWorkerFromQueueViewModel.class);
-        DialogDeleteFromQueueBinding binding = DialogDeleteFromQueueBinding.inflate(getLayoutInflater());
+        DialogDeleteCheckBinding binding = DialogDeleteCheckBinding.inflate(getLayoutInflater());
         final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        binding.textMain.setText(getString(R.string.are_you_sure_you_want_to_delete_this_worker_from_your_queue));
 
         setupObserves();
 

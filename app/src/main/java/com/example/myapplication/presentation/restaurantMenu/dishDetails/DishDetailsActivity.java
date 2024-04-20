@@ -6,20 +6,40 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.ActivityDishDetailsBinding;
+import com.example.myapplication.databinding.ActivityMainBinding;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.AddRequiredChoiceActivity;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity;
 
 public class DishDetailsActivity extends AppCompatActivity {
 
+    ActivityDishDetailsBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dish_details);
+        binding = ActivityDishDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_dish_details);
+
+        if (navHostFragment != null) {
+            NavController navController = navHostFragment.getNavController();
+
+            NavigationUI.setupActionBarWithNavController(this, navController);
+            NavigationUI.setupWithNavController(binding.toolbar, navController);
+        }
     }
 
     public void openAddRequiredChoiceActivity(String categoryId, String dishId){
