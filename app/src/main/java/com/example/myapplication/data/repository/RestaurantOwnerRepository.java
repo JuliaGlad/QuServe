@@ -83,27 +83,64 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantOwnerRepository {
 
-    public Completable updateRequiredChoiceName(String restaurantId, String categoryId, String dishId, String choiceId, String name){
+    public Completable deleteIngredientToRemove(String restaurantId, String categoryId, String dishId, String name){
         return Completable.create(emitter -> {
-           service.fireStore
-                   .collection(RESTAURANT_LIST)
-                   .document(restaurantId)
-                   .collection(RESTAURANT_MENU)
-                   .document(categoryId)
-                   .collection(CATEGORY_DISHES)
-                   .document(dishId)
-                   .collection(REQUIRED_CHOICES)
-                   .document(choiceId)
-                   .update(CHOICE_NAME, name)
-                   .addOnCompleteListener(task -> {
-                       if (task.isSuccessful()){
-                           emitter.onComplete();
-                       }
-                   });
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .update(INGREDIENT_TO_REMOVE, FieldValue.arrayRemove(name))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
         });
     }
 
-    public Completable addNewRequiredChoiceVariant(String restaurantId, String categoryId, String dishId, String choiceId, String newVariant){
+    public Completable updateIngredientsToRemove(String restaurantId, String categoryId, String dishId, String previousName, String newName) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .update(INGREDIENT_TO_REMOVE, FieldValue.arrayRemove(previousName),
+                            INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(newName))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable updateRequiredChoiceName(String restaurantId, String categoryId, String dishId, String choiceId, String name) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(CATEGORY_DISHES)
+                    .document(dishId)
+                    .collection(REQUIRED_CHOICES)
+                    .document(choiceId)
+                    .update(CHOICE_NAME, name)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable addNewRequiredChoiceVariant(String restaurantId, String categoryId, String dishId, String choiceId, String newVariant) {
         return Completable.create(emitter -> {
             service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -116,7 +153,7 @@ public class RestaurantOwnerRepository {
                     .document(choiceId)
                     .update(CHOICE_VARIANT, FieldValue.arrayUnion(newVariant))
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
                         }
                     });
@@ -429,7 +466,7 @@ public class RestaurantOwnerRepository {
         });
     }
 
-    public Completable addIngredientsToRemove(String restaurantId, String categoryId, String dishId, List<String> variantsNames) {
+    public Completable addIngredientToRemove(String restaurantId, String categoryId, String dishId, String variant) {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -439,11 +476,12 @@ public class RestaurantOwnerRepository {
                     .collection(CATEGORY_DISHES)
                     .document(dishId);
 
-            docRef.update(INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(variantsNames)).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    emitter.onComplete();
-                }
-            });
+            docRef.update(INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(variant))
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
         });
     }
 
@@ -470,10 +508,8 @@ public class RestaurantOwnerRepository {
         });
     }
 
-    public Completable addRequiredChoice(String restaurantId, String categoryId, String dishId, String name, List<String> variantsNames) {
-        Random rand = new Random();
-        int id = rand.nextInt(90000000) + 10000000;
-        String choiceId = "@" + id;
+    public Completable addRequiredChoice(String restaurantId, String categoryId, String dishId, String choiceId, String name, List<String> variantsNames) {
+
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -875,7 +911,6 @@ public class RestaurantOwnerRepository {
     }
 
     public Single<String> addTable(String locationId, String restaurantId, String tableId, String tableNumber) {
-        Log.i("DATA", restaurantId + locationId + tableId);
         DocumentReference docRef =
                 service.fireStore
                         .collection(RESTAURANT_LIST)

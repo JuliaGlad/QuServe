@@ -40,36 +40,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_save"
-        style="@style/Widget.Material3.Button.TonalButton.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="@string/save"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_cancel"
         style="@style/Widget.Material3.Button.TextButton.Dialog.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/button_save"
-        app:layout_constraintEnd_toStartOf="@+id/button_save"
-        app:layout_constraintTop_toTopOf="@+id/button_save" />
-
-    <ImageButton
-        android:id="@+id/button_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/dialog_button_background_tonal"
-        android:padding="7dp"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintEnd_toStartOf="@+id/button_add"
-        app:layout_constraintTop_toTopOf="@+id/title"
-        app:srcCompat="@drawable/ic_delete"
-        app:tint="?colorPrimary" />
+        android:layout_marginTop="20dp"
+        android:text="@string/ok"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <ImageButton
         android:id="@+id/button_add"
@@ -82,5 +59,6 @@
         app:layout_constraintTop_toTopOf="@+id/title"
         app:srcCompat="@drawable/ic_add"
         app:tint="?colorPrimary" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

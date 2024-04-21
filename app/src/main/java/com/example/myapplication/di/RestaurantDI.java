@@ -30,6 +30,7 @@ import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryU
 import com.example.myapplication.domain.usecase.restaurant.menu.AddNewRequireChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddRequiredChoicesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddToppingUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteIngredientToRemoveUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteRequiredChoiceByIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteRequiredChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteToppingImageUseCase;
@@ -46,6 +47,7 @@ import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleRequire
 import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsImagesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetToppingsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UpdateDishDataUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.UpdateIngredientsToRemoveUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UpdateRequiredChoiceNameUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UpdateRequiredChoiceVariantUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryBytesImageUseCase;
@@ -54,6 +56,8 @@ import com.example.myapplication.domain.usecase.restaurant.menu.UploadDishImageU
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadToppingImage;
 
 public class RestaurantDI {
+    public static DeleteIngredientToRemoveUseCase deleteIngredientToRemoveUseCase = new DeleteIngredientToRemoveUseCase();
+    public static UpdateIngredientsToRemoveUseCase updateIngredientsToRemoveUseCase = new UpdateIngredientsToRemoveUseCase();
     public static UpdateRequiredChoiceNameUseCase updateRequiredChoiceNameUseCase = new UpdateRequiredChoiceNameUseCase();
     public static AddNewRequireChoiceVariantUseCase addNewRequireChoiceVariantUseCase = new AddNewRequireChoiceVariantUseCase();
     public static UpdateRequiredChoiceVariantUseCase updateRequiredChoiceVariantUseCase = new UpdateRequiredChoiceVariantUseCase();
@@ -104,6 +108,6 @@ public class RestaurantDI {
     public static GetIngredientsToRemoveUseCase getIngredientsToRemoveUseCase = new GetIngredientsToRemoveUseCase();
     public static GetRequiredChoicesUseCase getRequiredChoicesUseCase = new GetRequiredChoicesUseCase();
     public static AddToppingUseCase addToppingUseCase = new AddToppingUseCase();
-    public static AddIngredientsToRemoveUseCase addIngredientsToRemoveUseCase = new AddIngredientsToRemoveUseCase();
+    public static AddIngredientsToRemoveUseCase addIngredientToRemoveUseCase = new AddIngredientsToRemoveUseCase();
     public static AddRequiredChoicesUseCase addRequiredChoicesUseCase = new AddRequiredChoicesUseCase();
 }

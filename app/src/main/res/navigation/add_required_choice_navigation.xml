@@ -22,5 +22,13 @@
 
         <argument android:name="page"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_addRequiredChoiceFragment_to_requiredChoiceSuccessfullyAdded"
+            app:destination="@id/requiredChoiceSuccessfullyAdded" />
     </fragment>
+    <fragment
+        android:id="@+id/requiredChoiceSuccessfullyAdded"
+        android:name="com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.success.RequiredChoiceSuccessfullyAdded"
+        android:label="RequiredChoiceSuccessfullyAdded" />
+
 </navigation>

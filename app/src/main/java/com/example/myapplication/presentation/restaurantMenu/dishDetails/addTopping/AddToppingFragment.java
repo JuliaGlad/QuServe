@@ -12,6 +12,9 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
 
 import android.content.Context;
 import android.content.Intent;
@@ -55,7 +58,7 @@ public class AddToppingFragment extends Fragment {
     private AddToppingViewModel viewModel;
     private FragmentAddToppingBinding binding;
     private MainAdapter adapter = new MainAdapter();
-    private ActivityResultLauncher<Intent> launcher;
+    private ActivityResultLauncher<Intent> launcherToppings;
     private List<DelegateItem> items = new ArrayList<>();
     private String page, restaurantId, categoryId, dishId;
 
@@ -107,8 +110,15 @@ public class AddToppingFragment extends Fragment {
     private void setupObserves() {
         viewModel.isComplete.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
+                Bundle bundle = new Bundle();
+                bundle.putString(TOPPING_NAME, name);
+                bundle.putString(TOPPING_PRICE, price);
+                bundle.putString(TOPPING_IMAGE, String.valueOf(image));
+
                 viewModel.setArgumentsNull();
-                requireActivity().finish();
+
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_addToppingFragment_to_toppingSuccessfullyAdded, bundle);
             }
         });
     }
@@ -203,13 +213,13 @@ public class AddToppingFragment extends Fragment {
                 .compress(512)
                 .maxResultSize(512, 512)
                 .createIntent(intent -> {
-                    launcher.launch(intent);
+                    launcherToppings.launch(intent);
                     return null;
                 });
     }
 
     private void setLauncher(){
-        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        launcherToppings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();

@@ -11,9 +11,10 @@ public class ToppingDishDetailsModel {
     String name;
     String price;
     Task<Uri> image;
+    Uri uri;
     ButtonItemListener listener;
 
-    public ToppingDishDetailsModel(int id, String name, String price, Task<Uri> image, ButtonItemListener listener) {
+    public ToppingDishDetailsModel(int id, String name, String price, Task<Uri> image, Uri uri, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
         this.price = price;

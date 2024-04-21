@@ -19,9 +19,9 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantMenuBinding;
-import com.example.myapplication.presentation.restaurantMenu.categoryItem.CategoryItemDelegate;
-import com.example.myapplication.presentation.restaurantMenu.categoryItem.CategoryItemDelegateItem;
-import com.example.myapplication.presentation.restaurantMenu.categoryItem.CategoryItemModel;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegate;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;

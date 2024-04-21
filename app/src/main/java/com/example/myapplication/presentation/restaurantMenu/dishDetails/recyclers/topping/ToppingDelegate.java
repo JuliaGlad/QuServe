@@ -6,8 +6,8 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.myapplication.databinding.RecyclerViewToppingsItemBinding;
 
+import myapplication.android.common_ui.databinding.RecyclerViewToppingsItemBinding;
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
@@ -48,6 +48,12 @@ public class ToppingDelegate implements AdapterDelegate {
                                 .into(binding.ingredientImage);
                     }
                 });
+            }
+
+            if (model.uri != null){
+                Glide.with(itemView.getContext())
+                        .load(model.uri)
+                        .into(binding.ingredientImage);
             }
 
             binding.buttonDelete.setOnClickListener(v -> {

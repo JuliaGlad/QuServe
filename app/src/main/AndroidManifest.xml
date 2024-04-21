@@ -26,6 +26,9 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.restaurantOrder.menu.RestaurantOrderMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity"
             android:exported="false" />
         <activity

@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.restaurantMenu;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -60,7 +58,6 @@ public class RestaurantMenuViewModel extends ViewModel {
                         for (CategoryModel currentModel : models) {
                             for (ImageTaskNameModel model : imageTaskIdModels) {
                                 if (Objects.equals(model.getName(), currentModel.getName())) {
-                                    Log.i("Results", "Image: " + model.getName() + "Category: " + currentModel.getName());
                                     menuModels.add(new CategoryMenuModel(
                                             currentModel.getCategoryId(),
                                             currentModel.getName(),
@@ -124,19 +121,4 @@ public class RestaurantMenuViewModel extends ViewModel {
                     }
                 });
     }
-
-//    List<DishMenuModel> models = new ArrayList<>();
-//                        for (DishMenuOwnerModel current : dishMenuOwnerModels) {
-//        models.add(new DishMenuModel(
-//                current.getDishId(),
-//                current.getName(),
-//                current.getPrice(),
-//                current.getWeightCount()
-//        ));
-//    }
-//                        if (categories != null){
-//        _state.postValue(new RestaurantMenuState.Success(new RestaurantMenuStateModel(models, categories)));
-//    } else {
-//        _newCategory.postValue(models);
-//    }
 }

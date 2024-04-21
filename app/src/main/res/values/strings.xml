@@ -318,7 +318,7 @@
     <string name="add_ingredients_that_can_be_removed_optional">Add ingredients that can be removed(optional):</string>
     <string name="add_dish_photo">Add dish photo:</string>
     <string name="enter_choice_name">Enter choice name:</string>
-    <string name="add_at_least_2_variant">Add at least 2 variant:</string>
+    <string name="add_at_least_2_variant">Add at least 2 options:</string>
     <string name="add_ingredient">Add ingredient</string>
     <string name="ingredient_name">Ingredient name</string>
     <string name="new_dish_was_added_to_your_restaurant_menu">New dish was added to your restaurant menu!</string>
@@ -335,4 +335,8 @@
     <string name="are_you_sure_you_want_to_delete_this_choice">Are you sure you want to delete this choice?</string>
     <string name="add_new_variant">Add new variant</string>
     <string name="new_variant_name">New variant name</string>
+    <string name="new_topping_was_successfully_added_to_this_dish">New topping was successfully added to this dish!</string>
+    <string name="now_your_visitors_can_add_this_to_topping_to_this_dish">Now your visitors can add this to topping to this dish</string>
+    <string name="new_required_choice_was_added_to_your_dish">New required choice was added to your dish!</string>
+    <string name="your_visitors_will_have_to_choose_one_of_added_options_before_ordering_this_dish">Your visitors will have to choose one of added options before ordering this dish</string>
 </resources>

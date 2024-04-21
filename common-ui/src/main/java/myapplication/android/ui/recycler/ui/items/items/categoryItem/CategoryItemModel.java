@@ -1,4 +1,4 @@
-package com.example.myapplication.presentation.restaurantMenu.categoryItem;
+package myapplication.android.ui.recycler.ui.items.items.categoryItem;
 
 import android.net.Uri;
 

@@ -20,6 +20,13 @@
 
         <argument android:name="dishId"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_addToppingFragment_to_toppingSuccessfullyAdded"
+            app:destination="@id/toppingSuccessfullyAdded" />
 
     </fragment>
+    <fragment
+        android:id="@+id/toppingSuccessfullyAdded"
+        android:name="com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.success.ToppingSuccessfullyAdded"
+        android:label="ToppingSuccessfullyAdded" />
 </navigation>

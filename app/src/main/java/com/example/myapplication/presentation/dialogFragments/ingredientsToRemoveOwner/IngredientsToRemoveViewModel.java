@@ -22,8 +22,11 @@ public class IngredientsToRemoveViewModel extends ViewModel {
     private final MutableLiveData<IngredientToRemoveDialogState> _state = new MutableLiveData<>(new IngredientToRemoveDialogState.Loading());
     LiveData<IngredientToRemoveDialogState> state = _state;
 
-    private final MutableLiveData<Boolean> _isSaved = new MutableLiveData<>(false);
-    LiveData<Boolean> isSaved = _isSaved;
+    private final MutableLiveData<String> _isAdded = new MutableLiveData<>(null);
+    LiveData<String> isAdded = _isAdded;
+
+    private final MutableLiveData<Integer> _isDeleted = new MutableLiveData<>(null);
+    LiveData<Integer> isDeleted = _isDeleted;
 
     public void getIngredientsToRemove(String restaurantId, String categoryId, String dishId) {
         RestaurantDI.getIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId)
@@ -46,8 +49,8 @@ public class IngredientsToRemoveViewModel extends ViewModel {
                 });
     }
 
-    public void addItems(String restaurantId, String categoryId, String dishId, List<String> names){
-        RestaurantDI.addIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId, names)
+    public void addItem(String restaurantId, String categoryId, String dishId, String name){
+        RestaurantDI.addIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -57,7 +60,49 @@ public class IngredientsToRemoveViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _isSaved.postValue(true);
+                        _isAdded.postValue(name);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public void updateIngredientToRemove(String restaurantId, String categoryId, String dishId, String previousName, String name) {
+        RestaurantDI.updateIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId, previousName, name)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("Done", "done");
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.d("Error", "error" + e.getMessage());
+                    }
+                });
+    }
+
+    public void deleteIngredient(String restaurantId, String categoryId, String dishId, String name, int index) {
+        RestaurantDI.deleteIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _isDeleted.postValue(index);
                     }
 
                     @Override

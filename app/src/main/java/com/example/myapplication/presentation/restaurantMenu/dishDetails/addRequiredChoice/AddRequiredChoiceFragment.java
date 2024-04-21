@@ -6,6 +6,9 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 
 import android.content.Context;
@@ -101,10 +104,18 @@ public class AddRequiredChoiceFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.isComplete.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                viewModel.setArgumentsNull();
-                requireActivity().finish();
+        viewModel.isComplete.observe(getViewLifecycleOwner(), choiceId -> {
+            if (choiceId != null) {
+                Bundle bundle = new Bundle();
+
+                ArrayList<String> arrayList = new ArrayList<>(RequiredChoiceArguments.variants);
+
+                bundle.putString(CHOICE_ID, choiceId);
+                bundle.putString(CHOICE_NAME, RequiredChoiceArguments.name);
+                bundle.putStringArrayList(CHOICE_VARIANT, arrayList);
+
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_addRequiredChoiceFragment_to_requiredChoiceSuccessfullyAdded, bundle);
             }
         });
     }

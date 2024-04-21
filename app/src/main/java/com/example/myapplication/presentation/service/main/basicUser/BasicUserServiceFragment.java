@@ -3,13 +3,16 @@ package com.example.myapplication.presentation.service.main.basicUser;
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,6 +21,9 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserServiceBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
+import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,12 +36,14 @@ public class BasicUserServiceFragment extends Fragment {
 
     private BasicUserViewModel viewModel;
     private FragmentBasicUserServiceBinding binding;
+    private ActivityResultLauncher<ScanOptions> restaurantLauncher;
     private final List<OptionImageButtonModel> list = new ArrayList<>();
     private final OptionImageButtonAdapter adapter = new OptionImageButtonAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initRestaurantLauncher();
     }
 
     @Override
@@ -49,6 +57,16 @@ public class BasicUserServiceFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initRecycler();
+    }
+
+    private void initRestaurantLauncher() {
+        restaurantLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                Intent intent = new Intent(requireContext(), RestaurantOrderMenuActivity.class);
+                intent.putExtra(RESTAURANT_DATA, result.getContents());
+                requireActivity().startActivity(intent);
+            }
+        });
     }
 
     private void initRecycler() {

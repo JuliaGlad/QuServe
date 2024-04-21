@@ -1,6 +1,5 @@
-package com.example.myapplication.presentation.restaurantMenu.categoryItem;
+package myapplication.android.ui.recycler.ui.items.items.categoryItem;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -8,8 +7,8 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.myapplication.databinding.RecyclerViewMenuCategoryBinding;
 
+import myapplication.android.common_ui.databinding.RecyclerViewMenuCategoryBinding;
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 

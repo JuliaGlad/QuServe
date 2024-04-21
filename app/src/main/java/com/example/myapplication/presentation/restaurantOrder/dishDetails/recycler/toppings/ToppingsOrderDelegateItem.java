@@ -1,17 +1,17 @@
-package com.example.myapplication.presentation.restaurantMenu.categoryItem;
+package com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.toppings;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
-public class CategoryItemDelegateItem implements DelegateItem<CategoryItemModel> {
+public class ToppingsOrderDelegateItem implements DelegateItem<ToppingsOrderModel> {
 
-    CategoryItemModel value;
+    ToppingsOrderModel value;
 
-    public CategoryItemDelegateItem(CategoryItemModel value) {
+    public ToppingsOrderDelegateItem(ToppingsOrderModel value) {
         this.value = value;
     }
 
     @Override
-    public CategoryItemModel content() {
+    public ToppingsOrderModel content() {
         return value;
     }
 
