@@ -131,6 +131,7 @@
     <string name="your_queue_has_been_paused">Your queue has been paused!</string>
     <string name="have_a_little_rest_and_then_come_back">Have a little rest and then come back!</string>
     <string name="stop">Stop</string>
+    <string name="add_category">Add category</string>
 
     <string-array name="lifetime">
         <item>Нет определенного времени</item>

@@ -1,19 +1,30 @@
 package com.example.myapplication.presentation.restaurantMenu.dishDetails;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -25,6 +36,8 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentDishDetailsBinding;
 import com.example.myapplication.presentation.dialogFragments.deleteToppingDialog.DeleteToppingDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.AddRequiredChoiceActivity;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.DishDetailsStateModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.RequiredChoiceDishDetailsModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingDelegate;
@@ -58,6 +71,7 @@ public class DishDetailsFragment extends Fragment {
     private DishDetailsViewModel viewModel;
     private FragmentDishDetailsBinding binding;
     private String dishId, categoryId, restaurantId;
+    private ActivityResultLauncher<Intent> addToppingLauncher, launcherRequiredChoices;
     private List<DelegateItem> requiredChoiceItems = new ArrayList<>();
     private List<DelegateItem> toppingItems = new ArrayList<>();
     private final MainAdapter requiredChoiceAdapter = new MainAdapter();
@@ -70,7 +84,10 @@ public class DishDetailsFragment extends Fragment {
         dishId = getActivity().getIntent().getStringExtra(DISH_ID);
         categoryId = getActivity().getIntent().getStringExtra(CATEGORY_ID);
         restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        setToppingLauncher();
+        setRequiredChoiceLauncher();
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -141,6 +158,82 @@ public class DishDetailsFragment extends Fragment {
         });
     }
 
+    private void setToppingLauncher() {
+        addToppingLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String name = data.getStringExtra(TOPPING_NAME);
+                            String price = data.getStringExtra(TOPPING_PRICE);
+                            Uri image = Uri.parse(data.getStringExtra(TOPPING_IMAGE));
+                            addNewTopping(name, price, image);
+                        }
+                    }
+                });
+    }
+
+    private void setRequiredChoiceLauncher() {
+        launcherRequiredChoices = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String name = data.getStringExtra(CHOICE_NAME);
+                            String choiceId = data.getStringExtra(CHOICE_ID);
+                            ArrayList<String> variant = data.getStringArrayListExtra(CHOICE_VARIANT);
+                            addNewRequireChoice(name, choiceId, variant);
+                        }
+                    }
+                });
+    }
+
+    private void addNewRequireChoice(String name, String choiceId, ArrayList<String> variants) {
+        List<DelegateItem> newItems = new ArrayList<>(requiredChoiceItems);
+        newItems.remove(requiredChoiceItems.size() - 1);
+        RequiredChoiceAdapter adapter = new RequiredChoiceAdapter();
+        newItems.add(new RequiredChoiceHeaderDelegateItem(new RequiredChoiceHeaderModel(requiredChoiceItems.size() - 1, name, () -> {
+
+            Bundle bundle = new Bundle();
+
+            bundle.putString(CHOICE_ID, choiceId);
+            bundle.putString(CATEGORY_ID, categoryId);
+            bundle.putString(DISH_ID, dishId);
+
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_dishDetailsFragment_to_editRequiredChoiceFragment, bundle);
+        })));
+
+        List<RequiredChoiceItemModel> choiceItemModels = new ArrayList<>();
+
+        for (int i = 0; i < variants.size(); i++) {
+            String choice = variants.get(i);
+            choiceItemModels.add(new RequiredChoiceItemModel(i, choice));
+        }
+
+        newItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(requiredChoiceItems.size(), choiceItemModels, adapter)));
+        newItems.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(requiredChoiceItems.size(), () -> {
+           openAddRequiredChoiceActivity(categoryId, dishId);
+        })));
+
+        requiredChoiceAdapter.submitList(newItems);
+        requiredChoiceItems = newItems;
+    }
+
+    private void addNewTopping(String name, String price, Uri image) {
+        List<DelegateItem> newItems = new ArrayList<>(toppingItems);
+        newItems.remove(toppingItems.size() - 1);
+        newItems.add(new ToppingDishDetailsDelegateItem(new ToppingDishDetailsModel(toppingItems.size(), name, price, null, image,
+                () -> {
+                    showDeleteToppingDialog(restaurantId, categoryId, dishId, name, toppingItems.size());
+                })));
+        newItems.add(new AddToppingDelegateItem(new AddToppingModel(toppingItems.size(), () -> {
+            openAddToppingsActivity(categoryId, dishId);
+        })));
+        toppingsAdapter.submitList(newItems);
+        toppingItems = newItems;
+    }
+
     private void initUi(DishDetailsStateModel model) {
         Glide.with(requireContext())
                 .load(model.getUri())
@@ -170,16 +263,24 @@ public class DishDetailsFragment extends Fragment {
             for (int i = 0; i < variants.size(); i++) {
                 VariantsModel current = variants.get(i);
                 int index = i;
-                toppingItems.add(new ToppingDishDetailsDelegateItem(new ToppingDishDetailsModel(i, current.getName(), current.getPrice(), current.getUri(),
+                toppingItems.add(new ToppingDishDetailsDelegateItem(new ToppingDishDetailsModel(i, current.getName(), current.getPrice(), current.getUri(), null,
                         () -> {
-                           showDeleteToppingDialog(restaurantId, categoryId, dishId, current.getName(), index);
+                            showDeleteToppingDialog(restaurantId, categoryId, dishId, current.getName(), index);
                         })));
             }
         }
         toppingItems.add(new AddToppingDelegateItem(new AddToppingModel(toppingItems.size(), () -> {
-            ((DishDetailsActivity) requireActivity()).openAddToppingsActivity(categoryId, dishId);
+            openAddToppingsActivity(categoryId, dishId);
         })));
         toppingsAdapter.submitList(toppingItems);
+    }
+
+    private void openAddToppingsActivity(String categoryId, String dishId) {
+        Intent intent = new Intent(requireActivity(), AddToppingsActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        intent.putExtra(CATEGORY_ID, categoryId);
+        intent.putExtra(DISH_ID, dishId);
+        addToppingLauncher.launch(intent);
     }
 
     private void showDeleteToppingDialog(String restaurantId, String categoryId, String dishId, String name, int index) {
@@ -222,9 +323,17 @@ public class DishDetailsFragment extends Fragment {
             }
         }
         requiredChoiceItems.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(requiredChoiceItems.size(), () -> {
-            ((DishDetailsActivity) requireActivity()).openAddRequiredChoiceActivity(categoryId, dishId);
+            openAddRequiredChoiceActivity(categoryId, dishId);
         })));
         requiredChoiceAdapter.submitList(requiredChoiceItems);
+    }
+
+    public void openAddRequiredChoiceActivity(String categoryId, String dishId){
+        Intent intent = new Intent(requireActivity(), AddRequiredChoiceActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        intent.putExtra(CATEGORY_ID, categoryId);
+        intent.putExtra(DISH_ID, dishId);
+        launcherRequiredChoices.launch(intent);
     }
 
 }

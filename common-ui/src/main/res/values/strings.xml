@@ -140,6 +140,7 @@
     <string name="workers">Workers</string>
     <string name="company_name">Company name</string>
     <string name="statistics">Statistics</string>
+    <string name="add_category">Add category</string>
 
     <string-array name="lifetime">
         <item>
