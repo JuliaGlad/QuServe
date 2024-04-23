@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="TextAppearance.Material3.HeadlineLarge.QuServe" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
     <style name="NumberPickerTheme" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorAccent">?colorPrimary</item>
         <item name="colorControlNormal">@color/transparent</item>

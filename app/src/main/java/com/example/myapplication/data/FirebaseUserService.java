@@ -1,15 +1,7 @@
 package com.example.myapplication.data;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.LocalCacheSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -19,7 +11,6 @@ public class FirebaseUserService {
 
 
     public FirebaseAuth auth = FirebaseAuth.getInstance();
-    public FirebaseUser authUser = auth.getCurrentUser();
     public FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     public StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 

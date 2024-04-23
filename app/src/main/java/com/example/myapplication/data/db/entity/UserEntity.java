@@ -15,14 +15,13 @@ public class UserEntity {
     public String gender;
     public String phoneNumber;
     public String email;
-    public String birthday;
-    public String uri;
+    public String birthday;    public String uri;
     public String background;
     public String participantQueuePath;
     public boolean ownQueue;
     public boolean participateInQueue;
 
-    public UserEntity( String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
+    public UserEntity(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;

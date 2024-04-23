@@ -335,4 +335,6 @@
     <string name="now_your_visitors_can_add_this_to_topping_to_this_dish">Now your visitors can add this to topping to this dish</string>
     <string name="new_required_choice_was_added_to_your_dish">New required choice was added to your dish!</string>
     <string name="your_visitors_will_have_to_choose_one_of_added_options_before_ordering_this_dish">Your visitors will have to choose one of added options before ordering this dish</string>
+    <string name="order">Order</string>
+    <string name="total">Total:</string>
 </resources>
