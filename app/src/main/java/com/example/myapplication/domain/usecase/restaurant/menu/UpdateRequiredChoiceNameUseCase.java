@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UpdateRequiredChoiceNameUseCase {
     public Completable invoke(String restaurantId, String categoryId, String dishId, String choiceId, String name){
-        return DI.restaurantOwnerRepository.updateRequiredChoiceName(restaurantId, categoryId, dishId, choiceId, name);
+        return DI.restaurantRepository.updateRequiredChoiceName(restaurantId, categoryId, dishId, choiceId, name);
     }
 }

@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetTableQrCodeJpgUseCase {
     public Single<Uri> invoke(String tableId){
-        return DI.restaurantOwnerRepository.getTableQrCodeJpg(tableId);
+        return DI.restaurantRepository.getTableQrCodeJpg(tableId);
     }
 }

@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.RequiredChoiceDishDetailsModel;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 
 import java.util.List;
 

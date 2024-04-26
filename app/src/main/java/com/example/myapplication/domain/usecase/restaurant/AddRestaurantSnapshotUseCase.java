@@ -7,6 +7,6 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class AddRestaurantSnapshotUseCase {
     public Observable<DocumentSnapshot> invoke(String restaurantId){
-        return DI.restaurantOwnerRepository.addSnapshot(restaurantId);
+        return DI.restaurantRepository.addSnapshot(restaurantId);
     }
 }

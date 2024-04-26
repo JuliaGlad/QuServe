@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetRestaurantsUseCase {
     public Single<List<RestaurantNameIdModel>> invoke(){
-        return DI.restaurantOwnerRepository.getRestaurants().map(restaurantDtos ->
+        return DI.restaurantRepository.getRestaurants().map(restaurantDtos ->
                 restaurantDtos
                         .stream()
                         .filter(restaurantDto -> restaurantDto.getOwner().equals(service.auth.getCurrentUser().getUid()))

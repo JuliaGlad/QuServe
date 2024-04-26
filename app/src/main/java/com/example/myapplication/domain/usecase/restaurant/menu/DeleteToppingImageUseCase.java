@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class DeleteToppingImageUseCase {
     public Completable invoke(String restaurantId, String dishId, String name){
-        return DI.restaurantOwnerRepository.deleteToppingImage(restaurantId, dishId, name);
+        return DI.restaurantRepository.deleteToppingImage(restaurantId, dishId, name);
     }
 }

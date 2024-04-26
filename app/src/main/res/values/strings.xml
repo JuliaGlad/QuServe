@@ -341,4 +341,7 @@
     <string name="your_visitors_will_have_to_choose_one_of_added_options_before_ordering_this_dish">Your visitors will have to choose one of added options before ordering this dish</string>
     <string name="order">Order</string>
     <string name="total">Total:</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="thank_you_for_your_order">Thank you for your order!</string>
+    <string name="your_order_is_being_prepared_we_wish_you_a_nice_day">Your order is being prepared! We wish you a nice day!</string>
 </resources>

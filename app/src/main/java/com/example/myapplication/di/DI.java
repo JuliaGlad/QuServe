@@ -6,7 +6,7 @@ import com.example.myapplication.data.repository.CompanyQueueRepository;
 import com.example.myapplication.data.repository.CompanyQueueUserRepository;
 import com.example.myapplication.data.repository.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
-import com.example.myapplication.data.repository.RestaurantOwnerRepository;
+import com.example.myapplication.data.repository.RestaurantRepository;
 
 public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
@@ -14,7 +14,7 @@ public class DI {
     public static ProfileRepository profileRepository = new ProfileRepository();
     public static CompanyQueueUserRepository companyQueueUserRepository = new CompanyQueueUserRepository();
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
-    public static RestaurantOwnerRepository restaurantOwnerRepository = new RestaurantOwnerRepository();
+    public static RestaurantRepository restaurantRepository = new RestaurantRepository();
     public static CommonCompanyRepository commonCompanyRepository = new CommonCompanyRepository();
 
 }

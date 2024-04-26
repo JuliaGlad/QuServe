@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadTableQrCodePdfUseCase {
     public Completable invoke(File file, String tableId){
-        return DI.restaurantOwnerRepository.uploadTablePdfToFireStorage(file, tableId);
+        return DI.restaurantRepository.uploadTablePdfToFireStorage(file, tableId);
     }
 }

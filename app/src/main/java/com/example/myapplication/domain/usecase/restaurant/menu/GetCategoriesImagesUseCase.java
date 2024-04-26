@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetCategoriesImagesUseCase {
     public Single<List<ImageTaskNameModel>> invoke(String restaurantId, List<String> categoriesNames) {
-        return DI.restaurantOwnerRepository.getCategoriesImages(restaurantId, categoriesNames).map(tasks ->
+        return DI.restaurantRepository.getCategoriesImages(restaurantId, categoriesNames).map(tasks ->
                 tasks.stream()
                         .map(task -> new ImageTaskNameModel(task.getTask(), task.getName()))
                         .collect(Collectors.toList()));

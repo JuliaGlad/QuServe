@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetIngredientsToRemoveUseCase {
     public Single<List<String>> invoke(String restaurantId, String categoryId, String dishId){
-        return DI.restaurantOwnerRepository.getToRemove(restaurantId, categoryId, dishId);
+        return DI.restaurantRepository.getToRemove(restaurantId, categoryId, dishId);
     }
 
 }

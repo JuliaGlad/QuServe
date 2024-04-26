@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class CreateRestaurantDocumentUseCase {
     public Completable invoke(String restaurantId, String restaurantName, String email, String phone){
-        return DI.restaurantOwnerRepository.createRestaurantDocument(restaurantId, restaurantName, email, phone);
+        return DI.restaurantRepository.createRestaurantDocument(restaurantId, restaurantName, email, phone);
     }
 }

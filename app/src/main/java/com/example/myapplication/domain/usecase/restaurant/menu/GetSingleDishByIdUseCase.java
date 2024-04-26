@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetSingleDishByIdUseCase {
     public Single<DishDetailsModel> invoke(String restaurantId, String categoryId, String dishId){
-        return DI.restaurantOwnerRepository.getSingleDishById(restaurantId, categoryId, dishId).map(dishDto ->
+        return DI.restaurantRepository.getSingleDishById(restaurantId, categoryId, dishId).map(dishDto ->
                 new DishDetailsModel(
                         dishId,
                         dishDto.getName(),

@@ -23,6 +23,7 @@ import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.Utils.USER_RESTAURANT_ORDER;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 
@@ -59,6 +60,31 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProfileRepository {
+
+    public Single<String> getActiveOrder(){
+        return Single.create(emitter -> {
+           service.fireStore.collection(USER_LIST)
+                   .document(service.auth.getCurrentUser().getUid())
+                   .get().addOnCompleteListener(task ->{
+                       if (task.isSuccessful()){
+                           emitter.onSuccess(task.getResult().getString(USER_RESTAURANT_ORDER));
+                       }
+                   });
+        });
+    }
+
+    public Completable addActiveOrder(String path){
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .update(USER_RESTAURANT_ORDER, path).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
 
     public Completable updateRole(String companyId, String userId, String role) {
         return Completable.create(emitter -> {

@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadTableQrCodeJpgUseCase {
     public Completable invoke(String tableId, byte[] data){
-        return DI.restaurantOwnerRepository.uploadTableQrCodeFireStorage(tableId, data);
+        return DI.restaurantRepository.uploadTableQrCodeFireStorage(tableId, data);
     }
 }

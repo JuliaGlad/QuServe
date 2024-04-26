@@ -1,5 +1,6 @@
 package com.example.myapplication.di;
 
+import com.example.myapplication.domain.usecase.restaurant.order.GetOrderByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.AddRestaurantSnapshotUseCase;
 import com.example.myapplication.domain.usecase.restaurant.AddRestaurantTablesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.CreateRestaurantDocumentUseCase;
@@ -54,8 +55,29 @@ import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryBy
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadCategoryUriImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadDishImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UploadToppingImage;
+import com.example.myapplication.domain.usecase.restaurant.order.AddDishToCartUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.AddToActiveOrdersUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.AddToTableListOrdersUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.DecrementDishAmountUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.DeleteOrderUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.GetCartUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.GetDishesImagesByIdsUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.GetOrderRestaurantIdUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.IncrementDishAmountUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.RemoveFromCartUseCase;
 
 public class RestaurantDI {
+    public static GetOrderByPathUseCase getOrderByPathUseCase = new GetOrderByPathUseCase();
+    public static AddToActiveOrdersUseCase addToActiveOrdersUseCase = new AddToActiveOrdersUseCase();
+    public static AddToTableListOrdersUseCase addToTableListOrdersUseCase = new AddToTableListOrdersUseCase();
+    public static GetDishesImagesByIdsUseCase getDishesImagesByIdsUseCase = new GetDishesImagesByIdsUseCase();
+    public static DeleteOrderUseCase deleteOrderUseCase = new DeleteOrderUseCase();
+    public static GetOrderRestaurantIdUseCase getOrderRestaurantIdUseCase = new GetOrderRestaurantIdUseCase();
+    public static RemoveFromCartUseCase removeFromCartUseCase = new RemoveFromCartUseCase();
+    public static DecrementDishAmountUseCase decrementDishAmountUseCase = new DecrementDishAmountUseCase();
+    public static IncrementDishAmountUseCase incrementDishAmountUseCase = new IncrementDishAmountUseCase();
+    public static GetCartUseCase getCartUseCase = new GetCartUseCase();
+    public static AddDishToCartUseCase addDishToCartUseCase = new AddDishToCartUseCase();
     public static DeleteIngredientToRemoveUseCase deleteIngredientToRemoveUseCase = new DeleteIngredientToRemoveUseCase();
     public static UpdateIngredientsToRemoveUseCase updateIngredientsToRemoveUseCase = new UpdateIngredientsToRemoveUseCase();
     public static UpdateRequiredChoiceNameUseCase updateRequiredChoiceNameUseCase = new UpdateRequiredChoiceNameUseCase();

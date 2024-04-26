@@ -3,8 +3,11 @@ package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +17,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.databinding.FragmentRestaurantOrderDishDetailsBinding;
+import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOrder.IngredientsToRemoveOrderDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.requiredChoice.RequiredChoiceAdapter;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.topping.ToppingDelegate;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.model.RequiredChoiceOrderDishDetailsModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.model.RestaurantOrderDishDetailsModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.requireChoice.RequireChoiceOrderModel;
+import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.requireChoice.RequiredChoiceOrderAdapter;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.requiredChoiceHeader.RequiredChoiceOrderHeaderDelegate;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.requiredChoiceHeader.RequiredChoiceOrderHeaderDelegateItem;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.requiredChoiceHeader.RequiredChoiceOrderHeaderModel;
@@ -30,6 +39,7 @@ import com.example.myapplication.presentation.restaurantOrder.dishDetails.recycl
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.state.RestaurantOrderDishDetailsState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
@@ -42,8 +52,10 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
     private RestaurantOrderDishDetailsViewModel viewModel;
     private FragmentRestaurantOrderDishDetailsBinding binding;
-    private String dishId, categoryId, restaurantId;
-    private final List<VariantsModel> chosenToppings = new ArrayList<>();
+    private String dishId, categoryId, restaurantId, tablePath;
+    private final List<VariantCartModel> chosenToppings = new ArrayList<>();
+    private final List<String> chosenRemove = new ArrayList<>();
+    private String[] chosenRequireChoices;
     private final List<DelegateItem> requiredChoiceItems = new ArrayList<>();
     private final List<DelegateItem> toppingItems = new ArrayList<>();
     private final MainAdapter requiredChoiceAdapter = new MainAdapter();
@@ -54,6 +66,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantOrderDishDetailsViewModel.class);
         dishId = getActivity().getIntent().getStringExtra(DISH_ID);
+        tablePath = getActivity().getIntent().getStringExtra(TABLE_PATH);
         categoryId = getActivity().getIntent().getStringExtra(CATEGORY_ID);
         restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
         viewModel.getDishData(restaurantId, categoryId, dishId);
@@ -72,6 +85,18 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         initToppingsAdapter();
         initRequiredChoiceAdapter();
         setupObserves();
+
+    }
+
+    private void initOrderButton(String name, String weight, String price) {
+        binding.buttonOrder.setOnClickListener(v -> {
+            CartDishModel model = new CartDishModel(
+                    dishId, categoryId, name, weight, price,
+                    String.valueOf(1), chosenToppings, Arrays.asList(chosenRequireChoices), chosenRemove
+            );
+            viewModel.addToCart(restaurantId, model);
+            ((RestaurantOrderDishDetailsActivity) requireActivity()).openCartActivity(restaurantId, tablePath);
+        });
     }
 
     private void initRequiredChoiceAdapter() {
@@ -94,21 +119,42 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 RestaurantOrderDishDetailsModel model = ((RestaurantOrderDishDetailsState.Success) state).data;
 
                 String name = model.getName();
+                String weight = model.getWeightOrCount();
+                String price = model.getPrice();
+
                 List<VariantsModel> toppings = model.getToppings();
                 List<RequiredChoiceOrderDishDetailsModel> requireChoices = model.getModels();
+                List<String> toRemove = model.getIngredientsToRemove();
+
+                chosenRequireChoices = new String[requireChoices.size()];
 
                 binding.nameText.setText(name);
                 binding.ingredientText.setText(model.getIngredients());
-                binding.priceEditText.setText(model.getPrice());
+                binding.priceEditText.setText(price);
+
+                Glide.with(requireView())
+                        .load(model.getUri())
+                        .into(binding.foodImage);
 
                 initToppingsRecycler(toppings);
                 initRequiredChoiceRecycler(requireChoices);
+                initOrderButton(name, weight, price);
+                initRemove(toRemove);
 
             } else if (state instanceof RestaurantOrderDishDetailsState.Loading) {
 
             } else if (state instanceof RestaurantOrderDishDetailsState.Error) {
 
             }
+        });
+    }
+
+    private void initRemove(List<String> toRemove) {
+        binding.toRemoveHeader.setOnClickListener(v -> {
+            IngredientsToRemoveOrderDialogFragment dialogFragment = new IngredientsToRemoveOrderDialogFragment(toRemove, chosenRemove);
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "INGREDIENTS_TO_REMOVE_ORDER_DIALOG");
+            dialogFragment.OnDismissListener(bundle -> {
+            });
         });
     }
 
@@ -127,16 +173,24 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         if (models != null && models.size() > 0) {
             for (int i = 0; i < models.size(); i++) {
                 RequiredChoiceOrderDishDetailsModel current = models.get(i);
-                RequiredChoiceAdapter adapter = new RequiredChoiceAdapter();
+                RequiredChoiceOrderAdapter adapter = new RequiredChoiceOrderAdapter();
+
                 List<RequireChoiceOrderModel> choiceItemModels = new ArrayList<>();
+
                 for (int j = 0; j < current.getVariantsName().size(); j++) {
-                    String choice = current.getVariantsName().get(i);
+                    String choice = current.getVariantsName().get(j);
+
                     boolean isDefault = false;
-                    if (j == 0){
+                    if (j == 0) {
+                        chosenRequireChoices[j] = choice;
                         isDefault = true;
                     }
-                    choiceItemModels.add(new RequireChoiceOrderModel(i, choice, isDefault, null));
+                    int index = i;
+                    choiceItemModels.add(new RequireChoiceOrderModel(i, choice, isDefault, chosenRequireChoices[i], () -> {
+                        chosenRequireChoices[index] = choice;
+                    }));
                 }
+
                 requiredChoiceItems.add(new RequiredChoiceOrderHeaderDelegateItem(new RequiredChoiceOrderHeaderModel(choiceItemModels.size(), current.getName())));
                 requiredChoiceItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(i + 1, choiceItemModels, adapter)));
             }

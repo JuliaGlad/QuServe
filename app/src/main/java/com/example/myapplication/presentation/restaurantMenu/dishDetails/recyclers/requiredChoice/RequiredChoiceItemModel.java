@@ -9,7 +9,7 @@ public class RequiredChoiceItemModel {
         this.name = name;
     }
 
-    public boolean compareTo(RequiredChoiceItemModel other){
+    public boolean compareTo(Object other){
         return this.hashCode() == other.hashCode();
     }
 }

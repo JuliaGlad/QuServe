@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UpdateRestaurantDataUseCase {
     public Completable invoke(String restaurantId, String restaurantName, String phone){
-        return DI.restaurantOwnerRepository.updateRestaurantData(restaurantId, restaurantName, phone);
+        return DI.restaurantRepository.updateRestaurantData(restaurantId, restaurantName, phone);
     }
 }

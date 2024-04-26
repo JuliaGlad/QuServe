@@ -85,6 +85,13 @@
         <item name="android:textColorHint">?android:textColorHint</item>
     </style>
 
+    <style name="Widget.Material3.TextInputLayout.EmptyBox.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="hintEnabled">false</item>
+        <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
     <style name="Widget.Material3.TextInputLayout.OutlinedBox.Dialog.Tonal.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
         <item name="hintEnabled">false</item>
         <item name="boxCornerRadiusBottomEnd">100dp</item>

@@ -1,5 +1,7 @@
 package com.example.myapplication.data.dto;
 
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
+
 import java.util.List;
 
 public class CartDishDto {
@@ -7,17 +9,35 @@ public class CartDishDto {
     private final String dishId;
     private final String categoryId;
     private final String amount;
-    private final List<String> toppings;
+    private final String name;
+    private final String weight;
+    private final String price;
+    private final List<VariantCartModel> toppings;
     private final List<String> requiredChoices;
     private final List<String> toRemove;
 
-    public CartDishDto(String dishId, String categoryId, String amount, List<String> toppings, List<String> requiredChoices, List<String> toRemove) {
+    public CartDishDto(String dishId, String categoryId, String name, String weight, String price, String amount, List<VariantCartModel> toppings, List<String> requiredChoices, List<String> toRemove) {
         this.dishId = dishId;
         this.categoryId = categoryId;
         this.amount = amount;
+        this.name = name;
+        this.weight = weight;
+        this.price = price;
         this.toppings = toppings;
         this.requiredChoices = requiredChoices;
         this.toRemove = toRemove;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public String getPrice() {
+        return price;
     }
 
     public String getAmount() {
@@ -32,7 +52,7 @@ public class CartDishDto {
         return categoryId;
     }
 
-    public List<String> getToppings() {
+    public List<VariantCartModel> getToppings() {
         return toppings;
     }
 

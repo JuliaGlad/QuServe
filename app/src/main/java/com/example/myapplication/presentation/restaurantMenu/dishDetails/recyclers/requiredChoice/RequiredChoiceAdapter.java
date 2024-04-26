@@ -23,7 +23,7 @@ public class RequiredChoiceAdapter extends ListAdapter<RequiredChoiceItemModel, 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder)holder).bind(getItem(position));
+        ((ViewHolder)holder).bind((RequiredChoiceItemModel) getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class AddRequiredChoicesUseCase {
     public Completable invoke(String restaurantId, String categoryId, String dishId, String choiceId, String name, List<String> variantsNames){
-        return DI.restaurantOwnerRepository.addRequiredChoice(restaurantId, categoryId, dishId, choiceId, name, variantsNames);
+        return DI.restaurantRepository.addRequiredChoice(restaurantId, categoryId, dishId, choiceId, name, variantsNames);
     }
 }

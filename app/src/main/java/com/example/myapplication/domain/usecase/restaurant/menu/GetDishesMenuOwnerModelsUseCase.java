@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetDishesMenuOwnerModelsUseCase {
     public Single<List<DishMenuOwnerModel>> invoke(String restaurantId, String categoryId){
-        return DI.restaurantOwnerRepository.getDishes(restaurantId, categoryId).map(dishDtos ->
+        return DI.restaurantRepository.getDishes(restaurantId, categoryId).map(dishDtos ->
                 dishDtos.stream()
                         .map(dishDto -> new DishMenuOwnerModel(dishDto.getDishId(),dishDto.getName(),dishDto.getWeightCount(),dishDto.getPrice()))
                         .collect(Collectors.toList()));

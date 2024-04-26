@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class DeleteTableQrCodeJpgUseCase {
     public Completable invoke(String tableId){
-        return DI.restaurantOwnerRepository.deleteQrCodeJpg(tableId);
+        return DI.restaurantRepository.deleteQrCodeJpg(tableId);
     }
 }

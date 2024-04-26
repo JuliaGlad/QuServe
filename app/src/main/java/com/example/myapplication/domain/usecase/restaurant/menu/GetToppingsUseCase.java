@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetToppingsUseCase {
     public Single<List<ToppingsModel>> invoke(String restaurantId, String categoryId, String dishId){
-        return DI.restaurantOwnerRepository.getToppings(restaurantId, categoryId, dishId).map(toppingDtos ->
+        return DI.restaurantRepository.getToppings(restaurantId, categoryId, dishId).map(toppingDtos ->
                 toppingDtos.stream()
                         .map(toppingDto -> new ToppingsModel(toppingDto.getName(), toppingDto.getPrice()))
                         .collect(Collectors.toList()));

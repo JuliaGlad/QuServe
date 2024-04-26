@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.toppings;
 
 import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewToppingsItemBinding;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
@@ -18,17 +20,17 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 public class ToppingsOrderDelegate implements AdapterDelegate {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return null;
+        return new ViewHolder(RecyclerViewToppingsItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, DelegateItem item, int position) {
-
+        ((ViewHolder)holder).bind((ToppingsOrderModel) item.content());
     }
 
     @Override
     public boolean isOfViewType(DelegateItem item) {
-        return false;
+        return item instanceof ToppingsOrderDelegateItem;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,7 +59,7 @@ public class ToppingsOrderDelegate implements AdapterDelegate {
                 if (!model.isChosen) {
                     model.isChosen = true;
                     binding.item.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
-                    model.variants.add(new VariantsModel(model.name, model.price, model.image));
+                    model.variants.add(new VariantCartModel(model.name, model.price));
                 } else {
                     model.isChosen = false;
                     binding.item.setStrokeColor(Color.TRANSPARENT);

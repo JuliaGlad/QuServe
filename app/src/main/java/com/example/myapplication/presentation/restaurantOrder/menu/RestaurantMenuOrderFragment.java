@@ -44,8 +44,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantMenuOrderViewModel.class);
         tablePath = getActivity().getIntent().getStringExtra(RESTAURANT_DATA);
-        restaurantId = tablePath.substring(16, 35);
-        Log.d("Restaurant id", restaurantId);
+        restaurantId = tablePath.substring(15, 35);
         viewModel.getMenuCategories(restaurantId);
     }
 
@@ -68,7 +67,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
     private void initButtonCart() {
         binding.buttonCart.setOnClickListener(v -> {
-
+            ((RestaurantOrderMenuActivity)requireActivity()).openCartActivity(restaurantId, tablePath);
         });
     }
 
@@ -126,7 +125,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         null,
                         current.getTask(),
                         () -> {
-                            ((RestaurantOrderMenuActivity)requireActivity()).openRestaurantOrderDishDetailsActivity(restaurantId, categoryId, current.getDishId());
+                            ((RestaurantOrderMenuActivity)requireActivity()).openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId());
                         }
                 ));
             }

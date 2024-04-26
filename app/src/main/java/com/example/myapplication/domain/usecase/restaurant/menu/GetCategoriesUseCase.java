@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetCategoriesUseCase {
     public Single<List<CategoryModel>> invoke(String restaurantId) {
-        return DI.restaurantOwnerRepository.getCategories(restaurantId).map(categoryDtos ->
+        return DI.restaurantRepository.getCategories(restaurantId).map(categoryDtos ->
                 categoryDtos.stream()
                         .map(categoryDto -> new CategoryModel(categoryDto.getCategoryId(), categoryDto.getName()))
                         .collect(Collectors.toList()));

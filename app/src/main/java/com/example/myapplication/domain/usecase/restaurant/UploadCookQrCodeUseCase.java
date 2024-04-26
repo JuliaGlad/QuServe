@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadCookQrCodeUseCase {
     public Completable invoke(String locationId, byte[] bytes){
-        return DI.restaurantOwnerRepository.uploadCookQrCode(locationId, bytes);
+        return DI.restaurantRepository.uploadCookQrCode(locationId, bytes);
     }
 }

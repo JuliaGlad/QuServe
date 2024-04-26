@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetRestaurantLocationsUseCase {
     public Single<List<RestaurantLocationModel>> invoke(String restaurantId) {
-        return DI.restaurantOwnerRepository.getRestaurantLocations(restaurantId).map(locationDtos ->
+        return DI.restaurantRepository.getRestaurantLocations(restaurantId).map(locationDtos ->
                 locationDtos.stream()
                         .map(locationDto -> new RestaurantLocationModel(
                                 locationDto.getLocationId(),

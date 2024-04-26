@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetWaiterQrCodeUseCase {
     public Single<Uri> invoke(String locationId){
-        return DI.restaurantOwnerRepository.getWaiterQrCode(locationId);
+        return DI.restaurantRepository.getWaiterQrCode(locationId);
     }
 }

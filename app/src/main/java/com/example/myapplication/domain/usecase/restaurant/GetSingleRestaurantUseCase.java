@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetSingleRestaurantUseCase {
     public Single<RestaurantEmailNameModel> invoke(String restaurantId){
-        return DI.restaurantOwnerRepository.getRestaurants().map(restaurantDtos ->
+        return DI.restaurantRepository.getRestaurants().map(restaurantDtos ->
                 restaurantDtos.stream()
                         .filter(restaurantDto -> restaurantDto.getRestaurantId().equals(restaurantId))
                         .map(restaurantDto -> new RestaurantEmailNameModel(restaurantId, restaurantDto.getName(), restaurantDto.getEmail() ))

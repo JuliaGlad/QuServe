@@ -22,6 +22,7 @@ import com.example.myapplication.databinding.FragmentBasicUserServiceBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
 import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
+import com.example.myapplication.presentation.service.main.ScanCode;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -75,7 +76,7 @@ public class BasicUserServiceFragment extends Fragment {
                     ((MainActivity) requireActivity()).openQueueActivity();
                 }),
                 new OptionImageButtonModel(2, R.drawable.restaurant_action_background, getResources().getString(R.string.restaurant), () -> {
-
+                    setScanOptions();
                 }),
                 new OptionImageButtonModel(3, R.drawable.on_board_catering_background, getResources().getString(R.string.on_board_catering), () -> {
 
@@ -89,6 +90,15 @@ public class BasicUserServiceFragment extends Fragment {
                     }
                 })
         });
+    }
+
+    private void setScanOptions() {
+        ScanOptions scanOptions = new ScanOptions();
+        scanOptions.setPrompt("Scan Qr-Code");
+        scanOptions.setBeepEnabled(true);
+        scanOptions.setCaptureActivity(ScanCode.class);
+        scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        restaurantLauncher.launch(scanOptions);
     }
 
     private void buildList(OptionImageButtonModel[] models) {

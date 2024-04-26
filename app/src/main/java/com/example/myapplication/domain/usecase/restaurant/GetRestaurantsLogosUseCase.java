@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetRestaurantsLogosUseCase {
     public Single<List<ImageTaskModel>> invoke(){
-        return DI.restaurantOwnerRepository.getRestaurantLogos().map(imageDtos ->
+        return DI.restaurantRepository.getRestaurantLogos().map(imageDtos ->
                 imageDtos.stream()
                         .map(ImageTaskModel::new)
                         .collect(Collectors.toList()));

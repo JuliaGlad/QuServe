@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.restaurantOrder.dishDetails.recyc
 import android.net.Uri;
 
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.google.android.gms.tasks.Task;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public class ToppingsOrderModel {
     String price;
     Task<Uri> image;
     boolean isChosen = false;
-    List<VariantsModel> variants;
+    List<VariantCartModel> variants;
 
-    public ToppingsOrderModel(int id, String name, String price, Task<Uri> image, List<VariantsModel> variants) {
+    public ToppingsOrderModel(int id, String name, String price, Task<Uri> image, List<VariantCartModel> variants) {
         this.id = id;
         this.name = name;
         this.price = price;

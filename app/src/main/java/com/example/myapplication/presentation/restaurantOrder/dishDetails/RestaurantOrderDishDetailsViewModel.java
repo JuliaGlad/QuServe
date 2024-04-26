@@ -14,6 +14,7 @@ import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.D
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.RequiredChoiceDishDetailsModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.state.DishDetailsState;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.model.RequiredChoiceOrderDishDetailsModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.model.RestaurantOrderDishDetailsModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.state.RestaurantOrderDishDetailsState;
@@ -99,5 +100,9 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                     }
                 });
 
+    }
+
+    public void addToCart(String restaurantId, CartDishModel model) {
+        RestaurantDI.addDishToCartUseCase.invoke(restaurantId, model);
     }
 }

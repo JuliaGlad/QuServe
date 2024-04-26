@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetRestaurantEditModel {
     public Single<RestaurantEditModel> invoke(String restaurantId) {
-        return DI.restaurantOwnerRepository.getRestaurants().map(restaurantDtos ->
+        return DI.restaurantRepository.getRestaurants().map(restaurantDtos ->
                 restaurantDtos.stream()
                         .filter(restaurantDto -> restaurantDto.getRestaurantId().equals(restaurantId))
                         .map(restaurantDto -> new RestaurantEditModel(

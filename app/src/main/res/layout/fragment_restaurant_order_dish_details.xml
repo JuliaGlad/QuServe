@@ -134,20 +134,20 @@
             android:background="@color/transparent"
             android:padding="10sp"
             android:src="@drawable/ic_error_ic"
-            app:layout_constraintBottom_toBottomOf="@+id/name_edit_text"
-            app:layout_constraintStart_toEndOf="@+id/name_edit_text"
-            app:layout_constraintTop_toTopOf="@+id/name_edit_text"
+            app:layout_constraintBottom_toBottomOf="@+id/name_text"
+            app:layout_constraintStart_toEndOf="@+id/name_text"
+            app:layout_constraintTop_toTopOf="@+id/name_text"
             app:tint="?colorPrimary" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_save"
+            android:id="@+id/button_order"
             style="@style/Widget.Material3.Button.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/save"
+            android:text="@string/add_to_cart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

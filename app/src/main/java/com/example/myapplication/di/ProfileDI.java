@@ -1,5 +1,6 @@
 package com.example.myapplication.di;
 
+import com.example.myapplication.domain.usecase.profile.AddActiveRestaurantOrderUseCase;
 import com.example.myapplication.domain.usecase.profile.AddEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
@@ -13,6 +14,7 @@ import com.example.myapplication.domain.usecase.profile.DeleteActiveQueueUseCase
 import com.example.myapplication.domain.usecase.profile.DeleteEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.profile.GetActiveQueuesByEmployeeIdUseCase;
 import com.example.myapplication.domain.usecase.profile.GetActiveQueuesUseCase;
+import com.example.myapplication.domain.usecase.profile.GetActiveRestaurantOrderUseCase;
 import com.example.myapplication.domain.usecase.profile.GetBackgroundImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetEmployeeRolesUseCase;
 import com.example.myapplication.domain.usecase.profile.GetHistoryUseCase;
@@ -39,6 +41,8 @@ import com.example.myapplication.domain.usecase.queue.usecase.GetOwnQueueData;
 import com.example.myapplication.domain.usecase.queue.usecase.GetParticipateInQueueData;
 
 public class ProfileDI {
+    public static GetActiveRestaurantOrderUseCase getActiveRestaurantOrderUseCase = new GetActiveRestaurantOrderUseCase();
+    public static AddActiveRestaurantOrderUseCase addActiveRestaurantOrderUseCase = new AddActiveRestaurantOrderUseCase();
     public static GetParticipantQueuePathUseCase getParticipantQueuePathUseCase = new GetParticipantQueuePathUseCase();
     public static GetActiveQueuesByEmployeeIdUseCase getActiveQueuesByEmployeeIdUseCase = new GetActiveQueuesByEmployeeIdUseCase();
     public static UpdateEmployeeRoleUseCase updateEmployeeRoleUseCase = new UpdateEmployeeRoleUseCase();

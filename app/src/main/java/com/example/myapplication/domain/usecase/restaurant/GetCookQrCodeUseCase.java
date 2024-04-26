@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetCookQrCodeUseCase {
     public Single<Uri> invoke(String locationId){
-        return DI.restaurantOwnerRepository.getCookQrCode(locationId);
+        return DI.restaurantRepository.getCookQrCode(locationId);
     }
 }

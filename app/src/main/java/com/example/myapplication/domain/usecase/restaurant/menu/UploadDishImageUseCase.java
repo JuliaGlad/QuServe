@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadDishImageUseCase {
     public Completable invoke(String restaurantId, String dishId,Uri uri){
-        return DI.restaurantOwnerRepository.uploadDishImage(restaurantId, dishId, uri);
+        return DI.restaurantRepository.uploadDishImage(restaurantId, dishId, uri);
     }
 }

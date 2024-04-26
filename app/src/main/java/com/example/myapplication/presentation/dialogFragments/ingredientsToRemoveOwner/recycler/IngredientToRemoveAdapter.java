@@ -62,7 +62,7 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
 
         private void setEditTextVisible() {
             binding.textIngredientName.setVisibility(View.GONE);
-            binding.editTextIngredientName.setVisibility(View.VISIBLE);
+            binding.textInputLayout.setVisibility(View.VISIBLE);
             binding.buttonDelete.setVisibility(View.GONE);
         }
 
@@ -78,7 +78,7 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
                     listener.onClick(name);
 
                     binding.button.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.ic_edit, itemView.getContext().getTheme()));
-                    binding.editTextIngredientName.setVisibility(View.GONE);
+                    binding.textInputLayout.setVisibility(View.GONE);
                     String newName = binding.editTextIngredientName.getText().toString();
 
                     binding.textIngredientName.setVisibility(View.VISIBLE);

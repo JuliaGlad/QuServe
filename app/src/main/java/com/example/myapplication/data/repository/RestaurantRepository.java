@@ -11,7 +11,10 @@ import static com.example.myapplication.presentation.utils.Utils.PDF;
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_DISHES;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COUNT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS_COUNT;
@@ -22,8 +25,11 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENTS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_TAKEN;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_CITY;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.REQUIRED_CHOICES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
@@ -40,23 +46,32 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_QR_CODES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPINGS;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TOTAL_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER_QR_CODE;
 
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.myapplication.data.dto.ActiveOrderDishDto;
+import com.example.myapplication.data.dto.CartDishDto;
 import com.example.myapplication.data.dto.CategoryDto;
 import com.example.myapplication.data.dto.DishDto;
 import com.example.myapplication.data.dto.ImageDto;
 import com.example.myapplication.data.dto.ImageTaskNameDto;
 import com.example.myapplication.data.dto.LocationDto;
+import com.example.myapplication.data.dto.OrderDto;
 import com.example.myapplication.data.dto.RequiredChoiceDto;
 import com.example.myapplication.data.dto.RestaurantDto;
 import com.example.myapplication.data.dto.TableDto;
 import com.example.myapplication.data.dto.ToppingDto;
+import com.example.myapplication.data.providers.CartProvider;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
+import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -70,7 +85,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -81,20 +95,165 @@ import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class RestaurantOwnerRepository {
+public class RestaurantRepository {
 
-    public Completable deleteIngredientToRemove(String restaurantId, String categoryId, String dishId, String name){
+    public Single<OrderDto> getOrderByPath(String path) {
+        return Single.create(emitter -> {
+            DocumentReference docRef = service.fireStore.document(path);
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+
+                    docRef.collection(DISHES).get().addOnCompleteListener(taskDishes -> {
+                        if (taskDishes.isSuccessful()) {
+                            List<ActiveOrderDishDto> dtos = new ArrayList<>();
+                            List<DocumentSnapshot> dishesSnapshots = taskDishes.getResult().getDocuments();
+
+                            for (DocumentSnapshot current : dishesSnapshots) {
+
+                                List<VariantCartModel> toppings = new ArrayList<>();
+                                List<String> toRemove = (List<String>) current.get(INGREDIENT_TO_REMOVE);
+                                List<String> requiredChoice = (List<String>) current.get(REQUIRED_CHOICES);
+
+                                docRef.collection(DISHES).document(current.getId()).collection(TOPPINGS)
+                                        .get().addOnCompleteListener(taskToppings -> {
+                                            if (taskToppings.isSuccessful()) {
+                                                List<DocumentSnapshot> toppingsSnapshots = taskToppings.getResult().getDocuments();
+                                                for (DocumentSnapshot currentTopping : toppingsSnapshots) {
+                                                    toppings.add(new VariantCartModel(
+                                                            currentTopping.getString(TOPPING_NAME),
+                                                            currentTopping.getString(TOPPING_PRICE)
+                                                    ));
+                                                }
+                                            }
+                                        });
+
+                                dtos.add(new ActiveOrderDishDto(
+                                        current.getString(PATH),
+                                        toppings,
+                                        requiredChoice,
+                                        toRemove
+                                ));
+                            }
+
+                            emitter.onSuccess(new OrderDto(
+                                    snapshot.getId(),
+                                    snapshot.getString(TOTAL_PRICE),
+                                    Boolean.TRUE.equals(snapshot.getBoolean(IS_TAKEN)),
+                                    dtos
+                            ));
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    public Completable addToTableListOrder(String path, String orderId) {
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore.document(path);
+
+            HashMap<String, String> order = new HashMap<>();
+            order.put(ORDER_ID, orderId);
+            docRef.set(order).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    CartProvider.deleteCart();
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
+
+    public Single<String> addToActiveOrders(String restaurantId, String path, String orderId, String totalPrice, List<OrderDishesModel> models) {
+        return Single.create(emitter -> {
+
+            DocumentReference pathDoc = service.fireStore.document(path);
+            String locationId = pathDoc.getParent().getParent().getId();
+
+            DocumentReference docRef = service.fireStore.collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(ACTIVE_ORDERS)
+                    .document(orderId);
+
+            CollectionReference menuCollRef = service.fireStore.collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU);
+
+            String orderPath = docRef.getPath();
+
+            CollectionReference collRef = docRef.collection(DISHES);
+
+            HashMap<String, Object> order = new HashMap<>();
+            order.put(ORDER_ID, orderId);
+            order.put(VISITOR, service.auth.getCurrentUser().getUid());
+            order.put(TOTAL_PRICE, totalPrice);
+            order.put(IS_TAKEN, false);
+
+            docRef.set(order).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    for (int i = 0; i < models.size(); i++) {
+                        OrderDishesModel current = models.get(i);
+                        DocumentReference docDish = collRef.document("#" + (i + 1));
+                        String dishPath = menuCollRef.document(current.getCategoryId()).collection(DISHES).document(current.getDishId()).getPath();
+
+                        HashMap<String, Object> dishDocument = new HashMap<>();
+                        dishDocument.put(PATH, dishPath);
+                        dishDocument.put(COUNT, current.getAmount());
+                        dishDocument.put(INGREDIENT_TO_REMOVE, current.getToRemove());
+                        dishDocument.put(REQUIRED_CHOICES, current.getRequireChoices());
+                        dishDocument.put(DISH_PRICE, current.getPrice());
+
+                        docDish.set(dishDocument);
+
+                        CollectionReference toppingsCollectionDoc = docDish.collection(TOPPINGS);
+
+                        for (VariantCartModel model : current.getToppings()) {
+
+                            HashMap<String, Object> topping = new HashMap<>();
+                            topping.put(TOPPING_NAME, model.getName());
+                            topping.put(TOPPING_PRICE, model.getPrice());
+
+                            toppingsCollectionDoc.document(model.getName()).set(topping);
+                        }
+                    }
+                    emitter.onSuccess(orderPath);
+                }
+            });
+        });
+    }
+
+    public Single<List<ImageTaskNameDto>> getDishesImagesByIds(String restaurantId, List<String> ids) {
+        return Single.create(emitter -> {
+            List<ImageTaskNameDto> tasks = new ArrayList<>();
+            for (String id : ids) {
+                StorageReference reference = service.storageReference
+                        .child(RESTAURANT_MENUS_PATH)
+                        .child(restaurantId + "/")
+                        .child(id + "/")
+                        .child(id + JPG);
+                tasks.add(new ImageTaskNameDto(
+                        reference.getDownloadUrl(),
+                        id
+                ));
+            }
+            emitter.onSuccess(tasks);
+        });
+    }
+
+    public Completable deleteIngredientToRemove(String restaurantId, String categoryId, String dishId, String name) {
         return Completable.create(emitter -> {
             service.fireStore
                     .collection(RESTAURANT_LIST)
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .update(INGREDIENT_TO_REMOVE, FieldValue.arrayRemove(name))
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
                         }
                     });
@@ -108,7 +267,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .update(INGREDIENT_TO_REMOVE, FieldValue.arrayRemove(previousName),
                             INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(newName))
@@ -127,7 +286,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId)
@@ -147,7 +306,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId)
@@ -167,7 +326,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId);
@@ -188,7 +347,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId)
@@ -208,7 +367,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId)
@@ -227,7 +386,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId)
@@ -265,7 +424,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(TOPPINGS)
                     .document(name)
@@ -284,7 +443,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .update(DISH_NAME, name,
                             INGREDIENTS, ingredients,
@@ -370,7 +529,7 @@ public class RestaurantOwnerRepository {
                 .document(restaurantId)
                 .collection(RESTAURANT_MENU)
                 .document(categoryId)
-                .collection(CATEGORY_DISHES);
+                .collection(DISHES);
         return Single.create(emitter -> {
             collRef
                     .get().addOnCompleteListener(task -> {
@@ -403,7 +562,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -431,6 +590,7 @@ public class RestaurantOwnerRepository {
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                            Log.d("Snapshots size", snapshots.size() + restaurantId);
                             List<CategoryDto> categoryDtos = new ArrayList<>();
 
                             for (DocumentSnapshot current : snapshots) {
@@ -473,7 +633,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId);
 
             docRef.update(INGREDIENT_TO_REMOVE, FieldValue.arrayUnion(variant))
@@ -492,7 +652,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(TOPPINGS)
                     .document(name);
@@ -516,7 +676,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .document(choiceId);
@@ -543,7 +703,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -567,7 +727,7 @@ public class RestaurantOwnerRepository {
                             .document(restaurantId)
                             .collection(RESTAURANT_MENU)
                             .document(categoryId)
-                            .collection(CATEGORY_DISHES)
+                            .collection(DISHES)
                             .document(dishId)
                             .collection(TOPPINGS);
 
@@ -595,7 +755,7 @@ public class RestaurantOwnerRepository {
                     .document(restaurantId)
                     .collection(RESTAURANT_MENU)
                     .document(categoryId)
-                    .collection(CATEGORY_DISHES)
+                    .collection(DISHES)
                     .document(dishId)
                     .collection(REQUIRED_CHOICES)
                     .get().addOnCompleteListener(taskChoices -> {
@@ -633,7 +793,7 @@ public class RestaurantOwnerRepository {
                 .document(restaurantId)
                 .collection(RESTAURANT_MENU)
                 .document(categoryId)
-                .collection(CATEGORY_DISHES)
+                .collection(DISHES)
                 .document(dishId);
 
         return Completable.create(emitter -> {
@@ -646,7 +806,6 @@ public class RestaurantOwnerRepository {
             dish.put(DISH_ESTIMATED_TIME_COOKING, estimatedTimeCooking);
             dish.put(TOPPINGS, Collections.emptyList());
             dish.put(INGREDIENT_TO_REMOVE, Collections.emptyList());
-
 
             menu.set(dish).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

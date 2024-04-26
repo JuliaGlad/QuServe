@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetSingleDishImageUseCase {
     public Single<ImageModel> invoke(String restaurantId, String dishId){
-        return DI.restaurantOwnerRepository.getSingleDishImage(restaurantId, dishId).map(imageDto ->
+        return DI.restaurantRepository.getSingleDishImage(restaurantId, dishId).map(imageDto ->
                 new ImageModel(imageDto.getImageUri()));
     }
 }

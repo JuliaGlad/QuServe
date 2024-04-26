@@ -4,18 +4,14 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.RecyclerViewRequiredChoiceItemBinding;
 
-import myapplication.android.ui.recycler.delegate.AdapterDelegate;
-import myapplication.android.ui.recycler.delegate.DelegateItem;
+public class RequiredChoiceOrderAdapter extends ListAdapter<RequireChoiceOrderModel, RecyclerView.ViewHolder> {
 
-public class RequiredChoiceOrderDelegate extends ListAdapter<RequireChoiceOrderModel, RecyclerView.ViewHolder> {
-
-    protected RequiredChoiceOrderDelegate() {
+    public RequiredChoiceOrderAdapter() {
         super(new RequiredChoiceOrderCallBack());
     }
 
@@ -41,7 +37,7 @@ public class RequiredChoiceOrderDelegate extends ListAdapter<RequireChoiceOrderM
         void bind(RequireChoiceOrderModel model){
             binding.variantName.setText(model.name);
             binding.item.setOnClickListener(v -> {
-
+                model.listener.onClick();
             });
         }
     }

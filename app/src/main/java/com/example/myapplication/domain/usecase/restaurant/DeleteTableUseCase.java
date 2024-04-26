@@ -6,6 +6,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class DeleteTableUseCase {
     public Completable invoke(String restaurantId, String locationId, String tableId){
-        return DI.restaurantOwnerRepository.deleteTable(restaurantId, locationId, tableId);
+        return DI.restaurantRepository.deleteTable(restaurantId, locationId, tableId);
     }
 }

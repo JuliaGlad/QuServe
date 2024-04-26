@@ -8,6 +8,6 @@ import io.reactivex.rxjava3.core.Completable;
 
 public class UploadRestaurantLogoUseCase {
     public Completable invoke(Uri uri, String restaurantId){
-        return DI.restaurantOwnerRepository.uploadRestaurantLogoToFireStorage(uri, restaurantId);
+        return DI.restaurantRepository.uploadRestaurantLogoToFireStorage(uri, restaurantId);
     }
 }
