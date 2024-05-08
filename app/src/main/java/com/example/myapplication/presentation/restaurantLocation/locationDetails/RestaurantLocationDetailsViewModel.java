@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -22,7 +22,7 @@ public class RestaurantLocationDetailsViewModel extends ViewModel {
     LiveData<Uri> waiterQrCode = _waiterQrCode;
 
     public void getCookQrCode(String locationId){
-        RestaurantDI.getCookQrCodeUseCase.invoke(locationId)
+        RestaurantEmployeeDI.getCookQrCodeUseCase.invoke(locationId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Uri>() {
                     @Override
@@ -43,7 +43,7 @@ public class RestaurantLocationDetailsViewModel extends ViewModel {
     }
 
     public void getWaiterQrCode(String locationId){
-        RestaurantDI.getWaiterQrCodeUseCase.invoke(locationId)
+        RestaurantEmployeeDI.getWaiterQrCodeUseCase.invoke(locationId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Uri>() {
                     @Override

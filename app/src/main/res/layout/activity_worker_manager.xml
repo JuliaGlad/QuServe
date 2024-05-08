@@ -8,7 +8,7 @@
     tools:context=".presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/nav_host_fragment_activity_main"
+        android:id="@+id/worker_manager_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

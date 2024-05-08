@@ -4,13 +4,13 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
+import com.example.myapplication.di.restaurant.RestaurantLocationDI;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -35,7 +35,7 @@ public class AddLocationViewModel extends ViewModel {
 
        String locationId = generateLocationId();
 
-        RestaurantDI.createRestaurantLocationDocumentUseCase.invoke(restaurantId, locationId, location, city)
+        RestaurantLocationDI.createRestaurantLocationDocumentUseCase.invoke(restaurantId, locationId, location, city)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<String>() {
                     @Override
@@ -99,7 +99,7 @@ public class AddLocationViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        RestaurantDI.uploadCookQrCodeUseCase.invoke(locationId, data)
+        RestaurantEmployeeDI.uploadCookQrCodeUseCase.invoke(locationId, data)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -125,7 +125,7 @@ public class AddLocationViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        RestaurantDI.uploadWaiterQrCodeUseCase.invoke(locationId, data)
+        RestaurantEmployeeDI.uploadWaiterQrCodeUseCase.invoke(locationId, data)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

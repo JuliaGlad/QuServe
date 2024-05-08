@@ -1,11 +1,12 @@
 package com.example.myapplication.presentation.dialogFragments.alreadyParticipateInQueue;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -19,7 +20,7 @@ public class AlreadyParticipateInQueueDialogViewModel extends ViewModel {
     public void leaveQueue() {
         ProfileDI.getParticipantQueuePathUseCase.invoke()
                 .flatMapCompletable(path -> QueueDI.removeParticipantById.invoke(path))
-                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke("", false))
+                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke( NOT_PARTICIPATE_IN_QUEUE))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

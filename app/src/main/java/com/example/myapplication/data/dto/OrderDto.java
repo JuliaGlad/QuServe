@@ -1,21 +1,46 @@
 package com.example.myapplication.data.dto;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderDto {
+    private final String restaurantId;
+    private final String restaurntName;
+    private final String path;
     private final String orderId;
+    private final String tableNumber;
     private final String totalPrice;
-    private final boolean isOrdered;
+    private final String isOrdered;
     private final List<ActiveOrderDishDto> dtos;
 
-    public OrderDto(String orderId, String totalPrice, boolean isOrdered, List<ActiveOrderDishDto> dtos) {
+    public OrderDto(String orderId, String path, String tableNumber, String restaurantId, String restaurntName, String totalPrice, String isOrdered, List<ActiveOrderDishDto> dtos) {
         this.dtos = dtos;
+        this.path = path;
+        this.restaurntName = restaurntName;
+        this.tableNumber = tableNumber;
+        this.restaurantId = restaurantId;
         this.isOrdered = isOrdered;
         this.orderId = orderId;
         this.totalPrice = totalPrice;
     }
 
-    public boolean isOrdered() {
+    public String getPath() {
+        return path;
+    }
+
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public String getRestaurantName() {
+        return restaurntName;
+    }
+
+    public String isOrdered() {
         return isOrdered;
     }
 

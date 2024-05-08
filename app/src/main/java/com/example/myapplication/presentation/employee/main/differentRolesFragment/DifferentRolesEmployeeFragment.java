@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,8 +21,6 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentDifferentRolesEmployeeBinding;
-import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
-import com.example.myapplication.presentation.employee.delegates.BecomeEmployeeButtonDelegate;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.delegate.CompanyEmployeeDelegate;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.delegate.CompanyEmployeeDelegateItem;
@@ -30,27 +29,19 @@ import com.example.myapplication.presentation.employee.main.differentRolesFragme
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.state.DifferentRoleState;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegate;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegateItem;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonModel;
+import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
-import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
 import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegate;
 import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableModel;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 
 public class DifferentRolesEmployeeFragment extends Fragment {
 
@@ -73,6 +64,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         String models = getArguments().getString(EMPLOYEE_ROLE);
         roleModels = new Gson().fromJson(models, new TypeToken<List<EmployeeRoleModel>>() {
         }.getType());
+        assert roleModels != null;
         viewModel.getEmployeeCompanyRoles(roleModels);
         return binding.getRoot();
     }
@@ -124,6 +116,11 @@ public class DifferentRolesEmployeeFragment extends Fragment {
                                         .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
                                         .commit();
                                 break;
+                            case COOK:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
+                                        .commit();
                         }
                     }
             )));

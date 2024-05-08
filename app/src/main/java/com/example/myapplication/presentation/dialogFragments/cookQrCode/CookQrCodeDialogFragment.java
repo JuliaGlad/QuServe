@@ -28,7 +28,7 @@ public class CookQrCodeDialogFragment extends DialogFragment {
         DialogCookQrCodeBinding binding = DialogCookQrCodeBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
-        Glide.with(requireView())
+        Glide.with(requireContext())
                 .load(uri)
                 .into(binding.qrCode);
 

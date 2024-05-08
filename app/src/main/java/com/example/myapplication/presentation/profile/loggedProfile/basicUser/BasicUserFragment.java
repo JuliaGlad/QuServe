@@ -72,7 +72,6 @@ public class BasicUserFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel.retrieveUserNameData();
         binding = FragmentBasicUserBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 

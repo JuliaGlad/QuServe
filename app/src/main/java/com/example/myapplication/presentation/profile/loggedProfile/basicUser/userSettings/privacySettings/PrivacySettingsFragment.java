@@ -75,7 +75,6 @@ public class PrivacySettingsFragment extends Fragment {
 
                 email = bundle.getString(EMAIL);
                 password = bundle.getString(PASSWORD);
-
                 viewModel.verifyBeforeUpdate(email);
 
             };

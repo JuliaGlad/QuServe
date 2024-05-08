@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item"
+    app:cardCornerRadius="40dp"
+    app:cardElevation="0dp"
+    android:layout_marginBottom="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorSurfaceContainerLow">
+
+        <TextView
+            android:id="@+id/table_number"
+            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/regular"
+            android:text="Table №"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/dishes_title"
+            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Dishes:"
+            app:layout_constraintStart_toStartOf="@+id/table_number"
+            app:layout_constraintTop_toBottomOf="@+id/table_number" />
+
+        <TextView
+            android:id="@+id/count"
+            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:text="2"
+            app:layout_constraintBottom_toBottomOf="@+id/dishes_title"
+            app:layout_constraintStart_toEndOf="@+id/dishes_title"
+            app:layout_constraintTop_toTopOf="@+id/dishes_title" />
+
+        <TextView
+            android:id="@+id/button_accept"
+            style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_surface_containater_tonal_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="16dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="10dp"
+            android:text="@string/accept"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dishes_title" />
+
+        <TextView
+            android:id="@+id/button_see_details"
+            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/view_details"
+            app:layout_constraintBottom_toBottomOf="@+id/button_accept"
+            app:layout_constraintEnd_toStartOf="@+id/button_accept"
+            app:layout_constraintTop_toTopOf="@+id/button_accept" />
+
+        <TextView
+            android:id="@+id/number"
+            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            app:layout_constraintBottom_toBottomOf="@+id/table_number"
+            app:layout_constraintStart_toEndOf="@+id/table_number"
+            app:layout_constraintTop_toTopOf="@+id/table_number" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

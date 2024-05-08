@@ -12,8 +12,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
 import com.google.zxing.BarcodeFormat;
@@ -55,7 +54,7 @@ public class CreateQueueViewModel extends ViewModel {
         QueueDI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime)
                 .flatMapCompletable(path -> {
                     generateQrCode(path);
-                    return ProfileDI.updateOwnQueueUseCase.invoke(true);
+                    return ProfileDI.updateOwnQueueUseCase.invoke(queueID);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

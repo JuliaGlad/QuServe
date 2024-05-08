@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditBasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditUserModel;
 

@@ -8,9 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
-import com.example.myapplication.di.QueueDI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantTableDI;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -38,7 +36,7 @@ public class AddTableViewModel extends ViewModel {
 
     public void addTable(String restaurantId, String locationId, String number) {
         String tableId = generateId();
-        RestaurantDI.addRestaurantTablesUseCase.invoke(restaurantId, locationId, tableId, number)
+        RestaurantTableDI.addRestaurantTablesUseCase.invoke(restaurantId, locationId, tableId, number)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<String>() {
                     @Override
@@ -70,7 +68,7 @@ public class AddTableViewModel extends ViewModel {
 
         byte[] data = baos.toByteArray();
 
-        return RestaurantDI.uploadTableQrCodeJpgUseCase.invoke(tableId, data);
+        return RestaurantTableDI.uploadTableQrCodeJpgUseCase.invoke(tableId, data);
     }
 
     private void generateQrCode(String path, String tableId) {
@@ -109,7 +107,7 @@ public class AddTableViewModel extends ViewModel {
     }
 
     private void uploadPdfToFireStorage(File file, String tableId) {
-        RestaurantDI.uploadTableQrCodePdfUseCase.invoke(file, tableId).subscribeOn(Schedulers.io())
+        RestaurantTableDI.uploadTableQrCodePdfUseCase.invoke(file, tableId).subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

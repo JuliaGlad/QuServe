@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.profile.HistoryModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.models.HistoryItemModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.models.HistoryState;

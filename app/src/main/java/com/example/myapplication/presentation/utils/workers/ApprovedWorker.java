@@ -8,8 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
 
 public class ApprovedWorker extends Worker {
 

@@ -1,14 +1,13 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,7 @@ public class WorkerDetailsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(WorkerDetailsViewModel.class);
         if (getArguments() != null) {
             name = getArguments().getString(EMPLOYEE_NAME);
-            employeeId = getArguments().getString(EMPLOYEE);
+            employeeId = getArguments().getString(COMPANY_EMPLOYEE);
             companyId = getArguments().getString(COMPANY_ID);
             viewModel.getEmployeeData(companyId, employeeId);
         }
@@ -109,7 +108,7 @@ public class WorkerDetailsFragment extends Fragment {
 
             bundle.putString(COMPANY_ID, companyId);
             bundle.putStringArrayList(QUEUE_ID, ids);
-            bundle.putString(EMPLOYEE, employeeId);
+            bundle.putString(COMPANY_EMPLOYEE, employeeId);
             bundle.putString(EMPLOYEE_NAME, name);
 
             NavHostFragment.findNavController(this)

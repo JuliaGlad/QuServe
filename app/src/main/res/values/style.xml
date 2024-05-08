@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="ThemeOverlay.Material3.Button.Tonal.QuServe" parent="Widget.Material3.Button.TonalButton">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:paddingStart">32dp</item>
+        <item name="android:paddingEnd">32dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="backgroundTint">#CCE8FF</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <style name="TextAppearance.Material3.HeadlineLarge.QuServe" parent="TextAppearance.Material3.HeadlineLarge">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/bold_roboto</item>

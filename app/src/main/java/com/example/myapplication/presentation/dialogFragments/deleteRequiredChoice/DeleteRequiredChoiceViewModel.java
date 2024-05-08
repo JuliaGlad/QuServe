@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -17,7 +17,7 @@ public class DeleteRequiredChoiceViewModel extends ViewModel {
     LiveData<Boolean> isChoiceDelete = _isChoiceDelete;
 
     public void deleteChoice(String restaurantId, String categoryId, String dishId, String choiceId){
-        RestaurantDI.deleteRequiredChoiceByIdUseCase.invoke(restaurantId, categoryId, dishId, choiceId)
+        RestaurantMenuDI.deleteRequiredChoiceByIdUseCase.invoke(restaurantId, categoryId, dishId, choiceId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

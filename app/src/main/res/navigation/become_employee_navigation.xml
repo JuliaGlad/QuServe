@@ -16,6 +16,6 @@
 
     <fragment
         android:id="@+id/successfullyBecomeEmployeeFragment"
-        android:name="com.example.myapplication.presentation.employee.successfullyBecomeEmployee.SuccessfullyBecomeEmployeeFragment"
+        android:name="com.example.myapplication.presentation.employee.becomeEmployee.successfullyBecomeEmployee.SuccessfullyBecomeEmployeeFragment"
         tools:layout="@layout/fragment_successfuly_become_employee" />
 </navigation>

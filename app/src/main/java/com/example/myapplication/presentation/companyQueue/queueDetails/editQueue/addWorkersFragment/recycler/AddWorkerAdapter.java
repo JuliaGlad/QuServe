@@ -15,8 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewAddWorkerItemBinding;
 import com.example.myapplication.domain.model.common.ImageModel;

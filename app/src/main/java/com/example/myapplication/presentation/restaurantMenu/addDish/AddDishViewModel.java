@@ -1,13 +1,10 @@
 package com.example.myapplication.presentation.restaurantMenu.addDish;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
-import com.example.myapplication.presentation.restaurantMenu.AddCategory.main.ArgumentsCategory;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import java.util.Random;
 
@@ -22,8 +19,8 @@ public class AddDishViewModel extends ViewModel {
 
     public void initDishData(String restaurantId, String categoryId) {
         String dishId = generateId();
-        RestaurantDI.addDishUseCase.invoke(restaurantId, categoryId, dishId, DishArguments.name, DishArguments.ingredients, DishArguments.weightCount, DishArguments.price, DishArguments.timeCooking)
-                .andThen(RestaurantDI.uploadDishImageUseCase.invoke(restaurantId, dishId, DishArguments.imageUri))
+        RestaurantMenuDI.addDishUseCase.invoke(restaurantId, categoryId, dishId, DishArguments.name, DishArguments.ingredients, DishArguments.weightCount, DishArguments.price, DishArguments.timeCooking)
+                .andThen(RestaurantMenuDI.uploadDishImageUseCase.invoke(restaurantId, dishId, DishArguments.imageUri))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

@@ -15,9 +15,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CommonCompanyDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.company.CommonCompanyDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -75,7 +75,7 @@ public class CreateCompanyAccountViewModel extends ViewModel {
 
         } else if (companyService.equals(stringsServicesArray[1])) {
             companyID = generateID(RESTAURANT);
-            RestaurantDI.createRestaurantDocumentUseCase.invoke(companyID, name, email, phone)
+            RestaurantUserDI.createRestaurantDocumentUseCase.invoke(companyID, name, email, phone)
                     .concatWith(CommonCompanyDI.setCompanyUserUseCase.invoke(companyID, name, RESTAURANT))
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {

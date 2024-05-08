@@ -1,20 +1,23 @@
 package com.example.myapplication.presentation.home.basicUser;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CommonCompanyDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.company.CommonCompanyDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.common.CommonCompanyModel;
-import com.example.myapplication.domain.model.company.CompanyNameIdModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.example.myapplication.domain.model.queue.QueueModel;
+import com.example.myapplication.domain.model.restaurant.order.OrderModel;
 import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicUserModel;
-import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserBooleanModel;
+import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserActionModel;
 import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
 import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
@@ -30,12 +33,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class HomeBasisUserViewModel extends ViewModel {
 
     private boolean isCompanyOwner = false;
-    private boolean isQueueParticipant = false;
-    private boolean isQueueOwner = false;
+    private String isQueueParticipant = NOT_PARTICIPATE_IN_QUEUE;
+    private String isQueueOwner = NOT_QUEUE_OWNER;
+    private String isRestaurantVisitor = NOT_RESTAURANT_VISITOR;
 
     QueueBasicUserHomeModel ownerQueue = null;
     QueueBasicUserHomeModel participantQueue = null;
+    QueueBasicUserHomeModel restaurantVisitor = null;
     List<CompanyBasicUserModel> companies = new ArrayList<>();
+
+    private final MutableLiveData<Boolean> _getRestaurant = new MutableLiveData<>(false);
+    LiveData<Boolean> getRestaurant = _getRestaurant;
 
     private final MutableLiveData<Boolean> _getCompanies = new MutableLiveData<>(false);
     LiveData<Boolean> getCompanies = _getCompanies;
@@ -48,27 +56,29 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     public void getUserBooleanData() {
         CommonCompanyDI.checkAnyCompanyExistUseCase.invoke()
-                .zipWith(ProfileDI.getUserBooleanDataUseCase.invoke(), (companyBoolean, userBooleanDataModel) ->
-                        new HomeBasicUserBooleanModel(
+                .zipWith(ProfileDI.getUserActionsDataUseCase.invoke(), (companyBoolean, userBooleanDataModel) ->
+                        new HomeBasicUserActionModel(
                                 userBooleanDataModel.isOwnQueue(),
                                 userBooleanDataModel.isParticipateInQueue(),
+                                userBooleanDataModel.getRestaurantVisitor(),
                                 companyBoolean)
                 )
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<HomeBasicUserBooleanModel>() {
+                .subscribe(new SingleObserver<HomeBasicUserActionModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull HomeBasicUserBooleanModel homeBasicUserBooleanModel) {
-                        if (!homeBasicUserBooleanModel.isCompanyOwner() && !homeBasicUserBooleanModel.isParticipateInQueue() && !homeBasicUserBooleanModel.isOwnQueue()) {
+                    public void onSuccess(@NonNull HomeBasicUserActionModel homeBasicUserActionModel) {
+                        if (!homeBasicUserActionModel.isCompanyOwner() && homeBasicUserActionModel.isParticipateInQueue().equals(NOT_PARTICIPATE_IN_QUEUE) && homeBasicUserActionModel.isOwnQueue().equals(NOT_QUEUE_OWNER)) {
                             _state.postValue(new HomeBasicUserState.Success(null));
                         } else {
-                            isCompanyOwner = homeBasicUserBooleanModel.isCompanyOwner();
-                            isQueueParticipant = homeBasicUserBooleanModel.isParticipateInQueue();
-                            isQueueOwner = homeBasicUserBooleanModel.isOwnQueue();
+                            isCompanyOwner = homeBasicUserActionModel.isCompanyOwner();
+                            isQueueParticipant = homeBasicUserActionModel.isParticipateInQueue();
+                            isRestaurantVisitor = homeBasicUserActionModel.isRestaurantVisitor();
+                            isQueueOwner = homeBasicUserActionModel.isOwnQueue();
                             getCompanies();
                         }
                     }
@@ -82,28 +92,6 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     public void getCompanies() {
         if (isCompanyOwner) {
-//            CompanyQueueUserDI.getCompanyUseCase.invoke()
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe(new SingleObserver<List<CompanyNameIdModel>>() {
-//                        @Override
-//                        public void onSubscribe(@NonNull Disposable d) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onSuccess(@NonNull List<CompanyNameIdModel> companyNameIdModels) {
-//                            for (int i = 0; i < companyNameIdModels.size(); i++) {
-//                                CompanyNameIdModel current = companyNameIdModels.get(i);
-//                                companies.add(new CompanyBasicUserModel(current.getId(), current.getName()));
-//                            }
-//                            _getCompanies.postValue(true);
-//                        }
-//
-//                        @Override
-//                        public void onError(@NonNull Throwable e) {
-//
-//                        }
-//                    });
             CommonCompanyDI.getAllServiceCompaniesUseCase.invoke()
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<List<CommonCompanyModel>>() {
@@ -134,8 +122,38 @@ public class HomeBasisUserViewModel extends ViewModel {
         }
     }
 
-    public void getQueueByParticipantId() {
-        if (isQueueParticipant) {
+    public void getRestaurantByVisitorPath() {
+        if (!isRestaurantVisitor.equals(NOT_RESTAURANT_VISITOR)) {
+            ProfileDI.getActiveRestaurantOrderUseCase.invoke()
+                    .flatMap(path -> RestaurantOrderDI.getOrderModelByPathUseCase.invoke(path))
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new SingleObserver<OrderModel>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull OrderModel orderModel) {
+                            restaurantVisitor = new QueueBasicUserHomeModel(
+                                    isRestaurantVisitor,
+                                    orderModel.getRestaurantName()
+                            );
+                            _getRestaurant.postValue(true);
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+                    });
+        } else {
+            _getRestaurant.postValue(true);
+        }
+    }
+
+    public void getQueueByParticipantPath() {
+        if (!isQueueParticipant.equals(NOT_PARTICIPATE_IN_QUEUE)) {
             ProfileDI.getParticipantQueuePathUseCase.invoke()
                     .flatMap(path -> QueueDI.getQueueByParticipantPathUseCase.invoke(path))
                     .subscribeOn(Schedulers.io())
@@ -148,7 +166,7 @@ public class HomeBasisUserViewModel extends ViewModel {
                         @Override
                         public void onSuccess(@NonNull QueueModel queueModel) {
                             participantQueue = new QueueBasicUserHomeModel(
-                                    queueModel.getId(),
+                                    isQueueParticipant,
                                     queueModel.getName()
                             );
                             _state.postValue(new HomeBasicUserState.Success(new HomeBasicUserModel(companies, participantQueue, ownerQueue)));
@@ -165,7 +183,7 @@ public class HomeBasisUserViewModel extends ViewModel {
     }
 
     public void getQueueByAuthorId() {
-        if (isQueueOwner) {
+        if (!isQueueOwner.equals(NOT_QUEUE_OWNER)) {
             QueueDI.getQueueByAuthorUseCase.invoke()
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<QueueIdAndNameModel>() {

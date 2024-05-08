@@ -46,10 +46,11 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
         }
 
         void bind(CartDishItemModel models) {
+            String firstPrice = models.price;
             binding.dishName.setText(models.name);
             binding.weightCount.setText(models.weight);
             binding.itemsCount.setText(models.amount);
-            binding.price.setText(models.price);
+            binding.price.setText(String.valueOf(Integer.parseInt(models.price) * Integer.parseInt(models.amount)));
 
             if (models.task != null){
                 models.task.addOnCompleteListener(task -> {
@@ -67,13 +68,22 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
 
             binding.buttonAdd.setOnClickListener(v -> {
                 models.addListener.onClick();
-                binding.itemsCount.setText(String.valueOf(Integer.parseInt(models.amount) + 1));
+                models.amount = String.valueOf(Integer.parseInt(models.amount) + 1);
+                String newPrice = String.valueOf(Integer.parseInt(models.price) + Integer.parseInt(firstPrice));
+                models.price = newPrice;
+                models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) + Integer.parseInt(newPrice));
+                binding.price.setText(models.price);
+                binding.itemsCount.setText(models.amount);
             });
             binding.buttonRemove.setOnClickListener(v -> {
                 models.removeListener.onClick();
-                binding.itemsCount.setText(String.valueOf(Integer.parseInt(models.amount) - 1));
+                models.amount = String.valueOf(Integer.parseInt(models.amount) - 1);
+                String newPrice = String.valueOf(Integer.parseInt(models.price) - Integer.parseInt(firstPrice));
+                models.price = newPrice;
+                models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) - Integer.parseInt(newPrice));
+                binding.price.setText(models.price);
+                binding.itemsCount.setText(models.amount);
             });
-            binding.item.setOnClickListener(v -> models.itemListener.onClick());
         }
 
         private void initToRemoveRecycler(List<String> toRemove) {

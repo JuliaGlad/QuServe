@@ -3,21 +3,18 @@ package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.myapplication.databinding.FragmentOrderCartBinding;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
-import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
@@ -34,7 +31,7 @@ public class OrderCartFragment extends Fragment {
     private OrderCartViewModel viewModel;
     private FragmentOrderCartBinding binding;
     private final CartDishItemAdapter cartDishItemAdapter = new CartDishItemAdapter();
-    private String restaurantId, locationId, path;
+    private String restaurantId, path;
     private int totalPrice;
 
     @Override
@@ -43,7 +40,6 @@ public class OrderCartFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(OrderCartViewModel.class);
         restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
         path = getActivity().getIntent().getStringExtra(TABLE_PATH);
-        locationId = "s";
         viewModel.getCartItems(restaurantId);
     }
 
@@ -64,7 +60,6 @@ public class OrderCartFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof OrderCartState.Success) {
-                String value = null;
                 OrderStateModel stateModel = ((OrderCartState.Success) state).data;
                 if (stateModel != null) {
                     List<CartDishModel> models = stateModel.getModels();
@@ -74,40 +69,45 @@ public class OrderCartFragment extends Fragment {
                         CartDishModel current = models.get(i);
                         for (ImageTaskNameModel currentUri : uris) {
                             if (currentUri.getName().equals(current.getDishId())) {
-                                value = current.getPrice().substring(current.getPrice().length()-1);
-                                String price = current.getPrice().substring(0, current.getPrice().length() - 1);
+                                String price = current.getPrice();
                                 int dishPrice = Integer.parseInt(price);
                                 for (VariantCartModel cartModel : current.getToppings()) {
-                                    dishPrice += Integer.parseInt(cartModel.getPrice().substring(0, current.getPrice().length() - 1));
+                                    dishPrice += Integer.parseInt(cartModel.getPrice());
                                 }
-                                totalPrice += dishPrice;
+                                String amount = current.getAmount();
+                                String dishId = current.getDishId();
+                                totalPrice += (dishPrice * Integer.parseInt(current.getAmount()));
                                 items.add(new CartDishItemModel(
                                         i,
-                                        current.getDishId(),
+                                        dishId,
                                         current.getCategoryId(),
                                         current.getName(),
                                         current.getWeight(),
                                         String.valueOf(dishPrice),
-                                        current.getAmount(),
+                                        String.valueOf(totalPrice),
+                                        amount,
                                         currentUri.getTask(),
                                         current.getToRemove(),
                                         current.getToppings(),
                                         current.getRequiredChoices(),
                                         () -> {
-
-                                        },
-                                        () -> {
                                             viewModel.increaseAmount(current);
                                         },
                                         () -> {
-                                            viewModel.decrementAmount(current);
+                                            if (Integer.parseInt(amount) == 1){
+                                                viewModel.removeItemFromCart(dishId);
+                                                binding.totalPrice.setText(String.valueOf(totalPrice));
+                                            } else {
+                                                viewModel.decrementAmount(current);
+                                                binding.totalPrice.setText(String.valueOf(totalPrice));
+                                            }
                                         }
                                 ));
                                 break;
                             }
                         }
                     }
-                    binding.totalPrice.setText(String.valueOf(totalPrice).concat(value));
+                    binding.totalPrice.setText(String.valueOf(totalPrice));
                     cartDishItemAdapter.submitList(items);
                     initOrderButton(items);
 
@@ -136,8 +136,10 @@ public class OrderCartFragment extends Fragment {
                 models.add(new OrderDishesModel(
                         current.getDishId(),
                         current.getCategoryId(),
+                        current.getName(),
                         current.getPrice(),
                         current.getAmount(),
+                        current.getWeight(),
                         current.getTopping(),
                         current.getToRemove(),
                         current.getRequiredChoices()

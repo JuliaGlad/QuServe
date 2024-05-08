@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.domain.model.restaurant.menu.RequiredChoiceModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.editRequiredChoice.model.EditRequireChoiceModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.editRequiredChoice.state.EditRequiredChoiceState;
@@ -27,7 +27,7 @@ public class EditRequiredChoiceViewModel extends ViewModel {
     LiveData<Integer> isChoiceVariantDelete = _isChoiceVariantDelete;
 
     public void updateRequiredChoiceUseCase(String restaurantId, String categoryId, String dishId, String choiceId, String name){
-        RestaurantDI.updateRequiredChoiceNameUseCase.invoke(restaurantId, categoryId, dishId, choiceId, name)
+        RestaurantMenuDI.updateRequiredChoiceNameUseCase.invoke(restaurantId, categoryId, dishId, choiceId, name)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -48,7 +48,7 @@ public class EditRequiredChoiceViewModel extends ViewModel {
     }
 
     public void updateVariant(String restaurantId, String categoryId, String dishId, String choiceId, String previousVariant, String newVariant){
-        RestaurantDI.updateRequiredChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, previousVariant, newVariant)
+        RestaurantMenuDI.updateRequiredChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, previousVariant, newVariant)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -69,7 +69,7 @@ public class EditRequiredChoiceViewModel extends ViewModel {
     }
 
     public void deleteChoiceVariant(String restaurantId, String categoryId, String dishId, String choiceId, String variant, int index){
-        RestaurantDI.deleteRequiredChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, variant)
+        RestaurantMenuDI.deleteRequiredChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, variant)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -90,7 +90,7 @@ public class EditRequiredChoiceViewModel extends ViewModel {
     }
 
     public void getData(String restaurantId, String categoryId, String dishId, String choiceId) {
-        RestaurantDI.getSingleRequiredChoiceByIdUseCase.invoke(restaurantId, categoryId, dishId, choiceId)
+        RestaurantMenuDI.getSingleRequiredChoiceByIdUseCase.invoke(restaurantId, categoryId, dishId, choiceId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<RequiredChoiceModel>() {
                     @Override

@@ -20,8 +20,6 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentLocationsBinding;
-import com.example.myapplication.di.RestaurantDI;
-import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
 import com.example.myapplication.presentation.restaurantLocation.locations.model.LocationsModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationAdapter;
@@ -63,8 +61,7 @@ public class LocationsFragment extends Fragment {
 
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_locationsFragment_to_addLocationFragment);
+            ((LocationsActivity)requireActivity()).openAddLocationActivity();
         });
     }
 

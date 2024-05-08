@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.state.WorkerDetailsState;
@@ -24,7 +24,7 @@ public class WorkerDetailsViewModel extends ViewModel {
     LiveData<WorkerDetailsState> state = _state;
 
     public void getEmployeeData(String companyId, String employeeId) {
-        ProfileDI.getActiveQueuesByEmployeeIdUseCase.invoke(companyId, employeeId)
+        ProfileEmployeeDI.getActiveQueuesByEmployeeIdUseCase.invoke(companyId, employeeId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ActiveQueueEmployeeModel>>() {
                     @Override

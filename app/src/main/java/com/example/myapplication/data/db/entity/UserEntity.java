@@ -15,13 +15,12 @@ public class UserEntity {
     public String gender;
     public String phoneNumber;
     public String email;
-    public String birthday;    public String uri;
-    public String background;
-    public String participantQueuePath;
-    public boolean ownQueue;
-    public boolean participateInQueue;
+    public String birthday;
+    public String ownQueue;
+    public String participateInQueue;
+    public String restaurantVisitor;
 
-    public UserEntity(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
+    public UserEntity(@NonNull String userName, String gender, String phoneNumber, String email, String birthday, String ownQueue, String participateInQueue, String restaurantVisitor) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -29,8 +28,6 @@ public class UserEntity {
         this.birthday = birthday;
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
-        this.uri = uri;
-        this.participantQueuePath = participantQueuePath;
-        this.background = background;
+        this.restaurantVisitor = restaurantVisitor;
     }
 }

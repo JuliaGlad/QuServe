@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -27,8 +27,8 @@ public class AddToppingViewModel extends ViewModel {
     }
 
     public void initData(String restaurantId, String categoryId, String dishId) {
-        RestaurantDI.addToppingUseCase.invoke(restaurantId, categoryId, dishId, name, price)
-                .andThen(RestaurantDI.uploadToppingImage.invoke(name, image, restaurantId, dishId))
+        RestaurantMenuDI.addToppingUseCase.invoke(restaurantId, categoryId, dishId, name, price)
+                .andThen(RestaurantMenuDI.uploadToppingImage.invoke(name, image, restaurantId, dishId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

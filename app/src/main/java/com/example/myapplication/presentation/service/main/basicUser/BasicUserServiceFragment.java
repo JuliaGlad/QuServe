@@ -1,8 +1,14 @@
 package com.example.myapplication.presentation.service.main.basicUser;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import android.content.Context;
@@ -13,16 +19,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserServiceBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
+import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
+import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
+import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
 import com.example.myapplication.presentation.service.main.ScanCode;
+import com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -38,6 +51,7 @@ public class BasicUserServiceFragment extends Fragment {
     private BasicUserViewModel viewModel;
     private FragmentBasicUserServiceBinding binding;
     private ActivityResultLauncher<ScanOptions> restaurantLauncher;
+    private ActivityResultLauncher<Intent> employeeLauncher;
     private final List<OptionImageButtonModel> list = new ArrayList<>();
     private final OptionImageButtonAdapter adapter = new OptionImageButtonAdapter();
 
@@ -45,6 +59,46 @@ public class BasicUserServiceFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initRestaurantLauncher();
+        initEmployeeLauncher();
+    }
+
+    private void initEmployeeLauncher() {
+
+        employeeLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        String role = data.getStringExtra(EMPLOYEE_ROLE);
+                        String companyId = data.getStringExtra(COMPANY_ID);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(COMPANY_ID, companyId);
+
+                        switch (role) {
+                            case WORKER:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.nav_host_fragment_activity_main, QueueWorkerFragment.class, bundle)
+                                        .commit();
+                                break;
+                            case ADMIN:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.nav_host_fragment_activity_main, QueueAdminFragment.class, bundle)
+                                        .commit();
+                                break;
+                            case COOK:
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.nav_host_fragment_activity_main, CookEmployeeFragment.class, bundle)
+                                        .commit();
+                                break;
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -59,6 +113,8 @@ public class BasicUserServiceFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initRecycler();
     }
+
+
 
     private void initRestaurantLauncher() {
         restaurantLauncher = registerForActivityResult(new ScanContract(), result -> {
@@ -86,7 +142,8 @@ public class BasicUserServiceFragment extends Fragment {
                         NeedAccountDialogFragment dialogFragment = new NeedAccountDialogFragment();
                         dialogFragment.show(getActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
                     } else {
-                        ((MainActivity) requireActivity()).openBecomeEmployeeOptionsActivity();
+                        Intent intent = new Intent(requireActivity(), BecomeEmployeeOptionsActivity.class);
+                        employeeLauncher.launch(intent);
                     }
                 })
         });

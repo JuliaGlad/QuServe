@@ -2,19 +2,16 @@ package com.example.myapplication.di;
 
 import com.example.myapplication.data.FirebaseUserService;
 import com.example.myapplication.data.repository.CommonCompanyRepository;
-import com.example.myapplication.data.repository.CompanyQueueRepository;
-import com.example.myapplication.data.repository.CompanyQueueUserRepository;
-import com.example.myapplication.data.repository.ProfileRepository;
+import com.example.myapplication.data.repository.companyQueue.CompanyQueueRepository;
+import com.example.myapplication.data.repository.companyQueue.CompanyQueueUserRepository;
+import com.example.myapplication.data.repository.profile.ProfileRepository;
 import com.example.myapplication.data.repository.QueueRepository;
-import com.example.myapplication.data.repository.RestaurantRepository;
 
 public class DI {
     public static FirebaseUserService service = FirebaseUserService.getInstance();
     public static QueueRepository queueRepository = new QueueRepository();
-    public static ProfileRepository profileRepository = new ProfileRepository();
     public static CompanyQueueUserRepository companyQueueUserRepository = new CompanyQueueUserRepository();
     public static CompanyQueueRepository companyQueueRepository = new CompanyQueueRepository();
-    public static RestaurantRepository restaurantRepository = new RestaurantRepository();
     public static CommonCompanyRepository commonCompanyRepository = new CommonCompanyRepository();
 
 }

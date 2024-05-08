@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
-import java.util.Collections;
 import java.util.Random;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -23,7 +22,7 @@ public class AddRequiredChoiceViewModel extends ViewModel {
 
         String choiceId = generateChoiceId();
 
-        RestaurantDI.addRequiredChoicesUseCase.invoke(restaurantId, categoryId, dishId, choiceId, RequiredChoiceArguments.name, RequiredChoiceArguments.variants)
+        RestaurantMenuDI.addRequiredChoicesUseCase.invoke(restaurantId, categoryId, dishId, choiceId, RequiredChoiceArguments.name, RequiredChoiceArguments.variants)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

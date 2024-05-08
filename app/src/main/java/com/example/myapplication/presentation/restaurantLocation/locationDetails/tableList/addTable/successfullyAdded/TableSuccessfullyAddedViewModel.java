@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantTableDI;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.addTable.successfullyAdded.state.TableAddedState;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -20,7 +20,7 @@ public class TableSuccessfullyAddedViewModel extends ViewModel {
     LiveData<TableAddedState> state = _state;
 
     public void getTableQrCode(String tableId) {
-        RestaurantDI.getTableQrCodeJpgUseCase.invoke(tableId)
+        RestaurantTableDI.getTableQrCodeJpgUseCase.invoke(tableId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Uri>() {
                     @Override

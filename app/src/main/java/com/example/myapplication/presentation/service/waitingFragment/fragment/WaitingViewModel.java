@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.model.WaitingModel;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.state.WaitingState;
@@ -23,8 +22,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class WaitingViewModel extends ViewModel {
 
     private String queueId, nameString, queuePath;
-    private int midTime = 0;
-    private int peopleBeforeSize = 0;
 
     private final MutableLiveData<Boolean> _isAdded = new MutableLiveData<>(false);
     LiveData<Boolean> isAdded = _isAdded;
@@ -39,15 +36,6 @@ public class WaitingViewModel extends ViewModel {
                     return QueueDI.getQueueByParticipantPathUseCase.invoke(queuePath);
                 })
                 .flatMapObservable(queueModel -> {
-                    List<String> participantsList = queueModel.getParticipants();
-                    for (int i = 0; i < participantsList.size(); i++) {
-                        if (checkParticipantsIndex(participantsList, i)) {
-                            peopleBeforeSize = i + 1;
-                            midTime = Integer.parseInt(queueModel.getMidTime()) * peopleBeforeSize;
-                            break;
-                        }
-                    }
-
                     _state.postValue(new WaitingState.Success(new WaitingModel(
                             queueModel.getName(),
                             queueModel.getParticipants(),

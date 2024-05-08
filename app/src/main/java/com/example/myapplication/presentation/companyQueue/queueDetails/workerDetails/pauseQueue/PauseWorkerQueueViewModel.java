@@ -4,9 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;

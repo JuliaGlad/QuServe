@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.service.main.queue;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.content.Intent;
@@ -26,8 +28,8 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 public class QueueFragment extends Fragment {
 
-    private boolean isParticipateInQueue = false;
-    private boolean isOwnQueue = false;
+    private String isParticipateInQueue = NOT_PARTICIPATE_IN_QUEUE;
+    private String isOwnQueue = NOT_QUEUE_OWNER;
     private QueueViewModel viewModel;
     private FragmentQueueBinding binding;
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher;
@@ -57,8 +59,8 @@ public class QueueFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.isParticipateInQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            isParticipateInQueue = aBoolean;
+        viewModel.isParticipateInQueue.observe(getViewLifecycleOwner(), isParticipant -> {
+            isParticipateInQueue = isParticipant;
         });
 
         viewModel.isOwnQueue.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -72,7 +74,7 @@ public class QueueFragment extends Fragment {
         binding.buttonJoinQueue.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.qr_code, getContext().getTheme()));
 
         binding.buttonJoinQueue.item.setOnClickListener(v -> {
-            if (!isParticipateInQueue) {
+            if (isParticipateInQueue.equals(NOT_PARTICIPATE_IN_QUEUE)) {
                 setJoinQueueScanOptions();
             } else {
                 showAlreadyParticipateDialog();
@@ -114,7 +116,7 @@ public class QueueFragment extends Fragment {
 
         binding.buttonCreateQueue.item.setOnClickListener(v -> {
             if (viewModel.checkAuthentication()) {
-                if (!isOwnQueue) {
+                if (isOwnQueue.equals(NOT_QUEUE_OWNER)) {
                     ((QueueActivity) requireActivity()).openCreateQueueActivity();
                 } else {
                     showAlreadyOwnDialog();

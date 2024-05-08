@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +24,17 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentHomeBasisUserBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.AlreadyOwnQueueDialogFragment;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegate;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonDelegateItem;
-import com.example.myapplication.presentation.home.homeDelegates.actionButton.HomeActionButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
 
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
 
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegate;
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegateItem;
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
 import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
@@ -50,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
@@ -86,6 +84,12 @@ public class HomeBasisUserFragment extends Fragment {
     }
 
     private void setupObserves() {
+        viewModel.getRestaurant.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                viewModel.getQueueByParticipantPath();
+            }
+        });
+
         viewModel.getCompanies.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 viewModel.getQueueByAuthorId();
@@ -94,7 +98,7 @@ public class HomeBasisUserFragment extends Fragment {
 
         viewModel.getQueueById.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                viewModel.getQueueByParticipantId();
+                viewModel.getRestaurantByVisitorPath();
             }
         });
 
@@ -140,7 +144,6 @@ public class HomeBasisUserFragment extends Fragment {
         adapter.addDelegate(new HomeActionButtonDelegate());
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(delegates);
-        Log.d("Got", "submit");
         binding.progressBar.setVisibility(View.GONE);
     }
 
@@ -182,8 +185,8 @@ public class HomeBasisUserFragment extends Fragment {
     private void initUserNoActionsRecycler() {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.home_advise_box_text)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.join_queue, R.string.scan_queue_s_qr_code_and_join_it, R.drawable.qr_code, this::setJoinQueueScanOptions)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.create_queue, R.string.create_your_own_queue_so_people_can_join_it, R.drawable.ic_add_queue, () -> {
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.join_queue), getString(R.string.scan_queue_s_qr_code_and_join_it), R.drawable.qr_code, this::setJoinQueueScanOptions)),
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.create_queue), getString(R.string.create_your_own_queue_so_people_can_join_it), R.drawable.ic_add_queue, () -> {
                     ((MainActivity) requireActivity()).openCreateQueueActivity();
                 }))
         });
@@ -229,6 +232,8 @@ public class HomeBasisUserFragment extends Fragment {
         List<DelegateItem> list = Arrays.asList(items);
         adapter.addDelegate(new AdviseBoxDelegate());
         adapter.addDelegate(new ButtonWithDescriptionDelegate());
+        binding.recyclerView.setAdapter(adapter);
+        binding.progressBar.setVisibility(View.GONE);
         adapter.submitList(list);
     }
 }

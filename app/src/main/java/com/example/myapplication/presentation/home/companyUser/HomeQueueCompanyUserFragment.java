@@ -23,12 +23,12 @@ import com.example.myapplication.presentation.home.companyUser.state.HomeQueueCo
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
-import com.example.myapplication.presentation.home.homeDelegates.homeQueueActionButton.QueueActionButtonDelegate;
-import com.example.myapplication.presentation.home.homeDelegates.homeQueueActionButton.QueueActionButtonDelegateItem;
-import com.example.myapplication.presentation.home.homeDelegates.homeQueueActionButton.QueueActionButtonModel;
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegate;
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonDelegateItem;
-import com.example.myapplication.presentation.home.homeDelegates.squareButton.SquareButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,8 +89,8 @@ public class HomeQueueCompanyUserFragment extends Fragment {
     private void initEmptyActionRecycler() {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.home_advise_box_text)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.add_employees, R.string.add_new_employees_to_your_company, R.drawable.ic_add_employee, this::showEmployeeQrCodeDialog)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.create_queue, R.string.create_new_company_queue_so_people_can_join_it, R.drawable.ic_add_queue, () -> {
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_employees), getString(R.string.add_new_employees_to_your_company), R.drawable.ic_add_employee, this::showEmployeeQrCodeDialog)),
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.create_queue), getString(R.string.create_new_company_queue_so_people_can_join_it), R.drawable.ic_add_queue, () -> {
                     ((MainActivity) requireActivity()).openCreateCompanyQueueActivity(companyId);
                 }))
         });

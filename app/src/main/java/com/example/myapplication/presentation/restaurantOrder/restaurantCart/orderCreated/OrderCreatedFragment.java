@@ -20,14 +20,7 @@ import com.example.myapplication.databinding.FragmentOrderCreatedBinding;
 
 public class OrderCreatedFragment extends Fragment {
 
-    private OrderCreatedViewModel viewModel;
     private FragmentOrderCreatedBinding binding;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(OrderCreatedViewModel.class);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.ProfileDI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
@@ -31,13 +31,13 @@ public class OrderCartViewModel extends ViewModel {
     LiveData<OrderCartState> state = _state;
 
     public void getCartItems(String currentRestaurant) {
-        List<CartDishModel> models = RestaurantDI.getCartUseCase.invoke();
-        String orderRestaurantId = RestaurantDI.getOrderRestaurantIdUseCase.invoke();
+        List<CartDishModel> models = RestaurantOrderDI.getCartUseCase.invoke();
+        String orderRestaurantId = RestaurantOrderDI.getOrderRestaurantIdUseCase.invoke();
 
         List<String> ids = models.stream().map(CartDishModel::getDishId).collect(Collectors.toList());
         if (orderRestaurantId != null) {
             if (currentRestaurant.equals(orderRestaurantId)) {
-                RestaurantDI.getDishesImagesByIdsUseCase.invoke(currentRestaurant, ids)
+                RestaurantOrderDI.getDishesImagesByIdsUseCase.invoke(currentRestaurant, ids)
                         .subscribeOn(Schedulers.io())
                         .subscribe(new SingleObserver<List<ImageTaskNameModel>>() {
                             @Override
@@ -58,7 +58,7 @@ public class OrderCartViewModel extends ViewModel {
                             }
                         });
             } else {
-                RestaurantDI.deleteOrderUseCase.invoke();
+                RestaurantOrderDI.deleteOrderUseCase.invoke();
                 _state.postValue(new OrderCartState.Success(null));
             }
         } else {
@@ -68,9 +68,9 @@ public class OrderCartViewModel extends ViewModel {
 
     public void createOrder(String restaurantId, String totalPrice, String path, List<OrderDishesModel> models) {
         String orderId = generateOrderId();
-        RestaurantDI.addToActiveOrdersUseCase.invoke(restaurantId, path, orderId, totalPrice, models)
+        RestaurantOrderDI.addToActiveOrdersUseCase.invoke(restaurantId, path, orderId, totalPrice, models)
                 .flatMapCompletable(pathOrder -> ProfileDI.addActiveRestaurantOrderUseCase.invoke(pathOrder))
-                .concatWith(RestaurantDI.addToTableListOrdersUseCase.invoke(path, orderId))
+                .concatWith(RestaurantOrderDI.addToTableListOrdersUseCase.invoke(path, orderId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -96,11 +96,15 @@ public class OrderCartViewModel extends ViewModel {
         return "@" + id;
     }
 
+    public void removeItemFromCart(String dishId){
+        RestaurantOrderDI.removeFromCartUseCase.invoke(dishId);
+    }
+
     public void increaseAmount(CartDishModel model) {
-        RestaurantDI.incrementDishAmountUseCase.invoke(model);
+        RestaurantOrderDI.incrementDishAmountUseCase.invoke(model);
     }
 
     public void decrementAmount(CartDishModel model) {
-        RestaurantDI.decrementDishAmountUseCase.invoke(model);
+        RestaurantOrderDI.decrementDishAmountUseCase.invoke(model);
     }
 }

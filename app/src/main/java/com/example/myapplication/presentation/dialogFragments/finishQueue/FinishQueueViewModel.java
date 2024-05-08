@@ -2,14 +2,14 @@ package com.example.myapplication.presentation.dialogFragments.finishQueue;
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.company.CompanyQueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -27,7 +27,7 @@ public class FinishQueueViewModel extends ViewModel {
             case BASIC:
                 QueueDI.deleteQrCodeUseCase.invoke(queueId)
                         .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
-                        .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
+                        .andThen(ProfileDI.updateOwnQueueUseCase.invoke(NOT_QUEUE_OWNER))
                         .subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override

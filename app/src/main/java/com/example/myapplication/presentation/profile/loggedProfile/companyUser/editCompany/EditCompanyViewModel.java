@@ -6,12 +6,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.restaurant.RestaurantEditModel;
-import com.example.myapplication.domain.model.restaurant.RestaurantEmailNameModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.model.EditCompanyModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.state.EditCompanyState;
 
@@ -82,8 +80,8 @@ public class EditCompanyViewModel extends ViewModel {
     }
 
     public void getRestaurantData(String restaurantId){
-        RestaurantDI.getRestaurantEditModel.invoke(restaurantId)
-                .zipWith(RestaurantDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), new BiFunction<RestaurantEditModel, ImageModel, EditCompanyModel>() {
+        RestaurantUserDI.getRestaurantEditModel.invoke(restaurantId)
+                .zipWith(RestaurantUserDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), new BiFunction<RestaurantEditModel, ImageModel, EditCompanyModel>() {
                     @Override
                     public EditCompanyModel apply(RestaurantEditModel restaurantEditModel, ImageModel imageModel) throws Throwable {
                         return new EditCompanyModel(
@@ -115,8 +113,8 @@ public class EditCompanyViewModel extends ViewModel {
     }
 
     public void updateRestaurantData(String restaurantId, String name, String phone, Uri uri){
-        RestaurantDI.updateRestaurantDataUseCase.invoke(restaurantId, name, phone)
-                .concatWith(RestaurantDI.uploadRestaurantLogoUseCase.invoke(uri, restaurantId))
+        RestaurantUserDI.updateRestaurantDataUseCase.invoke(restaurantId, name, phone)
+                .concatWith(RestaurantUserDI.uploadRestaurantLogoUseCase.invoke(uri, restaurantId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

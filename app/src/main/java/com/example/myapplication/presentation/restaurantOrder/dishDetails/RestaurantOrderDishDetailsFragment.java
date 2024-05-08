@@ -89,11 +89,14 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     }
 
     private void initOrderButton(String name, String weight, String price) {
+
+
         binding.buttonOrder.setOnClickListener(v -> {
             CartDishModel model = new CartDishModel(
                     dishId, categoryId, name, weight, price,
                     String.valueOf(1), chosenToppings, Arrays.asList(chosenRequireChoices), chosenRemove
             );
+
             viewModel.addToCart(restaurantId, model);
             ((RestaurantOrderDishDetailsActivity) requireActivity()).openCartActivity(restaurantId, tablePath);
         });

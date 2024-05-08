@@ -10,8 +10,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;

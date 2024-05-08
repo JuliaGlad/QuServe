@@ -16,9 +16,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;

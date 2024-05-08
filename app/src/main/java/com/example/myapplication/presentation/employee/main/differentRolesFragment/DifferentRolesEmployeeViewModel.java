@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
 import com.example.myapplication.domain.model.company.EmployeeRoleCompanyModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.model.DifferentRoleModel;

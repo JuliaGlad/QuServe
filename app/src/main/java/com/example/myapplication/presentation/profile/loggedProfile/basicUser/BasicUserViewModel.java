@@ -7,11 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CommonCompanyDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
-import com.example.myapplication.domain.model.common.CommonCompanyModel;
+import com.example.myapplication.di.company.CommonCompanyDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserDataModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
@@ -24,7 +21,6 @@ import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 

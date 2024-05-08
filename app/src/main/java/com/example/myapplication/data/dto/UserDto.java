@@ -1,51 +1,37 @@
 package com.example.myapplication.data.dto;
 
-import android.net.Uri;
-
 public class UserDto {
     private final String userName;
     private final String gender;
     private final String phoneNumber;
     private final String email;
     private final String birthday;
-    private final String uri;
-    private final String background;
-    private final String participantQueuePath;
-    private final boolean ownQueue;
-    private final boolean participateInQueue;
+    private final String ownQueue;
+    private final String participateInQueue;
+    private final String restaurantVisitor;
 
-    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String uri, String background, String participantQueuePath, boolean ownQueue, boolean participateInQueue) {
+    public UserDto(String userName, String gender, String phoneNumber, String email, String birthday, String ownQueue, String participateInQueue, String restaurantVisitor) {
         this.userName = userName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.birthday = birthday;
-        this.uri = uri;
-        this.background = background;
-        this.participantQueuePath = participantQueuePath;
         this.ownQueue = ownQueue;
         this.participateInQueue = participateInQueue;
-    }
-
-    public String getParticipantQueuePath() {
-        return participantQueuePath;
-    }
-
-    public String getBackground() {
-        return background;
-    }
-
-    public String getUri() {
-        return uri;
+        this.restaurantVisitor = restaurantVisitor;
     }
 
     public String getBirthday(){return birthday;}
 
-    public boolean isOwnQueue() {
+    public String isOwnQueue() {
         return ownQueue;
     }
 
-    public boolean isParticipateInQueue() {
+    public String isRestaurantVisitor() {
+        return restaurantVisitor;
+    }
+
+    public String isParticipateInQueue() {
         return participateInQueue;
     }
 

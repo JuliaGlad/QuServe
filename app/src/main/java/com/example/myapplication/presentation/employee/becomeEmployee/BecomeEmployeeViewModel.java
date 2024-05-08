@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -59,7 +59,7 @@ public class BecomeEmployeeViewModel extends ViewModel {
         ProfileDI.getUserEmailAndNameDataUseCase.invoke()
                 .flatMapCompletable(userEmailAndNameModel ->
                         CompanyQueueUserDI.addEmployeeUseCase.invoke(companyId, userEmailAndNameModel.getName()))
-                .andThen(ProfileDI.addEmployeeRoleUseCase.invoke(companyId))
+                .andThen(ProfileEmployeeDI.addEmployeeRoleUseCase.invoke(companyId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

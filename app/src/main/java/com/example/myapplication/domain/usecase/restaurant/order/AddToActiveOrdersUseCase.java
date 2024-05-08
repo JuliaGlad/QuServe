@@ -1,15 +1,14 @@
 package com.example.myapplication.domain.usecase.restaurant.order;
 
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class AddToActiveOrdersUseCase {
     public Single<String> invoke(String restaurantId, String path, String orderId, String totalPrice, List<OrderDishesModel> models){
-        return DI.restaurantRepository.addToActiveOrders(restaurantId, path, orderId, totalPrice, models);
+        return RestaurantOrderDI.restaurantOrderRepository.addToActiveOrders(restaurantId, path, orderId, totalPrice, models);
     }
 }

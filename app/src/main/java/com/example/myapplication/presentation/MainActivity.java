@@ -1,10 +1,12 @@
 package com.example.myapplication.presentation;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.DRAWABLES;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -25,6 +27,9 @@ import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQ
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerActivity;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity;
+import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.CookActiveOrdersActivity;
+import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersActivity;
+import com.example.myapplication.presentation.home.stories.StoriesActivity;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
@@ -34,6 +39,8 @@ import com.example.myapplication.presentation.profile.loggedProfile.companyUser.
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationActivity;
+import com.example.myapplication.presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity;
 import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
 import com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
 import com.example.myapplication.presentation.service.main.queue.QueueActivity;
@@ -65,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
             NavigationUI.setupWithNavController(binding.navView, navController);
         }
-
     }
 
     @Override
@@ -81,6 +87,37 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openLocationDetailsActivity(String locationId){
+        Intent intent = new Intent(this, RestaurantLocationDetailsActivity.class);
+        intent.putExtra(LOCATION_ID, locationId);
+        startActivity(intent);
+    }
+
+    public void openAddLocationsActivity(){
+        Intent intent = new Intent(this, AddLocationActivity.class);
+        startActivity(intent);
+    }
+
+    public void openCookActiveOrdersActivity(String restaurantId, String locationId){
+        Intent intent = new Intent(this, CookActiveOrdersActivity.class);
+        intent.putExtra(COMPANY_ID, restaurantId);
+        intent.putExtra(LOCATION_ID, locationId);
+        startActivity(intent);
+    }
+
+    public void openAvailableOrdersActivity(String restaurantId, String locationId){
+        Intent intent = new Intent(this, AvailableCookOrdersActivity.class);
+        intent.putExtra(COMPANY_ID, restaurantId);
+        intent.putExtra(LOCATION_ID, locationId);
+        startActivity(intent);
+    }
+
+    public void openStoriesActivity(int[] drawables){
+        Intent intent = new Intent(this, StoriesActivity.class);
+        intent.putExtra(DRAWABLES, drawables);
+        startActivity(intent);
     }
 
     public void openRestaurantMenuActivity(){
@@ -121,13 +158,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(PAGE_KEY, PAGE_1);
         startActivity(intent);
     }
-
-    public void openCompanySettingsActivity(String companyId){
-        Intent intent = new Intent(this, SettingsCompanyActivity.class);
-        intent.putExtra(COMPANY_ID, companyId);
-        startActivity(intent);
-    }
-
     public void openBasicSettingsActivity(){
         Intent intent = new Intent(this, BasicSettingsActivity.class);
         startActivity(intent);

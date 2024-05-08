@@ -29,7 +29,7 @@ public class CompanyQueueDetailsActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_activity_main);
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.company_queue_details_container);
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();

@@ -2,8 +2,7 @@ package com.example.myapplication.presentation.dialogFragments.logout;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 
 public class LogoutDialogViewModel extends ViewModel {
 

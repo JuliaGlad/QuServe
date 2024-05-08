@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue.model.JoinQueueModel;
 import com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue.state.JoinQueueState;
@@ -80,7 +79,7 @@ public class JoinQueueViewModel extends ViewModel {
 
     public void addToParticipantsList(String path) {
         QueueDI.addToParticipantsListUseCase.invoke(path)
-                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke(path,true))
+                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke(path))
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

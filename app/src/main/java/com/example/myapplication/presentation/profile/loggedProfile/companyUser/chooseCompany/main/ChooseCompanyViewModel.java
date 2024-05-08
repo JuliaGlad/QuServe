@@ -4,14 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CommonCompanyDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.company.CommonCompanyDI;
 import com.example.myapplication.domain.model.common.CommonCompanyModel;
-import com.example.myapplication.domain.model.common.ImageTaskModel;
-import com.example.myapplication.domain.model.company.CompanyNameIdModel;
-import com.example.myapplication.domain.model.restaurant.RestaurantNameIdModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ChooseCompanyState;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.CompanyListModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ListItemModel;
@@ -22,7 +16,6 @@ import java.util.List;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChooseCompanyViewModel extends ViewModel {

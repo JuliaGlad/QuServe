@@ -1,9 +1,9 @@
 package com.example.myapplication.domain.usecase.profile;
 
-import com.example.myapplication.di.DI;
+import static com.example.myapplication.di.DI.service;
 
 public class CheckAuthenticationUseCase {
     public boolean invoke(){
-        return DI.profileRepository.checkAuth();
+        return service.auth.getCurrentUser() != null && !service.auth.getCurrentUser().isAnonymous();
     }
 }

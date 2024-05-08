@@ -26,11 +26,9 @@ public class UserDatabaseProvider {
                         userDto.getPhoneNumber(),
                         userDto.getEmail(),
                         userDto.getBirthday(),
-                        userDto.getUri(),
-                        userDto.getBackground(),
-                        userDto.getParticipantQueuePath(),
                         userDto.isOwnQueue(),
-                        userDto.isParticipateInQueue()
+                        userDto.isParticipateInQueue(),
+                        userDto.isRestaurantVisitor()
                 )
         );
     }
@@ -46,11 +44,9 @@ public class UserDatabaseProvider {
                     entity.phoneNumber,
                     entity.email,
                     entity.birthday,
-                    entity.uri,
-                    entity.background,
-                    entity.participantQueuePath,
                     entity.ownQueue,
-                    entity.participateInQueue
+                    entity.participateInQueue,
+                    entity.restaurantVisitor
             );
         } else {
             return null;
@@ -79,42 +75,21 @@ public class UserDatabaseProvider {
         }
     }
 
-    public static void updateUri(String uri) {
+    public static void updateOwnQueue(String isOwn){
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
-            entity.uri = uri;
-            App.getInstance().getDatabase().userDao().update(entity);
-        }
-    }
-
-    public static void updateBackground(String uri) {
-        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
-        if (entities.size() > 0) {
-            UserEntity entity = entities.get(0);
-            entity.background = uri;
-            App.getInstance().getDatabase().userDao().update(entity);
-        }
-    }
-
-    public static void updateOwnQueue(boolean isOwn){
-        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
-        if (entities.size() > 0) {
-            UserEntity entity = entities.get(0);
-
             entity.ownQueue = isOwn;
 
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }
 
-    public static void updateParticipateInQueue(String path, boolean isParticipant){
+    public static void updateParticipateInQueue(String path){
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (entities.size() > 0) {
             UserEntity entity = entities.get(0);
-            entity.participantQueuePath = path;
-            entity.participateInQueue = isParticipant;
-
+            entity.participateInQueue = path;
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }

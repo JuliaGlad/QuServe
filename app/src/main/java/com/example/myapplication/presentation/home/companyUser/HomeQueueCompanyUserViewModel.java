@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 import com.example.myapplication.domain.model.company.CompanyQueueParticipantsSizeAndNameModel;
 import com.example.myapplication.presentation.home.companyUser.models.QueueCompanyHomeModel;
 import com.example.myapplication.presentation.home.companyUser.state.HomeQueueCompanyState;

@@ -5,9 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
-import com.example.myapplication.domain.model.profile.UserBooleanDataModel;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.domain.model.profile.UserActionsDataModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.core.Observer;
@@ -17,25 +16,25 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class QueueViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> _isOwnQueue = new MutableLiveData<>(false);
-    LiveData<Boolean> isOwnQueue = _isOwnQueue;
+    private final MutableLiveData<String> _isOwnQueue = new MutableLiveData<>(null);
+    LiveData<String> isOwnQueue = _isOwnQueue;
 
-    private final MutableLiveData<Boolean> _isParticipateInQueue = new MutableLiveData<>(false);
-    LiveData<Boolean> isParticipateInQueue = _isParticipateInQueue;
+    private final MutableLiveData<String> _isParticipateInQueue = new MutableLiveData<>(null);
+    LiveData<String> isParticipateInQueue = _isParticipateInQueue;
 
     public void getUserData() {
-        ProfileDI.getUserBooleanDataUseCase.invoke()
+        ProfileDI.getUserActionsDataUseCase.invoke()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<UserBooleanDataModel>() {
+                .subscribe(new SingleObserver<UserActionsDataModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull UserBooleanDataModel userBooleanDataModel) {
-                        _isOwnQueue.postValue(userBooleanDataModel.isOwnQueue());
-                        _isParticipateInQueue.postValue(userBooleanDataModel.isParticipateInQueue());
+                    public void onSuccess(@NonNull UserActionsDataModel userActionsDataModel) {
+                        _isOwnQueue.postValue(userActionsDataModel.isOwnQueue());
+                        _isParticipateInQueue.postValue(userActionsDataModel.isParticipateInQueue());
                         addSnapshot();
                     }
 
@@ -46,7 +45,7 @@ public class QueueViewModel extends ViewModel {
                 });
     }
 
-    public boolean checkAuthentication(){
+    public boolean checkAuthentication() {
         return ProfileDI.checkAuthenticationUseCase.invoke();
     }
 
@@ -62,10 +61,8 @@ public class QueueViewModel extends ViewModel {
                     @Override
                     public void onNext(@io.reactivex.rxjava3.annotations.NonNull DocumentSnapshot snapshot) {
                         if (snapshot != null) {
-                            if (ProfileDI.checkBooleanDataUseCase.invoke(snapshot, Boolean.TRUE.equals(_isOwnQueue.getValue()), Boolean.TRUE.equals(_isParticipateInQueue.getValue()))) {
-                                _isOwnQueue.postValue(ProfileDI.getOwnQueueData.invoke(snapshot));
-                                _isParticipateInQueue.postValue(ProfileDI.getParticipateInQueueData.invoke(snapshot));
-                            }
+                            _isOwnQueue.postValue(ProfileDI.getOwnQueueData.invoke(snapshot));
+                            _isParticipateInQueue.postValue(ProfileDI.getParticipateInQueueData.invoke(snapshot));
                         }
                     }
 

@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.restaurant.menu;
 
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import io.reactivex.rxjava3.core.Completable;
 
@@ -15,7 +15,7 @@ public class AddDishUseCase {
             String price,
             String estimatedTimeCooking){
 
-        return DI.restaurantRepository.addCompanyDish(restaurantId, categoryId, dishId, name, ingredients, weightCount, price, estimatedTimeCooking);
+        return RestaurantMenuDI.restaurantMenuRepository.addCompanyDish(restaurantId, categoryId, dishId, name, ingredients, weightCount, price, estimatedTimeCooking);
 
     }
  }

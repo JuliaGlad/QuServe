@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.restaurant.RestaurantEmailNameModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.model.CompanyUserModel;
@@ -47,8 +46,8 @@ public class SettingCompanyViewModel extends ViewModel {
     }
 
     public void getRestaurant(String restaurantId) {
-        RestaurantDI.getSingleRestaurantUseCase.invoke(restaurantId)
-                .zipWith(RestaurantDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), new BiFunction<RestaurantEmailNameModel, ImageModel, CompanyUserModel>() {
+        RestaurantUserDI.getSingleRestaurantUseCase.invoke(restaurantId)
+                .zipWith(RestaurantUserDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), new BiFunction<RestaurantEmailNameModel, ImageModel, CompanyUserModel>() {
                     @Override
                     public CompanyUserModel apply(RestaurantEmailNameModel restaurantEmailNameModel, ImageModel imageModel) throws Throwable {
                         return new CompanyUserModel(

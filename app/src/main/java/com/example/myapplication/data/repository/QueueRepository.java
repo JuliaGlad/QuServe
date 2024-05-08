@@ -7,6 +7,8 @@ import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
 import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED_15;
@@ -95,11 +97,11 @@ public class QueueRepository {
 
     }
 
-    public Single<QueueDto> getQueueByParticipantPath(String path){
+    public Single<QueueDto> getQueueByParticipantPath(String path) {
         DocumentReference docRef = service.fireStore.document(path);
-       return Single.create(emitter -> {
-           docRef.get().addOnCompleteListener(task -> {
-               if (task.isSuccessful()){
+        return Single.create(emitter -> {
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     emitter.onSuccess(new QueueDto(
                             (List<Object>) document.get(QUEUE_PARTICIPANTS_LIST),
@@ -112,9 +114,9 @@ public class QueueRepository {
                             document.getString(PEOPLE_PASSED_15),
                             document.getString(MID_TIME_WAITING))
                     );
-               }
-           });
-       });
+                }
+            });
+        });
     }
 
     public Single<List<QueueDto>> getQueuesList() {
@@ -189,7 +191,7 @@ public class QueueRepository {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
             docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     emitter.onComplete();
                 }
             });
@@ -216,9 +218,22 @@ public class QueueRepository {
     public Completable finishQueue(String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Completable.create(emitter -> {
-            docRef.delete().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    emitter.onComplete();
+            docRef.get().addOnCompleteListener(taskGet -> {
+                if (taskGet.isSuccessful()) {
+                    List<String> participants = (List<String>) taskGet.getResult().get(QUEUE_PARTICIPANTS_LIST);
+                    if (participants != null) {
+                        for (String currentId : participants) {
+                            service.fireStore
+                                    .collection(USER_LIST)
+                                    .document(currentId)
+                                    .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
+                        }
+                    }
+                    docRef.delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
                 }
             });
         });

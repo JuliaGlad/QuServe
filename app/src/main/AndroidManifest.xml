@@ -26,6 +26,27 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.employee.becomeCook.BecomeCookActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".presentation.employee.main.restaurantCook.activeOrders.dishDetails.OrderDetailsWithIndicatorsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.restaurantLocation.addLocation.AddLocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.employee.main.restaurantCook.activeOrders.CookActiveOrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.common.OrderDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.home.stories.StoriesActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.restaurantOrder.restaurantCart.orderCreated.OrderCreatedActivity"
             android:exported="false" />
         <activity

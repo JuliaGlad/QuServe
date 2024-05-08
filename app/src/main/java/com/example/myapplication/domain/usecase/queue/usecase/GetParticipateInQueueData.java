@@ -5,7 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_
 import com.google.firebase.firestore.DocumentSnapshot;
 
 public class GetParticipateInQueueData {
-    public boolean invoke(DocumentSnapshot value){
-        return Boolean.TRUE.equals(value.getBoolean(PARTICIPATE_IN_QUEUE));
+    public String invoke(DocumentSnapshot value){
+        return value.getString(PARTICIPATE_IN_QUEUE);
     }
 }

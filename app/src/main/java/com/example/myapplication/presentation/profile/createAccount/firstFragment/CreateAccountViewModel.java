@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -32,7 +31,7 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
 
     public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
-        ProfileDI.createAccountUseCase.invoke(email, password, userName, String.valueOf(uri))
+        ProfileDI.createAccountUseCase.invoke(email, password, userName)
                 .concatWith(
                         ProfileDI.uploadProfileImageToFireStorageUseCase.invoke(uri)
                                 .andThen(ProfileDI.sendVerificationEmailUseCase.invoke())

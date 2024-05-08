@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.model.EmployeeModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.state.EmployeeState;

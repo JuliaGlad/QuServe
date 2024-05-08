@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.state.IngredientToRemoveDialogState;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class IngredientsToRemoveViewModel extends ViewModel {
     LiveData<Integer> isDeleted = _isDeleted;
 
     public void getIngredientsToRemove(String restaurantId, String categoryId, String dishId) {
-        RestaurantDI.getIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId)
+        RestaurantMenuDI.getIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<String>>() {
                     @Override
@@ -50,7 +50,7 @@ public class IngredientsToRemoveViewModel extends ViewModel {
     }
 
     public void addItem(String restaurantId, String categoryId, String dishId, String name){
-        RestaurantDI.addIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
+        RestaurantMenuDI.addIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -71,7 +71,7 @@ public class IngredientsToRemoveViewModel extends ViewModel {
     }
 
     public void updateIngredientToRemove(String restaurantId, String categoryId, String dishId, String previousName, String name) {
-        RestaurantDI.updateIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId, previousName, name)
+        RestaurantMenuDI.updateIngredientsToRemoveUseCase.invoke(restaurantId, categoryId, dishId, previousName, name)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -92,7 +92,7 @@ public class IngredientsToRemoveViewModel extends ViewModel {
     }
 
     public void deleteIngredient(String restaurantId, String categoryId, String dishId, String name, int index) {
-        RestaurantDI.deleteIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
+        RestaurantMenuDI.deleteIngredientToRemoveUseCase.invoke(restaurantId, categoryId, dishId, name)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

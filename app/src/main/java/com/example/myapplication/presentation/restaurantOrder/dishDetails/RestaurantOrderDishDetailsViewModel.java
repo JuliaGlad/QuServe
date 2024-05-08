@@ -6,13 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.domain.model.restaurant.menu.RequiredChoiceModel;
 import com.example.myapplication.domain.model.restaurant.menu.ToppingsModel;
-import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.DishDetailsStateModel;
-import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.RequiredChoiceDishDetailsModel;
-import com.example.myapplication.presentation.restaurantMenu.dishDetails.state.DishDetailsState;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.model.RequiredChoiceOrderDishDetailsModel;
@@ -41,7 +39,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
     List<RequiredChoiceOrderDishDetailsModel> models = new ArrayList<>();
 
     public void getDishData(String restaurantId, String categoryId, String dishId) {
-        RestaurantDI.getSingleDishByIdUseCase.invoke(restaurantId, categoryId, dishId)
+        RestaurantMenuDI.getSingleDishByIdUseCase.invoke(restaurantId, categoryId, dishId)
                 .flatMap(dishMenuOwnerModel -> {
 
                     name = dishMenuOwnerModel.getName();
@@ -51,22 +49,22 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                     timeCooking = dishMenuOwnerModel.getEstimatedTimeCooking();
                     ingredientsToRemove = dishMenuOwnerModel.getToRemove();
 
-                    return RestaurantDI.getSingleDishImageUseCase.invoke(restaurantId, dishId);
+                    return RestaurantMenuDI.getSingleDishImageUseCase.invoke(restaurantId, dishId);
                 })
                 .flatMap(imageModel -> {
                     imageUri = imageModel.getImageUri();
-                    return RestaurantDI.getRequiredChoicesUseCase.invoke(restaurantId, categoryId, dishId);
+                    return RestaurantMenuDI.getRequiredChoicesUseCase.invoke(restaurantId, categoryId, dishId);
                 }).flatMap(requiredChoiceModels -> {
                     for (RequiredChoiceModel current : requiredChoiceModels) {
                         models.add(new RequiredChoiceOrderDishDetailsModel(current.getId(), current.getName(), current.getVariantsName()));
                     }
-                    return RestaurantDI.getToppingsUseCase.invoke(restaurantId, categoryId, dishId);
+                    return RestaurantMenuDI.getToppingsUseCase.invoke(restaurantId, categoryId, dishId);
                 }).flatMap(toppingsModels -> {
                     this.toppingsModels = toppingsModels;
                     for (ToppingsModel current : toppingsModels) {
                         toppingsNames.add(current.getName());
                     }
-                    return RestaurantDI.getToppingsImagesUseCase.invoke(restaurantId, dishId, toppingsNames);
+                    return RestaurantMenuDI.getToppingsImagesUseCase.invoke(restaurantId, dishId, toppingsNames);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ImageTaskNameModel>>() {
@@ -103,6 +101,6 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
     }
 
     public void addToCart(String restaurantId, CartDishModel model) {
-        RestaurantDI.addDishToCartUseCase.invoke(restaurantId, model);
+        RestaurantOrderDI.addDishToCartUseCase.invoke(restaurantId, model);
     }
 }

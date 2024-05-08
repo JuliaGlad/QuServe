@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantLocationDI;
 import com.example.myapplication.domain.model.restaurant.location.RestaurantLocationModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.model.LocationsModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.state.LocationsState;
@@ -24,7 +23,7 @@ public class LocationsViewModel extends ViewModel {
     LiveData<LocationsState> state = _state;
 
     public void getRestaurantLocations(String restaurantId){
-        RestaurantDI.getRestaurantLocationsUseCase.invoke(restaurantId)
+       RestaurantLocationDI.getRestaurantLocationsUseCase.invoke(restaurantId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<RestaurantLocationModel>>() {
                     @Override

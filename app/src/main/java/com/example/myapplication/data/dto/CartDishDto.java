@@ -8,7 +8,7 @@ public class CartDishDto {
 
     private final String dishId;
     private final String categoryId;
-    private final String amount;
+    private String amount;
     private final String name;
     private final String weight;
     private final String price;
@@ -42,6 +42,10 @@ public class CartDishDto {
 
     public String getAmount() {
         return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
     public String getDishId() {

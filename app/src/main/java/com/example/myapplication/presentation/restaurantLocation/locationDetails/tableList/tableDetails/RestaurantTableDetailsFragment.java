@@ -123,11 +123,11 @@ public class RestaurantTableDetailsFragment extends Fragment {
     private void initRecycler(Uri uri) {
         buildList(new DelegateItem[]{
                 new ImageViewDelegateItem(new ImageViewModel(1, uri)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, R.string.download_pdf, R.string.show_the_visitors_this_qr_code_so_that_they_can_place_an_order_for_this_table,R.drawable.qr_code,
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.download_pdf), getString(R.string.show_the_visitors_this_qr_code_so_that_they_can_place_an_order_for_this_table),R.drawable.qr_code,
                         () -> {
                             viewModel.getQrCodePdf(tableId);
                         })),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(3, R.string.view_order, R.string.view_details_of_active_order_on_this_table,R.drawable.ic_list_fill,
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(3, getString(R.string.view_order), getString(R.string.view_details_of_active_order_on_this_table), R.drawable.ic_list_fill,
                         () -> {
 
                         }))

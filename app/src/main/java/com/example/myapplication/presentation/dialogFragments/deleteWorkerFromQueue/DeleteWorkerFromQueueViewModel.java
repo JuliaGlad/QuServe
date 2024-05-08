@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.company.CompanyQueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.profile.ProfileEmployeeDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -20,7 +20,7 @@ public class DeleteWorkerFromQueueViewModel extends ViewModel {
 
     public void deleteFromQueue(String companyId, String queueId, String employeeId){
         CompanyQueueDI.deleteEmployeeFromQueueUseCase.invoke(companyId, queueId, employeeId)
-                .concatWith(ProfileDI.deleteActiveQueueUseCase.invoke(companyId, queueId, employeeId))
+                .concatWith(ProfileEmployeeDI.deleteActiveQueueUseCase.invoke(companyId, queueId, employeeId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

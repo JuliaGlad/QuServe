@@ -7,8 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;
 import com.example.myapplication.domain.model.company.WorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.models.EditQueueModel;

@@ -47,7 +47,7 @@ import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderD
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
 
-public class AddRequiredChoiceFragment extends Fragment {
+public class  AddRequiredChoiceFragment extends Fragment {
 
     private AddRequiredChoiceViewModel viewModel;
     private FragmentRequiredChoiceBinding binding;

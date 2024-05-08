@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.utils.workers;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.content.Context;
@@ -9,8 +10,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -29,8 +29,8 @@ public class BasicQueueFinishWorker extends Worker {
         Data data = getInputData();
         String queueId = data.getString(QUEUE_ID);
         QueueDI.deleteQrCodeUseCase.invoke(queueId)
-//                .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
-                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
+                .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
+                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(NOT_QUEUE_OWNER))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

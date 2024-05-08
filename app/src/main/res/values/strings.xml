@@ -235,7 +235,7 @@
     <string name="restaurant">Dining in Restaurant</string>
     <string name="on_board_catering">On-Board catering</string>
     <string name="become_employee">Become employee</string>
-    <string name="scan_queue_s_qr_code_and_join_it">Scan queue`s qr-code and join it</string>
+    <string name="scan_queue_s_qr_code_and_join_it">Scan queue`s qr-code, join it and save your time</string>
     <string name="create_queue">Create Queue</string>
     <string name="create_your_own_queue_so_people_can_join_it">Create your own queue so people can join it</string>
     <string name="add_employees">Add employees</string>
@@ -261,7 +261,7 @@
     <string name="worker_details_advise_box_text">View and manage queues assigned to employee</string>
     <string name="scan_company_qr_code_and_join_their_team">Scan company`s qr-code and join their team</string>
     <string name="become_worker_description">Become company worker and serve different queues</string>
-    <string name="cooker">Cooker</string>
+    <string name="cooker">Cook</string>
     <string name="waiter">Waiter</string>
     <string name="become_cooker_description">Become restaurant cook, make dishes, easily communicate with waiters and serve people</string>
     <string name="become_waiter_description">Become restaurant waiter and serve visitor </string>
@@ -344,4 +344,24 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="thank_you_for_your_order">Thank you for your order!</string>
     <string name="your_order_is_being_prepared_we_wish_you_a_nice_day">Your order is being prepared! We wish you a nice day!</string>
+    <string name="services">Services</string>
+    <string name="features">Features</string>
+    <string name="your_orders">Your Orders</string>
+    <string name="view_your_taken_orders_and_track_their_fulfillment">View your taken orders and track their fulfillment</string>
+    <string name="available_orders">Available orders</string>
+    <string name="view_available_orders_in_your_restaurant_and_accept_them">View available orders in your restaurant and accept them</string>
+    <string name="view_details">View details</string>
+    <string name="accept">Accept</string>
+    <string name="dishes">Dishes:</string>
+    <string name="do_you_want_to_become_cook">Do you want to become cook of</string>
+    <string name="you_have_become_cook">You have become cook!</string>
+    <string name="now_you_can_view_active_orders_and_easily_monitor_the_preparation_of_dishes">Now you can view active orders and easily monitor the preparation of dishes</string>
+    <string name="number_of_dish">Number of dish:</string>
+    <string name="here_you_will_see_all_your_available_actions">Here you will see all your available actions</string>
+    <string name="add_new_workers_to_your_company_and_assign_them_queues">Add new workers to your company and assign them queues</string>
+    <string name="create_new_restaurant_location_add_tables_and_employees_and_take_orders">Create new restaurant location, add tables and employees and take orders</string>
+    <string name="open_and_edit_restaurant_menu_so_your_visitors_can_use_it">Open and edit restaurant menu so your visitors can use it</string>
+    <string name="open_menu">Open menu</string>
+    <string name="orders_count">Orders count:</string>
+    <string name="are_you_sure_you_want_to_finish_your_order">Are you sure you want to finish your order</string>
 </resources>

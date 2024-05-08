@@ -25,7 +25,7 @@
         android:fontFamily="@font/roboto_medium"
         android:text="@string/admin"
         android:textColor="#D0F6FF"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/admin_wall_paper"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -35,10 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="5dp"
+        android:fontFamily="@font/bold_roboto"
         android:text="Company Name"
         android:textColor="@color/white"
-        android:textSize="20sp"
-        android:fontFamily="@font/bold_roboto"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/subTitle"
         app:layout_constraintStart_toStartOf="parent" />
 

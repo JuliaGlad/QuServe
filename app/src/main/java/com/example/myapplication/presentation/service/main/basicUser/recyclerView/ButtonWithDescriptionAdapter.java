@@ -1,14 +1,11 @@
 package com.example.myapplication.presentation.service.main.basicUser.recyclerView;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +28,7 @@ public class ButtonWithDescriptionAdapter extends ListAdapter<ButtonWithDescript
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder)holder).bind((ButtonWithDescriptionModel) getItem(position));
+        ((ViewHolder)holder).bind(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -48,11 +45,11 @@ public class ButtonWithDescriptionAdapter extends ListAdapter<ButtonWithDescript
             binding.description.setText(model.getDescription());
             binding.icon.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), model.getDrawable(), itemView.getContext().getTheme()));
             binding.item.setOnClickListener(v -> {
-                setJoinQueueScanOptions(model.getLauncher());
+                setScanOptions(model.getLauncher());
             });
         }
 
-        private void setJoinQueueScanOptions(ActivityResultLauncher<ScanOptions> launcher) {
+        private void setScanOptions(ActivityResultLauncher<ScanOptions> launcher) {
             ScanOptions scanOptions = new ScanOptions();
             scanOptions.setPrompt("Scan Qr-Code");
             scanOptions.setBeepEnabled(true);

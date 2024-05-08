@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -16,7 +16,7 @@ public class AddNewVariantViewModel extends ViewModel {
     LiveData<String> isAdded = _isAdded;
 
     public void addVariant(String restaurantId, String categoryId, String dishId, String choiceId, String newVariant){
-        RestaurantDI.addNewRequireChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, newVariant)
+        RestaurantMenuDI.addNewRequireChoiceVariantUseCase.invoke(restaurantId, categoryId, dishId, choiceId, newVariant)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

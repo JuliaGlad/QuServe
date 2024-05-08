@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 
@@ -25,7 +24,7 @@ public class AlreadyOwnQueueViewModel extends ViewModel {
     public void finishQueue() {
         QueueDI.deleteQrCodeUseCase.invoke(queueId)
                 .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
-                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(false))
+                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(queueId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

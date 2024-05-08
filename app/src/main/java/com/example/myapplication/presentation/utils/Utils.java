@@ -1,6 +1,11 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String EMPLOYEE = "Employee";
+    public static final String DRAWABLES = "Drawables";
+    public static final String NOT_PARTICIPATE_IN_QUEUE = "Not participant";
+    public static final String NOT_RESTAURANT_VISITOR = "Not visitor";
+    public static final String NOT_QUEUE_OWNER = "Not owner";
     public static final String USER_RESTAURANT_ORDER = "RestaurantOrder";
     public static final String VARIANT_KEY = "VariantKey";
     public static final String COMPANY_QUEUE = "Queue";
@@ -21,7 +26,7 @@ public class Utils {
     public static final String HOURS_DIVIDER = "H";
     public static final String MINUTES_DIVIDER = "M";
     public static final String SECONDS_DIVIDER = "S";
-    public static final String EMPLOYEE = "Employee";
+    public static final String COMPANY_EMPLOYEE = "CompanyEmployee";
     public static final String PARTICIPANT = "Participant";
     public static final String OWNER = "Owner";
     public static final String PAUSED_HOURS = "Paused_Hours";

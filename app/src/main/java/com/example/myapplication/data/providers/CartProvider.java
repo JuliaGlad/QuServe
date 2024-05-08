@@ -6,6 +6,7 @@ import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.dao.CartDao;
 import com.example.myapplication.data.db.entity.CartEntity;
 import com.example.myapplication.data.dto.CartDishDto;
+import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +26,46 @@ public class CartProvider {
 
     public static void addToCart(String restaurantId, CartDishDto dishDto) {
         CartDao cartDao = App.getInstance().getDatabase().cartDao();
+
         CartEntity entity = getCart();
         List<CartDishDto> cartDtos = new ArrayList<>();
         if (entity != null) {
             cartDtos = entity.dtos;
         }
         if (cartDtos.size() > 0) {
-            cartDtos.add(dishDto);
+            boolean isAdd = false;
+
+            String dishId = dishDto.getDishId();
+            int toRemoveHash = dishDto.getToRemove().hashCode();
+            int requireChoiceHash = dishDto.getRequiredChoices().hashCode();
+
+            List<VariantCartModel> toppings = dishDto.getToppings();
+            List<String> toppingsNames = new ArrayList<>();
+            for (VariantCartModel currentTopping : toppings) {
+                toppingsNames.add(currentTopping.getName());
+            }
+            int toppingsHash = toppingsNames.hashCode();
+
+            for (CartDishDto dto : cartDtos) {
+                List<String> currentNames = new ArrayList<>();
+                for (VariantCartModel current : dto.getToppings()) {
+                    currentNames.add(current.getName());
+                }
+                int hashTopping = currentNames.hashCode();
+                int hashRequire = dto.getRequiredChoices().hashCode();
+                int hashRemove = dto.getToRemove().hashCode();
+
+                if (dto.getDishId().equals(dishId) && requireChoiceHash == hashRequire && toRemoveHash == hashRemove && toppingsHash == hashTopping) {
+                    int amount = Integer.parseInt(dto.getAmount()) + 1;
+                    dto.setAmount(String.valueOf(amount));
+                    isAdd = true;
+                    break;
+                }
+            }
+            if (!isAdd) {
+                cartDtos.add(dishDto);
+
+            }
             cartDao.update(entity);
         } else {
             List<CartDishDto> dtos = new ArrayList<>();
@@ -41,48 +75,59 @@ public class CartProvider {
     }
 
     public static void incrementDishAmount(CartDishDto dishDto) {
-        CartEntity entity = getCart();
-        List<CartDishDto> dtos = entity.dtos;
-        for (int i = 0; i < dtos.size(); i++) {
-            CartDishDto current = dtos.get(i);
-            if (current.equals(dishDto)) {
-                int newAmount = Integer.parseInt(current.getAmount()) + 1;
-                dtos.set(i, new CartDishDto(
-                        current.getDishId(),
-                        current.getCategoryId(),
-                        String.valueOf(newAmount),
-                        current.getName(),
-                        current.getWeight(),
-                        current.getPrice(),
-                        current.getToppings(),
-                        current.getRequiredChoices(),
-                        current.getToRemove()
-                ));
-                App.getInstance().getDatabase().cartDao().update(entity);
+        CartDao cartDao = App.getInstance().getDatabase().cartDao();
+        CartEntity entity = cartDao.getCart();
+        List<CartDishDto> cartDtos = entity.dtos;
+
+        int toRemoveHash = dishDto.getToRemove().hashCode();
+        int requireChoiceHash = dishDto.getRequiredChoices().hashCode();
+        String dishId = dishDto.getDishId();
+
+        List<VariantCartModel> toppings = dishDto.getToppings();
+        List<String> toppingsNames = new ArrayList<>();
+        for (VariantCartModel currentTopping : toppings) {
+            toppingsNames.add(currentTopping.getName());
+        }
+        int toppingsHash = toppingsNames.hashCode();
+
+        for (CartDishDto dto : cartDtos) {
+            List<String> currentNames = new ArrayList<>();
+            for (VariantCartModel current : dto.getToppings()) {
+                currentNames.add(current.getName());
+            }
+            int hashTopping = currentNames.hashCode();
+            int hashRequire = dto.getRequiredChoices().hashCode();
+            int hashRemove = dto.getToRemove().hashCode();
+
+            if (dto.getDishId().equals(dishId) && requireChoiceHash == hashRequire && toRemoveHash == hashRemove && toppingsHash == hashTopping) {
+                int amount = Integer.parseInt(dto.getAmount()) + 1;
+                dto.setAmount(String.valueOf(amount));
+                cartDao.update(entity);
                 break;
             }
         }
+
     }
 
     public static void decrementDishAmount(CartDishDto dishDto) {
-        CartEntity entity = getCart();
-        List<CartDishDto> dtos = entity.dtos;
-        for (int i = 0; i < dtos.size(); i++) {
-            CartDishDto current = dtos.get(i);
-            if (current.equals(dishDto)) {
-                int newAmount = Integer.parseInt(current.getAmount()) - 1;
-                dtos.set(i, new CartDishDto(
-                        current.getDishId(),
-                        current.getCategoryId(),
-                        String.valueOf(newAmount),
-                        current.getName(),
-                        current.getWeight(),
-                        current.getPrice(),
-                        current.getToppings(),
-                        current.getRequiredChoices(),
-                        current.getToRemove()
-                ));
-                App.getInstance().getDatabase().cartDao().update(entity);
+        CartDao cartDao = App.getInstance().getDatabase().cartDao();
+        CartEntity entity = cartDao.getCart();
+        List<CartDishDto> cartDtos = entity.dtos;
+
+        int toppingsHash = dishDto.getToppings().hashCode();
+        int toRemoveHash = dishDto.getToRemove().hashCode();
+        int requireChoiceHash = dishDto.getRequiredChoices().hashCode();
+        String dishId = dishDto.getDishId();
+
+        for (CartDishDto dto : cartDtos) {
+            if (dto.getDishId().equals(dishId) && requireChoiceHash == dto.getRequiredChoices().hashCode()
+                    && toRemoveHash == dto.getToRemove().hashCode() && toppingsHash == dto.getToppings().hashCode()) {
+                int amount = Integer.parseInt(dto.getAmount()) - 1;
+                dto.setAmount(String.valueOf(amount));
+                if (amount == 0){
+                    cartDtos.remove(dto);
+                }
+                cartDao.update(entity);
                 break;
             }
         }

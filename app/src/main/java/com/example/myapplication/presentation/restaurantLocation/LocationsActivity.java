@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityLocationsBinding;
+import com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationActivity;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity;
 
 public class LocationsActivity extends AppCompatActivity {
@@ -39,6 +40,11 @@ public class LocationsActivity extends AppCompatActivity {
     public void openLocationDetailsActivity(String locationId){
         Intent intent = new Intent(this, RestaurantLocationDetailsActivity.class);
         intent.putExtra(LOCATION_ID, locationId);
+        startActivity(intent);
+    }
+
+    public void openAddLocationActivity(){
+        Intent intent = new Intent(this, AddLocationActivity.class);
         startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.utils.youtTurnNotification;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
@@ -15,9 +16,8 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
 
@@ -45,7 +45,7 @@ public class YourTurnForegroundService extends Service {
     private void addDocumentSnapshot(String path) {
         QueueDI.onParticipantServedUseCase.invoke(path)
                 .concatWith(QueueDI.removeParticipantById.invoke(path))
-                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke("", false))
+                .andThen(ProfileDI.updateParticipateInQueueUseCase.invoke(NOT_PARTICIPATE_IN_QUEUE))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

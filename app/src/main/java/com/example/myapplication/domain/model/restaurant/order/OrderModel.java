@@ -3,19 +3,37 @@ package com.example.myapplication.domain.model.restaurant.order;
 import java.util.List;
 
 public class OrderModel {
+    private final String path;
+    private final String restaurantName;
+    private final String tableNumber;
     private final String orderId;
     private final String totalPrice;
-    private final boolean isOrdered;
-    private final List<ActiveOrderDishModel> dtos;
+    private final String isOrdered;
+    private final List<ActiveOrderDishModel> models;
 
-    public OrderModel(String orderId, String totalPrice, boolean isOrdered, List<ActiveOrderDishModel> dtos) {
-        this.dtos = dtos;
+    public OrderModel(String path, String orderId, String restaurantName, String tableNumber, String totalPrice, String isOrdered, List<ActiveOrderDishModel> models) {
+        this.models = models;
+        this.path = path;
+        this.tableNumber = tableNumber;
+        this.restaurantName = restaurantName;
         this.isOrdered = isOrdered;
         this.orderId = orderId;
         this.totalPrice = totalPrice;
     }
 
-    public boolean isOrdered() {
+    public String getPath() {
+        return path;
+    }
+
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public String isOrdered() {
         return isOrdered;
     }
 
@@ -28,6 +46,6 @@ public class OrderModel {
     }
 
     public List<ActiveOrderDishModel> getDtos() {
-        return dtos;
+        return models;
     }
 }

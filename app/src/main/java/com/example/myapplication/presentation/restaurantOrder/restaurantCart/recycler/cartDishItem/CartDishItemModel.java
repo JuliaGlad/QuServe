@@ -2,7 +2,6 @@ package com.example.myapplication.presentation.restaurantOrder.restaurantCart.re
 
 import android.net.Uri;
 
-import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.google.android.gms.tasks.Task;
 
@@ -18,15 +17,15 @@ public class CartDishItemModel {
     String weight;
     String amount;
     String price;
+    String totalPrice;
     Task<Uri> task;
     List<String> toRemove;
     List<VariantCartModel> topping;
     List<String> requiredChoices;
-    ButtonItemListener itemListener;
     ButtonItemListener addListener;
     ButtonItemListener removeListener;
 
-    public CartDishItemModel(int id, String dishId, String categoryId ,String name, String weight, String price, String amount, Task<Uri> task, List<String> toRemove, List<VariantCartModel> topping, List<String> requiredChoices, ButtonItemListener itemListener, ButtonItemListener addListener, ButtonItemListener removeListener) {
+    public CartDishItemModel(int id, String dishId, String categoryId , String name, String weight, String price, String totalPrice, String amount, Task<Uri> task, List<String> toRemove, List<VariantCartModel> topping, List<String> requiredChoices, ButtonItemListener addListener, ButtonItemListener removeListener) {
         this.id = id;
         this.dishId = dishId;
         this.categoryId = categoryId;
@@ -34,11 +33,11 @@ public class CartDishItemModel {
         this.price = price;
         this.weight = weight;
         this.amount = amount;
+        this.totalPrice = totalPrice;
         this.task = task;
         this.toRemove = toRemove;
         this.topping = topping;
         this.requiredChoices = requiredChoices;
-        this.itemListener = itemListener;
         this.addListener = addListener;
         this.removeListener = removeListener;
     }

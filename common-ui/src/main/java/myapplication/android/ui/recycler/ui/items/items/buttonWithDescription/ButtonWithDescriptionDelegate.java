@@ -11,7 +11,7 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 public class ButtonWithDescriptionDelegate implements AdapterDelegate {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
-        return new ViewHolder(RecyclerViewButtonWithDescriptionLayoutBinding.inflate(LayoutInflater.from(parent.getContext())));
+        return new ViewHolder(RecyclerViewButtonWithDescriptionLayoutBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override

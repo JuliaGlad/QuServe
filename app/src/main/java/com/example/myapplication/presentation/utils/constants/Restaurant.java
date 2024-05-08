@@ -1,6 +1,13 @@
 package com.example.myapplication.presentation.utils.constants;
 
 public class Restaurant {
+    public static final String DISHES_COUNT = "DishesCount";
+    public static final String READY_DISHES = "ReadyDishes";
+    public static final String NO_TAKEN_ORDERS = "No taken orders";
+    public static final String NOT_TAKEN = "Not taken";
+    public static final String COOK = "Cook";
+    public static final String RESTAURANT_EMPLOYEE = "RestaurantEmployee";
+    public static final String IS_RESTAURANT_VISITOR = "RestaurantVisitor";
     public static final String PATH = "Path";
     public static final String NO_ORDER = "NoOrder";
     public static final String TABLE_PATH = "TablePath";
@@ -15,6 +22,7 @@ public class Restaurant {
     public static final String TOPPING_IMAGE = "ToppingImage";
     public static final String CHOICE_ID = "ChoiceId";
     public static final String DISH_ID = "DishId";
+    public static final String IS_DONE = "IsDone";
     public static final String TOPPING_PRICE = "ToppingPrice";
     public static final String CATEGORY_ID = "CategoryId";
     public static final String CHOICE_NAME = "Name";

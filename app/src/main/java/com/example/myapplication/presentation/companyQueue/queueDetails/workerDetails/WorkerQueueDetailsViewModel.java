@@ -6,8 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.example.myapplication.domain.model.company.CompanyQueueNameModel;

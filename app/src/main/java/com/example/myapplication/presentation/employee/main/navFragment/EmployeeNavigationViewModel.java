@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.profile.UserEmployeeModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 
@@ -24,11 +24,16 @@ public class EmployeeNavigationViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isEmployee = new MutableLiveData<>(null);
     LiveData<Boolean> isEmployee = _isEmployee;
 
-    private final MutableLiveData<List<EmployeeRoleModel>> _roles = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> _getCompanyEmployeeRoles = new MutableLiveData<>(false);
+    LiveData<Boolean> getCompanyEmployeeRoles = _getCompanyEmployeeRoles;
+
+    private final MutableLiveData<List<EmployeeRoleModel>> _roles = new MutableLiveData<>(null);
     LiveData<List<EmployeeRoleModel>> roles = _roles;
 
-    public void isEmployee(){
-        ProfileDI.isEmployeeUseCase.isEmployee()
+    private List<EmployeeRoleModel> models = new ArrayList<>();
+
+    public void isEmployee() {
+        ProfileEmployeeDI.isEmployeeUseCase.isEmployee()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Boolean>() {
                     @Override
@@ -48,8 +53,8 @@ public class EmployeeNavigationViewModel extends ViewModel {
                 });
     }
 
-    public void getRoles(){
-        ProfileDI.getEmployeeRolesUseCase.invoke()
+    public void getRestaurantRoles() {
+        ProfileEmployeeDI.getRestaurantEmployeeRolesUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<UserEmployeeModel>>() {
                     @Override
@@ -59,16 +64,21 @@ public class EmployeeNavigationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<UserEmployeeModel> userEmployeeModels) {
-                        List<EmployeeRoleModel> models = new ArrayList<>();
-                        for (int i = 0; i < userEmployeeModels.size(); i++) {
-                            UserEmployeeModel current = userEmployeeModels.get(i);
-                            models.add(new EmployeeRoleModel(
-                                    current.getRole(),
-                                    current.getCompanyId()
-                            ));
+                        if (userEmployeeModels.size() > 0) {
+                            for (UserEmployeeModel user : userEmployeeModels) {
+                                models.add(new EmployeeRoleModel(
+                                        user.getRole(),
+                                        user.getCompanyId(),
+                                        user.getLocationId()
+                                ));
+                            }
+                            Log.d("Roles restaurant if more", "got");
+                            _roles.postValue(models);
+                        } else {
+                            Log.d("Roles restaurant if less", "got");
+                            _roles.postValue(models);
                         }
-                        Log.d("Roles size", String.valueOf(models.size()));
-                        _roles.postValue(models);
+
                     }
 
                     @Override
@@ -78,4 +88,45 @@ public class EmployeeNavigationViewModel extends ViewModel {
                 });
     }
 
+    public void getCompanyRoles() {
+        ProfileEmployeeDI.getEmployeeRolesUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<List<UserEmployeeModel>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull List<UserEmployeeModel> userEmployeeModels) {
+                        if (userEmployeeModels.size() > 0) {
+                            for (int i = 0; i < userEmployeeModels.size(); i++) {
+                                UserEmployeeModel current = userEmployeeModels.get(i);
+                                models.add(new EmployeeRoleModel(
+                                        current.getRole(),
+                                        current.getCompanyId(),
+                                        null
+                                ));
+                            }
+                            Log.d("Roles company if more", "got");
+                            _getCompanyEmployeeRoles.postValue(true);
+                        } else {
+                            Log.d("Roles company if less", "got");
+                            _getCompanyEmployeeRoles.postValue(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public void setArgumentsNull() {
+        _isEmployee.postValue(null);
+        _roles.postValue(null);
+        _getCompanyEmployeeRoles.postValue(false);
+        models.clear();
+    }
 }

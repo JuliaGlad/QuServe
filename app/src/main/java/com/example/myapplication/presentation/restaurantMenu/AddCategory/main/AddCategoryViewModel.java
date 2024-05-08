@@ -2,18 +2,14 @@ package com.example.myapplication.presentation.restaurantMenu.AddCategory.main;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
@@ -36,7 +32,6 @@ public class AddCategoryViewModel extends ViewModel {
             image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
             byte[] bytes = baos.toByteArray();
-            initDataWithBytes(bytes, restaurantId, categoryId);
 
         } else if (ArgumentsCategory.chosenImage instanceof Uri) {
             initDataWithUri((Uri) ArgumentsCategory.chosenImage, restaurantId, categoryId);
@@ -45,8 +40,8 @@ public class AddCategoryViewModel extends ViewModel {
     }
 
     private void initDataWithUri(Uri uri, String restaurantId, String categoryId) {
-        RestaurantDI.addMenuCategoryUseCase.invoke(restaurantId, categoryId, ArgumentsCategory.name)
-                    .concatWith(RestaurantDI.uploadCategoryUriImageUseCase.invoke(uri, restaurantId, ArgumentsCategory.name))
+        RestaurantMenuDI.addMenuCategoryUseCase.invoke(restaurantId, categoryId, ArgumentsCategory.name)
+                    .concatWith(RestaurantMenuDI.uploadCategoryUriImageUseCase.invoke(uri, restaurantId, ArgumentsCategory.name))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -66,27 +61,6 @@ public class AddCategoryViewModel extends ViewModel {
                 });
     }
 
-    private void initDataWithBytes(byte[] bytes, String restaurantId, String categoryId) {
-        RestaurantDI.addMenuCategoryUseCase.invoke(restaurantId, categoryId, ArgumentsCategory.name)
-                .concatWith(RestaurantDI.uploadCategoryBytesImageUseCase.invoke(bytes, restaurantId, ArgumentsCategory.name))
-                .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        _onComplete.postValue(true);
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-    }
 
     private String generateId() {
         Random rand = new Random();

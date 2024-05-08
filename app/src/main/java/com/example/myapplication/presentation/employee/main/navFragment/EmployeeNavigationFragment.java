@@ -7,27 +7,24 @@ import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_PATH;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEmployeeNavigationBinding;
@@ -36,6 +33,7 @@ import com.example.myapplication.presentation.employee.main.differentRolesFragme
 import com.example.myapplication.presentation.employee.main.notEmployeeYetFragment.NotEmployeeYetFragment;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
+import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment;
 import com.google.gson.Gson;
 
@@ -66,7 +64,7 @@ public class EmployeeNavigationFragment extends Fragment {
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
 
-        switch (state){
+        switch (state) {
             case ANONYMOUS:
                 fragmentManager
                         .beginTransaction()
@@ -85,47 +83,70 @@ public class EmployeeNavigationFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+        viewModel.setArgumentsNull();
+    }
+
     private void setupObserves() {
         viewModel.isEmployee.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null && !aBoolean){
+            if (aBoolean != null && !aBoolean) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.employee_nav_container, NotEmployeeYetFragment.class, null)
                         .commit();
-            } else {
-                viewModel.getRoles();
+            } else if (aBoolean != null){
+                viewModel.getCompanyRoles();
+            }
+        });
+
+        viewModel.getCompanyEmployeeRoles.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean) {
+                viewModel.getRestaurantRoles();
             }
         });
 
         viewModel.roles.observe(getViewLifecycleOwner(), roles -> {
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            if (roles.size() > 1){
-                Bundle bundle = new Bundle();
-                bundle.putString(EMPLOYEE_ROLE, new Gson().toJson(roles));
-                fragmentManager
-                        .beginTransaction()
-                        .replace(R.id.employee_nav_container, DifferentRolesEmployeeFragment.class, bundle)
-                        .commit();
-            } else if (roles.size() == 1){
-                EmployeeRoleModel employeeRoleModel = roles.get(0);
+            if (roles != null) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                if (roles.size() > 1) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(EMPLOYEE_ROLE, new Gson().toJson(roles));
+                    fragmentManager
+                            .beginTransaction()
+                            .replace(R.id.employee_nav_container, DifferentRolesEmployeeFragment.class, bundle)
+                            .commit();
+                } else if (roles.size() == 1) {
+                    EmployeeRoleModel employeeRoleModel = roles.get(0);
 
-                Bundle bundle = new Bundle();
-                bundle.putString(COMPANY_ID, employeeRoleModel.getCompanyId());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(COMPANY_ID, employeeRoleModel.getCompanyId());
 
-                switch (employeeRoleModel.getRole()){
-                    case WORKER:
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.employee_nav_container, QueueWorkerFragment.class, bundle)
-                                .commit();
-                        break;
-                    case ADMIN:
-                        fragmentManager
-                                .beginTransaction()
-                                .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
-                                .commit();
-                        break;
+                    String role = employeeRoleModel.getRole();
+                    Log.d("Role", role);
+                    switch (role) {
+                        case WORKER:
+                            fragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.employee_nav_container, QueueWorkerFragment.class, bundle)
+                                    .commit();
+                            break;
+                        case ADMIN:
+                            fragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
+                                    .commit();
+                            break;
+                        case COOK:
+                            bundle.putString(LOCATION_ID, employeeRoleModel.getLocationId());
+                            fragmentManager
+                                    .beginTransaction()
+                                    .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
+                                    .commit();
+                    }
                 }
             }
         });

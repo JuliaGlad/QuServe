@@ -17,8 +17,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.DI;
+import com.example.myapplication.di.company.CompanyQueueDI;
 import com.example.myapplication.di.QueueDI;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;

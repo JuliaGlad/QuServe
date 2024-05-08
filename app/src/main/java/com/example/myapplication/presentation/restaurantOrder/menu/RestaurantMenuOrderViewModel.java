@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.domain.model.restaurant.menu.CategoryModel;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
@@ -34,7 +34,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
 
     public void getMenuCategories(String restaurantId) {
         List<CategoryModel> models = new ArrayList<>();
-        RestaurantDI.getCategoriesUseCase.invoke(restaurantId)
+        RestaurantMenuDI.getCategoriesUseCase.invoke(restaurantId)
                 .flatMap(categoryModels -> {
                     List<String> categoryNames = new ArrayList<>();
                     if (categoryModels.size() > 0) {
@@ -43,7 +43,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
                             categoryNames.add(current.getName());
                         }
                     }
-                    return RestaurantDI.getCategoriesImagesUseCase.invoke(restaurantId, categoryNames);
+                    return RestaurantMenuDI.getCategoriesImagesUseCase.invoke(restaurantId, categoryNames);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ImageTaskNameModel>>() {
@@ -79,10 +79,10 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
 
     public void getCategoryDishes(String restaurantId, String categoryId, boolean isDefault) {
         List<DishMenuOwnerModel> dishes = new ArrayList<>();
-        RestaurantDI.getDishesMenuOwnerModelsUseCase.invoke(restaurantId, categoryId)
+        RestaurantMenuDI.getDishesMenuOwnerModelsUseCase.invoke(restaurantId, categoryId)
                 .flatMap(dishMenuOwnerModels -> {
                     dishes.addAll(dishMenuOwnerModels);
-                    return RestaurantDI.getDishesImagesUseCase.invoke(restaurantId, dishes);
+                    return RestaurantMenuDI.getDishesImagesUseCase.invoke(restaurantId, dishes);
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<ImageTaskNameModel>>() {

@@ -55,7 +55,6 @@ public class ProfileLoggedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = FragmentProfileLoggedBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -86,7 +85,6 @@ public class ProfileLoggedFragment extends Fragment {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         if (type != null) {
             switch (type) {
-
                 case BASIC:
                     setBasicLayout(fragmentManager);
                     break;

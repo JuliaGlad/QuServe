@@ -1,23 +1,20 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.main;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWorkerManagerBinding;
@@ -25,7 +22,6 @@ import com.example.myapplication.presentation.employee.main.queueAdminFragment.w
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.model.CompanyEmployeeModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.recycler.WorkerManagerAdapter;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.recycler.WorkerManagerModel;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +96,7 @@ public class WorkerManagerFragment extends Fragment {
                             () -> {
                                 Bundle bundle = new Bundle();
                                 bundle.putString(EMPLOYEE_NAME, name);
-                                bundle.putString(EMPLOYEE, id);
+                                bundle.putString(COMPANY_EMPLOYEE, id);
                                 bundle.putString(COMPANY_ID, companyId);
                                 NavHostFragment.findNavController(this)
                                         .navigate(R.id.action_workerManagerFragment_to_workerDetailsFragment, bundle);

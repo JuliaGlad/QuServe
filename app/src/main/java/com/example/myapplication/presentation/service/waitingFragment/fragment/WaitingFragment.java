@@ -39,7 +39,7 @@ import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTex
 public class WaitingFragment extends Fragment {
 
     private WaitingViewModel viewModel;
-    private FragmentWaitingBinding binding;;
+    private FragmentWaitingBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override

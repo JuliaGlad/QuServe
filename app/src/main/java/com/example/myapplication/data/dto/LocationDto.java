@@ -6,13 +6,19 @@ public class LocationDto {
     private final String city;
     private final String cooksCount;
     private final String waitersCount;
+    private final String ordersCount;
 
-    public LocationDto(String locationId, String location, String city, String cooksCount, String waitersCount) {
+    public LocationDto(String locationId, String location, String city, String cooksCount, String waitersCount, String ordersCount) {
         this.locationId = locationId;
         this.location = location;
         this.city = city;
+        this.ordersCount = ordersCount;
         this.cooksCount = cooksCount;
         this.waitersCount = waitersCount;
+    }
+
+    public String getOrdersCount() {
+        return ordersCount;
     }
 
     public String getLocationId() {

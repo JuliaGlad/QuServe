@@ -90,10 +90,8 @@ public class CommonCompanyRepository {
 
                         @Override
                         public void onSuccess(@NonNull List<CommonCompanyDto> companyDtos) {
-                            Log.d("DTO SIZE", "" + companyDtos.size() );
                             for (CommonCompanyDto current : companyDtos) {
                                 String companyService = current.getService();
-                                Log.d("CompanyService", companyService);
                                 switch (companyService) {
                                     case COMPANY_QUEUE:
                                         StorageReference referenceQueue = service.storageReference
@@ -112,7 +110,6 @@ public class CommonCompanyRepository {
                                 }
 
                             }
-                            Log.d("Size", listTask.size() + "");
                             emitter.onSuccess(listTask);
                         }
 

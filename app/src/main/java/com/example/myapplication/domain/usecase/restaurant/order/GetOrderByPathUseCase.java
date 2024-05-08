@@ -1,22 +1,29 @@
 package com.example.myapplication.domain.usecase.restaurant.order;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.domain.model.restaurant.order.ActiveOrderDishModel;
-import com.example.myapplication.domain.model.restaurant.order.OrderModel;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.domain.model.restaurant.order.OrderDetailsDishUseCaseModel;
+import com.example.myapplication.domain.model.restaurant.order.OrderDetailsModel;
 
 import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.core.Single;
 
 public class GetOrderByPathUseCase {
-    public Single<OrderModel> invoke(String path) {
-        return DI.restaurantRepository.getOrderByPath(path).map(orderDto ->
-                new OrderModel(
+    public Single<OrderDetailsModel> invoke(String path) {
+        return RestaurantOrderDI.restaurantOrderRepository.getOrderByPath(path).map(orderDto ->
+                new OrderDetailsModel(
                         orderDto.getOrderId(),
+                        orderDto.getRestaurantId(),
+                        orderDto.getRestaurantName(),
+                        orderDto.getTableNumber(),
                         orderDto.getTotalPrice(),
-                        orderDto.isOrdered(),
-                        orderDto.getDtos().stream().map(dto -> new ActiveOrderDishModel(
-                                dto.getDishPath(),
+                        orderDto.getDtos().stream().map(dto -> new OrderDetailsDishUseCaseModel(
+                                dto.getDishId(),
+                                dto.getDocuDishId(),
+                                dto.getAmount(),
+                                dto.getName(),
+                                dto.getWeight(),
+                                dto.getPrice(),
                                 dto.getToppings(),
                                 dto.getRequiredChoices(),
                                 dto.getToRemove()

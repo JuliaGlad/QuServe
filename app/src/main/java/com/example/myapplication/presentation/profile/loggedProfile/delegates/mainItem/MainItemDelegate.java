@@ -4,7 +4,6 @@ import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMAIL;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
@@ -18,11 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
 import com.example.myapplication.databinding.RecyclerViewUserProfileMainItemBinding;
-import com.example.myapplication.di.ProfileDI;
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.common.ImageModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -85,7 +83,7 @@ public class MainItemDelegate implements AdapterDelegate {
         }
 
         private void addRestaurantSnapshot(MainItemModel model) {
-            RestaurantDI.addRestaurantSnapshotUseCase.invoke(model.companyId)
+            RestaurantUserDI.addRestaurantSnapshotUseCase.invoke(model.companyId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<DocumentSnapshot>() {
                         @Override
@@ -102,7 +100,7 @@ public class MainItemDelegate implements AdapterDelegate {
                                 binding.yourEmail.setText(snapshot.getString(RESTAURANT_EMAIL));
                             }
 
-                            RestaurantDI.getSingleRestaurantLogoUseCase.invoke(model.companyId)
+                            RestaurantUserDI.getSingleRestaurantLogoUseCase.invoke(model.companyId)
                                     .subscribeOn(Schedulers.io())
                                     .subscribe(new SingleObserver<ImageModel>() {
                                         @Override

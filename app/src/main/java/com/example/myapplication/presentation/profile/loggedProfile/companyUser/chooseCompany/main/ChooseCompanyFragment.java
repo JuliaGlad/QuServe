@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,6 @@ public class ChooseCompanyFragment extends Fragment {
 
     private ChooseCompanyViewModel viewModel;
     private FragmentChooseCompanyBinding binding;
-    private String state;
     List<CompanyListModel> models = new ArrayList<>();
     List<Task<Uri>> imageList = new ArrayList<>();
     List<DelegateItem> delegates = new ArrayList<>();
@@ -122,7 +122,7 @@ public class ChooseCompanyFragment extends Fragment {
 
     private void initNavigation() {
         Intent intent = new Intent();
-        getActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
         requireActivity().finish();
     }
 

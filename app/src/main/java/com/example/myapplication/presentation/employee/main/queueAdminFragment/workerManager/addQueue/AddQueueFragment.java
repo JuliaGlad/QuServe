@@ -1,35 +1,29 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
-
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddQueueBinding;
-import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.recycler.AddQueueItemAdapter;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.recycler.AddQueueItemModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.state.AddQueueState;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +47,7 @@ public class AddQueueFragment extends Fragment {
 
             companyId = getArguments().getString(COMPANY_ID);
             employeeName = getArguments().getString(EMPLOYEE_NAME);
-            employeeId = getArguments().getString(EMPLOYEE);
+            employeeId = getArguments().getString(COMPANY_EMPLOYEE);
 
             viewModel.getCompanyQueues(companyId, ids);
         }
@@ -105,7 +99,7 @@ public class AddQueueFragment extends Fragment {
 
                 Bundle bundle = new Bundle();
                 bundle.putString(EMPLOYEE_NAME, employeeName);
-                bundle.putString(EMPLOYEE, employeeId);
+                bundle.putString(COMPANY_EMPLOYEE, employeeId);
                 bundle.putString(COMPANY_ID, companyId);
 
                 NavHostFragment.findNavController(this)

@@ -5,23 +5,17 @@ import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import java.util.List;
 
 public class ActiveOrderDishModel {
-    private final String dishPath;
-    private final List<VariantCartModel> toppings;
+    private final List<String> toppings;
     private final List<String> requiredChoices;
     private final List<String> toRemove;
 
-    public ActiveOrderDishModel(String dishPath, List<VariantCartModel> toppings, List<String> requiredChoices, List<String> toRemove) {
-        this.dishPath = dishPath;
+    public ActiveOrderDishModel(List<String> toppings, List<String> requiredChoices, List<String> toRemove) {
         this.toppings = toppings;
         this.requiredChoices = requiredChoices;
         this.toRemove = toRemove;
     }
 
-    public String getDishPath() {
-        return dishPath;
-    }
-
-    public List<VariantCartModel> getToppings() {
+    public List<String> getToppings() {
         return toppings;
     }
 

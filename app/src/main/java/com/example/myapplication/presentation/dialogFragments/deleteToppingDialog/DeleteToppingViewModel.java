@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.RestaurantDI;
+import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -17,8 +17,8 @@ public class DeleteToppingViewModel extends ViewModel {
     LiveData<Boolean> isDeleted = _isDeleted;
 
     public void deleteTopping(String restaurantId, String categoryId, String dishId, String name) {
-        RestaurantDI.deleteToppingUseCase.invoke(restaurantId, categoryId, dishId, name)
-                .concatWith(RestaurantDI.deleteToppingImageUseCase.invoke(restaurantId, dishId, name))
+        RestaurantMenuDI.deleteToppingUseCase.invoke(restaurantId, categoryId, dishId, name)
+                .concatWith(RestaurantMenuDI.deleteToppingImageUseCase.invoke(restaurantId, dishId, name))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

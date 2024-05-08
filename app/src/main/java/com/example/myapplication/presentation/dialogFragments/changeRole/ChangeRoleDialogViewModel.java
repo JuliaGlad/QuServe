@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.CompanyQueueDI;
-import com.example.myapplication.di.CompanyQueueUserDI;
-import com.example.myapplication.di.DI;
-import com.example.myapplication.di.ProfileDI;
+import com.example.myapplication.di.company.CompanyQueueDI;
+import com.example.myapplication.di.company.CompanyQueueUserDI;
+import com.example.myapplication.di.profile.ProfileDI;
+import com.example.myapplication.di.profile.ProfileEmployeeDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -21,7 +21,7 @@ public class ChangeRoleDialogViewModel extends ViewModel {
 
     public void updateField(String role, String employeeId, String companyId) {
         CompanyQueueUserDI.updateRoleUseCase.invoke(role, employeeId, companyId)
-                .concatWith(ProfileDI.updateEmployeeRoleUseCase.invoke(companyId, employeeId, role))
+                .concatWith(ProfileEmployeeDI.updateEmployeeRoleUseCase.invoke(companyId, employeeId, role))
                 .andThen(CompanyQueueDI.removeAdminFromAllQueuesAsWorkerUseCase.invoke(companyId, employeeId, role))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
