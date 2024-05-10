@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="24dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent"
-    app:cardCornerRadius="100dp">
+    app:cardCornerRadius="24dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="?colorPrimaryContainer"
@@ -18,26 +19,29 @@
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/button_icon_primary_container_background"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/qr_code"
+            app:srcCompat="@drawable/ic_create_restaurant_order"
             app:tint="?colorPrimary" />
 
         <TextView
             android:id="@+id/head_line"
-            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="24dp"
-            android:text="@string/become_employee"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/order_in_restaurant"
+            app:layout_constraintBottom_toBottomOf="@+id/icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/icon" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

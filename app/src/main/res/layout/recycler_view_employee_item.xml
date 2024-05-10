@@ -19,17 +19,18 @@
 
     <TextView
         android:id="@+id/employee_name"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
-        android:layout_width="wrap_content"
+        style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Employee name"
+        app:layout_constraintEnd_toStartOf="@+id/button_delete"
         app:layout_constraintStart_toEndOf="@+id/employee_photo"
         app:layout_constraintTop_toTopOf="@+id/employee_photo" />
 
     <TextView
         android:id="@+id/role_headline"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -40,7 +41,7 @@
 
     <TextView
         android:id="@+id/role"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
@@ -53,7 +54,6 @@
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         android:background="@drawable/button_icons_background"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

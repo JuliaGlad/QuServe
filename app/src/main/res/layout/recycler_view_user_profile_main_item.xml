@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:padding="24dp"
     android:background="@drawable/background_main_item">
 
     <ImageView
         android:id="@+id/profile_photo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_margin="20dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,7 +18,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
-        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -32,12 +31,13 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/your_email"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Regular.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="5dp"
         android:text="TextView"
+        android:textColor="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintStart_toEndOf="@+id/profile_photo"
         app:layout_constraintTop_toBottomOf="@+id/name" />

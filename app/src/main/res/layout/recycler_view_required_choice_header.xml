@@ -4,28 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp">
+    android:layout_marginTop="24dp">
 
     <TextView
         android:id="@+id/header"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/choose"
-        android:fontFamily="@font/bold_roboto"
-        android:textColor="?colorPrimary"
-        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/choice_name"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:fontFamily="@font/bold_roboto"
         android:text="Choice name"
-        android:textColor="?colorPrimary"
-        android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/header"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +29,7 @@
         android:id="@+id/button_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="16dp"
         android:background="@color/transparent"
         android:src="@drawable/ic_edit"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -6,62 +6,63 @@
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16sp"
+    android:padding="16dp"
     android:layout_marginBottom="20dp"
     android:background="@drawable/dialog_background">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
+        app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners"
         android:id="@+id/dish_image"
-        android:layout_height="130dp"
-        android:layout_marginBottom="24dp"
         android:layout_width="140dp"
-        android:src="@drawable/add_photo_rectangle_land_scape"
+        android:layout_height="140dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/weight_count" />
 
     <TextView
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
         android:id="@+id/dish_name"
+        style="@style/TextAppearance.Material3.BodyLarge.Medium.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_width="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="3dp"
+        android:text="WOK-Noodles"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
         app:layout_constraintTop_toBottomOf="@+id/weight_count" />
 
     <TextView
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe.Regular"
         android:id="@+id/weight_count"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Regular.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
         android:text="100g"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toTopOf="@+id/dish_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
         android:id="@+id/price"
-        android:layout_height="35dp"
-        android:layout_marginTop="30dp"
-        android:layout_width="90dp"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="444 ₽"
+        app:layout_constraintBottom_toBottomOf="@+id/items_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
+        app:layout_constraintTop_toTopOf="@+id/items_count" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/dish_name" />
+        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        app:spanCount="2" />
 
     <ImageView
         android:id="@+id/add_item_icon"
@@ -80,8 +81,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
@@ -97,52 +98,60 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_to_remove"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/remove_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings"
+        app:spanCount="6" />
 
     <ImageButton
-        android:background="@drawable/button_icons_light_background"
         android:id="@+id/button_add"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cart_item_right_corners_background"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/price"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/items_count"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/price"
+        app:layout_constraintTop_toTopOf="@+id/items_count"
         app:srcCompat="@drawable/ic_add" />
 
     <ImageButton
-        android:background="@drawable/button_icons_light_background"
         android:id="@+id/button_remove"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
         android:layout_width="wrap_content"
-        android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/price"
-        app:layout_constraintEnd_toStartOf="@+id/button_add"
-        app:layout_constraintTop_toTopOf="@+id/price"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_icons_light_background"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/items_count"
+        app:layout_constraintEnd_toStartOf="@+id/items_count"
+        app:layout_constraintTop_toTopOf="@+id/items_count"
         app:srcCompat="@drawable/baseline_remove_24" />
 
     <TextView
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
         android:id="@+id/items_count"
-        android:layout_height="wrap_content"
+        style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="?colorSurfaceContainerLowest"
+        android:padding="11dp"
         android:text="1"
-        app:layout_constraintBottom_toBottomOf="@+id/button_add"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_add"
-        app:layout_constraintStart_toEndOf="@+id/button_remove"
-        app:layout_constraintTop_toTopOf="@+id/button_add"
-        app:layout_constraintVertical_bias="0.48" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

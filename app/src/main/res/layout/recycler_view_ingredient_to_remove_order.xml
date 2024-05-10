@@ -9,14 +9,15 @@
 
     <TextView
         android:id="@+id/text_ingredient_name"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_medium"
-        android:padding="16dp"
         android:text="@string/ingredient_name"
-        android:textColor="?colorPrimary"
-        android:textSize="16sp"
-        android:visibility="visible"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

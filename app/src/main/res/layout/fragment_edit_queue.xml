@@ -21,25 +21,29 @@
 
     <EditText
         android:id="@+id/header"
-        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bold_roboto"
         android:text="Queue Name"
-        android:backgroundTint="?colorPrimary"
+        android:backgroundTint="@color/colorTextHint"
+        android:hint="@string/queue_name"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/location_edit"
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe.Regular"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="@string/location"
-        android:backgroundTint="?colorPrimary"
+        android:backgroundTint="@color/colorTextHint"
+        android:hint="@string/location"
+        android:textColorHint="@color/colorTextHint"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toBottomOf="@+id/header" />
 

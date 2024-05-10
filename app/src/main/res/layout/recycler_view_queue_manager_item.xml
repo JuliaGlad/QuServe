@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/queue_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
     app:cardCornerRadius="40dp"
     app:cardElevation="0dp"
-    app:strokeColor="@color/transparent"
-    android:layout_marginTop="24dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -28,28 +28,25 @@
 
         <TextView
             android:id="@+id/queue_name"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
-            android:fontFamily="@font/regular"
-            android:text="Queue name"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:text="DeLTA Tech Corp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/title_workers"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingBottom="24dp"
             android:text="@string/workers"
-            android:textColor="?colorOnSurface"
-            android:fontFamily="@font/bold_roboto"
-            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="@+id/queue_name"
             app:layout_constraintTop_toBottomOf="@+id/location" />
 
@@ -62,7 +59,7 @@
             app:layout_constraintStart_toEndOf="@+id/title_workers"
             app:layout_constraintTop_toTopOf="@+id/title_workers"
             app:srcCompat="@drawable/ic_circle"
-            app:tint="?colorPrimaryContainer" />
+            app:tint="@color/roundLowest" />
 
 
         <ImageView
@@ -74,7 +71,7 @@
             app:layout_constraintStart_toEndOf="@+id/first_worker"
             app:layout_constraintTop_toTopOf="@id/title_workers"
             app:srcCompat="@drawable/ic_circle"
-            app:tint="#8EC8E4" />
+            app:tint="@color/roundMedium" />
 
         <ImageView
             android:id="@+id/third_worker"
@@ -85,11 +82,11 @@
             app:layout_constraintStart_toEndOf="@+id/second_worker"
             app:layout_constraintTop_toTopOf="@+id/title_workers"
             app:srcCompat="@drawable/ic_circle"
-            app:tint="#5EA8CC" />
+            app:tint="@color/roundHigh" />
 
         <TextView
             android:id="@+id/workers_count"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -100,7 +97,7 @@
 
         <TextView
             android:id="@+id/location"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

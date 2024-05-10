@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="ThemeOverlay.Material3.Button.Tonal.QuServe" parent="Widget.Material3.Button.TonalButton">
         <item name="fontFamily">@font/roboto_medium</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
@@ -8,15 +7,147 @@
         <item name="android:paddingEnd">32dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:paddingTop">12dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="backgroundTint">#CCE8FF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="backgroundTint">@color/colorSurfaceContainerHighest</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="TextAppearance.Material3.HeadlineLarge.QuServe" parent="TextAppearance.Material3.HeadlineLarge">
+    <style name="Widget.MaterialComponents.ShapeableImageView.RoundCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyLarge.Bold.QuServe" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/bold_roboto</item>
         <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyLarge.Medium.QuServe" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyLarge.Regular.QuServe" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Bold.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Medium.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.Regular.QuServe" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.Bold.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.Medium.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.Regular.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.ExtraSmall.Bold.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodySmall.ExtraSmall.Regular.QuServe" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
+    </style>
+    
+    <style name="TextAppearance.Material3.TitleLarge.Bold.QuServe" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleLarge.Medium.QuServe" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleMedium.Bold.QuServe" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleMedium.Medium.QuServe" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleSmall.Bold.QuServe" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="fontFamily">@font/bold_roboto</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleSmall.Medium.QuServe" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleSmall.Regular.QuServe" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:fontFamily">@font/regular</item>
+        <item name="fontFamily">@font/regular</item>
     </style>
 
     <style name="NumberPickerTheme" parent="Theme.Material3.Light.NoActionBar">
@@ -40,57 +171,6 @@
         <item name="android:padding">20dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="TextAppearance.Material3.BodyLarge.QuServe" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/regular</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
-    </style>
-
-    <style name="TextAppearance.Material3.BodyMedium.QuServe" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/regular</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
-    </style>
-
-    <style name="TextAppearance.Material3.TitleLarge.QuServe.Regular" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/regular</item>
-        <item name="android:fontFamily">@font/regular</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextAppearance.Material3.TitleMedium.QuServe" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
-        <item name="fontFamily">@font/roboto_medium</item>
-    </style>
-
-    <style name="TextAppearance.Material3.HeadlineLarge.Employee" parent="TextAppearance.Material3.HeadlineLarge">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/roboto_medium</item>
-        <item name="android:fontFamily">>@font/roboto_medium</item>
-    </style>
-
-    <style name="TextAppearance.Material3.HeadlineMedium.QuServe" parent="TextAppearance.Material3.HeadlineMedium">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/bold_roboto</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
-    </style>
-
-    <style name="TextAppearance.Material3.HeadlineSmall.QuServe" parent="TextAppearance.Material3.HeadlineSmall">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/bold_roboto</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="TextAppearance.Material3.TitleLarge.QuServe" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/bold_roboto</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
     </style>
 
     <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
@@ -148,20 +228,6 @@
         <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
         <item name="boxBackgroundColor">@color/colorBox</item>
         <item name="android:textColorHint">?android:textColorHint</item>
-    </style>
-
-
-    <style name="TextAppearance.Material3.TitleSmall.QuServe" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/bold_roboto</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
-    </style>
-
-    <style name="TextAppearance.Material3.TitleSmall.Dialog.QuServe" parent="TextAppearance.Material3.TitleSmall">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">@font/bold_roboto</item>
-        <item name="android:fontFamily">@font/bold_roboto</item>
     </style>
 
     <style name="TextAppearance.Material3.TitleSmall.Red.QuServe" parent="TextAppearance.Material3.TitleMedium">

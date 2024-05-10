@@ -13,8 +13,9 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@+id/queue_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/queue_name"
         app:tint="?colorPrimary" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -25,28 +26,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        app:layout_constraintTop_toBottomOf="@+id/button_menu" />
 
     <ImageButton
         android:id="@+id/button_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_menu_24"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/baseline_menu_24"
+        app:layout_constraintBottom_toBottomOf="@+id/queue_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/queue_name"
+        app:tint="?colorPrimary" />
 
     <TextView
         android:id="@+id/queue_name"
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Queue Name"
-        app:layout_constraintBottom_toBottomOf="@+id/imageButton"
         app:layout_constraintEnd_toStartOf="@+id/button_menu"
         app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="@+id/imageButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"

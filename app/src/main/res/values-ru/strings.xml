@@ -373,4 +373,7 @@
     <string name="you_have_become_waiter">You have become waiter!</string>
     <string name="now_you_can_get_access_to_restaurant_orders_and_serve_dishes">Now you can get access to restaurant orders and serve dishes</string>
     <string name="shopping_cart">Shopping cart</string>
+    <string name="order_in_restaurant">Order in restaurant</string>
+    <string name="looks_like_something_went_wrong_please_try_again_later">Looks like something went wrong! Please try again later!</string>
+    <string name="queue_name">Queue Name</string>
 </resources>

@@ -13,14 +13,14 @@
         android:id="@+id/company_logo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_round_add_photo_24"
+        android:src="@drawable/add_photo_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/company_name"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

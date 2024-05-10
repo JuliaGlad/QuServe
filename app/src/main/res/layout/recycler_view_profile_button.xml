@@ -23,12 +23,11 @@
 
     <TextView
         android:id="@+id/text"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="TextView"
-        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/icon"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="@+id/icon" />

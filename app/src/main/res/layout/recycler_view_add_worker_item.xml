@@ -5,7 +5,7 @@
     android:id="@+id/item"
     app:cardCornerRadius="100dp"
     app:strokeColor="@color/transparent"
-    android:layout_marginBottom="24dp"
+    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/employee_name"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -35,7 +35,7 @@
 
         <TextView
             android:id="@+id/role_headline"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/role"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"

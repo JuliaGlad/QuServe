@@ -7,7 +7,7 @@
     android:layout_marginTop="24dp"
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/transparent"
-    app:cardCornerRadius="40dp">
+    app:cardCornerRadius="30dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/waiting_item_icon_background"
-            android:padding="10dp"
+            android:padding="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_time_40"
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/head_line"
-            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -51,15 +51,14 @@
 
         <TextView
             android:id="@+id/description"
-            style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:fontFamily="@font/roboto_medium"
             android:text="~ 1h 12min"
-            android:textSize="18sp"
+            android:textColor="@color/colorTextHint"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"

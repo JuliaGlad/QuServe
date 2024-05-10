@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/for_yourself"
-                style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+                style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/for_yourself"
@@ -62,7 +62,7 @@
 
             <TextView
                 android:id="@+id/textView4"
-                style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+                style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/for_company"

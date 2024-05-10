@@ -39,7 +39,7 @@ public class AddWorkerAdapter extends ListAdapter<AddWorkerRecyclerModel, Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).bind((AddWorkerRecyclerModel) getItem(position));
+        ((ViewHolder) holder).bind(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -18,19 +18,20 @@
 
     <TextView
         android:id="@+id/subTitle"
+        style="@style/TextAppearance.Material3.TitleSmall.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/cooker"
-        android:textColor="#D0F6FF"
-        android:textSize="20sp"
+        android:textColor="?colorSurfaceContainerHigh"
         app:layout_constraintBottom_toBottomOf="@+id/cook_wall_paper"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -38,7 +39,6 @@
         android:fontFamily="@font/bold_roboto"
         android:text="Restaurant Name"
         android:textColor="@color/white"
-        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/subTitle"
         app:layout_constraintStart_toStartOf="parent" />
 

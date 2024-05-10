@@ -5,6 +5,7 @@
     android:id="@+id/item"
     app:cardCornerRadius="40dp"
     app:cardElevation="0dp"
+
     android:layout_marginTop="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -12,15 +13,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:background="?colorSurfaceContainerLow">
 
         <TextView
             android:id="@+id/table_number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
             android:fontFamily="@font/regular"
             android:text="@string/table"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,17 +28,17 @@
 
         <TextView
             android:id="@+id/dishes_title"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="@string/dishes"
             app:layout_constraintStart_toStartOf="@+id/table_number"
             app:layout_constraintTop_toBottomOf="@+id/table_number" />
 
         <TextView
             android:id="@+id/count"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
@@ -49,17 +49,15 @@
 
         <TextView
             android:id="@+id/view_details"
-            style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/button_surface_containater_tonal_background"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="16dp"
+            android:paddingStart="24dp"
             android:paddingTop="10dp"
-            android:paddingEnd="16dp"
+            android:paddingEnd="24dp"
             android:paddingBottom="10dp"
             android:text="@string/view_details"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -68,9 +66,10 @@
 
         <TextView
             android:id="@+id/number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
             android:text="2"
             app:layout_constraintBottom_toBottomOf="@+id/table_number"
             app:layout_constraintStart_toEndOf="@+id/table_number"

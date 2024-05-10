@@ -6,72 +6,63 @@
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16sp"
+    android:padding="16dp"
     android:layout_marginBottom="20dp"
     android:background="@drawable/dialog_background">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
+        app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners"
         android:id="@+id/dish_image"
-        android:layout_height="130dp"
-        android:layout_marginBottom="24dp"
         android:layout_width="140dp"
-        android:src="@drawable/add_photo_rectangle_land_scape"
+        android:layout_height="140dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/weight_count" />
 
     <TextView
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
         android:id="@+id/dish_name"
+        style="@style/TextAppearance.Material3.BodyLarge.Medium.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_width="wrap_content"
-        android:text="TextView"
+        android:layout_marginTop="3dp"
+        android:text="WOK-Noodles"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
         app:layout_constraintTop_toBottomOf="@+id/weight_count" />
 
     <TextView
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe.Regular"
         android:id="@+id/weight_count"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Regular.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
         android:text="100g"
-        android:textSize="14sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toTopOf="@+id/dish_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/price"
-        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="444 ₽"
-        app:layout_constraintStart_toEndOf="@+id/price_title"
-        app:layout_constraintTop_toTopOf="@+id/price_title" />
-
-    <TextView
-        android:id="@+id/price_title"
-        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/price"
-        app:layout_constraintStart_toStartOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/number_of_dish_title2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/dish_name" />
+        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        app:spanCount="2" />
 
     <ImageView
         android:id="@+id/add_item_icon"
@@ -90,8 +81,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
@@ -107,39 +98,26 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_to_remove"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/remove_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings"
+        app:spanCount="6" />
 
     <TextView
-        android:id="@+id/dish_number"
+        android:id="@+id/price_value"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/number_of_dish"
-        android:textColor="?colorPrimary"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/number_of_dish_title2"
-        app:layout_constraintStart_toEndOf="@+id/number_of_dish_title2"
-        app:layout_constraintTop_toTopOf="@+id/number_of_dish_title2" />
+        android:text="444"
+        app:layout_constraintBottom_toBottomOf="@+id/price"
+        app:layout_constraintStart_toEndOf="@+id/price"
+        app:layout_constraintTop_toTopOf="@+id/price" />
 
-    <TextView
-        android:id="@+id/number_of_dish_title2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/number_of_dish"
-        android:textColor="?colorPrimary"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/remove_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

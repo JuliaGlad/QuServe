@@ -12,15 +12,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp"
         android:background="?colorSurfaceContainerLow">
 
         <TextView
             android:id="@+id/table_number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
             android:fontFamily="@font/regular"
             android:text="@string/table"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,10 +27,10 @@
 
         <TextView
             android:id="@+id/dishes_title"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:text="Dish name"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +39,7 @@
 
         <TextView
             android:id="@+id/count"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:text="2"
@@ -50,18 +49,16 @@
 
         <TextView
             android:id="@+id/served"
-            style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/button_surface_containater_tonal_background"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="16dp"
+            android:paddingStart="32dp"
             android:paddingTop="10dp"
-            android:paddingEnd="16dp"
+            android:paddingEnd="32dp"
             android:paddingBottom="10dp"
             android:text="@string/served"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +67,7 @@
 
         <TextView
             android:id="@+id/number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2"

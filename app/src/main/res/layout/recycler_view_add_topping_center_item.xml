@@ -4,67 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:gravity="center"
     android:layout_marginTop="40dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="130dp"
+    android:layout_height="230dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/item"
         android:layout_width="130dp"
-        android:layout_height="wrap_content"
+        android:layout_height="230dp"
         android:elevation="0dp"
         app:cardCornerRadius="20dp"
         app:strokeColor="@color/transparent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="130dp"
-            android:layout_height="wrap_content"
+            android:layout_height="230dp"
             android:background="?colorSurfaceContainerLow">
 
             <ImageView
                 android:id="@+id/ingredient_image"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="90dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/desserts_image"
-                app:layout_constraintBottom_toTopOf="@+id/ingredient_name"
+                android:src="@drawable/no_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/ingredient_name"
-                style="@style/TextAppearance.Material3.TitleSmall.QuServe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
-                android:padding="10dp"
-                android:text="Ingredient Name"
+                style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="Vegetables"
+                app:layout_constraintBottom_toTopOf="@+id/price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_image" />
 
             <TextView
                 android:id="@+id/price"
+                style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/primary_container_button_background"
-                android:fontFamily="@font/bold_roboto"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/button_surface_containater_tonal_background"
                 android:paddingStart="20dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
                 android:text="+100"
-                android:textColor="?colorPrimary"
-                android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredient_name" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>
 

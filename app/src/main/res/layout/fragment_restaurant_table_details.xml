@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/table_header"
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -64,7 +64,7 @@
 
     <TextView
         android:id="@+id/table_number"
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="11"

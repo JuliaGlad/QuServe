@@ -36,7 +36,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:padding="16dp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_seconds" />
 
@@ -68,7 +67,7 @@
 
     <TextView
         android:id="@+id/title_hours"
-        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -79,7 +78,7 @@
 
     <TextView
         android:id="@+id/title_minutes"
-        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -90,7 +89,7 @@
 
     <TextView
         android:id="@+id/title_seconds"
-        style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -101,7 +100,7 @@
 
     <TextView
         android:id="@+id/pause_queue_header"
-        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"

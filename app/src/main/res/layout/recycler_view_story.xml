@@ -5,10 +5,10 @@
     android:id="@+id/cardItem"
     android:layout_width="130dp"
     android:layout_height="130dp"
-    android:layout_marginStart="16dp"
+    android:layout_marginStart="20dp"
     app:cardCornerRadius="20dp"
     app:strokeColor="@color/colorPrimary"
-    app:strokeWidth="1.5dp">
+    app:strokeWidth="2dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint"
@@ -29,13 +29,12 @@
 
         <TextView
             android:id="@+id/title"
+            style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginBottom="7dp"
-            android:fontFamily="@font/roboto_medium"
             android:text="@string/services"
-            android:textSize="16sp"
             android:textColor="@color/colorSurface"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

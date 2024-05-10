@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/city_name"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/regular"

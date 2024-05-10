@@ -19,7 +19,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/queue_name"
-            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Queue name"
@@ -30,7 +30,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/subTitle"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -41,7 +41,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/people_in_queue"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"

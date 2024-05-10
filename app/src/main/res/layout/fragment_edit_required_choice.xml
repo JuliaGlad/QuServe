@@ -9,12 +9,12 @@
 
     <EditText
         android:id="@+id/choice_title_edit_text"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/choice_name"
-        android:fontFamily="@font/bold_roboto"
-        android:textSize="24sp"
-        android:textColor="?colorPrimary"
+        android:textAlignment="center"
+        android:textColorHint="@color/colorTextHint"
         android:backgroundTint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

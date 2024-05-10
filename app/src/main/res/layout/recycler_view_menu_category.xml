@@ -7,7 +7,7 @@
     android:focusable="true"
     android:layout_width="140dp"
     android:layout_height="200dp"
-    android:layout_marginEnd="10dp"
+    android:layout_marginStart="20dp"
     app:strokeColor="@color/transparent"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp">
@@ -19,22 +19,20 @@
 
         <ImageView
             android:id="@+id/food_image"
-            android:layout_width="0dp"
-            android:layout_height="140dp"
-            android:layout_marginBottom="10dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/baseline_add_photo_alternate_24"
-            app:layout_constraintBottom_toTopOf="@+id/food_title"
+            android:layout_width="140dp"
+            android:layout_height="130dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/no_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/food_title"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="16dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:text="@string/add_category"

@@ -18,19 +18,17 @@
 
     <TextView
         android:id="@+id/header_title"
+        style="@style/TextAppearance.Material3.TitleMedium.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_medium"
         android:text="@string/do_you_want_to_join"
-        android:textColor="@color/colorOnSurface"
-        android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
 
     <TextView
         android:id="@+id/queue_name"
-        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"

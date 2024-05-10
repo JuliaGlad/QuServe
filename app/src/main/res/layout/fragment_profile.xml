@@ -13,11 +13,11 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:text="@string/welcome"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -74,7 +74,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/forget_password"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -85,7 +85,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text_action_create_account"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/don_t_have_an_account_yet"

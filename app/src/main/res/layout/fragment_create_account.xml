@@ -23,11 +23,11 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/create_account"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/add_photo_layout" />

@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/employee_name"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -29,23 +29,25 @@
 
     <TextView
         android:id="@+id/queues_headline"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/assigned_queues"
+        android:textColor="@color/colorTextHint"
         app:layout_constraintStart_toEndOf="@+id/employee_photo"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />
 
     <TextView
         android:id="@+id/queues_count"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:text="2"
+        android:textColor="@color/colorTextHint"
         app:layout_constraintStart_toEndOf="@+id/queues_headline"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />
 

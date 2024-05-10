@@ -5,11 +5,9 @@
     android:id="@+id/service_button_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="24dp"
+    android:layout_marginTop="24dp"
     android:background="@drawable/card_background"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/icon"
@@ -25,7 +23,7 @@
 
     <TextView
         android:id="@+id/queue_name"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyLarge.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -36,7 +34,7 @@
 
     <TextView
         android:id="@+id/time"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="18 Dec, 16 : 45"

@@ -9,13 +9,11 @@
 
     <TextView
         android:id="@+id/text_ingredient_name"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/regular"
         android:padding="16dp"
         android:text="@string/ingredient_name"
-        android:textColor="?colorPrimary"
-        android:textSize="16sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/button"
         app:layout_constraintEnd_toStartOf="@+id/button"
@@ -73,7 +71,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_ingredient_name"
-            android:layout_width="match_parent"
+            style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:hint="@string/ingredient_name" />
     </com.google.android.material.textfield.TextInputLayout>

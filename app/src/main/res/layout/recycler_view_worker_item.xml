@@ -23,11 +23,10 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:fontFamily="@font/regular"
             android:padding="24dp"
             android:text="Worker name"
             app:layout_constraintBottom_toBottomOf="parent"

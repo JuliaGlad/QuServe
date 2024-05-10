@@ -11,28 +11,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/liquid_blue_card_background"
-            app:layout_constraintBottom_toBottomOf="@+id/ingredient_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="?colorSurfaceContainerLow">
 
         <EditText
             android:id="@+id/ingredient_name"
+            style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
             android:backgroundTint="@color/colorTextHint"
             android:fontFamily="@font/regular"
-            android:padding="24dp"
             android:hint="@string/ingredient_name"
+            android:textColorHint="@color/colorTextHint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

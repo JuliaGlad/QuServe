@@ -31,7 +31,7 @@
 
     <TextView
         android:id="@+id/queue_name"
-        style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="0dp"

@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
     android:background="@drawable/card_background_red"
-    android:padding="12dp">
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/icon"
@@ -23,12 +23,11 @@
 
     <TextView
         android:id="@+id/text"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="@string/leave_queue"
-        android:textSize="18sp"
         android:textColor="@color/colorOnErrorContainer"
         app:layout_constraintBottom_toBottomOf="@+id/icon"
         app:layout_constraintStart_toEndOf="@+id/icon"

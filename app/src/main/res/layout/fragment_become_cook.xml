@@ -18,12 +18,10 @@
 
     <TextView
         android:id="@+id/header_title"
+        style="@style/TextAppearance.Material3.TitleMedium.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="26sp"
-        android:textColor="@color/colorOnSurface"
-        android:fontFamily="@font/roboto_medium"
         android:text="@string/do_you_want_to_become_cook"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +29,7 @@
 
     <TextView
         android:id="@+id/company_name"
-        style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

@@ -5,22 +5,21 @@
     android:id="@+id/item"
     app:cardCornerRadius="40dp"
     app:cardElevation="0dp"
-    android:layout_marginBottom="24dp"
+    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:background="?colorSurfaceContainerLow">
 
         <TextView
             android:id="@+id/table_number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
             android:fontFamily="@font/regular"
             android:text="Table №"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,38 +27,37 @@
 
         <TextView
             android:id="@+id/dishes_title"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="Dishes:"
             app:layout_constraintStart_toStartOf="@+id/table_number"
             app:layout_constraintTop_toBottomOf="@+id/table_number" />
 
         <TextView
             android:id="@+id/count"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
-            android:text="2"
+            android:text="4"
             app:layout_constraintBottom_toBottomOf="@+id/dishes_title"
             app:layout_constraintStart_toEndOf="@+id/dishes_title"
             app:layout_constraintTop_toTopOf="@+id/dishes_title" />
 
         <TextView
             android:id="@+id/button_accept"
-            style="@style/TextAppearance.Material3.TitleMedium.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/button_surface_containater_tonal_background"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="16dp"
+            android:paddingStart="32dp"
             android:paddingTop="10dp"
-            android:paddingEnd="16dp"
+            android:paddingEnd="32dp"
             android:paddingBottom="10dp"
             android:text="@string/accept"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +66,7 @@
 
         <TextView
             android:id="@+id/button_see_details"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -79,13 +77,14 @@
 
         <TextView
             android:id="@+id/number"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
+            android:text="33"
             app:layout_constraintBottom_toBottomOf="@+id/table_number"
             app:layout_constraintStart_toEndOf="@+id/table_number"
-            app:layout_constraintTop_toTopOf="@+id/table_number" />
+            app:layout_constraintTop_toTopOf="@+id/table_number"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
