@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
-    android:paddingTop="20dp"
+    android:padding="20dp"
     tools:context=".presentation.restaurantLocation.addLocation.AddLocationFragment">
 
     <ImageButton
@@ -23,9 +21,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="60dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_back" />
@@ -35,7 +33,6 @@
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:text="@string/add_location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

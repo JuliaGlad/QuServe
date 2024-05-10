@@ -8,9 +8,9 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE
 import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOGO;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_OWNER;
@@ -19,8 +19,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 
 import android.net.Uri;
 
-import com.example.myapplication.data.dto.ImageDto;
-import com.example.myapplication.data.dto.RestaurantDto;
+import com.example.myapplication.data.dto.common.ImageDto;
+import com.example.myapplication.data.dto.restaurant.RestaurantDto;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,13 +36,32 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantUserRepository {
+
+    public Single<RestaurantDto> getRestaurantByIds(String restaurantId){
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot snapshot = task.getResult();
+                            emitter.onSuccess(new RestaurantDto(
+                                    snapshot.getId(),
+                                    snapshot.getString(RESTAURANT_NAME),
+                                    snapshot.getString(RESTAURANT_EMAIL),
+                                    snapshot.getString(RESTAURANT_PHONE),
+                                    snapshot.getString(RESTAURANT_OWNER)
+                            ));
+                        }
+                    });
+        });
+    }
 
     public Single<RestaurantDto> getRestaurantByPath(String path) {
         return Single.create(emitter -> {

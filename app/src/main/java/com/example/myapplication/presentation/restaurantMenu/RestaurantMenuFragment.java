@@ -65,6 +65,14 @@ public class RestaurantMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        if (viewModel.checkUserID()){
+            viewModel.signInAnonymously();
+        } else {
+            initUi();
+        }
+    }
+
+    private void initUi() {
         initAddButton();
         setGridAdapters();
         setHorizontalAdapter();
@@ -104,7 +112,13 @@ public class RestaurantMenuFragment extends Fragment {
             }
         });
 
-        viewModel.categories.observe(getActivity(), categoryMenuModels -> {
+        viewModel.isSignIn.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                initUi();
+            }
+        });
+
+        viewModel.categories.observe(getViewLifecycleOwner(), categoryMenuModels -> {
             if (categoryMenuModels != null) {
                 initCategoriesRecycler(categoryMenuModels);
             }

@@ -2,7 +2,7 @@ package com.example.myapplication.data.providers;
 
 import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.entity.CompanyUserEntity;
-import com.example.myapplication.data.dto.CompanyDto;
+import com.example.myapplication.data.dto.company.CompanyDto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,10 +1,8 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES_COUNT;
@@ -14,31 +12,28 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_TAKEN;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.NOT_TAKEN;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.READY_DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.REQUIRED_CHOICES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_MENU;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPINGS;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_NAME;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOTAL_PRICE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS;
 
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
-import com.example.myapplication.data.dto.ActiveOrderDishDto;
-import com.example.myapplication.data.dto.OrderDto;
-import com.example.myapplication.data.dto.OrderShortDto;
+import com.example.myapplication.data.dto.restaurant.ActiveOrderDishDto;
+import com.example.myapplication.data.dto.restaurant.OrderDto;
+import com.example.myapplication.data.dto.restaurant.OrderShortDto;
+import com.example.myapplication.data.dto.restaurant.ReadyDishDto;
 import com.example.myapplication.data.providers.CartProvider;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
@@ -46,31 +41,106 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.C;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantOrderRepository {
 
+    public Completable dishServed(String restaurantId, String locationId, String readyDishDocId) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(READY_DISHES)
+                    .document(readyDishDocId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Observable<ReadyDishDto> addReadyDishesSnapshot(String restaurantId, String locationId, List<String> readyDishDocIds) {
+        return Observable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(READY_DISHES)
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null) {
+                            for (QueryDocumentSnapshot query : value) {
+                                if (query.get(WAITER).equals(service.auth.getCurrentUser().getUid()) && !readyDishDocIds.contains(query.getId())) {
+                                    emitter.onNext(new ReadyDishDto(
+                                            query.getString(TABLE_NUMBER),
+                                            query.getString(COUNT),
+                                            query.getString(DISH_NAME),
+                                            query.getId()
+                                    ));
+                                }
+                            }
+                        }
+                    });
+        });
+    }
+
+    public Single<List<ReadyDishDto>> getReadyDishesToWaiter(String restaurantId, String locationId) {
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(READY_DISHES)
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                            List<ReadyDishDto> dishDtos = new ArrayList<>();
+                            for (DocumentSnapshot current : snapshots) {
+                                if (current.getString(WAITER).equals(service.auth.getCurrentUser().getUid())) {
+                                    dishDtos.add(new ReadyDishDto(
+                                            current.getString(TABLE_NUMBER),
+                                            current.getString(COUNT),
+                                            current.getString(DISH_NAME),
+                                            current.getId()
+                                    ));
+                                }
+                            }
+                            emitter.onSuccess(dishDtos);
+                        }
+                    });
+        });
+    }
+
     public Completable finishOrder(String orderPath) {
         return Completable.create(emitter -> {
-            service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
-                if (taskDocument.isSuccessful()) {
-                    emitter.onComplete();
+            String orderId = service.fireStore.document(orderPath).getId();
+
+            service.fireStore.document(orderPath).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    String waiterId = task.getResult().getString(WAITER);
+                    CollectionReference collRef = service.fireStore.document(orderPath).getParent().getParent().collection(WAITERS);
+                    removeOrderFromWaiter(collRef, waiterId, orderId).addOnCompleteListener(taskRemove -> {
+                        if (task.isSuccessful()) {
+                            service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
+                                if (taskDocument.isSuccessful()) {
+                                    emitter.onComplete();
+                                }
+                            });
+                        }
+                    });
                 }
             });
         });
@@ -80,13 +150,20 @@ public class RestaurantOrderRepository {
         return Single.create(emitter -> {
             DocumentReference locationRef = service.fireStore.document(orderPath).getParent().getParent();
             CollectionReference collRef = service.fireStore.document(orderPath).collection(DISHES);
+            String orderId = service.fireStore.document(orderPath).getId();
 
             assert locationRef != null;
             DocumentReference docRef = locationRef
                     .collection(READY_DISHES)
-                    .document(orderDishId);
+                    .document(orderId + "_" + orderDishId);
 
             HashMap<String, String> dish = new HashMap<>();
+            service.fireStore.document(orderPath).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    dish.put(WAITER, task.getResult().getString(WAITER));
+                    dish.put(COUNT, task.getResult().getString(COUNT));
+                }
+            });
             dish.put(TABLE_NUMBER, tableNumber);
             dish.put(DISH_NAME, dishName);
 
@@ -95,22 +172,21 @@ public class RestaurantOrderRepository {
                     collRef.document(orderDishId).update(IS_DONE, true)
                             .addOnCompleteListener(taskUpdate -> {
                                 if (taskUpdate.isSuccessful()) {
-
+                                    collRef.get().addOnCompleteListener(taskDocument -> {
+                                        if (taskDocument.isSuccessful()) {
+                                            List<DocumentSnapshot> documentSnapshots = taskDocument.getResult().getDocuments();
+                                            int size = 0;
+                                            for (DocumentSnapshot snapshot : documentSnapshots) {
+                                                boolean isDone = Boolean.TRUE.equals(snapshot.getBoolean(IS_DONE));
+                                                if (!isDone) {
+                                                    size++;
+                                                }
+                                            }
+                                            emitter.onSuccess(size);
+                                        }
+                                    });
                                 }
                             });
-                    collRef.get().addOnCompleteListener(taskDocument -> {
-                        if (taskDocument.isSuccessful()) {
-                            List<DocumentSnapshot> documentSnapshots = taskDocument.getResult().getDocuments();
-                            int size = 0;
-                            for (DocumentSnapshot snapshot : documentSnapshots) {
-                                boolean isDone = Boolean.TRUE.equals(snapshot.getBoolean(IS_DONE));
-                                if (!isDone){
-                                    size++;
-                                }
-                            }
-                            emitter.onSuccess(size);
-                        }
-                    });
                 }
             });
         });
@@ -251,9 +327,11 @@ public class RestaurantOrderRepository {
             DocumentReference pathDoc = service.fireStore.document(path);
 
             pathDoc.get().addOnCompleteListener(task -> {
-                String tableNumber = null;
+                String tableNumber;
                 if (task.isSuccessful()) {
                     tableNumber = task.getResult().getString(TABLE_NUMBER);
+                } else {
+                    tableNumber = null;
                 }
 
                 String locationId = pathDoc.getParent().getParent().getId();
@@ -266,24 +344,78 @@ public class RestaurantOrderRepository {
                         .document(orderId);
 
                 String orderPath = docRef.getPath();
-
                 CollectionReference collRef = docRef.collection(DISHES);
+                CollectionReference collRefLocationWaiters = service.fireStore.collection(RESTAURANT_LIST)
+                        .document(restaurantId)
+                        .collection(RESTAURANT_LOCATION)
+                        .document(locationId)
+                        .collection(WAITERS);
 
-                HashMap<String, Object> order = new HashMap<>();
-                order.put(TABLE_NUMBER, tableNumber);
-                order.put(VISITOR, service.auth.getCurrentUser().getUid());
-                order.put(TOTAL_PRICE, totalPrice);
-                order.put(IS_TAKEN, NOT_TAKEN);
-                order.put(DISHES_COUNT, String.valueOf(models.size()));
+                String waiterId = getWaiter(restaurantId, locationId);
+                addOrderToWaiterDocument(collRefLocationWaiters, waiterId, orderId).addOnCompleteListener(taskAdding -> {
+                    if (taskAdding.isSuccessful()) {
+                        HashMap<String, Object> order = new HashMap<>();
+                        order.put(TABLE_NUMBER, tableNumber);
+                        order.put(VISITOR, service.auth.getCurrentUser().getUid());
+                        order.put(TOTAL_PRICE, totalPrice);
+                        order.put(IS_TAKEN, NOT_TAKEN);
+                        order.put(WAITER, waiterId);
+                        order.put(DISHES_COUNT, String.valueOf(models.size()));
 
-                docRef.set(order).addOnCompleteListener(taskOrder -> {
-                    if (taskOrder.isSuccessful()) {
-                        setOrderDishesDocument(models, collRef);
-                        emitter.onSuccess(orderPath);
+                        docRef.set(order).addOnCompleteListener(taskOrder -> {
+                            if (taskOrder.isSuccessful()) {
+                                setOrderDishesDocument(models, collRef);
+                                emitter.onSuccess(orderPath);
+                            }
+                        });
                     }
                 });
             });
         });
+    }
+
+    private String getWaiter(String restaurantId, String locationId) {
+        final String[] minId = {null};
+        CollectionReference collRef = service.fireStore
+                .collection(RESTAURANT_LIST)
+                .document(restaurantId)
+                .collection(RESTAURANT_LOCATION)
+                .document(locationId)
+                .collection(WAITERS);
+
+        collRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                minId[0] = getWaiterId(snapshots);
+            }
+        });
+        String waiterId = minId[0];
+        return waiterId;
+    }
+
+    private Task<Void> addOrderToWaiterDocument(CollectionReference collRef, String waiterId, String orderId) {
+        return collRef.document(waiterId).update(ACTIVE_ORDERS_COUNT, FieldValue.arrayUnion(orderId));
+    }
+
+    private Task<Void> removeOrderFromWaiter(CollectionReference collRef, String waiterId, String orderId) {
+        return collRef.document(waiterId).update(ACTIVE_ORDERS_COUNT, FieldValue.arrayRemove(orderId));
+    }
+
+    private String getWaiterId(List<DocumentSnapshot> snapshots) {
+        int minOrders = -1;
+        String minId = null;
+        for (DocumentSnapshot current : snapshots) {
+            if (Boolean.TRUE.equals(current.getBoolean(IS_WORKING))) {
+                List<String> orders = ((List<String>) current.get(ACTIVE_ORDERS_COUNT));
+                assert orders != null;
+                int currentOrders = orders.size();
+                if (minOrders == -1 || currentOrders < minOrders) {
+                    minOrders = currentOrders;
+                    minId = current.getId();
+                }
+            }
+        }
+        return minId;
     }
 
     private void setOrderDishesDocument(List<OrderDishesModel> models, CollectionReference collRef) {

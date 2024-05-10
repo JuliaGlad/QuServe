@@ -30,8 +30,8 @@ import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
-import com.example.myapplication.data.dto.CompanyQueueDto;
-import com.example.myapplication.data.dto.WorkerDto;
+import com.example.myapplication.data.dto.company.CompanyQueueDto;
+import com.example.myapplication.data.dto.company.WorkerDto;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;

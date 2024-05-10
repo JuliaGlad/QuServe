@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="name_cannot_be_null">Name can`t be empty!</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>
     <string name="title_queue">Очередь</string>
@@ -359,4 +360,17 @@
     <string name="open_menu">Open menu</string>
     <string name="orders_count">Orders count:</string>
     <string name="are_you_sure_you_want_to_finish_your_order">Are you sure you want to finish your order</string>
+    <string name="your_company_request_is_under_consideration">Your company request is under consideration</string>
+    <string name="start_working">Start working</string>
+    <string name="start_work_to_get_orders_you_have_to_serve">Start work to get orders you have to serve</string>
+    <string name="served">Served</string>
+    <string name="finish_order">Finish order</string>
+    <string name="stop_working">Stop working</string>
+    <string name="are_you_sure_you_want_to_stop_your_work_for_today">Are you sure you want to stop your work for today?</string>
+    <string name="you_can_t_stop_your_work_yet">You can`t stop your work yet!</string>
+    <string name="you_need_to_serve_all_dishes_before_you_stop_working">You need to serve all dishes before you stop working</string>
+    <string name="do_you_want_to_become_waiter_of">Do you want to become waiter of</string>
+    <string name="you_have_become_waiter">You have become waiter!</string>
+    <string name="now_you_can_get_access_to_restaurant_orders_and_serve_dishes">Now you can get access to restaurant orders and serve dishes</string>
+    <string name="shopping_cart">Shopping cart</string>
 </resources>

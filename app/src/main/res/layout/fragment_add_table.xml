@@ -12,7 +12,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,8 +22,8 @@
             android:id="@+id/editLayout_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:hint="@string/table_number" />
+            android:hint="@string/table_number"
+            android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -31,7 +31,6 @@
         style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="100dp"
         android:text="@string/add_table_number"
         app:layout_constraintEnd_toEndOf="parent"

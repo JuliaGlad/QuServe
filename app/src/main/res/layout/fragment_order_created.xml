@@ -7,7 +7,6 @@
     android:padding="20dp"
     tools:context=".presentation.restaurantOrder.restaurantCart.orderCreated.OrderCreatedFragment">
 
-
     <ImageView
         android:id="@+id/image"
         android:layout_width="wrap_content"
@@ -23,7 +22,7 @@
         style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:text="@string/thank_you_for_your_order"
         app:layout_constraintStart_toStartOf="@+id/button_back"
         app:layout_constraintTop_toBottomOf="@+id/button_back" />
@@ -43,7 +42,7 @@
         layout="@layout/info_box_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image" />

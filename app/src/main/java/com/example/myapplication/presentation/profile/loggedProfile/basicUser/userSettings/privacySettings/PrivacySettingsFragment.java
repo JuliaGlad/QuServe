@@ -67,6 +67,12 @@ public class PrivacySettingsFragment extends Fragment {
         setupObserves();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
+    }
+
     private void initRecycler(){
         delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(1, R.drawable.ic_mail, R.string.change_email, () -> {
             ChangeEmailDialogFragment dialogFragment = new ChangeEmailDialogFragment();
@@ -115,7 +121,6 @@ public class PrivacySettingsFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.openSuccessDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
                 EmailUpdateSuccessfulDialogFragment dialogFragment = new EmailUpdateSuccessfulDialogFragment();

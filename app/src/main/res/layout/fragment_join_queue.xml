@@ -4,23 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="40dp"
-    tools:context=".presentation.service.JoinQueueFragment.joinQueue.JoinQueueFragment">
+    android:padding="20dp"
+    tools:context=".presentation.common.JoinQueueFragment.joinQueue.JoinQueueFragment">
 
     <ImageView
         android:id="@+id/qr_code_image"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/header_title"
-        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
         android:text="@string/do_you_want_to_join"
+        android:textColor="@color/colorOnSurface"
+        android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/qr_code_image" />
@@ -34,7 +37,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_title" />
-
 
     <androidx.cardview.widget.CardView
         android:id="@+id/button_yes"
@@ -82,8 +84,8 @@
         android:id="@+id/button_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="0dp"
         app:cardBackgroundColor="@color/transparent"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -120,4 +122,4 @@
 
     </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

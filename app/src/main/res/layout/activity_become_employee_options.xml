@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity">
+    tools:context=".presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/become_employee_options_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsFragment"/>
+        android:name="com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsFragment"/>
 
 </FrameLayout>

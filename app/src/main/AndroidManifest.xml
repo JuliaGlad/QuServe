@@ -26,8 +26,11 @@
         android:theme="@style/Theme.QuServe"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.employee.becomeWaiter.BecomeWaiterActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.employee.becomeCook.BecomeCookActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".presentation.employee.main.restaurantCook.activeOrders.dishDetails.OrderDetailsWithIndicatorsActivity"
             android:exported="false" />
@@ -41,7 +44,7 @@
             android:name=".presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.common.OrderDetailsActivity"
+            android:name=".presentation.common.orderDetails.OrderDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.home.stories.StoriesActivity"
@@ -95,13 +98,13 @@
             android:name=".presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity"
+            android:name=".presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.service.main.queue.QueueActivity"
+            android:name=".presentation.service.queue.QueueActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity"
@@ -137,13 +140,13 @@
             android:name=".presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.service.waitingFragment.fragment.WaitingActivity"
+            android:name=".presentation.common.waitingInQueue.WaitingActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.basicQueue.queueDetails.QueueDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.service.JoinQueueFragment.JoinQueueActivity"
+            android:name=".presentation.common.JoinQueueFragment.JoinQueueActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.basicQueue.createQueue.CreateQueueActivity"
@@ -177,7 +180,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.service.main.ScanCode"
+            android:name=".presentation.service.ScanCode"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme" />

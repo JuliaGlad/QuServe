@@ -1,7 +1,5 @@
 package com.example.myapplication.domain.usecase.profile.employee.company;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.data.dto.ActiveEmployeeQueueDto;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.profile.ActiveQueueEmployeeModel;
 

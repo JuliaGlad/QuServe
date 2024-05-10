@@ -11,7 +11,6 @@ public class FirebaseUserService {
 
     private static FirebaseUserService INSTANCE;
 
-
     public FirebaseAuth auth = FirebaseAuth.getInstance();
     public FirebaseFirestore fireStore = FirebaseFirestore.getInstance();
     public StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -21,6 +20,10 @@ public class FirebaseUserService {
             INSTANCE = new FirebaseUserService();
         }
         return INSTANCE;
+    }
+
+    private boolean isAnonymous(){
+        return auth.getCurrentUser().isAnonymous();
     }
 
     private FirebaseUserService() {}

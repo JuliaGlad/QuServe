@@ -16,10 +16,9 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.di.QueueDI;
-import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.annotations.NonNull;

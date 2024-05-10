@@ -8,7 +8,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/queue_manager_container"
-        android:name="com.example.myapplication.presentation.common.OrderDetailsFragment"
+        android:name="com.example.myapplication.presentation.common.orderDetails.OrderDetailsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="parent"

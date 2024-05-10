@@ -20,14 +20,13 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
 
 import android.net.Uri;
-import android.util.Log;
 
-import com.example.myapplication.data.dto.CategoryDto;
-import com.example.myapplication.data.dto.DishDto;
-import com.example.myapplication.data.dto.ImageDto;
-import com.example.myapplication.data.dto.ImageTaskNameDto;
-import com.example.myapplication.data.dto.RequiredChoiceDto;
-import com.example.myapplication.data.dto.ToppingDto;
+import com.example.myapplication.data.dto.restaurant.CategoryDto;
+import com.example.myapplication.data.dto.restaurant.DishDto;
+import com.example.myapplication.data.dto.common.ImageDto;
+import com.example.myapplication.data.dto.common.ImageTaskNameDto;
+import com.example.myapplication.data.dto.restaurant.RequiredChoiceDto;
+import com.example.myapplication.data.dto.restaurant.ToppingDto;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;

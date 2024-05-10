@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".presentation.employee.main.restaurantWaiter.startWork.StartWorkFragment">
+
+    <include
+        android:id="@+id/info_box_layout"
+        layout="@layout/info_box_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_work" />
+
+    <TextView
+        android:id="@+id/restaurant_name"
+        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurant name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/regular"
+        android:text="@string/waiter"
+        android:textColor="?colorPrimary"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_name" />
+
+
+    <ImageView
+        android:id="@+id/image_work"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/start_work"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subTitle" />
+
+    <Button
+        android:id="@+id/button_start_working"
+        style="@style/Widget.Material3.Button.QuServe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/start_working"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

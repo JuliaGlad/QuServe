@@ -7,9 +7,9 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header"
@@ -27,17 +27,17 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editLayout_email"
-                android:hint="@string/email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:padding="20dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -45,7 +45,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_email"
@@ -54,10 +54,11 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editLayout_password"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="20dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -65,23 +66,21 @@
             style="@style/Widget.Material3.Button.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:text="@string/sign_in"
             app:layout_constraintBottom_toTopOf="@+id/text_action_create_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/forget_password"
             style="@style/TextAppearance.Material3.BodyLarge.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="@string/forget_password"
             android:textColor="?android:textColorHint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textLayout_password"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_password" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -89,9 +88,8 @@
             style="@style/TextAppearance.Material3.BodyLarge.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            android:textColor="?android:textColorHint"
             android:text="@string/don_t_have_an_account_yet"
+            android:textColor="?android:textColorHint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

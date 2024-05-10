@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="20dp"
     tools:context=".presentation.basicQueue.queueDetails.QueueDetailsFragment">
-
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -23,7 +24,6 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

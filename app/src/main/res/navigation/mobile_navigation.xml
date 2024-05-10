@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/navigation_queue"
-        android:name="com.example.myapplication.presentation.service.main.ServiceFragment"
+        android:name="com.example.myapplication.presentation.service.ServiceFragment"
         android:label="@string/title_queue"
         tools:layout="@layout/fragment_service" >
         <action
@@ -124,7 +124,7 @@
         tools:layout="@layout/fragment_employee_navigation" />
     <fragment
         android:id="@+id/becomeEmployeeOptionsFragment"
-        android:name="com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsFragment"
+        android:name="com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsFragment"
         android:label="fragment_become_employee_options"
         tools:layout="@layout/fragment_become_employee_options" />
 

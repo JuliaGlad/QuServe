@@ -20,6 +20,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditProfileViewModel extends ViewModel {
 
+    private final MutableLiveData<Boolean> _openSuccessDialog = new MutableLiveData<>();
+    LiveData<Boolean> openSuccessDialog = _openSuccessDialog;
+
+    private final MutableLiveData<String> _openVerifyDialog = new MutableLiveData<>(null);
+    LiveData<String> openVerifyDialog = _openVerifyDialog;
+
     private final MutableLiveData<EditBasicUserState> _state = new MutableLiveData<>(new EditBasicUserState.Loading());
     LiveData<EditBasicUserState> state = _state;
 
@@ -65,6 +71,49 @@ public class EditProfileViewModel extends ViewModel {
                     @Override
                     public void onComplete() {
                         fragment.requireActivity().finish();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+
+    }
+
+    public void verifyBeforeUpdate(String email, String password){
+        ProfileDI.verifyBeforeUpdateEmailUseCase.invoke(email)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _openVerifyDialog.postValue(password);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public void updateEmailField(String email){
+        ProfileDI.updateEmailFieldUseCase.invoke(email)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _openSuccessDialog.postValue(true);
                     }
 
                     @Override

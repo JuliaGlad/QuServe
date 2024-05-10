@@ -163,9 +163,7 @@ public class EmployeesFragment extends Fragment {
     private void removeEmployee(String userId, String role) {
         for (int i = 0; i < basicList.size(); i++) {
             if (basicList.get(i).getEmployeeId().equals(userId)) {
-                Log.d("Basic list size", "" + basicList.size());
                 basicList.remove(i);
-                Log.d("BasicList Size", "" + basicList.size());
                 break;
             }
         }

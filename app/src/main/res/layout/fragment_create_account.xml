@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fillViewport="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
         <ImageView
             android:id="@+id/add_photo_layout"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_round_add_photo_24" />
+            app:srcCompat="@drawable/add_photo_round" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header"
@@ -38,8 +37,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header">
@@ -48,7 +46,8 @@
                 android:id="@+id/editLayout_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/user_name" />
+                android:hint="@string/user_name"
+                android:padding="20dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -56,7 +55,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_name">
@@ -65,7 +64,8 @@
                 android:id="@+id/editLayout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:padding="20dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -73,19 +73,20 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/colorTextHint"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLayout_email">
+            app:layout_constraintTop_toBottomOf="@+id/textLayout_email"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorTextHint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editLayout_password"
-                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/password" />
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="20dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -93,14 +94,20 @@
             style="@style/Widget.Material3.Button.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="40dp"
             android:text="@string/sign_up"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:tint="?colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_arrow_back" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

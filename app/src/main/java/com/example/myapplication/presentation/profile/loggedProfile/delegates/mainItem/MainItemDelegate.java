@@ -60,8 +60,6 @@ public class MainItemDelegate implements AdapterDelegate {
         }
 
         void bind(MainItemModel model) {
-
-
             binding.name.setText(model.name);
             binding.yourEmail.setText(model.email);
 

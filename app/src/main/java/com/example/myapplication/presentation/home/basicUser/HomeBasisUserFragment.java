@@ -39,9 +39,9 @@ import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicU
 import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
 import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
-import com.example.myapplication.presentation.service.JoinQueueFragment.JoinQueueActivity;
-import com.example.myapplication.presentation.service.main.ScanCode;
-import com.example.myapplication.presentation.service.main.queue.QueueActivity;
+import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.service.ScanCode;
+import com.example.myapplication.presentation.service.queue.QueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 

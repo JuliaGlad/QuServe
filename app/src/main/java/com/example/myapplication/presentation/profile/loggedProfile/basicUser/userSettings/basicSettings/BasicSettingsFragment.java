@@ -52,16 +52,10 @@ public class BasicSettingsFragment extends Fragment {
     private FragmentBasicSettingsBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
     private final List<DelegateItem> delegates = new ArrayList<>();
-    SharedPreferences settings;
-    SharedPreferences.Editor prefEditor;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(BasicSettingsViewModel.class);
-        settings = requireActivity().getSharedPreferences("THEME", MODE_PRIVATE);
-        prefEditor = settings.edit();
     }
 
     @Override
@@ -73,13 +67,15 @@ public class BasicSettingsFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        Configuration configuration = getResources().getConfiguration();
-        onConfigurationChanged(configuration);
-
         setupObserves();
         setAdapter();
         initButtonBack();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 
     private void initButtonBack() {
@@ -132,10 +128,8 @@ public class BasicSettingsFragment extends Fragment {
 
                     mainAdapter.submitList(delegates);
                 }
-                binding.progressBar.setVisibility(View.GONE);
-
             } else if (state instanceof BasicSettingsState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+
             } else if (state instanceof BasicSettingsState.Error) {
 
             }

@@ -2,7 +2,6 @@ package com.example.myapplication.data.repository.companyQueue;
 
 import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_COUNT;
-import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.Utils.APPROVED;
 import static com.example.myapplication.presentation.utils.Utils.COMPANIES;
@@ -35,9 +34,9 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.myapplication.data.dto.CompanyDto;
-import com.example.myapplication.data.dto.EmployeeDto;
-import com.example.myapplication.data.dto.ImageDto;
+import com.example.myapplication.data.dto.company.CompanyDto;
+import com.example.myapplication.data.dto.common.EmployeeDto;
+import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;

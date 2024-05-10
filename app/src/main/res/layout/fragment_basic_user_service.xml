@@ -7,7 +7,7 @@
     android:paddingTop="24dp"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    tools:context=".presentation.service.main.basicUser.BasicUserServiceFragment">
+    tools:context=".presentation.service.basicUser.BasicUserServiceFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

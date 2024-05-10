@@ -6,6 +6,7 @@ import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCas
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthenticationUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckPasswordUseCase;
+import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckVerificationUseCase;
 import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
@@ -38,6 +39,7 @@ public class ProfileDI {
     public static ProfileRepository profileRepository = new ProfileRepository();
     public static ProfileRepository.ProfileImages profileImages = new ProfileRepository.ProfileImages();
 
+    public static CheckUserIdUseCase checkUserIdUseCase = new CheckUserIdUseCase();
     public static RemoveRestaurantUserOrderUseCase removeRestaurantUserOrderUseCase = new RemoveRestaurantUserOrderUseCase();
     public static GetActiveRestaurantOrderUseCase getActiveRestaurantOrderUseCase = new GetActiveRestaurantOrderUseCase();
     public static AddActiveRestaurantOrderUseCase addActiveRestaurantOrderUseCase = new AddActiveRestaurantOrderUseCase();

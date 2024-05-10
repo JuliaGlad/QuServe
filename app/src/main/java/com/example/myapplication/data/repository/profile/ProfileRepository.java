@@ -35,9 +35,12 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.myapplication.app.App;
-import com.example.myapplication.data.dto.HistoryQueueDto;
-import com.example.myapplication.data.dto.ImageDto;
-import com.example.myapplication.data.dto.UserDto;
+import com.example.myapplication.data.db.entity.AnonymousUserEntity;
+import com.example.myapplication.data.dto.user.AnonymousUserDto;
+import com.example.myapplication.data.dto.user.HistoryQueueDto;
+import com.example.myapplication.data.dto.common.ImageDto;
+import com.example.myapplication.data.dto.user.UserDto;
+import com.example.myapplication.data.providers.AnonymousUserProvider;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
@@ -114,6 +117,12 @@ public class ProfileRepository {
     public Completable signInAnonymously() {
         return Completable.create(emitter -> {
             service.auth.signInAnonymously().addOnCompleteListener(task -> {
+                String userId = task.getResult().getUser().getUid();
+                AnonymousUserProvider.insertUser(new AnonymousUserDto(
+                        userId,
+                        NOT_PARTICIPATE_IN_QUEUE,
+                        NOT_RESTAURANT_VISITOR
+                ));
                 emitter.onComplete();
             });
         });
@@ -249,9 +258,13 @@ public class ProfileRepository {
         App.getInstance().getDatabase().userDao().deleteALl();
         return Completable.create(emitter -> {
             service.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                if (task.isSuccessful())
+                if (task.isSuccessful()) {
+                    AnonymousUserEntity entity = AnonymousUserProvider.getUser();
+                    if (entity != null){
+                        AnonymousUserProvider.deleteUser(entity);
+                    }
                     emitter.onComplete();
-                else
+                } else
                     emitter.onError(new Throwable("Wrong data"));
             });
         });
@@ -337,14 +350,19 @@ public class ProfileRepository {
 
     public Completable addActiveOrder(String path) {
         return Completable.create(emitter -> {
-            service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .update(IS_RESTAURANT_VISITOR, path).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            emitter.onComplete();
-                        }
-                    });
+            if (service.auth.getCurrentUser().isAnonymous()) {
+                service.fireStore
+                        .collection(USER_LIST)
+                        .document(service.auth.getCurrentUser().getUid())
+                        .update(IS_RESTAURANT_VISITOR, path).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                emitter.onComplete();
+                            }
+                        });
+            } else {
+                AnonymousUserProvider.updateRestaurantVisitor(path);
+                emitter.onComplete();
+            }
         });
     }
 
@@ -362,14 +380,22 @@ public class ProfileRepository {
 
     public Completable updateParticipateInQueue(String path) {
         DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
-        return Completable.create(emitter -> {
-            docRef.update(PARTICIPATE_IN_QUEUE, path).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    UserDatabaseProvider.updateParticipateInQueue(path);
-                    emitter.onComplete();
-                }
+        if (!service.auth.getCurrentUser().isAnonymous()) {
+            return Completable.create(emitter -> {
+                docRef.update(PARTICIPATE_IN_QUEUE, path).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        UserDatabaseProvider.updateParticipateInQueue(path);
+                        emitter.onComplete();
+                    }
+                });
             });
-        });
+        } else {
+            return Completable.create(emitter -> {
+                AnonymousUserProvider.updateParticipateInQueue(path);
+                emitter.onComplete();
+            });
+
+        }
     }
 
     private void getUserDocumentForDelete(DocumentReference docRef, String userId, CompletableEmitter emitter) {
@@ -554,4 +580,3 @@ public class ProfileRepository {
 
     }
 }
-

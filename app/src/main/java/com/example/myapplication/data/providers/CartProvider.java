@@ -1,11 +1,9 @@
 package com.example.myapplication.data.providers;
 
-import android.util.Log;
-
 import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.dao.CartDao;
 import com.example.myapplication.data.db.entity.CartEntity;
-import com.example.myapplication.data.dto.CartDishDto;
+import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 
 import java.util.ArrayList;

@@ -22,7 +22,6 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,8 +40,6 @@
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:text="@string/next_participant"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,10 +51,10 @@
         style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:fontFamily="@font/bold_roboto"
         android:text="@string/participants_list"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar

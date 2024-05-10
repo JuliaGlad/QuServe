@@ -1,12 +1,8 @@
 package com.example.myapplication.domain.usecase.profile;
 
-import com.example.myapplication.di.DI;
-import com.example.myapplication.data.dto.UserEmployeeRoleDto;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.profile.UserEmployeeModel;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -55,7 +55,6 @@ public class CreateAccountViewModel extends ViewModel {
                 });
     }
 
-
     public void sendEmailError(String errorMessage) {
         _emailError.setValue(errorMessage);
     }

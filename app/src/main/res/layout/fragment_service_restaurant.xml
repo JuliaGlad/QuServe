@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="24dp"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
-    tools:context=".presentation.service.main.basicUser.BasicUserServiceFragment">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="20dp"
+    tools:context=".presentation.service.basicUser.BasicUserServiceFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

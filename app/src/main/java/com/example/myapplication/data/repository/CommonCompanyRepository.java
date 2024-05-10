@@ -13,9 +13,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_PATH;
 
 import android.net.Uri;
-import android.util.Log;
 
-import com.example.myapplication.data.dto.CommonCompanyDto;
+import com.example.myapplication.data.dto.common.CommonCompanyDto;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

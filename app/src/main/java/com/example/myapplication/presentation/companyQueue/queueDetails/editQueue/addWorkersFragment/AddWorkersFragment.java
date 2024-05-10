@@ -3,26 +3,22 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.editQue
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
-import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddWorkersBinding;
-import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.recycler.WorkerItemModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.model.AddWorkerModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler.AddWorkerAdapter;
 import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler.AddWorkerRecyclerModel;

@@ -15,20 +15,17 @@
             android:id="@+id/company_logo"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_round_add_photo_24" />
+            app:srcCompat="@drawable/add_photo_round" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textLayout_company_name"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="1dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/company_logo">
@@ -45,6 +42,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_company_name">
@@ -63,6 +61,8 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Email.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="10dp"
             app:boxCornerRadiusBottomStart="30dp"
             app:boxCornerRadiusTopStart="30dp"
             app:layout_constraintEnd_toStartOf="@+id/button_change_email"
@@ -86,7 +86,6 @@
             android:id="@+id/button_change_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/change_email_icon_background"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/textLayout_company_email"
@@ -101,6 +100,7 @@
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_company_email">
@@ -121,7 +121,6 @@
             style="@style/Widget.Material3.Button.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

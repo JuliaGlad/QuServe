@@ -36,16 +36,15 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.ed
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.EditCompanyActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationActivity;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity;
 import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
-import com.example.myapplication.presentation.service.main.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
-import com.example.myapplication.presentation.service.main.queue.QueueActivity;
+import com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
+import com.example.myapplication.presentation.service.queue.QueueActivity;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
-import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
 
 public class MainActivity extends AppCompatActivity {
 

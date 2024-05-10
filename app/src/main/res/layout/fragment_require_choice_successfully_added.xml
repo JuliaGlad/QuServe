@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:padding="20dp"
     tools:context=".presentation.employee.becomeEmployee.successfullyBecomeEmployee.SuccessfullyBecomeEmployeeFragment">
 
     <ImageView
         android:id="@+id/success_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:src="@drawable/successfully_become_employee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,9 +21,9 @@
         style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textAlignment="center"
+        android:layout_marginTop="24dp"
         android:text="@string/new_required_choice_was_added_to_your_dish"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/success_image" />

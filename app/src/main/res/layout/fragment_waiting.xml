@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    tools:context=".presentation.service.waitingFragment.fragment.WaitingFragment">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="20dp"
+    tools:context=".presentation.common.waitingInQueue.WaitingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -14,7 +16,6 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/queue_name" />
 
@@ -33,7 +34,7 @@
         style="@style/TextAppearance.Material3.TitleLarge.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
+        android:paddingBottom="0dp"
         android:text="Queue Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

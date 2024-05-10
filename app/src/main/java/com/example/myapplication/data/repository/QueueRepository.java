@@ -25,8 +25,8 @@ import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
 
-import com.example.myapplication.data.dto.ImageDto;
-import com.example.myapplication.data.dto.QueueDto;
+import com.example.myapplication.data.dto.common.ImageDto;
+import com.example.myapplication.data.dto.queues.QueueDto;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;

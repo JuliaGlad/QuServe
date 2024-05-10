@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.domain.model.restaurant.menu.CategoryModel;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -31,6 +34,34 @@ public class RestaurantMenuViewModel extends ViewModel {
 
     private final MutableLiveData<RestaurantMenuState> _state = new MutableLiveData<>(new RestaurantMenuState.Loading());
     LiveData<RestaurantMenuState> state = _state;
+
+    private final MutableLiveData<Boolean> _isSignIn = new MutableLiveData<>(false);
+    LiveData<Boolean> isSignIn = _isSignIn;
+
+    public boolean checkUserID() {
+        return ProfileDI.checkUserIdUseCase.invoke();
+    }
+
+    public void signInAnonymously() {
+        QueueDI.signInAnonymouslyUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _isSignIn.postValue(true);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
 
     public void getMenuCategories(String restaurantId) {
         List<CategoryModel> models = new ArrayList<>();

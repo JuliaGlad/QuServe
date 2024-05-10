@@ -11,7 +11,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 
 import android.net.Uri;
 
-import com.example.myapplication.data.dto.TableDto;
+import com.example.myapplication.data.dto.restaurant.TableDto;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;

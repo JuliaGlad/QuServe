@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/finishedQueueCreationFragment"
-        android:name="com.example.myapplication.presentation.service.finishedQueueCreation.FinishedQueueCreationFragment"
+        android:name="com.example.myapplication.presentation.common.finishedQueueCreation.FinishedQueueCreationFragment"
         android:label="fragment_finished_queue_creation"
         tools:layout="@layout/fragment_finished_queue_creation" />
     <fragment

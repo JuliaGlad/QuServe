@@ -7,7 +7,6 @@
     android:padding="20dp"
     tools:context=".presentation.basicQueue.queueDetails.QueueDetailsFragment">
 
-
     <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="wrap_content"
@@ -18,12 +17,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?colorPrimary" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

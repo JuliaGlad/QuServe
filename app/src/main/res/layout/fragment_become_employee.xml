@@ -4,23 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="40dp"
-    tools:context=".presentation.service.JoinQueueFragment.joinQueue.JoinQueueFragment">
+    android:padding="20dp"
+    tools:context=".presentation.common.JoinQueueFragment.joinQueue.JoinQueueFragment">
 
     <ImageView
         android:id="@+id/qr_code_image"
         android:layout_width="wrap_content"
         android:layout_height="300dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/header_title"
-        style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:textSize="26sp"
+        android:textColor="@color/colorOnSurface"
+        android:fontFamily="@font/roboto_medium"
         android:text="@string/do_you_want_to_become_employee_of"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +34,7 @@
         style="@style/TextAppearance.Material3.HeadlineMedium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -55,7 +55,6 @@ public class QueueDI {
     public static GetQrCodeImageUseCase getQrCodeImageUseCase = new GetQrCodeImageUseCase();
     public static AddToParticipantsListUseCase addToParticipantsListUseCase = new AddToParticipantsListUseCase();
     public static SignInAnonymouslyUseCase signInAnonymouslyUseCase = new SignInAnonymouslyUseCase();
-    public static CheckUserIdUseCase checkUserIdUseCase = new CheckUserIdUseCase();
     public static GetQrCodePdfUseCase getQrCodePdfUseCase = new GetQrCodePdfUseCase();
     public static GetParticipantsListUseCase getParticipantsListUseCase = new GetParticipantsListUseCase();
     public static AddQueueSizeModelSnapShot addQueueSizeModelSnapShot = new AddQueueSizeModelSnapShot();

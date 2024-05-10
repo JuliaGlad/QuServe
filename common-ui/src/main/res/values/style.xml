@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+    <style name="Widget.Material3.TextInputLayout.OutlinedBox.QuServe" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintEnabled">false</item>
         <item name="boxCornerRadiusBottomEnd">100dp</item>
         <item name="boxCornerRadiusBottomStart">100dp</item>
@@ -22,6 +22,7 @@
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="fontFamily">@font/bold_roboto</item>
         <item name="android:fontFamily">@font/bold_roboto</item>
+        <item name="android:textSize">20dp</item>
     </style>
 
     <style name="TextAppearance.Material3.TitleLarge.QuServe" parent="TextAppearance.Material3.TitleLarge">

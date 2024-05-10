@@ -11,10 +11,11 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
-import com.example.myapplication.data.dto.ActiveEmployeeQueueDto;
-import com.example.myapplication.data.dto.RestaurantEmployeeDto;
-import com.example.myapplication.data.dto.UserEmployeeRoleDto;
+import com.example.myapplication.data.dto.company.ActiveEmployeeQueueDto;
+import com.example.myapplication.data.dto.restaurant.RestaurantEmployeeDto;
+import com.example.myapplication.data.dto.user.UserEmployeeRoleDto;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -53,6 +54,29 @@ public class ProfileEmployeeRepository {
     }
 
     public static class RestaurantEmployee{
+
+        public Completable addWaiterEmployeeRole(String waiterPath){
+            return Completable.create(emitter -> {
+                String locationId = service.fireStore.collection(waiterPath).getParent().getId();
+                String restaurantId = service.fireStore.collection(waiterPath).getParent().getParent().getParent().getId();
+
+                DocumentReference docRef = service.fireStore
+                        .collection(USER_LIST)
+                        .document(service.auth.getCurrentUser().getUid())
+                        .collection(RESTAURANT_EMPLOYEE)
+                        .document(restaurantId);
+
+                HashMap<String, String> employee = new HashMap<>();
+                employee.put(EMPLOYEE_ROLE, WAITER);
+                employee.put(LOCATION_ID, locationId);
+
+                docRef.set(employee).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        emitter.onComplete();
+                    }
+                });
+            });
+        }
 
         public Single<List<RestaurantEmployeeDto>> getRestaurantEmployeeRoles() {
             return Single.create(emitter -> {

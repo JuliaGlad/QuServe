@@ -9,7 +9,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS;
 
-import com.example.myapplication.data.dto.LocationDto;
+import com.example.myapplication.data.dto.restaurant.LocationDto;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;

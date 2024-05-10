@@ -19,7 +19,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.myapplication.R;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
-import com.example.myapplication.presentation.service.waitingFragment.fragment.WaitingActivity;
+import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;

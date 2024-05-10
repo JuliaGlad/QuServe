@@ -2,6 +2,8 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.e
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.myapplication.presentation.utils.Utils.EMAIL;
+import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
 import static com.google.common.base.StandardSystemProperty.USER_NAME;
 
 import android.app.DatePickerDialog;
@@ -12,6 +14,7 @@ import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -34,14 +38,17 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditProfileBinding;
+import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditBasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditUserModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
 
-///*
-// * @author j.gladkikh
-// */
+import myapplication.android.ui.listeners.DialogDismissedListener;
+
 public class EditProfileFragment extends Fragment {
     private EditProfileViewModel viewModel;
     private FragmentEditProfileBinding binding;
@@ -52,9 +59,7 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         viewModel = new ViewModelProvider(this).get(EditProfileViewModel.class);
-
         setActivityResultLauncher();
     }
 
@@ -69,12 +74,26 @@ public class EditProfileFragment extends Fragment {
 
         setupObserves();
         viewModel.retrieveUserData();
-
         initBirthdayButton();
         initChangePhotoButton();
         initSaveDataButton();
         initBackButton();
+        initChangeEmail();
+    }
 
+    private void initChangeEmail() {
+        binding.buttonChangeEmail.setOnClickListener(v -> {
+            ChangeEmailDialogFragment dialogFragment = new ChangeEmailDialogFragment();
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "CHANGE_EMAIL_DIALOG");
+            DialogDismissedListener listener = bundle -> {
+
+                email = bundle.getString(EMAIL);
+                String password = bundle.getString(PASSWORD);
+                viewModel.verifyBeforeUpdate(email, password);
+
+            };
+            dialogFragment.onDismissListener(listener);
+        });
     }
 
     private void initBirthdayButton() {
@@ -132,7 +151,11 @@ public class EditProfileFragment extends Fragment {
             email = binding.editLayoutEmail.getText().toString();
             gender = binding.editLayoutGender.getText().toString();
             birthday = binding.editLayoutData.getText().toString();
-            viewModel.saveData(name, phone, gender, birthday, imageUri, this);
+            if (name != null) {
+                viewModel.saveData(name, phone, gender, birthday, imageUri, this);
+            } else {
+                Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -179,6 +202,24 @@ public class EditProfileFragment extends Fragment {
 
             } else if (state instanceof EditBasicUserState.Error) {
 
+            }
+        });
+
+        viewModel.openSuccessDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                EmailUpdateSuccessfulDialogFragment dialogFragment = new EmailUpdateSuccessfulDialogFragment();
+                dialogFragment.show(getActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
+            }
+        });
+
+        viewModel.openVerifyDialog.observe(getViewLifecycleOwner(), password -> {
+            if (password != null) {
+                VerifyBeforeUpdateDialogFragment dialogFragment = new VerifyBeforeUpdateDialogFragment(email, password);
+                dialogFragment.show(getActivity().getSupportFragmentManager(), "VERIFY_BEFORE_UPDATE_DIALOG");
+                DialogDismissedListener dismissedListener = object -> {
+                    viewModel.updateEmailField(email);
+                };
+                dialogFragment.onDismissListener(dismissedListener);
             }
         });
 

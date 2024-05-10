@@ -59,6 +59,13 @@ public class CreateAccountFragment extends Fragment {
         initSignUpButton();
         initEditText();
         initAddPhoto();
+        initButtonBack();
+    }
+
+    private void initButtonBack() {
+        binding.buttonBack.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().popBackStack();
+        });
     }
 
     private void initAddPhoto() {

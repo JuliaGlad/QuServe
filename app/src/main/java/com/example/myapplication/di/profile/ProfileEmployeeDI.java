@@ -8,6 +8,7 @@ import com.example.myapplication.domain.usecase.profile.employee.company.DeleteE
 import com.example.myapplication.domain.usecase.profile.employee.company.GetActiveQueuesByEmployeeIdUseCase;
 import com.example.myapplication.domain.usecase.profile.employee.company.GetActiveQueuesUseCase;
 import com.example.myapplication.domain.usecase.profile.GetEmployeeRolesUseCase;
+import com.example.myapplication.domain.usecase.profile.employee.restaurant.AddWaiterEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.profile.employee.restaurant.GetRestaurantEmployeeRolesUseCase;
 import com.example.myapplication.domain.usecase.profile.employee.IsEmployeeUseCase;
 import com.example.myapplication.domain.usecase.profile.employee.company.UpdateEmployeeRoleUseCase;
@@ -18,6 +19,7 @@ public class ProfileEmployeeDI {
     public static ProfileEmployeeRepository.CompanyEmployee companyEmployee = new ProfileEmployeeRepository.CompanyEmployee();
     public static ProfileEmployeeRepository.RestaurantEmployee restaurantEmployee = new ProfileEmployeeRepository.RestaurantEmployee();
 
+    public static AddWaiterEmployeeRoleUseCase addWaiterEmployeeRoleUseCase = new AddWaiterEmployeeRoleUseCase();
     public static GetRestaurantEmployeeRolesUseCase getRestaurantEmployeeRolesUseCase = new GetRestaurantEmployeeRolesUseCase();
     public static AddCookEmployeeRoleUseCase addCookEmployeeRoleUseCase = new AddCookEmployeeRoleUseCase();
     public static DeleteEmployeeRoleUseCase deleteEmployeeRoleUseCase = new DeleteEmployeeRoleUseCase();

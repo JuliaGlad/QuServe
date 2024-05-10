@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantUserDI;
@@ -30,17 +29,13 @@ public class BecomeCookViewModel extends ViewModel {
     LiveData<Boolean> isComplete = _isComplete;
 
     public void getData(String path) {
-        RestaurantUserDI.getRestaurantNameByLocationPathUseCase.invoke(path)
-                .zipWith(RestaurantEmployeeDI.getCookQrCodeByPathUseCase.invoke(path), new BiFunction<RestaurantNameIdModel, Uri, BecomeCookStateModel>() {
-                    @Override
-                    public BecomeCookStateModel apply(RestaurantNameIdModel restaurantNameIdModel, Uri uri) throws Throwable {
-                        return new BecomeCookStateModel(
-                                restaurantNameIdModel.getName(),
-                                restaurantNameIdModel.getId(),
-                                uri
-                        );
-                    }
-                })
+        RestaurantUserDI.getRestaurantNameByEmployeePathUseCase.invoke(path)
+                .zipWith(RestaurantEmployeeDI.getCookQrCodeByPathUseCase.invoke(path), (restaurantNameIdModel, uri) ->
+                        new BecomeCookStateModel(
+                        restaurantNameIdModel.getName(),
+                        restaurantNameIdModel.getId(),
+                        uri
+                ))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<BecomeCookStateModel>() {
                     @Override

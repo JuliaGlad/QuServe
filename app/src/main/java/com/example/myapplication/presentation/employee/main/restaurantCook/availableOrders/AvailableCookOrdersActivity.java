@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.common.OrderDetailsActivity;
+import com.example.myapplication.presentation.common.orderDetails.OrderDetailsActivity;
 
 public class AvailableCookOrdersActivity extends AppCompatActivity {
 

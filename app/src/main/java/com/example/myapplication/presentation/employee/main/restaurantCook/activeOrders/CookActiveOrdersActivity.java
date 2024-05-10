@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
-import com.example.myapplication.presentation.common.OrderDetailsActivity;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.dishDetails.OrderDetailsWithIndicatorsActivity;
 
 public class CookActiveOrdersActivity extends AppCompatActivity {

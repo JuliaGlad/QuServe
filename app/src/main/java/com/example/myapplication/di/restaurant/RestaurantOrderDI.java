@@ -1,6 +1,7 @@
 package com.example.myapplication.di.restaurant;
 
 import com.example.myapplication.data.repository.restaurant.RestaurantOrderRepository;
+import com.example.myapplication.domain.usecase.restaurant.order.AddReadyDishesSnapshotUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.GetDishesImagesByIdsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.AddDishToCartUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.AddToActiveOrdersUseCase;
@@ -15,7 +16,9 @@ import com.example.myapplication.domain.usecase.restaurant.order.GetOrderByPathU
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderModelByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderRestaurantIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderWithNotTakenDishesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.GetReadyDishesToWaiterUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.IncrementDishAmountUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.OnDishServedUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.RemoveFromCartUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.TakeOrderByCookUseCase;
 
@@ -23,6 +26,9 @@ public class RestaurantOrderDI {
 
     public static RestaurantOrderRepository restaurantOrderRepository = new RestaurantOrderRepository();
 
+    public static OnDishServedUseCase onDishServedUseCase = new OnDishServedUseCase();
+    public static AddReadyDishesSnapshotUseCase addReadyDishesSnapshotUseCase = new AddReadyDishesSnapshotUseCase();
+    public static GetReadyDishesToWaiterUseCase getReadyDishesToWaiterUseCase = new GetReadyDishesToWaiterUseCase();
     public static FinishOrderByPathUseCase finishOrderByPathUseCase = new FinishOrderByPathUseCase();
     public static GetOrderWithNotTakenDishesUseCase getOrderWithNotTakenDishesUseCase = new GetOrderWithNotTakenDishesUseCase();
     public static AddToReadyDishesUseCase addToReadyDishesUseCase = new AddToReadyDishesUseCase();

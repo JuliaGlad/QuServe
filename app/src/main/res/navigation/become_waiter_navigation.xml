@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/become_waiter_navigation.xml"
+    app:startDestination="@id/becomeWaiterFragment">
+
+    <fragment
+        android:id="@+id/becomeWaiterFragment"
+        android:name="com.example.myapplication.presentation.employee.becomeWaiter.BecomeWaiterFragment"
+        android:label="BecomeWaiterFragment" >
+        <action
+            android:id="@+id/action_becomeWaiterFragment_to_successfullyBecomeWaiter"
+            app:destination="@id/successfullyBecomeWaiter" />
+    </fragment>
+    <fragment
+        android:id="@+id/successfullyBecomeWaiter"
+        android:name="com.example.myapplication.presentation.employee.becomeWaiter.success.SuccessfullyBecomeWaiterFragment"
+        android:label="SuccessfullyBecomeWaiter" />
+</navigation>

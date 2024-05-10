@@ -5,14 +5,12 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-import com.example.myapplication.data.dto.CartDishDto;
+import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;

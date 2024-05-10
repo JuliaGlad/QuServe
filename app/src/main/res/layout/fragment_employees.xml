@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="20dp"
     tools:context=".presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment">
 
     <ImageButton
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
         android:background="@color/transparent"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintBottom_toBottomOf="@+id/search_view"
@@ -22,31 +24,27 @@
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginStart="20dp"
         android:background="@drawable/card_background"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_back"
         app:layout_constraintTop_toTopOf="parent"
-        app:searchIcon="@drawable/search_icon"
         app:queryHint="@string/search"
+        app:searchIcon="@drawable/search_icon"
         app:tint="?colorPrimary" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24sp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        app:tabTextColor="?android:textColorHint"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabMode="fixed"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view">
+        app:layout_constraintTop_toBottomOf="@id/search_view"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="?android:textColorHint">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -68,11 +66,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="24dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_back"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
@@ -80,8 +76,8 @@
         android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"

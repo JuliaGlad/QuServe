@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.employee.main.navFragment;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
+
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -8,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
+import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 import com.example.myapplication.domain.model.profile.UserEmployeeModel;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
 
@@ -30,7 +34,35 @@ public class EmployeeNavigationViewModel extends ViewModel {
     private final MutableLiveData<List<EmployeeRoleModel>> _roles = new MutableLiveData<>(null);
     LiveData<List<EmployeeRoleModel>> roles = _roles;
 
-    private List<EmployeeRoleModel> models = new ArrayList<>();
+    private final List<EmployeeRoleModel> models = new ArrayList<>();
+
+    private final MutableLiveData<Bundle> _isWorking = new MutableLiveData<>(null);
+    LiveData<Bundle> isWorking = _isWorking;
+
+    private final MutableLiveData<Boolean> _noWork = new MutableLiveData<>(false);
+    LiveData<Boolean> noWork = _noWork;
+
+    public void checkIsWorking(String restaurantId, String locationId, Bundle bundle) {
+        RestaurantEmployeeDI.checkIsWorkingUseCase.invoke(restaurantId, locationId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Boolean aBoolean) {
+                        bundle.putBoolean(IS_WORKING, aBoolean);
+                        _isWorking.postValue(bundle);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
 
     public void isEmployee() {
         ProfileEmployeeDI.isEmployeeUseCase.isEmployee()

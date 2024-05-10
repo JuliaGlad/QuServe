@@ -10,7 +10,9 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,6 +36,8 @@ import com.example.myapplication.presentation.employee.main.notEmployeeYetFragme
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
 import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
+import com.example.myapplication.presentation.employee.main.restaurantWaiter.main.MainWaiterFragment;
+import com.example.myapplication.presentation.employee.main.restaurantWaiter.startWork.StartWorkFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment;
 import com.google.gson.Gson;
 
@@ -103,6 +107,24 @@ public class EmployeeNavigationFragment extends Fragment {
             }
         });
 
+
+        viewModel.isWorking.observe(getViewLifecycleOwner(), bundle -> {
+            if (bundle != null){
+                boolean isWorking = bundle.getBoolean(IS_WORKING);
+                if (isWorking) {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
+                            .commit();
+                } else {
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.employee_nav_container, StartWorkFragment.class, bundle)
+                            .commit();
+                }
+            }
+        });
+
         viewModel.getCompanyEmployeeRoles.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 viewModel.getRestaurantRoles();
@@ -126,7 +148,6 @@ public class EmployeeNavigationFragment extends Fragment {
                     bundle.putString(COMPANY_ID, employeeRoleModel.getCompanyId());
 
                     String role = employeeRoleModel.getRole();
-                    Log.d("Role", role);
                     switch (role) {
                         case WORKER:
                             fragmentManager
@@ -146,6 +167,10 @@ public class EmployeeNavigationFragment extends Fragment {
                                     .beginTransaction()
                                     .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
                                     .commit();
+                        case WAITER:
+                            bundle.putString(LOCATION_ID, employeeRoleModel.getLocationId());
+                            viewModel.checkIsWorking(employeeRoleModel.getCompanyId(), employeeRoleModel.getLocationId(), bundle);
+                            break;
                     }
                 }
             }

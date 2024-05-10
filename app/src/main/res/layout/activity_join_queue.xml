@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.service.JoinQueueFragment.JoinQueueActivity">
+    tools:context=".presentation.common.JoinQueueFragment.JoinQueueActivity">
 
     <fragment
         android:id="@+id/joinQueueFragment"
-        android:name="com.example.myapplication.presentation.service.JoinQueueFragment.joinQueue.JoinQueueFragment"
+        android:name="com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.JoinQueueFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="parent"

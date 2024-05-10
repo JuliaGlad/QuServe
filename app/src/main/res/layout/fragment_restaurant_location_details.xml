@@ -9,7 +9,6 @@
     android:paddingEnd="20dp"
     tools:context=".presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
