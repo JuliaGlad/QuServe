@@ -27,7 +27,7 @@
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/white" />
+        app:tint="?colorPrimary" />
 
     <ProgressBar
         android:id="@+id/progressBar"

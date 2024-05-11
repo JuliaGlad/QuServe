@@ -71,13 +71,15 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:layout_marginTop="8dp"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/colorOnErrorContainerHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_main">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:textColorHint="@color/colorOnErrorContainerVariant"
-            android:textColor="@color/colorOnErrorContainerVariant"
+            android:textColorHint="@color/colorOnErrorContainerHint"
+            android:textColor="@color/colorOnErrorContainerHint"
             android:id="@+id/editLayout_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

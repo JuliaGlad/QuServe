@@ -83,13 +83,6 @@
                 android:layout_height="wrap_content"
                 android:text="2. Умное обслуживание ресторанов и кафе. Приложение упрощает процесс ожидание и делает его более удобным и надежным, как для посетителей, так и для сотрудников ресторана."/>
 
-            <com.google.android.material.textview.MaterialTextView
-                android:padding="16dp"
-                style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="3. Умное обслуживание в самолете. Приложение облегчает работу бортпроводников, а также решает сложности с пониманием иностранного языка."/>
-
 
         </LinearLayout>
 

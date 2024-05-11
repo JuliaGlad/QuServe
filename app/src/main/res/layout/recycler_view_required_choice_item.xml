@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorDisabled"
+        android:background="?colorSurfaceContainer"
         android:paddingStart="50dp"
         android:paddingTop="16dp"
         android:paddingEnd="50dp"

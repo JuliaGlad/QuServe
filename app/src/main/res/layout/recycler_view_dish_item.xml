@@ -24,7 +24,7 @@
 
             <ImageView
                 android:id="@+id/dish_image"
-                android:layout_width="150dp"
+                android:layout_width="170dp"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/no_image"

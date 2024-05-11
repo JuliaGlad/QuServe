@@ -37,7 +37,7 @@
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/bold_roboto"
         android:text="Company Name"
-        android:textColor="@color/white"
+        android:textColor="?colorSurface"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/subTitle"
         app:layout_constraintStart_toStartOf="parent" />

@@ -32,7 +32,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/queue"
-            android:textColor="@color/white"
+            android:textColor="?colorSurface"
             app:layout_constraintBottom_toBottomOf="@+id/background"
             app:layout_constraintStart_toStartOf="parent" />
 

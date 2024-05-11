@@ -5,5 +5,5 @@
     <stroke
         android:width="10dp"
         android:color="?colorSurface" />
-    <solid android:color="?cardBackgroundColor" />
+    <solid android:color="@color/colorCardBackground" />
 </shape>

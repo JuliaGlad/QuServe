@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#266180</color>
+    <color name="colorPrimaryButton">#266180</color>
     <color name="colorOnPrimary">#F7FCFF</color>
     <color name="colorSecondary">#4D6880</color>
     <color name="colorOnSecondary">#F7FCFF</color>
     <color name="colorTertiary">#6A5880</color>
     <color name="colorOnTertiary">#FBF7FF</color>
     <color name="colorError">#CC3A3A</color>
+    <color name="colorErrorButton">#CC3A3A</color>
     <color name="colorOnError">#FFF4F4</color>
     <color name="colorErrorContainer">#FFEAE9</color>
     <color name="colorOnErrorContainer">#B23333</color>
     <color name="colorOnErrorContainerVariant">#E98080</color>
+    <color name="colorOnErrorContainerDialog">#E98080</color>
+    <color name="colorOnErrorContainerHint">#E98080</color>
+    <color name="colorErrorContainerButtonBackground">@color/colorOnErrorTonal</color>
     <color name="colorOnErrorTonal">#FFCFCB</color>
     <color name="colorPrimaryContainer">#AEDEF5</color>
     <color name="colorOnPrimaryContainer">@color/colorPrimary</color>
+    <color name="colorPrimaryContainerVariant">#94CDE8</color>
     <color name="colorSecondaryContainer">#BED3E5</color>
     <color name="colorOnSecondaryContainer">#171F26</color>
     <color name="colorTertiaryContainer">#EFE4FB</color>
@@ -24,8 +30,8 @@
     <color name="colorSurfaceContainer">#D7E6F2</color>
     <color name="colorCardBackground">#E2F2FF</color>
     <color name="colorSurfaceContainerLowest">#EFF7FF</color>
-    <color name="colorSurfaceContainerHigh">#D0F6FF</color>
-    <color name="colorSurfaceContainerHighest">#CCE8FF</color>
+    <color name="colorSurfaceContainerHigh">#CFE9FF</color>
+    <color name="colorSurfaceContainerHighest">#C3E4FF</color>
     <color name="colorOutline">#889199</color>
     <color name="colorOutlineVariant">#7C8B99</color>
     <color name="colorInverseSurface">#2A3940</color>

@@ -38,7 +38,7 @@
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/bold_roboto"
         android:text="Restaurant Name"
-        android:textColor="@color/white"
+        android:textColor="?colorSurface"
         app:layout_constraintBottom_toTopOf="@+id/subTitle"
         app:layout_constraintStart_toStartOf="parent" />
 
