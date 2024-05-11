@@ -2,23 +2,31 @@ package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEES;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK_QR_CODE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER_QR_CODE;
 
 import android.net.Uri;
 
+import com.example.myapplication.data.dto.common.EmployeeDto;
+import com.example.myapplication.data.dto.restaurant.EmployeeRestaurantDto;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +36,44 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RestaurantEmployeesRepository {
 
-    public Single<Boolean> checkIsWorking(String restaurantId, String locationId){
+    public Completable deleteRestaurantEmployee(String restaurantId, String locationId, String userId, String role){
+        return Completable.create(emitter -> {
+            String document;
+            if (role.equals(WAITER)){
+                document = WAITERS;
+            } else {
+                document = COOKS;
+            }
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(document)
+                    .document(userId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Single<List<EmployeeRestaurantDto>> getEmployees(String restaurantId, String locationId) {
+        return Single.create(emitter -> {
+            DocumentReference docRef =
+                    service.fireStore
+                            .collection(RESTAURANT_LIST)
+                            .document(restaurantId)
+                            .collection(RESTAURANT_LOCATION)
+                            .document(locationId);
+            List<EmployeeRestaurantDto> employees = new ArrayList<>();
+            getCooks(employees, docRef);
+            getWaiters(employees, docRef);
+        });
+    }
+
+    public Single<Boolean> checkIsWorking(String restaurantId, String locationId) {
         return Single.create(emitter -> {
             service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -38,7 +83,7 @@ public class RestaurantEmployeesRepository {
                     .collection(WAITERS)
                     .document(service.auth.getCurrentUser().getUid())
                     .get().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult().getBoolean(IS_WORKING));
                         }
                     });
@@ -129,7 +174,7 @@ public class RestaurantEmployeesRepository {
         });
     }
 
-    public Single<Uri> getWaiterQrCodeByPath(String waiterPath){
+    public Single<Uri> getWaiterQrCodeByPath(String waiterPath) {
         return Single.create(emitter -> {
             String locationId = service.fireStore.collection(waiterPath).getParent().getId();
             service.storageReference
@@ -203,6 +248,36 @@ public class RestaurantEmployeesRepository {
                             emitter.onComplete();
                         }
                     });
+        });
+    }
+
+    private void getWaiters(List<EmployeeRestaurantDto> employees, DocumentReference docRef) {
+        docRef.collection(WAITERS).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                for (DocumentSnapshot current : snapshots) {
+                    employees.add(new EmployeeRestaurantDto(
+                            current.getId(),
+                            current.getString(USER_NAME_KEY),
+                            WAITER
+                    ));
+                }
+            }
+        });
+    }
+
+    private void getCooks(List<EmployeeRestaurantDto> employees, DocumentReference docRef) {
+        docRef.collection(COOKS).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                for (DocumentSnapshot current : snapshots) {
+                    employees.add(new EmployeeRestaurantDto(
+                            current.getId(),
+                            current.getString(USER_NAME_KEY),
+                            COOK
+                    ));
+                }
+            }
         });
     }
 

@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.data.repository.profile.ProfileRepository;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
@@ -18,6 +20,7 @@ public class FinishRestaurantOrderViewModel extends ViewModel {
 
     public void finishOrder(String orderPath) {
         RestaurantOrderDI.finishOrderByPathUseCase.invoke(orderPath)
+                .concatWith(ProfileDI.removeRestaurantUserOrderUseCase.invoke())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

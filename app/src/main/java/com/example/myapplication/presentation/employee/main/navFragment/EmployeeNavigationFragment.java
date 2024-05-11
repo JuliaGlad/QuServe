@@ -12,12 +12,12 @@ import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEmployeeNavigationBinding;
 import com.example.myapplication.presentation.employee.employeeUserModel.EmployeeRoleModel;
+import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation.ChooseLocationFragment;
 import com.example.myapplication.presentation.employee.main.differentRolesFragment.DifferentRolesEmployeeFragment;
 import com.example.myapplication.presentation.employee.main.notEmployeeYetFragment.NotEmployeeYetFragment;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
@@ -38,7 +39,7 @@ import com.example.myapplication.presentation.employee.main.queueWorkerFragment.
 import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
 import com.example.myapplication.presentation.employee.main.restaurantWaiter.main.MainWaiterFragment;
 import com.example.myapplication.presentation.employee.main.restaurantWaiter.startWork.StartWorkFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment;
+import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.EmployeesFragment;
 import com.google.gson.Gson;
 
 public class EmployeeNavigationFragment extends Fragment {
@@ -82,6 +83,11 @@ public class EmployeeNavigationFragment extends Fragment {
             case COMPANY:
                 fragmentManager.beginTransaction()
                         .replace(R.id.employee_nav_container, EmployeesFragment.class, null)
+                        .commit();
+                break;
+            case RESTAURANT:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.employee_nav_container, ChooseLocationFragment.class, null)
                         .commit();
                 break;
         }

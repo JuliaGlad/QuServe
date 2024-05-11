@@ -25,13 +25,17 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/TextAppearance.Material3.HeadlineSmall.QuServe"
+            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
+            android:lineSpacingMultiplier="1"
             android:text="@string/statistics"
             android:textColor="@color/colorTertiary"
+            android:textColorHighlight="@color/colorTextHint"
+            android:textColorHint="@color/colorTextHint"
+            android:textColorLink="@color/colorTextHint"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -378,7 +378,6 @@ public class CompanyQueueUserRepository {
                         Uri uri = task.getResult();
                         emitter.onSuccess(new ImageDto(uri));
                     } else {
-                        Log.d("Error", task.getException().getMessage());
                         emitter.onSuccess(new ImageDto(Uri.EMPTY));
                     }
                 });

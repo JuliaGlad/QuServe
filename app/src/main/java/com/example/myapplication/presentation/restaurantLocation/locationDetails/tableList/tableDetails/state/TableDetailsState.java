@@ -4,9 +4,9 @@ import com.example.myapplication.presentation.restaurantLocation.locationDetails
 
 public interface TableDetailsState {
     class Success implements TableDetailsState{
-        public TableDetailModel data;
+        public TableDetailsStateModel data;
 
-        public Success(TableDetailModel data) {
+        public Success(TableDetailsStateModel data) {
             this.data = data;
         }
     }

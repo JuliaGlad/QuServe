@@ -29,12 +29,16 @@
 
         <TextView
             android:id="@+id/ingredient_name"
-            style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
+            android:lineSpacingMultiplier="1"
             android:padding="10dp"
             android:text="Ingredient Name"
+            android:textColorHighlight="@color/colorTextHint"
+            android:textColorHint="@color/colorTextHint"
+            android:textColorLink="@color/colorTextHint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

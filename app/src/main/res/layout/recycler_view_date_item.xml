@@ -8,7 +8,7 @@
     app:cardCornerRadius="0dp">
 
         <TextView
-            android:id="@+id/city_name"
+            android:id="@+id/date"
             style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,11 +1,14 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -38,7 +42,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
     List<VariantsModel> toppings = new ArrayList<>();
     List<RequiredChoiceOrderDishDetailsModel> models = new ArrayList<>();
 
-    public void getDishData(String restaurantId, String categoryId, String dishId) {
+    public void getDishData(String restaurantId, String categoryId, String dishId, String type) {
         RestaurantMenuDI.getSingleDishByIdUseCase.invoke(restaurantId, categoryId, dishId)
                 .flatMap(dishMenuOwnerModel -> {
 
@@ -85,6 +89,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                                 }
                             }
                         }
+
                         _state.postValue(new RestaurantOrderDishDetailsState.Success(new RestaurantOrderDishDetailsModel(
                                 name, price, timeCooking, ingredients,
                                 weightOrCount, ingredientsToRemove, toppings,
@@ -99,6 +104,8 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                 });
 
     }
+
+
 
     public void addToCart(String restaurantId, CartDishModel model) {
         RestaurantOrderDI.addDishToCartUseCase.invoke(restaurantId, model);

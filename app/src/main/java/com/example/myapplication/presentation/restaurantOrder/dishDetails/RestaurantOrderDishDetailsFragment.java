@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
@@ -52,7 +53,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
     private RestaurantOrderDishDetailsViewModel viewModel;
     private FragmentRestaurantOrderDishDetailsBinding binding;
-    private String dishId, categoryId, restaurantId, tablePath;
+    private String dishId, categoryId, restaurantId, tablePath, type;
     private final List<VariantCartModel> chosenToppings = new ArrayList<>();
     private final List<String> chosenRemove = new ArrayList<>();
     private String[] chosenRequireChoices;
@@ -69,7 +70,8 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         tablePath = getActivity().getIntent().getStringExtra(TABLE_PATH);
         categoryId = getActivity().getIntent().getStringExtra(CATEGORY_ID);
         restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        viewModel.getDishData(restaurantId, categoryId, dishId);
+        type = getActivity().getIntent().getStringExtra(STATE);
+        viewModel.getDishData(restaurantId, categoryId, dishId, type);
     }
 
     @Override
@@ -89,8 +91,6 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     }
 
     private void initOrderButton(String name, String weight, String price) {
-
-
         binding.buttonOrder.setOnClickListener(v -> {
             CartDishModel model = new CartDishModel(
                     dishId, categoryId, name, weight, price,
@@ -151,6 +151,8 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
             }
         });
     }
+
+
 
     private void initRemove(List<String> toRemove) {
         binding.toRemoveHeader.setOnClickListener(v -> {

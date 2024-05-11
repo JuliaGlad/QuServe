@@ -7,12 +7,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantTableDI;
+import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.model.TableModel;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.model.TableDetailModel;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.state.TableDetailsState;
+import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.state.TableDetailsStateModel;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantTableDetailsViewModel extends ViewModel {
@@ -25,17 +28,26 @@ public class RestaurantTableDetailsViewModel extends ViewModel {
 
     public void getTableData(String restaurantId, String locationId, String tableId) {
         RestaurantTableDI.getSingleTableByIdUseCase.invoke(restaurantId, locationId, tableId)
-                .zipWith(RestaurantTableDI.getTableQrCodeJpgUseCase.invoke(tableId), TableDetailModel::new)
+                .zipWith(RestaurantTableDI.getTableQrCodeJpgUseCase.invoke(tableId), new BiFunction<TableModel, Uri, TableDetailsStateModel>() {
+                    @Override
+                    public TableDetailsStateModel apply(TableModel tableModel, Uri uri) throws Throwable {
+                        return new TableDetailsStateModel(
+                                tableModel.getNumber(),
+                                tableModel.getOrderId(),
+                                uri
+                        );
+                    }
+                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<TableDetailModel>() {
+                .subscribe(new SingleObserver<TableDetailsStateModel>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull TableDetailModel tableDetailModel) {
-                        _state.postValue(new TableDetailsState.Success(tableDetailModel));
+                    public void onSuccess(@NonNull TableDetailsStateModel tableDetailsStateModel) {
+                        _state.postValue(new TableDetailsState.Success(tableDetailsStateModel));
                     }
 
                     @Override

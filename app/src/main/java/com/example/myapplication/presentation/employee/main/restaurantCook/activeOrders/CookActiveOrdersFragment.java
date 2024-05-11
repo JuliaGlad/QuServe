@@ -16,29 +16,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentCookActiveOrdersBinding;
-import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.dishDetails.OrderDetailsWithIndicatorsActivity;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.recycler.ActiveOrdersAdapter;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.recycler.ActiveOrdersItemModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.state.CookActiveOrderStateModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.state.CookActiveOrdersState;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CookActiveOrdersFragment extends Fragment {
 
     private CookActiveOrdersViewModel viewModel;
     private FragmentCookActiveOrdersBinding binding;
-    private String restaurantId, locationId;
-    private ActiveOrdersAdapter adapter = new ActiveOrdersAdapter();
+    private final ActiveOrdersAdapter adapter = new ActiveOrdersAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CookActiveOrdersViewModel.class);
-        restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
+        String restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        String locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
         viewModel.getOrders(restaurantId, locationId);
     }
 

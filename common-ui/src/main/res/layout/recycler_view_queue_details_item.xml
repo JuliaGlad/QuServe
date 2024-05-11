@@ -27,7 +27,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:lineSpacingMultiplier="1"
         android:text="TextView"
+        android:textColorHighlight="@color/colorTextHint"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
         app:layout_constraintBottom_toBottomOf="@+id/icon"
         app:layout_constraintEnd_toStartOf="@+id/icon_next"
         app:layout_constraintStart_toStartOf="@+id/title"
@@ -45,11 +49,15 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/TextAppearance.Material3.TitleSmall.QuServe"
+        style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:lineSpacingMultiplier="1"
         android:text="Title"
+        android:textColorHighlight="@color/colorTextHint"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="@+id/icon" />
 

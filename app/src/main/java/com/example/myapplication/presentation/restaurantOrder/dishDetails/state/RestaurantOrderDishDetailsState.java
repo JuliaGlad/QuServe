@@ -13,4 +13,5 @@ public interface RestaurantOrderDishDetailsState {
     class Loading implements RestaurantOrderDishDetailsState{}
 
     class Error implements RestaurantOrderDishDetailsState{}
+
 }

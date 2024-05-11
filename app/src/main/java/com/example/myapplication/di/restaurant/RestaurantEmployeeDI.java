@@ -1,12 +1,15 @@
 package com.example.myapplication.di.restaurant;
 
 import com.example.myapplication.data.repository.restaurant.RestaurantEmployeesRepository;
+import com.example.myapplication.domain.usecase.profile.employee.restaurant.DeleteRestaurantEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.restaurant.UpdateIsWorkingUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.AddCookUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.AddWaiterUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.CheckIsWorkingUseCase;
+import com.example.myapplication.domain.usecase.restaurant.employee.DeleteEmployeeUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetCookQrCodeByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetCookQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.employee.GetEmployeesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetWaiterQrCodeByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetWaiterQrCodeUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.UploadCookQrCodeUseCase;
@@ -16,6 +19,8 @@ public class RestaurantEmployeeDI {
 
     public static RestaurantEmployeesRepository restaurantEmployeesRepository = new RestaurantEmployeesRepository();
 
+    public static DeleteEmployeeUseCase deleteEmployeeUseCase = new DeleteEmployeeUseCase();
+    public static GetEmployeesUseCase getEmployeesUseCase = new GetEmployeesUseCase();
     public static CheckIsWorkingUseCase checkIsWorkingUseCase = new CheckIsWorkingUseCase();
     public static GetWaiterQrCodeByPathUseCase getWaiterQrCodeByPathUseCase = new GetWaiterQrCodeByPathUseCase();
     public static AddWaiterUseCase addWaiterUseCase = new AddWaiterUseCase();

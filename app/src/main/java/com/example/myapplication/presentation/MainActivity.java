@@ -7,6 +7,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,6 +23,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.presentation.common.orderDetails.OrderDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
 import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
@@ -86,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openOrderDetailsActivity(String path){
+        Intent intent = new Intent(this, OrderDetailsActivity.class);
+        intent.putExtra(PATH, path);
+        startActivity(intent);
     }
 
     public void openLocationDetailsActivity(String locationId){

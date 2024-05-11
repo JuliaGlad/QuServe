@@ -7,7 +7,7 @@
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
     android:paddingTop="20dp"
-    tools:context=".presentation.profile.loggedProfile.companyUser.employees.fragment.EmployeesFragment">
+    tools:context=".presentation.employee.main.companiesEmployees.employeesCompany.fragment.EmployeesFragment">
 
     <ImageButton
         android:id="@+id/button_back"

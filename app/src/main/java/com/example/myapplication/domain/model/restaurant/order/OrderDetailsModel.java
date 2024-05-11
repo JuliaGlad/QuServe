@@ -1,7 +1,5 @@
 package com.example.myapplication.domain.model.restaurant.order;
 
-import com.example.myapplication.presentation.common.state.OrderDetailsDishModel;
-
 import java.util.List;
 
 public class OrderDetailsModel {

@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/head_line"
-            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -42,14 +42,17 @@
 
         <TextView
             android:id="@+id/description"
-            style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/roboto_medium"
+            android:lineSpacingMultiplier="1.0"
             android:paddingBottom="20dp"
             android:text="@string/show_this_qr_code_to_people_who_are_looking_forward_to_join_your_queue"
+            android:textColorHighlight="@color/colorTextHint"
+            android:textColorHint="@color/colorTextHint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"

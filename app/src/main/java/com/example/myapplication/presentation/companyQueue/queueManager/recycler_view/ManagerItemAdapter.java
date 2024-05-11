@@ -1,19 +1,13 @@
 package com.example.myapplication.presentation.companyQueue.queueManager.recycler_view;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.RecyclerViewQueueManagerItemBinding;
-import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
-import com.example.myapplication.presentation.companyQueue.queueManager.QueueManagerActivity;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemCallBack;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 
 public class ManagerItemAdapter extends ListAdapter<ManagerItemModel, RecyclerView.ViewHolder> {
 

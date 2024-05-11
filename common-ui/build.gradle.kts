@@ -34,11 +34,10 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("io.reactivex.rxjava3:rxjava:3.1.8")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.android.gms:play-services-tasks:18.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

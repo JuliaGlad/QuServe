@@ -39,36 +39,36 @@ public class TabLayoutDelegate implements AdapterDelegate {
         }
 
         void bind(TabLayoutModel model){
-            binding.tabLayout.getTabAt(0).setText(model.firstText);
-            binding.tabLayout.getTabAt(1).setText(model.secondText);
-            binding.tabLayout.getTabAt(2).setText(model.thirdText);
-
-            binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    switch (tab.getPosition()){
-                        case 0:
-                            model.listener.onFirstTabSelected();
-                            break;
-                        case 1:
-                            model.listener.onSecondTabSelected();
-                            break;
-                        case 2:
-                            model.listener.onThirdTabSelected();
-                            break;
-                    }
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
+//            binding.tabLayout.getTabAt(0).setText(model.firstText);
+//            binding.tabLayout.getTabAt(1).setText(model.secondText);
+//            binding.tabLayout.getTabAt(2).setText(model.thirdText);
+//
+//            binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+//                @Override
+//                public void onTabSelected(TabLayout.Tab tab) {
+//                    switch (tab.getPosition()){
+//                        case 0:
+//                            model.listener.onFirstTabSelected();
+//                            break;
+//                        case 1:
+//                            model.listener.onSecondTabSelected();
+//                            break;
+//                        case 2:
+//                            model.listener.onThirdTabSelected();
+//                            break;
+//                    }
+//                }
+//
+//                @Override
+//                public void onTabUnselected(TabLayout.Tab tab) {
+//
+//                }
+//
+//                @Override
+//                public void onTabReselected(TabLayout.Tab tab) {
+//
+//                }
+//            });
         }
     }
 }

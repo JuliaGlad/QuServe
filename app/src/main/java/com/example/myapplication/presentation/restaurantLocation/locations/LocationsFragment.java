@@ -34,15 +34,14 @@ public class LocationsFragment extends Fragment {
     private LocationsViewModel viewModel;
     private FragmentLocationsBinding binding;
     private RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
-    private String restaurantId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LocationsViewModel.class);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        restaurantId = sharedPreferences.getString(COMPANY_ID, null);
-        viewModel.getRestaurantLocations(sharedPreferences.getString(COMPANY_ID, null));
+        String restaurantId = sharedPreferences.getString(COMPANY_ID, null);
+        viewModel.getRestaurantLocations(restaurantId);
     }
 
     @Override

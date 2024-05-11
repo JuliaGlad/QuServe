@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="restaurant_visitor">Restaurant visitor</string>
     <string name="name_cannot_be_null">Name can`t be empty!</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>
@@ -376,4 +377,11 @@
     <string name="order_in_restaurant">Order in restaurant</string>
     <string name="looks_like_something_went_wrong_please_try_again_later">Looks like something went wrong! Please try again later!</string>
     <string name="queue_name">Queue Name</string>
+    <string name="you_have_finished_this_order">You have finished this order!</string>
+    <string name="our_cooks_finished_your_order_and_it_should_be_served_to_you_soon">Our cooks finished your order and it should be served to you soon!</string>
+    <string name="your_order_is_finished">Your order is finished!</string>
+    <string name="you_can_now_continue_doing_other_order_and_this_one_will_be_served_soon">You can now continue doing other order and this one will be served soon</string>
+    <string name="scan_table_s_qr_code_open_restaurant_menu_and_create_order">Scan table`s qr-code, open restaurant menu and create order</string>
+    <string name="create_your_account_and_get_access_to_all_features">Create your account and get access to all features</string>
+    <string name="are_you_sure_you_want_to_delete_this_employee_from_your_restaurant">Are you sure you want to delete this employee from your restaurant?</string>
 </resources>

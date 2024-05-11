@@ -12,7 +12,7 @@ public class GetRestaurantTablesUseCase {
     public Single<List<RestaurantTableModel>> invoke(String restaurantId, String locationId){
         return RestaurantTableDI.restaurantTablesRepository.getTables(restaurantId, locationId).map(tableDtos ->
                 tableDtos.stream()
-                        .map(tableDto -> new RestaurantTableModel(tableDto.getTableId(), tableDto.getTableNumber()))
+                        .map(tableDto -> new RestaurantTableModel(tableDto.getTableId(), tableDto.getTableNumber(), tableDto.getOrderId()))
                         .collect(Collectors.toList()));
     }
 }

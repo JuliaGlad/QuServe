@@ -18,12 +18,15 @@
 
     <TextView
         android:id="@+id/body"
-        style="@style/TextAppearance.Material3.BodyMedium.Dialog.QuServe"
+        style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="TextView"
-        android:textColor="?colorOnTertiaryContainer"
+        android:textColor="@color/colorTextHint"
+        android:textColorHighlight="@color/colorTextHint"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon"

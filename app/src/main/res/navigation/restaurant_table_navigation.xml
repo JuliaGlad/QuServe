@@ -9,5 +9,15 @@
         android:id="@+id/restaurantTableDetailsFragment"
         android:name="com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.RestaurantTableDetailsFragment"
         android:label="fragment_restaurant_table_details"
+        tools:layout="@layout/fragment_restaurant_table_details" >
+        <action
+            android:id="@+id/action_restaurantTableDetailsFragment_to_restaurantTableOrderDetailsFragment"
+            app:destination="@id/restaurantTableOrderDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/restaurantTableOrderDetailsFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.orderDetails.TableOrderDetailsFragment"
+        android:label="fragment_restaurant_table_details"
         tools:layout="@layout/fragment_restaurant_table_details" />
 </navigation>

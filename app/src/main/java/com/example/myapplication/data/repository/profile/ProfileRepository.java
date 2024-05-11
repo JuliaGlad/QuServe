@@ -30,6 +30,7 @@ import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 
 import android.net.Uri;
 import android.util.Log;
@@ -66,11 +67,40 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
 
+    public Completable deleteRestaurantEmployeeRole(String restaurantId, String userId){
+        return Completable.create(emitter -> {
+            service.fireStore.collection(USER_LIST)
+                    .document(userId)
+                    .collection(RESTAURANT_EMPLOYEE)
+                    .document(restaurantId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable orderIsFinished() {
+        return Completable.create(emitter -> {
+            service.fireStore.collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null){
+                            if (value.get(IS_RESTAURANT_VISITOR).equals(NOT_RESTAURANT_VISITOR)){
+                                emitter.onComplete();
+                            }
+                        }
+                    });
+        });
+    }
+
     public Completable deleteRestaurantVisitor() {
         return Completable.create(emitter -> {
-            service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid())
+            service.fireStore.collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
                     .update(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR).addOnCompleteListener(taskUpdate -> {
-                        if (taskUpdate.isSuccessful()){
+                        if (taskUpdate.isSuccessful()) {
                             emitter.onComplete();
                         }
                     });
@@ -260,7 +290,7 @@ public class ProfileRepository {
             service.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     AnonymousUserEntity entity = AnonymousUserProvider.getUser();
-                    if (entity != null){
+                    if (entity != null) {
                         AnonymousUserProvider.deleteUser(entity);
                     }
                     emitter.onComplete();

@@ -1,8 +1,11 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISHES_COUNT;
@@ -31,8 +34,10 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.util.Log;
 
 import com.example.myapplication.data.dto.restaurant.ActiveOrderDishDto;
+import com.example.myapplication.data.dto.restaurant.DishShortInfoDto;
 import com.example.myapplication.data.dto.restaurant.OrderDto;
 import com.example.myapplication.data.dto.restaurant.OrderShortDto;
+import com.example.myapplication.data.dto.restaurant.OrderTableDetailsDto;
 import com.example.myapplication.data.dto.restaurant.ReadyDishDto;
 import com.example.myapplication.data.providers.CartProvider;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
@@ -234,6 +239,30 @@ public class RestaurantOrderRepository {
                         ));
                     }
                     emitter.onSuccess(dtos);
+                }
+            });
+        });
+    }
+
+    public Single<OrderTableDetailsDto> getOrderByIds(String restaurantId, String locationId, String orderId) {
+        return Single.create(emitter -> {
+            DocumentReference docLocation = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId);
+
+            DocumentReference orderDoc = docLocation.collection(ACTIVE_ORDERS).document(orderId);
+
+            orderDoc.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    List<DishShortInfoDto> dtos = new ArrayList<>();
+                    String cook = getCook(snapshot.getString(COOK), docLocation);
+                    String waiter = getWaiter(snapshot.getString(WAITER), docLocation);
+                    getDishesShortInfo(dtos, orderDoc);
+                    getCook(snapshot.getString(COOK), docLocation);
+                    emitter.onSuccess(new OrderTableDetailsDto(waiter, cook, dtos));
                 }
             });
         });
@@ -449,5 +478,37 @@ public class RestaurantOrderRepository {
 
             docDish.set(dishDocument);
         }
+    }
+
+    private String getWaiter(String waiterId, DocumentReference locationDoc) {
+        final String[] name = new String[1];
+        locationDoc.collection(WAITERS).document(waiterId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                name[0] = task.getResult().getString(USER_NAME_KEY);
+            }
+        });
+        return name[0];
+    }
+
+    private String getCook(String cookId, DocumentReference locationDoc) {
+        final String[] name = new String[1];
+        locationDoc.collection(COOKS).document(cookId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                name[0] = task.getResult().getString(USER_NAME_KEY);
+            }
+        });
+        return name[0];
+    }
+
+    private void getDishesShortInfo(List<DishShortInfoDto> dtos, DocumentReference docRef) {
+
+        docRef.collection(DISHES).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
+                for (DocumentSnapshot current : snapshots) {
+                    dtos.add(new DishShortInfoDto(current.getString(DISH_NAME), current.getString(COUNT)));
+                }
+            }
+        });
     }
 }

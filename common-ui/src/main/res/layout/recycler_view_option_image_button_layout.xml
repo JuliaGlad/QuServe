@@ -16,12 +16,16 @@
 
         <TextView
             android:id="@+id/title"
-            style="@style/TextAppearance.Material3.TitleLarge.QuServe"
+            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="160dp"
+            android:lineSpacingMultiplier="1"
             android:padding="10dp"
             android:text="TEXT"
+            android:textColorHighlight="@color/colorTextHint"
+            android:textColorHint="@color/colorTextHint"
+            android:textColorLink="@color/colorTextHint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

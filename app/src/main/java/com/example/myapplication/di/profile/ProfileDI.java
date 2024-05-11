@@ -2,6 +2,7 @@ package com.example.myapplication.di.profile;
 
 import com.example.myapplication.data.repository.profile.ProfileRepository;
 import com.example.myapplication.domain.usecase.profile.AddActiveRestaurantOrderUseCase;
+import com.example.myapplication.domain.usecase.profile.AddOrderIsFinishedSnapshot;
 import com.example.myapplication.domain.usecase.profile.AddSnapshotProfileUseCase;
 import com.example.myapplication.domain.usecase.profile.ChangePasswordUseCase;
 import com.example.myapplication.domain.usecase.profile.CheckAuthenticationUseCase;
@@ -12,6 +13,8 @@ import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.GetActiveRestaurantOrderUseCase;
 import com.example.myapplication.domain.usecase.profile.RemoveRestaurantUserOrderUseCase;
+import com.example.myapplication.domain.usecase.profile.anonymous.GetAnonymousUserUseCase;
+import com.example.myapplication.domain.usecase.profile.employee.restaurant.DeleteRestaurantEmployeeRoleUseCase;
 import com.example.myapplication.domain.usecase.profile.images.GetBackgroundImageUseCase;
 import com.example.myapplication.domain.usecase.profile.GetHistoryUseCase;
 import com.example.myapplication.domain.usecase.profile.GetParticipantQueuePathUseCase;
@@ -39,6 +42,9 @@ public class ProfileDI {
     public static ProfileRepository profileRepository = new ProfileRepository();
     public static ProfileRepository.ProfileImages profileImages = new ProfileRepository.ProfileImages();
 
+    public static DeleteRestaurantEmployeeRoleUseCase deleteRestaurantEmployeeRoleUseCase = new DeleteRestaurantEmployeeRoleUseCase();
+    public static GetAnonymousUserUseCase getAnonymousUserUseCase = new GetAnonymousUserUseCase();
+    public static AddOrderIsFinishedSnapshot addOrderIsFinishedSnapshot = new AddOrderIsFinishedSnapshot();
     public static CheckUserIdUseCase checkUserIdUseCase = new CheckUserIdUseCase();
     public static RemoveRestaurantUserOrderUseCase removeRestaurantUserOrderUseCase = new RemoveRestaurantUserOrderUseCase();
     public static GetActiveRestaurantOrderUseCase getActiveRestaurantOrderUseCase = new GetActiveRestaurantOrderUseCase();

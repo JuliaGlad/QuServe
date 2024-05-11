@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/header_total"
-        style="@style/TextAppearance.Material3.HeadlineLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/total"
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/total_price"
-        style="@style/TextAppearance.Material3.HeadlineLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="819 ₽"

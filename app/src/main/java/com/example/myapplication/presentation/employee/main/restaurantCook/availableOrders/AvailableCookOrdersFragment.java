@@ -68,7 +68,6 @@ public class AvailableCookOrdersFragment extends Fragment {
             if (state instanceof AvailableCookOrdersState.Success) {
                 List<AvailableOrdersStateModel> models = ((AvailableCookOrdersState.Success) state).data;
                 initRecycler(models);
-                Log.d("Success", "success");
             } else if (state instanceof AvailableCookOrdersState.Loading) {
 
             } else if (state instanceof AvailableCookOrdersState.Error) {

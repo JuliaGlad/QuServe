@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.common.orderDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +21,11 @@ import android.widget.PopupMenu;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentOrderDetailsBinding;
-import com.example.myapplication.presentation.common.recycler.OrderDetailsAdapter;
-import com.example.myapplication.presentation.common.recycler.OrderDetailsItemModel;
-import com.example.myapplication.presentation.common.state.OrderDetailsDishModel;
-import com.example.myapplication.presentation.common.state.OrderDetailsState;
-import com.example.myapplication.presentation.common.state.OrderDetailsStateModel;
+import com.example.myapplication.presentation.common.orderDetails.recycler.OrderDetailsAdapter;
+import com.example.myapplication.presentation.common.orderDetails.recycler.OrderDetailsItemModel;
+import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsDishModel;
+import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsState;
+import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsStateModel;
 import com.example.myapplication.presentation.dialogFragments.finishRestaurantOrder.FinishRestaurantOrderDialogFragment;
 
 import java.util.ArrayList;
@@ -42,7 +44,7 @@ public class OrderDetailsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(OrderDetailsViewModel.class);
         path = getActivity().getIntent().getStringExtra(PATH);
         state = getActivity().getIntent().getStringExtra(STATE);
-        viewModel.getOrder(path);
+        viewModel.getOrder(path, state);
     }
 
     @Override
@@ -57,9 +59,16 @@ public class OrderDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initButtonBack();
-        if (state.equals(VISITOR)){
+        if (state.equals(VISITOR)) {
             initMenu();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        viewModel = null;
+        binding = null;
     }
 
     private void initMenu() {
@@ -92,17 +101,24 @@ public class OrderDetailsFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof OrderDetailsState.Success){
-                OrderDetailsStateModel model = ((OrderDetailsState.Success)state).data;
+            if (state instanceof OrderDetailsState.Success) {
+                OrderDetailsStateModel model = ((OrderDetailsState.Success) state).data;
                 binding.totalPrice.setText(model.getTotalPrice());
                 initRecycler(model.getModels());
 
-            } else if (state instanceof OrderDetailsState.Loading){
+            } else if (state instanceof OrderDetailsState.Loading) {
 
-            } else if (state instanceof OrderDetailsState.Error){
+            } else if (state instanceof OrderDetailsState.Error) {
 
+            } else if (state instanceof OrderDetailsState.OrderIsFinished) {
+                navigateToFinishOrder();
             }
         });
+    }
+
+    private void navigateToFinishOrder() {
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_orderDetailsFragment_to_orderIsFinishedFragment);
     }
 
     private void initRecycler(List<OrderDetailsDishModel> dishes) {

@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,15 +31,11 @@ import com.example.myapplication.presentation.companyQueue.createQueue.chooseWor
 import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.recycler.WorkerItemModel;
 import com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.state.ChooseWorkersState;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemAdapter;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.EmployeeItemModel;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ChooseWorkersFragment extends Fragment {
 

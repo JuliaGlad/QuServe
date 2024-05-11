@@ -3,6 +3,7 @@ package com.example.myapplication.data.repository.restaurant;
 import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
 import static com.example.myapplication.presentation.utils.Utils.PDF;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_LIST;
@@ -26,7 +27,7 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RestaurantTablesRepository {
 
-    public Single<String> getSingleTableById(String restaurantId, String locationId, String tableId) {
+    public Single<TableDto> getSingleTableById(String restaurantId, String locationId, String tableId) {
         return Single.create(emitter -> {
             service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -34,9 +35,15 @@ public class RestaurantTablesRepository {
                     .collection(RESTAURANT_LOCATION)
                     .document(locationId)
                     .collection(TABLE_LIST)
-                    .document(tableId).get().addOnCompleteListener(task -> {
+                    .document(tableId).get()
+                    .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            emitter.onSuccess(task.getResult().getString(TABLE_NUMBER));
+                            DocumentSnapshot document = task.getResult();
+                            emitter.onSuccess(new TableDto(
+                                    document.getId(),
+                                    document.getString(TABLE_NUMBER),
+                                    document.getString(ORDER_ID)
+                            ));
                         }
                     });
         });
@@ -82,7 +89,8 @@ public class RestaurantTablesRepository {
                                 DocumentSnapshot current = snapshots.get(i);
                                 tables.add(new TableDto(
                                         current.getId(),
-                                        current.getString(TABLE_NUMBER)
+                                        current.getString(TABLE_NUMBER),
+                                        current.getString(ORDER_ID)
                                 ));
                             }
                             emitter.onSuccess(tables);

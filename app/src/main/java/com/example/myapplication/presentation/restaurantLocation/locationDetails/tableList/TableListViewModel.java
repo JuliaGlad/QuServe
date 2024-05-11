@@ -37,7 +37,8 @@ public class TableListViewModel extends ViewModel {
                         for (RestaurantTableModel model : restaurantTableModels) {
                             tables.add(new TableModel(
                                     model.getTableNumber(),
-                                    model.getTableId()
+                                    model.getTableId(),
+                                    model.getOrderId()
                             ));
                         }
                         _state.postValue(new TableListState.Success(tables));

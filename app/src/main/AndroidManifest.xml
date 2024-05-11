@@ -32,7 +32,7 @@
             android:name=".presentation.employee.becomeCook.BecomeCookActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.employee.main.restaurantCook.activeOrders.dishDetails.OrderDetailsWithIndicatorsActivity"
+            android:name=".presentation.employee.main.restaurantCook.activeOrders.orderDetails.OrderDetailsWithIndicatorsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.addLocation.AddLocationActivity"
@@ -135,9 +135,6 @@
             android:exported="false" />
         <activity
             android:name=".presentation.employee.becomeEmployee.BecomeEmployeeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.profile.loggedProfile.companyUser.employees.EmployeeMainActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.common.waitingInQueue.WaitingActivity"

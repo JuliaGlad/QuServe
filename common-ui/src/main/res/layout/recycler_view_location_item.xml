@@ -39,6 +39,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textLayout_email"
         app:srcCompat="@drawable/ic_location"
-        app:tint="?colorPrimary" />
+        app:tint="@color/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

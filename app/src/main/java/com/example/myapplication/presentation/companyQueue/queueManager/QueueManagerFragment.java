@@ -26,15 +26,10 @@ import com.example.myapplication.presentation.companyQueue.queueManager.recycler
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.state.QueueManagerState;
 import com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.employees.recyclerViewItem.LinearLayoutManagerWrapper;
+import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.LinearLayoutManagerWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.recycler.delegate.MainAdapter;
 
 public class QueueManagerFragment extends Fragment {
 

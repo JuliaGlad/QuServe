@@ -3,12 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <TextView
         android:id="@+id/set_text"
-        style="@style/TextAppearance.Material3.BodyLarge.QuServe"
+        style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="0.1"
         android:text="Text"
+        android:textColorHighlight="@color/colorTextHint"
+        android:textColorHint="@color/colorTextHint"
+        android:textColorLink="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
