@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/order_visitor_navigation.xml">
+
+   <fragment
+       android:id="@+id/orderDetailsFragment"
+       android:name="com.example.myapplication.presentation.common.orderDetails.OrderDetailsFragment">
+
+      <action
+          android:id="@+id/action_orderDetailsFragment_to_orderIsFinishedFragment"
+          app:destination="@id/orderIsFinishedFragment" />
+   </fragment>
+
+   <fragment
+       android:id="@+id/orderIsFinishedFragment"
+       android:name="com.example.myapplication.presentation.common.orderDetails.orderIsFinished.OrderIsFinishedFragment">
+
+   </fragment>
+
+</navigation>
