@@ -48,7 +48,7 @@ public class WorkerDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new WorkerDetailsState.Error());
                     }
                 });
     }

@@ -39,24 +39,24 @@ public class AvailableCookOrdersViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<OrderShortModel> orderModels) {
-                      List<AvailableOrdersStateModel> models =  orderModels.stream().map(orderModel -> new AvailableOrdersStateModel(
+                        List<AvailableOrdersStateModel> models = orderModels.stream().map(orderModel -> new AvailableOrdersStateModel(
                                         orderModel.getOrderId(),
                                         orderModel.getPath(),
                                         orderModel.getTableNumber(),
                                         orderModel.getDishesCount()
                                 ))
                                 .collect(Collectors.toList());
-                      _state.postValue(new AvailableCookOrdersState.Success(models));
+                        _state.postValue(new AvailableCookOrdersState.Success(models));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new AvailableCookOrdersState.Error());
                     }
                 });
     }
 
-    public void takeOrder(int index, String restaurantId, String locationId, String orderId){
+    public void takeOrder(int index, String restaurantId, String locationId, String orderId) {
         RestaurantOrderDI.takeOrderByCookUseCase.invoke(restaurantId, locationId, orderId)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

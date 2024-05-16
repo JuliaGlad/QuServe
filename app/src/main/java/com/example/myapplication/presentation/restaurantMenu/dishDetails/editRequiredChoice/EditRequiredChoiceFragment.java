@@ -134,11 +134,11 @@ public class EditRequiredChoiceFragment extends Fragment {
                 EditRequireChoiceModel model = ((EditRequiredChoiceState.Success) state).data;
                 binding.choiceTitleEditText.setText(model.getName());
                 initRecycler(model.getVariants());
-
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof EditRequiredChoiceState.Loading) {
 
             } else if (state instanceof EditRequiredChoiceState.Error) {
-
+                setError();
             }
         });
 
@@ -156,6 +156,13 @@ public class EditRequiredChoiceFragment extends Fragment {
             if (aBoolean){
                 navigateBack();
             }
+        });
+    }
+
+    private void setError() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getData(restaurantId, categoryId, dishId, choiceId);
         });
     }
 

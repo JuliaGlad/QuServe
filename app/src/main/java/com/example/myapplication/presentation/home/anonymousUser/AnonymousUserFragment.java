@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.home.anonymousUser;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -34,7 +36,7 @@ import com.example.myapplication.presentation.home.recycler.homeDelegates.square
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
 import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
-import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantMenuOrderFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragment;
 import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
 import com.example.myapplication.presentation.service.ScanCode;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -59,6 +61,7 @@ public class AnonymousUserFragment extends Fragment {
     private String restaurantPath;
     private final MainAdapter adapter = new MainAdapter();
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
+    private ActivityResultLauncher<Intent> createAccountLauncher;
     private final List<DelegateItem> items = new ArrayList<>();
     private final List<DelegateItem> actions = new ArrayList<>();
 
@@ -69,6 +72,7 @@ public class AnonymousUserFragment extends Fragment {
         viewModel.getActions();
         initJoinQueueLauncher();
         initRestaurantOrderLauncher();
+        initCreateAccountLauncher();
     }
 
     @Override
@@ -117,15 +121,16 @@ public class AnonymousUserFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof AnonymousUserState.Loading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof AnonymousUserState.Error) {
+                setErrorLayout();
 
             } else if (state instanceof AnonymousUserState.ActionsGot) {
                 AnonymousUserActionsHomeModel actions = ((AnonymousUserState.ActionsGot) state).data;
                 String queuePath = actions.getQueueParticipant();
                 restaurantPath = actions.getRestaurantVisitor();
                 viewModel.getQueueByPath(queuePath);
-
             } else if (state instanceof AnonymousUserState.QueueDataGot) {
                 String name = ((AnonymousUserState.QueueDataGot) state).queueName;
                 if (!name.equals(NOT_PARTICIPATE_IN_QUEUE)) {
@@ -149,7 +154,17 @@ public class AnonymousUserFragment extends Fragment {
                 } else {
                     initNoActionsRecycler();
                 }
+                binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.errorLayout.setVisibility(View.GONE);
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getActions();
         });
     }
 
@@ -163,17 +178,17 @@ public class AnonymousUserFragment extends Fragment {
                 () -> {
                     setScanOptions(restaurantOrderLauncher);
                 })));
-        items.add(new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(3, getString(R.string.create_account), getString(R.string.create_your_account_and_get_access_to_all_features), R.drawable.ic_create_account,
-                this::navigateToCreateAccount)));
+        adapter.submitList(items);
     }
 
     private void initRecycler() {
-        items.add(new SquareButtonDelegateItem(new SquareButtonModel(2, R.string.join_queue, R.string.create_account, R.drawable.qr_code, R.drawable.ic_create_account,
-                this::navigateToCreateAccount,
+        items.add(new SquareButtonDelegateItem(new SquareButtonModel(2, R.string.join_queue, R.string.order, R.drawable.qr_code, R.drawable.ic_create_restaurant_order,
                 () -> {
                     setScanOptions(joinQueueLauncher);
+                },
+                () -> {
+                    setScanOptions(restaurantOrderLauncher);
                 })));
-        items.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, restaurantOrderLauncher)));
         items.addAll(actions);
         adapter.submitList(items);
     }
@@ -187,10 +202,23 @@ public class AnonymousUserFragment extends Fragment {
         launcher.launch(scanOptions);
     }
 
+    private void initCreateAccountLauncher() {
+        createAccountLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setReorderingAllowed(true)
+                                .replace(R.id.logged_container, ProfileLoggedFragment.class, null)
+                                .commit();
+                    }
+                });
+    }
+
     private void navigateToCreateAccount() {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.home_container, CreateAccountFragment.class, null)
+                .replace(R.id.nav_host_fragment_activity_main, CreateAccountFragment.class, null)
                 .commit();
     }
 }

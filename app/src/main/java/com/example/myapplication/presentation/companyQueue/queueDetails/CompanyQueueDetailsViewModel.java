@@ -46,7 +46,7 @@ public class CompanyQueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new CompanyQueueDetailsState.Error());
                     }
                 });
     }

@@ -1,16 +1,17 @@
-package myapplication.android.ui.recycler.ui.items.items.button;
+package myapplication.android.ui.recycler.ui.items.items.priceWithCurrency;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
-public class ButtonDelegateItem implements DelegateItem {
-    private ButtonModel value;
+public class PriceWithCurrencyDelegateItem implements DelegateItem<PriceWithCurrencyModel> {
 
-    public ButtonDelegateItem( ButtonModel value) {
+    PriceWithCurrencyModel value;
+
+    public PriceWithCurrencyDelegateItem(PriceWithCurrencyModel value) {
         this.value = value;
     }
 
     @Override
-    public Object content() {
+    public PriceWithCurrencyModel content() {
         return value;
     }
 
@@ -18,7 +19,6 @@ public class ButtonDelegateItem implements DelegateItem {
     public int id() {
         return value.hashCode();
     }
-
 
     @Override
     public boolean compareToOther(DelegateItem other) {

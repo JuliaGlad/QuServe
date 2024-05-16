@@ -100,18 +100,31 @@ public class FinishedQueueCreationFragment extends Fragment {
                         .load(uri)
                         .into(binding.qrCodeImage);
                 binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof FinishedQueueState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof FinishedQueueState.Error) {
-
+                setErrorLayout();
             }
         });
     }
 
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getQrCode(queueId);
+        });
+    }
+
     private void setupBasicObserves() {
-        viewModel.queue.observe(getViewLifecycleOwner(), this::addFinishBasicQueueDelayWorker);
+        viewModel.queue.observe(getViewLifecycleOwner(), time -> {
+            if (time != null){
+                addFinishBasicQueueDelayWorker(time);
+            }
+        });
     }
 
     private void setupCompanyObserves() {
@@ -172,7 +185,7 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void addFinishBasicQueueDelayWorker(String time){
-        if (!time.equals(stringsTimeArray[0])) {
+         if (!time.equals(stringsTimeArray[0])) {
             List<String> list = Arrays.asList(time.split(" "));
             int number = Integer.parseInt(list.get(0));
             TimeUnit timeUnit = TimeUnit.valueOf(list.get(1));

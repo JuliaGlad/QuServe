@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentStartWorkBinding;
 import com.example.myapplication.presentation.employee.main.restaurantWaiter.main.MainWaiterFragment;
+import com.example.myapplication.presentation.employee.main.restaurantWaiter.startWork.state.StartWorkState;
 
 public class StartWorkFragment extends Fragment {
 
@@ -60,9 +61,16 @@ public class StartWorkFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.name.observe(getViewLifecycleOwner(), name -> {
-            if (name != null){
-                restaurantName = name;
+            if (name instanceof StartWorkState.Success){
+                restaurantName = ((StartWorkState.Success)name).data;
                 binding.restaurantName.setText(restaurantName);
+            } else if (name instanceof StartWorkState.Loading){
+
+            } else if (name instanceof StartWorkState.Error){
+                binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+                binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+                    viewModel.getRestaurantName(restaurantId);
+                });
             }
         });
 

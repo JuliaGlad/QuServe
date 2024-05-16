@@ -78,11 +78,19 @@ public class TableSuccessfullyAddedFragment extends Fragment {
                 Glide.with(requireView())
                         .load(uri)
                         .into(binding.qrCodeImage);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof TableAddedState.Loading) {
 
             } else if (state instanceof TableAddedState.Error) {
-
+                setError();
             }
+        });
+    }
+
+    private void setError() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getTableQrCode(tableId);
         });
     }
 

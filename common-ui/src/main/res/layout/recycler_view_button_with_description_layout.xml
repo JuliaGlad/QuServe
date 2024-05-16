@@ -7,11 +7,10 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/transparent"
+    app:cardBackgroundColor="@color/colorCardBackground"
     app:cardCornerRadius="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#FFE2F2FF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -30,7 +29,7 @@
 
         <TextView
             android:id="@+id/head_line"
-            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
@@ -42,17 +41,14 @@
 
         <TextView
             android:id="@+id/description"
-            style="@style/TextAppearance.Material3.TitleLarge.Medium.QuServe"
+            style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="5dp"
-            android:fontFamily="@font/roboto_medium"
-            android:lineSpacingMultiplier="1.0"
+            android:layout_marginEnd="20dp"
             android:paddingBottom="20dp"
-            android:text="@string/show_this_qr_code_to_people_who_are_looking_forward_to_join_your_queue"
-            android:textColorHighlight="@color/colorTextHint"
-            android:textColorHint="@color/colorTextHint"
+            android:text="Description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icon"

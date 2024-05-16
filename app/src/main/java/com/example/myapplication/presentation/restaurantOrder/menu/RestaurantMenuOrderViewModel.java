@@ -37,7 +37,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
         RestaurantMenuDI.getCategoriesUseCase.invoke(restaurantId)
                 .flatMap(categoryModels -> {
                     List<String> categoryNames = new ArrayList<>();
-                    if (categoryModels.size() > 0) {
+                    if (!categoryModels.isEmpty()) {
                         for (CategoryModel current : categoryModels) {
                             models.add(current);
                             categoryNames.add(current.getName());
@@ -117,7 +117,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new RestaurantMenuOrderState.Error());
                     }
                 });
     }

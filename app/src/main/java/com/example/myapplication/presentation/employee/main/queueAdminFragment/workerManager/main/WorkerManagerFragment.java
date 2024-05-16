@@ -105,12 +105,20 @@ public class WorkerManagerFragment extends Fragment {
                 }
                 binding.recyclerView.setAdapter(adapter);
                 adapter.submitList(models);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof WorkerManagerState.Loading) {
 
             } else if (state instanceof WorkerManagerState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployees(companyId);
         });
     }
 }

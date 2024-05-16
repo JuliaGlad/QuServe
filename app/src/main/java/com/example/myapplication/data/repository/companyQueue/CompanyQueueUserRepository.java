@@ -55,6 +55,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableEmitter;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
@@ -72,6 +73,8 @@ public class CompanyQueueUserRepository {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
                     emitter.onNext(value);
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -88,6 +91,8 @@ public class CompanyQueueUserRepository {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null) {
                     emitter.onNext(value);
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -112,6 +117,8 @@ public class CompanyQueueUserRepository {
                                     }
                                 });
                     }
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -161,6 +168,8 @@ public class CompanyQueueUserRepository {
             reference.putBytes(data).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -186,40 +195,14 @@ public class CompanyQueueUserRepository {
 
         Map<String, Object> company = new HashMap<>();
 
-        company.put(COMPANY_OWNER, service.auth.getCurrentUser().getUid());
-        company.put(COMPANY_NAME, name);
-        company.put(COMPANY_EMAIL, email);
-        company.put(COMPANY_PHONE, phone);
-        company.put(URI, String.valueOf(Uri.EMPTY));
-        company.put(COMPANY_SERVICE, companyService);
-        company.put(COMPANY_STATE, CREATED);
+        initCompany(name, email, phone, companyService, company);
 
         return Completable.create(emitter -> {
             docRef.set(company).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-
-                    DocumentReference userCompany = service.fireStore
-                            .collection(USER_LIST)
-                            .document(service.auth.getCurrentUser().getUid())
-                            .collection(COMPANY)
-                            .document(companyID);
-
-                    Map<String, Object> companyUser = new HashMap<>();
-                    companyUser.put(COMPANY_SERVICE, companyService);
-                    companyUser.put(COMPANY_NAME, name);
-
-                    userCompany.set(companyUser).addOnCompleteListener(taskUser -> {
-                        if (taskUser.isSuccessful()) {
-                            CompanyUserProvider.insertCompany(new CompanyDto(
-                                    companyID,
-                                    service.auth.getCurrentUser().getUid(),
-                                    String.valueOf(Uri.EMPTY),
-                                    name, email,
-                                    phone, companyService)
-                            );
-                            emitter.onComplete();
-                        }
-                    });
+                    seCompanyUser(companyID, name, email, phone, companyService, emitter, task);
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -244,6 +227,8 @@ public class CompanyQueueUserRepository {
                                                     document.getString(ACTIVE_QUEUES_COUNT)
                                             )).collect(Collectors.toList())
                             );
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -266,6 +251,8 @@ public class CompanyQueueUserRepository {
                                             document.getString(EMPLOYEE_ROLE),
                                             document.getString(ACTIVE_QUEUES_COUNT)
                                     )).collect(Collectors.toList()));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -285,6 +272,8 @@ public class CompanyQueueUserRepository {
                                 }
                             }
                             emitter.onSuccess(false);
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -296,6 +285,8 @@ public class CompanyQueueUserRepository {
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(task.getResult()));
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -319,6 +310,8 @@ public class CompanyQueueUserRepository {
             employeeRef.set(employee).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -340,6 +333,8 @@ public class CompanyQueueUserRepository {
                     employeeRef.delete().addOnCompleteListener(taskDelete -> {
                         emitter.onSuccess(role);
                     });
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -360,6 +355,8 @@ public class CompanyQueueUserRepository {
                                     CompanyUserProvider.updateUri(companyId, String.valueOf(uri));
                                     emitter.onComplete();
                                 });
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             } else {
@@ -382,7 +379,6 @@ public class CompanyQueueUserRepository {
                     }
                 });
             } catch (RuntimeExecutionException e) {
-                Log.d("RuntimeExecutionException", e.getMessage());
                 emitter.onSuccess(new ImageDto(Uri.EMPTY));
             }
         });
@@ -411,7 +407,7 @@ public class CompanyQueueUserRepository {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            emitter.onError(new Throwable(e.getMessage()));
                         }
                     });
         });
@@ -433,8 +429,6 @@ public class CompanyQueueUserRepository {
                 emitter.onSuccess(new ImageDto(Uri.EMPTY));
             }
         });
-//        }
-
     }
 
     public Completable updateQueueCompanyData(String companyId, String companyName, String phone) {
@@ -452,6 +446,8 @@ public class CompanyQueueUserRepository {
                 if (task.isSuccessful()) {
                     CompanyUserProvider.updateCompany(companyId, companyName, phone);
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -476,6 +472,8 @@ public class CompanyQueueUserRepository {
                                 .delete();
                     }
 
+                } else {
+                    emitter.onError(new Throwable(taskGet.getException()));
                 }
             });
 
@@ -505,4 +503,40 @@ public class CompanyQueueUserRepository {
         });
     }
 
+    private void seCompanyUser(String companyID, String name, String email, String phone, String companyService, CompletableEmitter emitter, Task<Void> task) {
+        DocumentReference userCompany = service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid())
+                .collection(COMPANY)
+                .document(companyID);
+
+        Map<String, Object> companyUser = new HashMap<>();
+        companyUser.put(COMPANY_SERVICE, companyService);
+        companyUser.put(COMPANY_NAME, name);
+
+        userCompany.set(companyUser).addOnCompleteListener(taskUser -> {
+            if (taskUser.isSuccessful()) {
+                CompanyUserProvider.insertCompany(new CompanyDto(
+                        companyID,
+                        service.auth.getCurrentUser().getUid(),
+                        String.valueOf(Uri.EMPTY),
+                        name, email,
+                        phone, companyService)
+                );
+                emitter.onComplete();
+            } else {
+                emitter.onError(new Throwable(task.getException()));
+            }
+        });
+    }
+
+    private void initCompany(String name, String email, String phone, String companyService, Map<String, Object> company) {
+        company.put(COMPANY_OWNER, service.auth.getCurrentUser().getUid());
+        company.put(COMPANY_NAME, name);
+        company.put(COMPANY_EMAIL, email);
+        company.put(COMPANY_PHONE, phone);
+        company.put(URI, String.valueOf(Uri.EMPTY));
+        company.put(COMPANY_SERVICE, companyService);
+        company.put(COMPANY_STATE, CREATED);
+    }
 }

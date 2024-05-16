@@ -66,7 +66,7 @@ public class WaitingViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new WaitingState.Error());
                     }
                 });
     }

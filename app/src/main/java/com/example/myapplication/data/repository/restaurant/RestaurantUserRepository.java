@@ -36,12 +36,28 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantUserRepository {
+
+    public Observable<DocumentSnapshot> addSnapshot(String restaurantId) {
+        return Observable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null) {
+                            emitter.onNext(value);
+                        } else {
+                            emitter.onError(new Throwable("Value is null"));
+                        }
+                    });
+        });
+    }
 
     public Single<RestaurantDto> getRestaurantByIds(String restaurantId){
         return Single.create(emitter -> {
@@ -58,6 +74,8 @@ public class RestaurantUserRepository {
                                     snapshot.getString(RESTAURANT_PHONE),
                                     snapshot.getString(RESTAURANT_OWNER)
                             ));
+                        }else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -76,6 +94,8 @@ public class RestaurantUserRepository {
                                     snapshot.getString(RESTAURANT_PHONE),
                                     snapshot.getString(RESTAURANT_OWNER)
                             ));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -87,6 +107,8 @@ public class RestaurantUserRepository {
             docRef.delete().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -107,6 +129,8 @@ public class RestaurantUserRepository {
             userCompany.set(restaurantUser).addOnCompleteListener(taskUser -> {
                 if (taskUser.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(taskUser.getException()));
                 }
             });
         });
@@ -129,6 +153,8 @@ public class RestaurantUserRepository {
                 if (task.isSuccessful()) {
                     RestaurantDto restaurantDto = new RestaurantDto(restaurantId, restaurantName, email, phone, ownerId);
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
 
@@ -158,7 +184,7 @@ public class RestaurantUserRepository {
         });
     }
 
-    public Completable updateRestaurantData(String restaurantId, String restaurantName, String phone) {
+    public Completable updateRestaurantData(String restaurantId, String email, String restaurantName, String phone) {
         return Completable.create(emitter -> {
             DocumentReference docRef = service.fireStore
                     .collection(RESTAURANT_LIST)
@@ -167,11 +193,14 @@ public class RestaurantUserRepository {
             FieldValue timestamp = FieldValue.serverTimestamp();
             docRef.update(
                     RESTAURANT_NAME, restaurantName,
+                    RESTAURANT_EMAIL, email,
                     COMPANY_PHONE, phone,
                     PROFILE_UPDATED_AT, timestamp
             ).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -197,6 +226,8 @@ public class RestaurantUserRepository {
                                     docRef.update(URI, String.valueOf(uri)).addOnCompleteListener(task1 -> {
                                         emitter.onComplete();
                                     });
+                                }else {
+                                    emitter.onError(new Throwable(task.getException()));
                                 }
                             });
                 } else {
@@ -239,7 +270,6 @@ public class RestaurantUserRepository {
                             @Override
                             public void onSuccess(@NonNull List<RestaurantDto> companyDtos) {
                                 for (int i = 0; i < companyDtos.size(); i++) {
-
                                     StorageReference reference = service.storageReference
                                             .child(RESTAURANT_PATH)
                                             .child(companyDtos.get(i).getRestaurantId() + "/")

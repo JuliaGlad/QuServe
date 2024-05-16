@@ -170,12 +170,21 @@ public class ChooseWorkersFragment extends Fragment {
                 adapter.submitList(workerItems);
 
                 binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof ChooseWorkersState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
             } else if (state instanceof ChooseWorkersState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployees(companyId);
         });
     }
 }

@@ -135,14 +135,13 @@ public class CompanyUserFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof CompanyUserState.Success) {
                 CompanyUserModel model = ((CompanyUserState.Success) state).data;
-                Log.d("DATA", model.getName() + model.getEmail());
                 initRecycler(model);
 
             } else if (state instanceof CompanyUserState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof CompanyUserState.Error) {
-
+                setErrorLayout();
             }
         });
 
@@ -163,6 +162,21 @@ public class CompanyUserFragment extends Fragment {
             }
         });
 
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            switch (type){
+                case RESTAURANT:
+                    viewModel.getRestaurant(companyId);
+                    break;
+                case COMPANY:
+                    viewModel.getCompany(companyId);
+                    break;
+            }
+        });
     }
 
     private void initRecycler(CompanyUserModel model) {
@@ -189,6 +203,7 @@ public class CompanyUserFragment extends Fragment {
 
         mainAdapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
 

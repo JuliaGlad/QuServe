@@ -1,23 +1,18 @@
 package com.example.myapplication.presentation.employee.becomeCook.main;
 
-import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
-
-import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
@@ -35,7 +30,7 @@ public class BecomeCookFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeCookViewModel.class);
-        path = getActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        path = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
         viewModel.getData(path);
     }
 
@@ -77,11 +72,12 @@ public class BecomeCookFragment extends Fragment {
                 Glide.with(requireView())
                         .load(model.getUri())
                         .into(binding.qrCodeImage);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof BecomeCookState.Loading){
 
             } else if (state instanceof BecomeCookState.Error){
-
+                setErrorLayout();
             }
         });
 
@@ -96,5 +92,12 @@ public class BecomeCookFragment extends Fragment {
             }
         });
 
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getData(path);
+        });
     }
 }

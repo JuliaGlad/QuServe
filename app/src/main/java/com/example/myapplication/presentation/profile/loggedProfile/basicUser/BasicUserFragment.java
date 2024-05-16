@@ -61,16 +61,17 @@ public class BasicUserFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BasicUserViewModel.class);
-
         setActivityResultLauncher();
         setChooseCompanyLauncher();
         setCreateCompanyLauncher();
+        viewModel.retrieveUserNameData();
+        viewModel.setBackground();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        viewModel.retrieveUserNameData();
+
         binding = FragmentBasicUserBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -80,7 +81,6 @@ public class BasicUserFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         setAdapter();
-        viewModel.setBackground();
         initSettingButton();
         initBackground();
     }
@@ -130,17 +130,26 @@ public class BasicUserFragment extends Fragment {
                 BasicUserState.Success userModel = (BasicUserState.Success) state;
                 initRecycler(userModel.data.getUri(), userModel.data.getName(), userModel.data.getEmail());
                 binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.errorLayout.setVisibility(View.GONE);
 
             } else if (state instanceof BasicUserState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof BasicUserState.Error) {
-
+                setError();
             }
         });
 
         viewModel.companyId.observe(getViewLifecycleOwner(), s -> {
             companyId = s;
+        });
+    }
+
+    private void setError() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.retrieveUserNameData();
         });
     }
 

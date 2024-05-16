@@ -29,7 +29,6 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileEmployeeRepository {
-
     public Single<Boolean> isEmployee() {
         return Single.create(emitter -> {
             DocumentReference userDoc = service.fireStore
@@ -38,24 +37,28 @@ public class ProfileEmployeeRepository {
 
             userDoc.collection(COMPANY_EMPLOYEE).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    boolean size = task.getResult().size() > 0;
+                    boolean size = !task.getResult().isEmpty();
                     if (size) {
-                        emitter.onSuccess(task.getResult().size() > 0);
+                        emitter.onSuccess(!task.getResult().isEmpty());
                     }
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
 
             userDoc.collection(RESTAURANT_EMPLOYEE).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    emitter.onSuccess(task.getResult().size() > 0);
+                    emitter.onSuccess(!task.getResult().isEmpty());
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
     }
 
-    public static class RestaurantEmployee{
+    public static class RestaurantEmployee {
 
-        public Completable addWaiterEmployeeRole(String waiterPath){
+        public Completable addWaiterEmployeeRole(String waiterPath) {
             return Completable.create(emitter -> {
                 String locationId = service.fireStore.collection(waiterPath).getParent().getId();
                 String restaurantId = service.fireStore.collection(waiterPath).getParent().getParent().getParent().getId();
@@ -71,8 +74,10 @@ public class ProfileEmployeeRepository {
                 employee.put(LOCATION_ID, locationId);
 
                 docRef.set(employee).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -87,7 +92,7 @@ public class ProfileEmployeeRepository {
                         .get().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
-                                if (snapshots.size() > 0) {
+                                if (!snapshots.isEmpty()) {
                                     List<RestaurantEmployeeDto> dtos = new ArrayList<>();
                                     for (DocumentSnapshot current : snapshots) {
                                         dtos.add(new RestaurantEmployeeDto(
@@ -100,6 +105,8 @@ public class ProfileEmployeeRepository {
                                 } else {
                                     emitter.onSuccess(Collections.emptyList());
                                 }
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -122,6 +129,8 @@ public class ProfileEmployeeRepository {
                 docRef.set(employee).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -129,7 +138,7 @@ public class ProfileEmployeeRepository {
 
     }
 
-    public static class CompanyEmployee{
+    public static class CompanyEmployee {
 
         public Completable deleteActiveQueue(String companyId, String queueId, String userId) {
             return Completable.create(emitter -> {
@@ -143,6 +152,8 @@ public class ProfileEmployeeRepository {
                         .delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -169,6 +180,8 @@ public class ProfileEmployeeRepository {
                                     ));
                                 }
                                 emitter.onSuccess(dtos);
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -195,6 +208,8 @@ public class ProfileEmployeeRepository {
                                     ));
                                 }
                                 emitter.onSuccess(dtos);
+                            }else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -214,6 +229,8 @@ public class ProfileEmployeeRepository {
                 docRef.set(employee).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         emitter.onComplete();
+                    }else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -228,7 +245,7 @@ public class ProfileEmployeeRepository {
                         .get().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
-                                if (documentSnapshots.size() > 0) {
+                                if (!documentSnapshots.isEmpty()) {
                                     List<UserEmployeeRoleDto> dtos = new ArrayList<>();
                                     for (int i = 0; i < documentSnapshots.size(); i++) {
                                         DocumentSnapshot current = documentSnapshots.get(i);
@@ -241,6 +258,8 @@ public class ProfileEmployeeRepository {
                                 } else {
                                     emitter.onSuccess(Collections.emptyList());
                                 }
+                            }else {
+                                emitter.onSuccess(Collections.emptyList());
                             }
                         });
             });
@@ -256,6 +275,8 @@ public class ProfileEmployeeRepository {
                         .update(EMPLOYEE_ROLE, role).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -270,6 +291,8 @@ public class ProfileEmployeeRepository {
                         .document(companyId).delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });

@@ -1,4 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="you_have_to_add_at_least_1_dish_to_create_order">You have to add at least 1 dish to create order</string>
+    <string name="you_have_to_add_at_least_2_variants">You have to add at least 2 variants</string>
+    <string name="name_can_not_be_required">Name can`t be empty</string>
+    <string name="this_data_is_required">This data is required</string>
     <string name="restaurant_visitor">Restaurant visitor</string>
     <string name="name_cannot_be_null">Name can`t be empty!</string>
     <string name="current_location">Current Location</string>
@@ -185,7 +189,6 @@
     <string-array name="services">
         <item>Queue</item>
         <item>Restaurant</item>
-        <item>On-board catering</item>
     </string-array>
 
     <string-array name="genders">

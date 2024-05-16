@@ -50,7 +50,7 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
             binding.dishName.setText(models.name);
             binding.weightCount.setText(models.weight);
             binding.itemsCount.setText(models.amount);
-            binding.price.setText(String.valueOf(Integer.parseInt(models.price) * Integer.parseInt(models.amount)));
+            binding.price.setText(String.valueOf(Integer.parseInt(models.price) * Integer.parseInt(models.amount)).concat("₽"));
 
             if (models.task != null){
                 models.task.addOnCompleteListener(task -> {
@@ -72,7 +72,7 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
                 String newPrice = String.valueOf(Integer.parseInt(models.price) + Integer.parseInt(firstPrice));
                 models.price = newPrice;
                 models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) + Integer.parseInt(newPrice));
-                binding.price.setText(models.price);
+                binding.price.setText(models.price.concat("₽"));
                 binding.itemsCount.setText(models.amount);
             });
             binding.buttonRemove.setOnClickListener(v -> {
@@ -81,7 +81,7 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
                 String newPrice = String.valueOf(Integer.parseInt(models.price) - Integer.parseInt(firstPrice));
                 models.price = newPrice;
                 models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) - Integer.parseInt(newPrice));
-                binding.price.setText(models.price);
+                binding.price.setText(models.price.concat("₽"));
                 binding.itemsCount.setText(models.amount);
             });
         }

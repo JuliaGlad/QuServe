@@ -14,6 +14,8 @@ import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class CategoryItemDelegate implements AdapterDelegate {
 
+    int selectedPosition;
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
         return new ViewHolder(RecyclerViewMenuCategoryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
@@ -21,7 +23,7 @@ public class CategoryItemDelegate implements AdapterDelegate {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, DelegateItem item, int position) {
-        ((ViewHolder) holder).bind((CategoryItemModel) item.content());
+        ((ViewHolder) holder).bind((CategoryItemModel) item.content(), position);
     }
 
     @Override
@@ -38,7 +40,7 @@ public class CategoryItemDelegate implements AdapterDelegate {
             binding = _binding;
         }
 
-        void bind(CategoryItemModel model) {
+        void bind(CategoryItemModel model, int position) {
 
             if (model.getDrawable() != 0) {
                 binding.foodImage.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), model.getDrawable(), itemView.getContext().getTheme()));

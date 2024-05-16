@@ -32,7 +32,7 @@ public class BecomeWaiterFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeWaiterViewModel.class);
-        waiterPath = getActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        waiterPath = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
         viewModel.getRestaurantName(waiterPath);
     }
 
@@ -79,11 +79,12 @@ public class BecomeWaiterFragment extends Fragment {
                 Glide.with(requireView())
                         .load(model.getUri())
                         .into(binding.qrCodeImage);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof BecomeWaiterState.Loading) {
 
             } else if (state instanceof BecomeWaiterState.Error) {
-
+                setErrorLayout();
             }
         });
 
@@ -95,6 +96,13 @@ public class BecomeWaiterFragment extends Fragment {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_becomeWaiterFragment_to_successfullyBecomeWaiter, bundle);
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getRestaurantName(waiterPath);
         });
     }
 }

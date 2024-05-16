@@ -58,7 +58,7 @@ public class RestaurantMenuViewModel extends ViewModel {
 
                     @Override
                     public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
+                        _state.postValue(new RestaurantMenuState.Error());
                     }
                 });
     }
@@ -103,7 +103,7 @@ public class RestaurantMenuViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new RestaurantMenuState.Error());
                     }
                 });
     }
@@ -148,7 +148,7 @@ public class RestaurantMenuViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new RestaurantMenuState.Error());
                     }
                 });
     }

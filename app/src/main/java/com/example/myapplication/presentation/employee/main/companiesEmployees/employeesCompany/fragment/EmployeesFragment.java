@@ -155,6 +155,7 @@ public class EmployeesFragment extends Fragment {
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(employeeItemAdapter);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void removeEmployee(String userId, String role) {
@@ -255,8 +256,16 @@ public class EmployeesFragment extends Fragment {
             } else if (state instanceof EmployeeState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
             } else if (state instanceof EmployeeState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployees(companyId);
         });
     }
 

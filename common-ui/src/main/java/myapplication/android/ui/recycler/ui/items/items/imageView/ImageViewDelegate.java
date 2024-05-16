@@ -39,7 +39,9 @@ public class ImageViewDelegate implements AdapterDelegate {
 
         public void bind(ImageViewModel model, View itemView) {
             if (model.uri != null) {
-                Glide.with(itemView.getContext()).load(model.uri).into(binding.imageView);
+                Glide.with(itemView.getContext())
+                        .load(model.uri)
+                        .into(binding.imageView);
             }
         }
     }

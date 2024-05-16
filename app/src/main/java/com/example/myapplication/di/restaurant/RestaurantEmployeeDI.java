@@ -5,6 +5,7 @@ import com.example.myapplication.domain.usecase.profile.employee.restaurant.Dele
 import com.example.myapplication.domain.usecase.restaurant.UpdateIsWorkingUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.AddCookUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.AddWaiterUseCase;
+import com.example.myapplication.domain.usecase.restaurant.employee.CheckActiveEmployeeOrders;
 import com.example.myapplication.domain.usecase.restaurant.employee.CheckIsWorkingUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.DeleteEmployeeUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetCookQrCodeByPathUseCase;
@@ -19,6 +20,7 @@ public class RestaurantEmployeeDI {
 
     public static RestaurantEmployeesRepository restaurantEmployeesRepository = new RestaurantEmployeesRepository();
 
+    public static CheckActiveEmployeeOrders checkActiveEmployeeOrders = new CheckActiveEmployeeOrders();
     public static DeleteEmployeeUseCase deleteEmployeeUseCase = new DeleteEmployeeUseCase();
     public static GetEmployeesUseCase getEmployeesUseCase = new GetEmployeesUseCase();
     public static CheckIsWorkingUseCase checkIsWorkingUseCase = new CheckIsWorkingUseCase();

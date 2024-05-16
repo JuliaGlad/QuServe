@@ -1,29 +1,25 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWorkerQueueDetailsBinding;
-import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsFragment;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.model.WorkerQueueDetailsModel;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.state.WorkerQueueDetailsState;
 import com.example.myapplication.presentation.dialogFragments.finishQueue.FinishQueueDialogFragment;
@@ -49,15 +45,14 @@ public class WorkerQueueDetailsFragment extends Fragment {
     private FragmentWorkerQueueDetailsBinding binding;
     private WorkerQueueDetailsViewModel viewModel;
     private final MainAdapter mainAdapter = new MainAdapter();
-    private List<DelegateItem> list = new ArrayList<>();
     private String queueId, companyId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(WorkerQueueDetailsViewModel.class);
-        queueId = getActivity().getIntent().getStringExtra(QUEUE_ID);
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        queueId = requireActivity().getIntent().getStringExtra(QUEUE_ID);
+        companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
     }
 
     @Override
@@ -103,10 +98,19 @@ public class WorkerQueueDetailsFragment extends Fragment {
                 }
 
             } else if (state instanceof WorkerQueueDetailsState.Loading){
+                binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof WorkerQueueDetailsState.Error){
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getCompanyQueueById(companyId, queueId);
         });
     }
 
@@ -178,8 +182,9 @@ public class WorkerQueueDetailsFragment extends Fragment {
     }
 
     private void buildList(DelegateItem[] items) {
-        list = Arrays.asList(items);
+        List<DelegateItem> list = Arrays.asList(items);
         mainAdapter.submitList(list);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

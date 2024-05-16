@@ -38,6 +38,7 @@ public class ChooseLocationFragment extends Fragment {
 
     private ChooseLocationViewModel viewModel;
     private FragmentChooseLocationBinding binding;
+    private String restaurantId;
     private final RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
 
     @Override
@@ -45,7 +46,7 @@ public class ChooseLocationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ChooseLocationViewModel.class);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        String restaurantId = sharedPreferences.getString(COMPANY_ID, null);
+        restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
     }
 
@@ -66,7 +67,7 @@ public class ChooseLocationFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof ChooseLocationState.Success) {
                 List<ChooseLocationStateModel> models = ((ChooseLocationState.Success)state).data;
-                if (models.size() > 0) {
+                if (!models.isEmpty()) {
                     initRecycler(models);
                 } else {
                     NavHostFragment.findNavController(this)
@@ -76,8 +77,15 @@ public class ChooseLocationFragment extends Fragment {
             } else if (state instanceof ChooseLocationState.Loading) {
 
             } else if (state instanceof ChooseLocationState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getRestaurantLocations(restaurantId);
         });
     }
 
@@ -105,6 +113,7 @@ public class ChooseLocationFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
 }

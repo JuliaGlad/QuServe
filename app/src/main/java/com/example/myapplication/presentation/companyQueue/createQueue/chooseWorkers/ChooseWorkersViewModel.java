@@ -50,7 +50,7 @@ public class ChooseWorkersViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new ChooseWorkersState.Error());
                     }
                 });
     }

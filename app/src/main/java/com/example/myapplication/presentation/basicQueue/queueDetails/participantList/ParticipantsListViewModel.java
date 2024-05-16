@@ -75,7 +75,7 @@ public class ParticipantsListViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new ParticipantsListState.Error());
                     }
 
                     @Override

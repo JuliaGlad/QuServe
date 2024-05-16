@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.model.QueueDetailsModel;
@@ -65,10 +66,8 @@ public class QueueDetailsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(QueueDetailsViewModel.class);
         binding = FragmentQueueDetailsBinding.inflate(inflater, container, false);
-
         viewModel.getQueue();
         viewModel.getQueueRecycler();
-
         return binding.getRoot();
     }
 
@@ -91,7 +90,7 @@ public class QueueDetailsFragment extends Fragment {
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof QueueDetailsState.Success){
-                if (list.size() == 0) {
+                if (list.isEmpty()) {
                     QueueDetailsModel model = ((QueueDetailsState.Success) state).data;
                     binding.queueName.setText(model.getName());
                     Uri uri = model.getUri();
@@ -103,13 +102,21 @@ public class QueueDetailsFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof QueueDetailsState.Error){
-
+                setErrorLayout();
             }
         });
 
         viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             requireActivity().startActivity(intent);
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getQueueRecycler();
         });
     }
 
@@ -186,5 +193,6 @@ public class QueueDetailsFragment extends Fragment {
         list = Arrays.asList(items);
         mainAdapter.submitList(list);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

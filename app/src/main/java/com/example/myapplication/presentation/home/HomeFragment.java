@@ -23,10 +23,12 @@ import androidx.fragment.app.FragmentManager;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentHomeBinding;
 import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.home.anonymousUser.AnonymousUserFragment;
 import com.example.myapplication.presentation.home.basicUser.HomeBasisUserFragment;
 import com.example.myapplication.presentation.home.companyUser.HomeQueueCompanyUserFragment;
 import com.example.myapplication.presentation.home.recycler.stories.StoryAdapter;
 import com.example.myapplication.presentation.home.recycler.stories.StoryModel;
+import com.example.myapplication.presentation.home.restaurantUser.RestaurantHomeFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment {
     private void initStoriesRecycler() {
 
         buildList(new StoryModel[]{
-                new StoryModel(1, getString(R.string.features), R.drawable.story_primary_background, R.drawable.create_image,
+                new StoryModel(1, getString(R.string.features), R.drawable.story_primary_background, R.drawable.quserve_icon_drawable,
                         () -> {
                             openStoriesActivity(new int[]{
                                     R.drawable.quserve_features_page1,
@@ -88,7 +90,10 @@ public class HomeFragment extends Fragment {
 
         switch (type) {
             case ANONYMOUS:
-
+                fragmentManager.beginTransaction()
+                        .replace(R.id.home_container, AnonymousUserFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
                 break;
             case BASIC:
                 fragmentManager.beginTransaction()
@@ -110,6 +115,14 @@ public class HomeFragment extends Fragment {
             case RESTAURANT:
                 companyId = sharedPreferences.getString(COMPANY_ID, null);
 
+                Bundle bundleRestaurant = new Bundle();
+                bundleRestaurant.putString(COMPANY_ID, companyId);
+
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.home_container, RestaurantHomeFragment.class, bundleRestaurant)
+                        .commit();
+                break;
 
         }
     }

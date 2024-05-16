@@ -161,8 +161,16 @@ public class EmployeesRestaurantFragment extends Fragment {
             } else if (state instanceof EmployeeState.Loading) {
 
             } else if (state instanceof EmployeeState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployees(restaurantId, locationId);
         });
     }
 
@@ -216,6 +224,7 @@ public class EmployeesRestaurantFragment extends Fragment {
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(adapter);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private void initSubLists() {

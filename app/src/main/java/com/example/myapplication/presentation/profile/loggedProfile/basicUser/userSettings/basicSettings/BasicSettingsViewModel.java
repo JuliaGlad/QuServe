@@ -36,7 +36,7 @@ public class BasicSettingsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new BasicSettingsState.Error());
                     }
                 });
     }

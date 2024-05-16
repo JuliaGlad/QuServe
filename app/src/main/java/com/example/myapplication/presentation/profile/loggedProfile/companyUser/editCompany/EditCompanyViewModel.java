@@ -51,7 +51,7 @@ public class EditCompanyViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new EditCompanyState.Error());
                     }
                 });
     }
@@ -81,18 +81,13 @@ public class EditCompanyViewModel extends ViewModel {
 
     public void getRestaurantData(String restaurantId){
         RestaurantUserDI.getRestaurantEditModel.invoke(restaurantId)
-                .zipWith(RestaurantUserDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), new BiFunction<RestaurantEditModel, ImageModel, EditCompanyModel>() {
-                    @Override
-                    public EditCompanyModel apply(RestaurantEditModel restaurantEditModel, ImageModel imageModel) throws Throwable {
-                        return new EditCompanyModel(
-                                restaurantEditModel.getName(),
-                                restaurantEditModel.getEmail(),
-                                restaurantEditModel.getPhone(),
-                                restaurantEditModel.getService(),
-                                imageModel.getImageUri()
-                        );
-                    }
-                })
+                .zipWith(RestaurantUserDI.getSingleRestaurantLogoUseCase.invoke(restaurantId), (restaurantEditModel, imageModel) -> new EditCompanyModel(
+                        restaurantEditModel.getName(),
+                        restaurantEditModel.getEmail(),
+                        restaurantEditModel.getPhone(),
+                        restaurantEditModel.getService(),
+                        imageModel.getImageUri()
+                ))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<EditCompanyModel>() {
                     @Override
@@ -112,8 +107,8 @@ public class EditCompanyViewModel extends ViewModel {
                 });
     }
 
-    public void updateRestaurantData(String restaurantId, String name, String phone, Uri uri){
-        RestaurantUserDI.updateRestaurantDataUseCase.invoke(restaurantId, name, phone)
+    public void updateRestaurantData(String restaurantId,String email, String name, String phone, Uri uri){
+        RestaurantUserDI.updateRestaurantDataUseCase.invoke(restaurantId, email, name, phone)
                 .concatWith(RestaurantUserDI.uploadRestaurantLogoUseCase.invoke(uri, restaurantId))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

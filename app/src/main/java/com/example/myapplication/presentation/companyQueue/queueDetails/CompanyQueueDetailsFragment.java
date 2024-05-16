@@ -150,6 +150,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
         list = Arrays.asList(items);
         mainAdapter.submitList(list);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void initBackButton() {
@@ -181,7 +182,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof CompanyQueueDetailsState.Success) {
-                if (list.size() == 0) {
+                if (list.isEmpty()) {
                     CompanyQueueDetailModel model = ((CompanyQueueDetailsState.Success) state).data;
                     binding.queueName.setText(model.getName());
                     initRecyclerView(queueId, model.getUri());
@@ -190,13 +191,21 @@ public class CompanyQueueDetailsFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof CompanyQueueDetailsState.Error) {
-
+                setErrorLayout();
             }
         });
 
         viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             requireActivity().startActivity(intent);
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getQueueRecycler(queueId, companyId);
         });
     }
 

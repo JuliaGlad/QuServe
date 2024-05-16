@@ -143,7 +143,6 @@ public class CreateCompanyAccountFragment extends Fragment {
     public void onPageInit(String page) {
         switch (page) {
             case PAGE_1:
-
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.enter_company_name, 24)),
                         new EditTextDelegateItem(new EditTextModel(1, R.string.company_name, name, InputType.TYPE_CLASS_TEXT, true, stringName -> {
@@ -152,6 +151,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 });
                 break;
             case PAGE_2:
+                binding.companyProgressBar.setProgress(25, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_work_email, 24)),
                         new EditTextDelegateItem(new EditTextModel(1, R.string.work_email, email, InputType.TYPE_CLASS_TEXT, true, stringEmail -> {
@@ -160,6 +160,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 });
                 break;
             case PAGE_3:
+                binding.companyProgressBar.setProgress(50, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_work_phone, 24)),
                         new EditTextDelegateItem(new EditTextModel(1, R.string.work_phone_number, phoneNumber, InputType.TYPE_CLASS_PHONE, true, stringPhone -> {
@@ -169,6 +170,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 break;
 
             case PAGE_4:
+                binding.companyProgressBar.setProgress(75, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.choose_service, 24)),
                         new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(1, R.array.services, R.string.select_item, serviceString -> {
@@ -189,16 +191,13 @@ public class CreateCompanyAccountFragment extends Fragment {
         switch (page) {
             case PAGE_1:
                 if (name == null) {
-                    Snackbar.make(requireView(), "You field is required!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
                 } else {
                     NavHostFragment.findNavController(this)
                             .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_2));
                 }
                 break;
             case PAGE_2:
-                if (email == null) {
-                    Snackbar.make(requireView(), "You field is required!", Snackbar.LENGTH_LONG).show();
-                }
                 NavHostFragment.findNavController(this)
                         .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_3));
                 break;
@@ -209,7 +208,7 @@ public class CreateCompanyAccountFragment extends Fragment {
 
             case PAGE_4:
                 if (service == null) {
-                    Snackbar.make(requireView(), "You field is required!", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 } else {
                     viewModel.initData();
                 }

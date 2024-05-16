@@ -31,6 +31,7 @@ import com.example.myapplication.databinding.FragmentRequiredChoiceBinding;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.recycler.RequiredChoiceEditDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.recycler.RequiredChoiceEditDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.recycler.RequiredChoiceEditItemModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,11 +188,19 @@ public class  AddRequiredChoiceFragment extends Fragment {
     private void navigateNext() {
         switch (page) {
             case PAGE_1:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddRequiredChoiceFragmentDirections.actionAddRequiredChoiceFragmentSelf(dishId, categoryId, PAGE_2));
+                if (RequiredChoiceArguments.name != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddRequiredChoiceFragmentDirections.actionAddRequiredChoiceFragmentSelf(dishId, categoryId, PAGE_2));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_2:
-                viewModel.addChoice(restaurantId, categoryId, dishId);
+                if (RequiredChoiceArguments.variants.size() >= 2) {
+                    viewModel.addChoice(restaurantId, categoryId, dishId);
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.you_have_to_add_at_least_2_variants), Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
     }

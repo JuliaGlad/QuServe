@@ -3,8 +3,6 @@ package com.example.myapplication.presentation.profile.loggedProfile.basicUser.u
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMAIL;
 import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
 

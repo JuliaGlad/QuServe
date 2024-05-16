@@ -8,21 +8,18 @@ import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +34,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateQueueBinding;
+import com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -48,11 +46,9 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.autoCompleteText.AutoCompleteTextModel;
-import myapplication.android.ui.recycler.ui.items.items.button.ButtonDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
-import myapplication.android.ui.recycler.ui.items.items.progressBar.ProgressBarDelegate;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
@@ -121,6 +117,7 @@ public class CreateQueueFragment extends Fragment {
                 break;
 
             case PAGE_2:
+                binding.companyProgressBar.setProgress(50, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)),
                         new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
@@ -139,19 +136,22 @@ public class CreateQueueFragment extends Fragment {
         switch (page) {
             case PAGE_1:
                 if (queueName == null) {
-                    Snackbar.make(getView(), "You need to write name", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
                 } else {
                     NavHostFragment.findNavController(this)
                             .navigate(CreateQueueFragmentDirections.actionCreateQueueFragmentSelf(PAGE_2));
                 }
                 break;
             case PAGE_2:
-
-                if (askPermission()) {
-                    viewModel.initQueueData();
-                    viewModel.setArgumentsNull();
+                if (queueTime != null) {
+                    if (askPermission()) {
+                        viewModel.initQueueData();
+                        viewModel.setArgumentsNull();
+                    }
+                    break;
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 }
-                break;
         }
     }
 
@@ -189,12 +189,9 @@ public class CreateQueueFragment extends Fragment {
     }
 
     private void setMainAdapter() {
-
-        mainAdapter.addDelegate(new ProgressBarDelegate());
         mainAdapter.addDelegate(delegate);
         mainAdapter.addDelegate(new TextViewHeaderDelegate());
         mainAdapter.addDelegate(new AutoCompleteTextDelegate());
-        mainAdapter.addDelegate(new ButtonDelegate());
 
         binding.recyclerView.setAdapter(mainAdapter);
     }
@@ -205,6 +202,7 @@ public class CreateQueueFragment extends Fragment {
             if (aBoolean){
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, BASIC);
+                bundle.putString(QUEUE_ID, Arguments.queueID);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createQueueFragment_to_finishedQueueCreationFragment, bundle);

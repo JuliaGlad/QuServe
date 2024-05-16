@@ -44,6 +44,7 @@ import com.example.myapplication.data.dto.user.UserDto;
 import com.example.myapplication.data.providers.AnonymousUserProvider;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
+import com.example.myapplication.domain.model.profile.AnonymousUserModel;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -52,6 +53,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
+
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,15 +70,42 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
 
-    public Completable deleteRestaurantEmployeeRole(String restaurantId, String userId){
+    public boolean isAnonymous(){
+        return service.auth.getCurrentUser().isAnonymous();
+    }
+
+    public Single<AnonymousUserDto> getAnonymousUser() {
+        return Single.create(emitter -> {
+            AnonymousUserDto dto =AnonymousUserProvider.getUser();
+            if (dto != null) {
+                emitter.onSuccess(dto);
+            } else {
+                service.auth.signInAnonymously().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        AnonymousUserDto newUser = new AnonymousUserDto(
+                                task.getResult().getUser().getUid(),
+                                NOT_PARTICIPATE_IN_QUEUE,
+                                NOT_RESTAURANT_VISITOR
+                        );
+                        AnonymousUserProvider.insertUser(newUser);
+                        emitter.onSuccess(newUser);
+                    }
+                });
+            }
+        });
+    }
+
+    public Completable deleteRestaurantEmployeeRole(String restaurantId, String userId) {
         return Completable.create(emitter -> {
             service.fireStore.collection(USER_LIST)
                     .document(userId)
                     .collection(RESTAURANT_EMPLOYEE)
                     .document(restaurantId)
                     .delete().addOnCompleteListener(task -> {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -86,10 +116,12 @@ public class ProfileRepository {
             service.fireStore.collection(USER_LIST)
                     .document(service.auth.getCurrentUser().getUid())
                     .addSnapshotListener((value, error) -> {
-                        if (value != null){
-                            if (value.get(IS_RESTAURANT_VISITOR).equals(NOT_RESTAURANT_VISITOR)){
+                        if (value != null) {
+                            if (value.get(IS_RESTAURANT_VISITOR).equals(NOT_RESTAURANT_VISITOR)) {
                                 emitter.onComplete();
                             }
+                        } else {
+                            emitter.onError(new Throwable("Value is null"));
                         }
                     });
         });
@@ -99,9 +131,11 @@ public class ProfileRepository {
         return Completable.create(emitter -> {
             service.fireStore.collection(USER_LIST)
                     .document(service.auth.getCurrentUser().getUid())
-                    .update(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR).addOnCompleteListener(taskUpdate -> {
-                        if (taskUpdate.isSuccessful()) {
+                    .update(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -139,6 +173,8 @@ public class ProfileRepository {
             service.auth.getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -160,10 +196,14 @@ public class ProfileRepository {
 
     public Observable<DocumentSnapshot> addSnapshot() {
         return Observable.create(emitter -> {
-            service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid())
+            service.fireStore
+                    .collection(USER_LIST)
+                    .document(service.auth.getCurrentUser().getUid())
                     .addSnapshotListener((value, error) -> {
                         if (value != null) {
                             emitter.onNext(value);
+                        } else {
+                            emitter.onError(new Throwable("Value is null"));
                         }
                     });
         });
@@ -177,7 +217,7 @@ public class ProfileRepository {
                     service.auth.getCurrentUser().updatePassword(newPassword);
                     emitter.onComplete();
                 } else {
-                    emitter.onError(new Throwable("EXCEPTION"));
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -189,6 +229,8 @@ public class ProfileRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -200,6 +242,8 @@ public class ProfileRepository {
             service.auth.getCurrentUser().reload().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(service.auth.getCurrentUser().isEmailVerified());
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -217,6 +261,8 @@ public class ProfileRepository {
                                     .collection(USER_LIST)
                                     .document(userId);
                             getUserDocumentForDelete(docRef, userId, emitter);
+                        } else {
+                            emitter.onError(new Throwable(auth.getException()));
                         }
                     });
         });
@@ -243,8 +289,13 @@ public class ProfileRepository {
 
     public Completable sendEmailVerification() {
         return Completable.create(emitter -> {
-            emitter.onComplete();
-            service.auth.getCurrentUser().sendEmailVerification();
+            service.auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
+                }
+            });
         });
     }
 
@@ -277,6 +328,8 @@ public class ProfileRepository {
                             UserDatabaseProvider.insertUser(userDto);
 
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
                 }
@@ -289,13 +342,13 @@ public class ProfileRepository {
         return Completable.create(emitter -> {
             service.auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    AnonymousUserEntity entity = AnonymousUserProvider.getUser();
-                    if (entity != null) {
-                        AnonymousUserProvider.deleteUser(entity);
+                    AnonymousUserDto dto = AnonymousUserProvider.getUser();
+                    if (dto != null) {
+                        AnonymousUserProvider.deleteUser();
                     }
                     emitter.onComplete();
                 } else
-                    emitter.onError(new Throwable("Wrong data"));
+                    emitter.onError(new Throwable(task.getException()));
             });
         });
     }
@@ -312,8 +365,12 @@ public class ProfileRepository {
                     PHONE_NUMBER_KEY, newUserPhone,
                     BIRTHDAY_KEY, newBirthday
             ).addOnCompleteListener(task -> {
-                UserDatabaseProvider.updateUser(newUserName, newUserGender, newUserPhone, newBirthday);
-                emitter.onComplete();
+                if (task.isSuccessful()) {
+                    UserDatabaseProvider.updateUser(newUserName, newUserGender, newUserPhone, newBirthday);
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
+                }
             });
         });
     }
@@ -324,6 +381,8 @@ public class ProfileRepository {
                     .update(EMAIL_KEY, newEmail).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -331,7 +390,7 @@ public class ProfileRepository {
 
     public Single<UserDto> getUserData() {
         UserDto localUser = UserDatabaseProvider.getUser();
-        if (localUser != null) {
+        if (localUser != null ) {
             return Single.create(emitter -> {
                 emitter.onSuccess(localUser);
             });
@@ -353,7 +412,6 @@ public class ProfileRepository {
                                             document.getString(PARTICIPATE_IN_QUEUE),
                                             document.getString(IS_RESTAURANT_VISITOR)
                                     );
-
                                     UserDatabaseProvider.insertUser(userDto);
                                     emitter.onSuccess(userDto);
                                 }
@@ -373,6 +431,8 @@ public class ProfileRepository {
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult().getString(IS_RESTAURANT_VISITOR));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -387,6 +447,8 @@ public class ProfileRepository {
                         .update(IS_RESTAURANT_VISITOR, path).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             } else {
@@ -403,6 +465,8 @@ public class ProfileRepository {
                 if (task.isSuccessful()) {
                     UserDatabaseProvider.updateOwnQueue(value);
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -416,6 +480,8 @@ public class ProfileRepository {
                     if (task.isSuccessful()) {
                         UserDatabaseProvider.updateParticipateInQueue(path);
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -440,17 +506,20 @@ public class ProfileRepository {
 
                 assert participantPath != null;
                 getActions(docRef, userId, emitter, participantPath, ownQueue, restaurantVisitor);
+            } else {
+                emitter.onError(new Throwable(task.getException()));
             }
         });
     }
 
     private void getActions(DocumentReference docRef, String userId, CompletableEmitter emitter, String participantPath, String ownQueue, String restaurantVisitor) {
-
         if (!participantPath.equals(NOT_PARTICIPATE_IN_QUEUE)) {
             service.fireStore.document(participantPath).update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(userId))
-                    .addOnCompleteListener(taskRemove -> {
-                        if (taskRemove.isSuccessful()) {
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
                             getQueueOwnerActions(docRef, userId, emitter, ownQueue, restaurantVisitor);
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         } else {
@@ -464,6 +533,8 @@ public class ProfileRepository {
             service.fireStore.document(ownQueue).delete().addOnCompleteListener(taskDeleteQueue -> {
                 if (taskDeleteQueue.isSuccessful()) {
                     getRestaurantActions(docRef, userId, emitter, restaurantVisitor);
+                } else {
+                    emitter.onError(new Throwable(taskDeleteQueue.getException()));
                 }
             });
         } else {
@@ -475,12 +546,14 @@ public class ProfileRepository {
         if (!restaurantVisitor.equals(NOT_RESTAURANT_VISITOR)) {
             service.fireStore.document(restaurantVisitor).delete().addOnCompleteListener(taskUserDelete -> {
                 if (taskUserDelete.isSuccessful()) {
-                    deleteCompanyEmployee(docRef, userId);
+                    deleteCompanyEmployee(docRef, userId, emitter);
                     deleteUser(docRef, emitter);
+                } else {
+                    emitter.onError(new Throwable(taskUserDelete.getException()));
                 }
             });
         } else {
-            deleteCompanyEmployee(docRef, userId);
+            deleteCompanyEmployee(docRef, userId, emitter);
             deleteUser(docRef, emitter);
         }
     }
@@ -494,13 +567,15 @@ public class ProfileRepository {
                                 UserDatabaseProvider.deleteUser();
                                 CompanyUserProvider.deleteAll();
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(taskNew.getException()));
                             }
                         });
             }
         });
     }
 
-    private void deleteCompanyEmployee(DocumentReference docRef, String userId) {
+    private void deleteCompanyEmployee(DocumentReference docRef, String userId, CompletableEmitter emitter) {
         docRef.collection(COMPANY_EMPLOYEE).get().addOnCompleteListener(taskEmployee -> {
             if (taskEmployee.isSuccessful()) {
                 List<DocumentSnapshot> snapshots = taskEmployee.getResult().getDocuments();
@@ -511,19 +586,21 @@ public class ProfileRepository {
 
                     docRef.collection(COMPANY_EMPLOYEE).document(id).collection(ACTIVE_QUEUES_LIST)
                             .get().addOnCompleteListener(taskQueues -> {
-
-                                List<DocumentSnapshot> documents = taskQueues.getResult().getDocuments();
-                                for (DocumentSnapshot currentSnapshot : documents) {
-                                    service.fireStore
-                                            .collection(QUEUE_LIST)
-                                            .document(COMPANIES_QUEUES)
-                                            .collection(id)
-                                            .document(currentSnapshot.getId())
-                                            .collection(WORKERS_LIST)
-                                            .document(userId)
-                                            .delete();
+                                if (taskQueues.isSuccessful()) {
+                                    List<DocumentSnapshot> documents = taskQueues.getResult().getDocuments();
+                                    for (DocumentSnapshot currentSnapshot : documents) {
+                                        service.fireStore
+                                                .collection(QUEUE_LIST)
+                                                .document(COMPANIES_QUEUES)
+                                                .collection(id)
+                                                .document(currentSnapshot.getId())
+                                                .collection(WORKERS_LIST)
+                                                .document(userId)
+                                                .delete();
+                                    }
+                                } else {
+                                    emitter.onError(new Throwable(taskQueues.getException()));
                                 }
-
                             });
                 }
             }
@@ -565,7 +642,6 @@ public class ProfileRepository {
                                 }
                             });
                         } catch (RuntimeExecutionException e) {
-                            Log.d("RuntimeExecutionException", e.getMessage());
                             emitter.onSuccess(new ImageDto(Uri.EMPTY));
                         }
 
@@ -581,6 +657,8 @@ public class ProfileRepository {
                         docRef.update(URI, imageUri).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable());
                             }
                         });
 
@@ -594,12 +672,13 @@ public class ProfileRepository {
         public Completable uploadBackgroundToFireStorage(Uri imageUri) {
             return Completable.create(emitter -> {
                 StorageReference reference = service.storageReference.child("BACKGROUND_IMAGES/").child(BACKGROUND_IMAGE + service.auth.getCurrentUser().getUid());
-
                 reference.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
                     DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
                     docRef.update(BACKGROUND_IMAGE, imageUri).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable());
                         }
                     });
 

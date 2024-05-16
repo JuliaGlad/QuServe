@@ -99,7 +99,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new RestaurantOrderDishDetailsState.Error());
                     }
                 });
 

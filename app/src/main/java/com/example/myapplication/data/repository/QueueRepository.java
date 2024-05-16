@@ -24,6 +24,9 @@ import static com.example.myapplication.presentation.utils.Utils.TIME;
 import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 
 import android.net.Uri;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.dto.queues.QueueDto;
@@ -65,6 +68,8 @@ public class QueueRepository {
             docRef.set(hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -114,6 +119,8 @@ public class QueueRepository {
                             document.getString(PEOPLE_PASSED_15),
                             document.getString(MID_TIME_WAITING))
                     );
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -171,6 +178,8 @@ public class QueueRepository {
             service.fireStore.document(path).addSnapshotListener((value, error) -> {
                 if (value != null) {
                     emitter.onNext(value);
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -193,6 +202,8 @@ public class QueueRepository {
             docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -210,6 +221,8 @@ public class QueueRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             service.auth.getCurrentUser().delete().addOnCompleteListener(task1 -> emitter.onComplete());
+                        }else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -234,6 +247,8 @@ public class QueueRepository {
                             emitter.onComplete();
                         }
                     });
+                }else {
+                    emitter.onError(new Throwable(taskGet.getException()));
                 }
             });
         });
@@ -245,6 +260,8 @@ public class QueueRepository {
                     .delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        }else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -257,6 +274,8 @@ public class QueueRepository {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null && !value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(userId) && !value.getString(QUEUE_IN_PROGRESS).contains(userId)) {
                     emitter.onComplete();
+                } else if (value == null){
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -269,9 +288,9 @@ public class QueueRepository {
                 List<String> newParticipants;
                 if (value != null) {
                     newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
-                    if (newParticipants != null) {
-                        emitter.onNext(newParticipants.size());
-                    }
+                    emitter.onNext(newParticipants.size());
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -294,6 +313,8 @@ public class QueueRepository {
                     if (size < previousSize) {
                         emitter.onNext(size);
                     }
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
                 }
             });
         });
@@ -302,6 +323,21 @@ public class QueueRepository {
     public Single<String> createQueueDocument(String queueID, String queueName, String queueTime) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueID);
         String path = docRef.getPath();
+        Map<String, Object> userQueue = geUserQueueMap(queueName, queueTime);
+
+        return Single.create(emitter -> {
+            docRef.set(userQueue).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onSuccess(path);
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
+                }
+            });
+        });
+    }
+
+    @NonNull
+    private Map<String, Object> geUserQueueMap(String queueName, String queueTime) {
         ArrayList<String> arrayList = new ArrayList<>();
 
         Map<String, Object> userQueue = new HashMap<>();
@@ -314,22 +350,19 @@ public class QueueRepository {
         userQueue.put(PEOPLE_PASSED, "0");
         userQueue.put(PEOPLE_PASSED_15, "0");
         userQueue.put(MID_TIME_WAITING, "0");
-
-        return Single.create(emitter -> {
-            docRef.set(userQueue).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    emitter.onSuccess(path);
-                }
-            });
-        });
+        return userQueue;
     }
 
     public Completable uploadBytesToFireStorage(String queueID, byte[] data) {
-        StorageReference reference = service.storageReference.child(QR_CODES).child(queueID + "/" + queueID + JPG);
+        StorageReference reference = service.storageReference
+                .child(QR_CODES)
+                .child(queueID + "/" + queueID + JPG);
         return Completable.create(emitter -> {
             reference.putBytes(data).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -345,10 +378,14 @@ public class QueueRepository {
 
     public Single<ImageDto> getQrCodeJpg(String queueID) {
         return Single.create(emitter -> {
-            StorageReference local = service.storageReference.child(QR_CODES).child(queueID + "/" + queueID + ".jpg");
+            StorageReference local = service.storageReference
+                    .child(QR_CODES)
+                    .child(queueID + "/" + queueID + ".jpg");
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(task.getResult()));
+                }else {
+                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
                 }
             });
         });
@@ -359,7 +396,11 @@ public class QueueRepository {
         return Completable.create(emitter -> {
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayUnion(service.auth.getCurrentUser().getUid()))
                     .addOnCompleteListener(task -> {
-                        emitter.onComplete();
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
+                        }
                     });
         });
     }
@@ -370,6 +411,8 @@ public class QueueRepository {
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(task.getResult()));
+                } else {
+                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
                 }
             });
         });

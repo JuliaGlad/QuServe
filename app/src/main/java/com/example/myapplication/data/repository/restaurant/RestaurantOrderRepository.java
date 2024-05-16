@@ -1,6 +1,7 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
@@ -33,6 +34,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.data.dto.restaurant.ActiveOrderDishDto;
 import com.example.myapplication.data.dto.restaurant.DishShortInfoDto;
 import com.example.myapplication.data.dto.restaurant.OrderDto;
@@ -54,8 +57,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableEmitter;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantOrderRepository {
 
@@ -71,6 +76,8 @@ public class RestaurantOrderRepository {
                     .delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -96,6 +103,8 @@ public class RestaurantOrderRepository {
                                     ));
                                 }
                             }
+                        } else {
+                            emitter.onError(new Throwable("Value is null"));
                         }
                     });
         });
@@ -124,6 +133,8 @@ public class RestaurantOrderRepository {
                                 }
                             }
                             emitter.onSuccess(dishDtos);
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -138,16 +149,26 @@ public class RestaurantOrderRepository {
                     String waiterId = task.getResult().getString(WAITER);
                     CollectionReference collRef = service.fireStore.document(orderPath).getParent().getParent().collection(WAITERS);
                     removeOrderFromWaiter(collRef, waiterId, orderId).addOnCompleteListener(taskRemove -> {
-                        if (task.isSuccessful()) {
-                            service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
-                                if (taskDocument.isSuccessful()) {
-                                    emitter.onComplete();
-                                }
-                            });
+                        if (taskRemove.isSuccessful()) {
+                            deleteOrderDocumentByPath(orderPath, emitter);
+                        }else {
+                            emitter.onError(new Throwable(taskRemove.getException()));
                         }
                     });
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
+        });
+    }
+
+    private void deleteOrderDocumentByPath(String orderPath, CompletableEmitter emitter) {
+        service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
+            if (taskDocument.isSuccessful()) {
+                emitter.onComplete();
+            }else {
+                emitter.onError(new Throwable(taskDocument.getException()));
+            }
         });
     }
 
@@ -156,44 +177,12 @@ public class RestaurantOrderRepository {
             DocumentReference locationRef = service.fireStore.document(orderPath).getParent().getParent();
             CollectionReference collRef = service.fireStore.document(orderPath).collection(DISHES);
             String orderId = service.fireStore.document(orderPath).getId();
-
             assert locationRef != null;
             DocumentReference docRef = locationRef
                     .collection(READY_DISHES)
                     .document(orderId + "_" + orderDishId);
-
-            HashMap<String, String> dish = new HashMap<>();
-            service.fireStore.document(orderPath).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    dish.put(WAITER, task.getResult().getString(WAITER));
-                    dish.put(COUNT, task.getResult().getString(COUNT));
-                }
-            });
-            dish.put(TABLE_NUMBER, tableNumber);
-            dish.put(DISH_NAME, dishName);
-
-            docRef.set(dish).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    collRef.document(orderDishId).update(IS_DONE, true)
-                            .addOnCompleteListener(taskUpdate -> {
-                                if (taskUpdate.isSuccessful()) {
-                                    collRef.get().addOnCompleteListener(taskDocument -> {
-                                        if (taskDocument.isSuccessful()) {
-                                            List<DocumentSnapshot> documentSnapshots = taskDocument.getResult().getDocuments();
-                                            int size = 0;
-                                            for (DocumentSnapshot snapshot : documentSnapshots) {
-                                                boolean isDone = Boolean.TRUE.equals(snapshot.getBoolean(IS_DONE));
-                                                if (!isDone) {
-                                                    size++;
-                                                }
-                                            }
-                                            emitter.onSuccess(size);
-                                        }
-                                    });
-                                }
-                            });
-                }
-            });
+            HashMap<String, String> dish = initReadyDish(tableNumber, dishName, orderPath);
+            setReadyDish(orderDishId, emitter, docRef, dish, collRef);
         });
     }
 
@@ -282,57 +271,69 @@ public class RestaurantOrderRepository {
                                     .getParent();
 
                     CollectionReference dishes = docRef.collection(DISHES);
-                    dishes.get().addOnCompleteListener(taskDishes -> {
-                        List<ActiveOrderDishDto> dtos = new ArrayList<>();
-                        List<DocumentSnapshot> dishesShapshot = taskDishes.getResult().getDocuments();
-
-                        for (DocumentSnapshot current : dishesShapshot) {
-                            List<String> toppings = (List<String>) current.get(TOPPINGS);
-                            List<String> toRemove = (List<String>) current.get(INGREDIENT_TO_REMOVE);
-                            List<String> requiredChoice = (List<String>) current.get(REQUIRED_CHOICES);
-
-                            String price = current.getString(DISH_PRICE);
-                            String documentDishId = current.getId();
-                            String name = current.getString(DISH_NAME);
-                            String weight = current.getString(DISH_WEIGHT_OR_COUNT);
-                            String dishId = current.getString(DISH_ID);
-                            boolean isDone = Boolean.TRUE.equals(current.getBoolean(IS_DONE));
-
-                            dtos.add(new ActiveOrderDishDto(
-                                    documentDishId, dishId, current.getString(COUNT),
-                                    name, weight, price, isDone,
-                                    toppings, requiredChoice, toRemove
-                            ));
-                        }
-
-                        assert parentDoc != null;
-
-                        parentDoc.get().addOnCompleteListener(taskName -> {
-                            if (taskName.isSuccessful()) {
-                                DocumentSnapshot snapshotParent = taskName.getResult();
-                                String name = snapshotParent.getString(RESTAURANT_NAME);
-                                String restaurantId = snapshotParent.getId();
-
-                                emitter.onSuccess(new OrderDto(
-                                        snapshot.getId(),
-                                        path,
-                                        snapshot.getString(TABLE_NUMBER),
-                                        restaurantId,
-                                        name,
-                                        snapshot.getString(TOTAL_PRICE),
-                                        snapshot.getString(IS_TAKEN),
-                                        dtos
-                                ));
-                            }
-                        });
-
-
-                    });
+                    getDishes(path, emitter, dishes, parentDoc, snapshot);
                 }
             });
 
 
         });
+    }
+
+    private void getDishes(String path, SingleEmitter<OrderDto> emitter, CollectionReference dishes, DocumentReference parentDoc, DocumentSnapshot snapshot) {
+        dishes.get().addOnCompleteListener(taskDishes -> {
+            List<ActiveOrderDishDto> dtos = new ArrayList<>();
+            List<DocumentSnapshot> dishesShapshot = taskDishes.getResult().getDocuments();
+
+            addDishesDtos(dishesShapshot, dtos);
+            assert parentDoc != null;
+            getParentDocument(path, emitter, parentDoc, snapshot, dtos);
+
+
+        });
+    }
+
+    private void getParentDocument(String path, SingleEmitter<OrderDto> emitter, DocumentReference parentDoc, DocumentSnapshot snapshot, List<ActiveOrderDishDto> dtos) {
+        parentDoc.get().addOnCompleteListener(taskName -> {
+            if (taskName.isSuccessful()) {
+                DocumentSnapshot snapshotParent = taskName.getResult();
+                String name = snapshotParent.getString(RESTAURANT_NAME);
+                String restaurantId = snapshotParent.getId();
+
+                emitter.onSuccess(new OrderDto(
+                        snapshot.getId(),
+                        path,
+                        snapshot.getString(TABLE_NUMBER),
+                        restaurantId,
+                        name,
+                        snapshot.getString(TOTAL_PRICE),
+                        snapshot.getString(IS_TAKEN),
+                        dtos
+                ));
+            } else {
+                emitter.onError(new Throwable(taskName.getException()));
+            }
+        });
+    }
+
+    private void addDishesDtos(List<DocumentSnapshot> dishesShapshot, List<ActiveOrderDishDto> dtos) {
+        for (DocumentSnapshot current : dishesShapshot) {
+            List<String> toppings = (List<String>) current.get(TOPPINGS);
+            List<String> toRemove = (List<String>) current.get(INGREDIENT_TO_REMOVE);
+            List<String> requiredChoice = (List<String>) current.get(REQUIRED_CHOICES);
+
+            String price = current.getString(DISH_PRICE);
+            String documentDishId = current.getId();
+            String name = current.getString(DISH_NAME);
+            String weight = current.getString(DISH_WEIGHT_OR_COUNT);
+            String dishId = current.getString(DISH_ID);
+            boolean isDone = Boolean.TRUE.equals(current.getBoolean(IS_DONE));
+
+            dtos.add(new ActiveOrderDishDto(
+                    documentDishId, dishId, current.getString(COUNT),
+                    name, weight, price, isDone,
+                    toppings, requiredChoice, toRemove
+            ));
+        }
     }
 
     public Completable addToTableListOrder(String path, String orderId) {
@@ -345,6 +346,8 @@ public class RestaurantOrderRepository {
                 if (task.isSuccessful()) {
                     CartProvider.deleteCart();
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -395,12 +398,65 @@ public class RestaurantOrderRepository {
                             if (taskOrder.isSuccessful()) {
                                 setOrderDishesDocument(models, collRef);
                                 emitter.onSuccess(orderPath);
+                            } else {
+                                emitter.onError(new Throwable(taskOrder.getException()));
                             }
                         });
                     }
                 });
             });
         });
+    }
+
+    private void setReadyDish(String orderDishId, SingleEmitter<Integer> emitter, DocumentReference docRef, HashMap<String, String> dish, CollectionReference collRef) {
+        docRef.set(dish).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                updateIsDone(orderDishId, emitter, collRef);
+            }
+        });
+    }
+
+    private void updateIsDone(String orderDishId, SingleEmitter<Integer> emitter, CollectionReference collRef) {
+        collRef.document(orderDishId).update(IS_DONE, true)
+                .addOnCompleteListener(taskUpdate -> {
+                    if (taskUpdate.isSuccessful()) {
+                        getDishes(emitter, collRef);
+                    } else {
+                        emitter.onError(new Throwable(taskUpdate.getException()));
+                    }
+                });
+    }
+
+    private void getDishes(SingleEmitter<Integer> emitter, CollectionReference collRef) {
+        collRef.get().addOnCompleteListener(taskDocument -> {
+            if (taskDocument.isSuccessful()) {
+                List<DocumentSnapshot> documentSnapshots = taskDocument.getResult().getDocuments();
+                int size = 0;
+                for (DocumentSnapshot snapshot : documentSnapshots) {
+                    boolean isDone = Boolean.TRUE.equals(snapshot.getBoolean(IS_DONE));
+                    if (!isDone) {
+                        size++;
+                    }
+                }
+                emitter.onSuccess(size);
+            } else {
+                emitter.onError(new Throwable(taskDocument.getException()));
+            }
+        });
+    }
+
+    @NonNull
+    private HashMap<String, String> initReadyDish(String tableNumber, String dishName, String orderPath) {
+        HashMap<String, String> dish = new HashMap<>();
+        service.fireStore.document(orderPath).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                dish.put(WAITER, task.getResult().getString(WAITER));
+                dish.put(COUNT, task.getResult().getString(COUNT));
+            }
+        });
+        dish.put(TABLE_NUMBER, tableNumber);
+        dish.put(DISH_NAME, dishName);
+        return dish;
     }
 
     private String getWaiter(String restaurantId, String locationId) {
@@ -483,7 +539,7 @@ public class RestaurantOrderRepository {
     private String getWaiter(String waiterId, DocumentReference locationDoc) {
         final String[] name = new String[1];
         locationDoc.collection(WAITERS).document(waiterId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 name[0] = task.getResult().getString(USER_NAME_KEY);
             }
         });
@@ -493,7 +549,7 @@ public class RestaurantOrderRepository {
     private String getCook(String cookId, DocumentReference locationDoc) {
         final String[] name = new String[1];
         locationDoc.collection(COOKS).document(cookId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
+            if (task.isSuccessful()) {
                 name[0] = task.getResult().getString(USER_NAME_KEY);
             }
         });
@@ -501,7 +557,6 @@ public class RestaurantOrderRepository {
     }
 
     private void getDishesShortInfo(List<DishShortInfoDto> dtos, DocumentReference docRef) {
-
         docRef.collection(DISHES).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<DocumentSnapshot> snapshots = task.getResult().getDocuments();

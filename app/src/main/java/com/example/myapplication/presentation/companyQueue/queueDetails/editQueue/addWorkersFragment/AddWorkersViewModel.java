@@ -59,7 +59,7 @@ public class AddWorkersViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new AddWorkersState.Error());
                     }
                 });
     }

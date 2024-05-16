@@ -38,7 +38,7 @@ public class DishOrderItemAdapter extends ListAdapter<DishOrderModel, RecyclerVi
 
         void bind(DishOrderModel model){
             binding.dishName.setText(model.getName());
-            binding.price.setText(model.getPrice());
+            binding.price.setText(model.getPrice().concat("₽"));
 
             if (model.getTask() != null){
                 model.getTask().addOnCompleteListener(task -> {

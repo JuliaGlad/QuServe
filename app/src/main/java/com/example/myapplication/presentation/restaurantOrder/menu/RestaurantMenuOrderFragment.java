@@ -87,15 +87,15 @@ public class RestaurantMenuOrderFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof RestaurantMenuState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
                 initDishRecycler(models);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantMenuState.Loading) {
 
             } else if (state instanceof RestaurantMenuState.Error) {
-
+                setErrorLayout();
             }
         });
 
@@ -112,9 +112,16 @@ public class RestaurantMenuOrderFragment extends Fragment {
         });
     }
 
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getMenuCategories(restaurantId);
+        });
+    }
+
     private void initDishRecycler(List<DishMenuModel> models) {
         List<DishOrderModel> items = new ArrayList<>();
-        if (models.size() > 0) {
+        if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
                 items.add(new DishOrderModel(
@@ -137,7 +144,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {
         List<DelegateItem> items = new ArrayList<>();
-        if (models.size() > 0) {
+        if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 CategoryMenuModel current = models.get(i);
                 boolean isDefault = false;

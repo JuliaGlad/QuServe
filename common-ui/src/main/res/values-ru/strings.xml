@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Поиск</string>
+    <string name="price">Цена</string>
+    <string name="location">Локация</string>
+    <string name="add_category">Добавить категорию</string>
+    <string name="participant">Участник</string>
+    <string name="statistic">Статистика</string>
+</resources>

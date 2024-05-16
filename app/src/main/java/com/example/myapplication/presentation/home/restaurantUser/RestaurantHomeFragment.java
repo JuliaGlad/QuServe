@@ -81,8 +81,15 @@ public class RestaurantHomeFragment extends Fragment {
             } else if (state instanceof RestaurantHomeState.Loading) {
 
             } else if (state instanceof RestaurantHomeState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getRestaurantLocations(restaurantId);
         });
     }
 
@@ -103,6 +110,7 @@ public class RestaurantHomeFragment extends Fragment {
             adapter.addDelegate(new HomeRestaurantLocationDelegate());
             binding.recyclerView.setAdapter(adapter);
             adapter.submitList(delegates);
+            binding.errorLayout.errorLayout.setVisibility(View.GONE);
         }
     }
 

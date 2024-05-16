@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -58,7 +59,12 @@ public class QueueDetailsViewModel extends ViewModel {
     public void getQueueRecycler() {
         QueueDI.getQueueByAuthorUseCase.invoke()
                 .flatMap(queueIdAndNameModel -> QueueDI.getQrCodeImageUseCase.invoke(queueIdAndNameModel.getId()),
-                        (queueIdAndNameModel, imageModel) -> new QueueDetailsModel(queueIdAndNameModel.getName(), queueIdAndNameModel.getId(), imageModel.getImageUri()))
+                        (queueIdAndNameModel, imageModel) ->
+                                new QueueDetailsModel(
+                                        queueIdAndNameModel.getName(),
+                                        queueIdAndNameModel.getId(),
+                                        imageModel.getImageUri())
+                )
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<QueueDetailsModel>() {
                     @Override
@@ -74,7 +80,7 @@ public class QueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new QueueDetailsState.Error());
                     }
                 });
 

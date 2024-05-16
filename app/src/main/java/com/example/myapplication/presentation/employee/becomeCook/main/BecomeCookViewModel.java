@@ -50,7 +50,7 @@ public class BecomeCookViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new BecomeCookState.Error());
                     }
                 });
     }

@@ -53,7 +53,7 @@ public class DishItemDelegate implements AdapterDelegate {
             }
 
             binding.dishName.setText(model.getName());
-            binding.price.setText(model.getPrice());
+            binding.price.setText(model.getPrice().concat("₽"));
             binding.weightCount.setText(model.getWeight());
 
             binding.item.setOnClickListener(v -> {

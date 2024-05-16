@@ -39,6 +39,7 @@ import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopp
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.recyclerView.ToppingItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.recyclerView.ToppingModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +50,8 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyModel;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
@@ -152,8 +155,8 @@ public class AddToppingFragment extends Fragment {
                 binding.progressBar.setProgress(35);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_topping_price, 24)),
-                        new EditTextDelegateItem(new EditTextModel(3, R.string.price, price, InputType.TYPE_CLASS_TEXT, true, stringPrice -> {
-                            price = stringPrice;
+                        new PriceWithCurrencyDelegateItem(new PriceWithCurrencyModel(3, price, string -> {
+                            price = string;
                         }))
                 });
                 break;
@@ -194,15 +197,27 @@ public class AddToppingFragment extends Fragment {
     private void navigateNext() {
         switch (page) {
             case PAGE_1:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddToppingFragmentDirections.actionAddToppingFragmentSelf(PAGE_2, categoryId, dishId));
+                if (name != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddToppingFragmentDirections.actionAddToppingFragmentSelf(PAGE_2, categoryId, dishId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_2:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddToppingFragmentDirections.actionAddToppingFragmentSelf(PAGE_3, categoryId, dishId));
+                if (price != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddToppingFragmentDirections.actionAddToppingFragmentSelf(PAGE_3, categoryId, dishId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_3:
-                viewModel.initData(restaurantId, categoryId, dishId);
+                if (image != null) {
+                    viewModel.initData(restaurantId, categoryId, dishId);
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
     }

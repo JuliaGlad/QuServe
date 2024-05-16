@@ -3,21 +3,18 @@ package com.example.myapplication.presentation.companyQueue.queueManager;
 import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueManagerBinding;
@@ -36,23 +33,20 @@ public class QueueManagerFragment extends Fragment {
     private QueueManagerViewModel viewModel;
     private FragmentQueueManagerBinding binding;
     private String companyId;
-    private List<ManagerItemModel> models = new ArrayList<>();
+    private final List<ManagerItemModel> models = new ArrayList<>();
     ManagerItemAdapter adapter = new ManagerItemAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(QueueManagerViewModel.class);
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        Log.d("CompanyId", companyId);
+        companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        viewModel.getList(companyId);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        viewModel.getList(companyId);
-
         binding = FragmentQueueManagerBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -77,8 +71,9 @@ public class QueueManagerFragment extends Fragment {
                     .commit();
 
             dialogFragment.onDismissListener(bundle -> {
-               String city = bundle.getString(CITY_KEY);
-               filterList(city);
+                String city = bundle.getString(CITY_KEY);
+                assert city != null;
+                filterList(city);
             });
         });
 
@@ -90,7 +85,7 @@ public class QueueManagerFragment extends Fragment {
         if (city.equals(getResources().getString(R.string.all_cities))) {
             adapter.submitList(models);
             binding.chooseCity.setText(getResources().getString(R.string.all_cities));
-        }else {
+        } else {
             binding.chooseCity.setText(city);
             for (int i = 0; i < models.size(); i++) {
                 if (models.get(i).getCity().equals(city)) {
@@ -105,8 +100,8 @@ public class QueueManagerFragment extends Fragment {
     private void setupObserves() {
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof QueueManagerState.Success){
-                if (models.size() == 0) {
+            if (state instanceof QueueManagerState.Success) {
+                if (models.isEmpty()) {
                     List<QueueManagerModel> queueManagerModels = ((QueueManagerState.Success) state).data;
                     for (int i = 0; i < queueManagerModels.size(); i++) {
                         QueueManagerModel current = queueManagerModels.get(i);
@@ -127,13 +122,22 @@ public class QueueManagerFragment extends Fragment {
                     binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
                     adapter.submitList(models);
                     binding.progressBar.setVisibility(View.GONE);
+                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
-            } else if (state instanceof QueueManagerState.Loading){
+            } else if (state instanceof QueueManagerState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
-            } else if (state instanceof  QueueManagerState.Error){
-
+            } else if (state instanceof QueueManagerState.Error) {
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getList(companyId);
         });
     }
 

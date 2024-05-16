@@ -41,6 +41,30 @@ public class MainWaiterViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isWorking = new MutableLiveData<>(null);
     LiveData<Boolean> isWorking = _isWorking;
 
+    private final MutableLiveData<Boolean> _haveOrders = new MutableLiveData<>(null);
+    LiveData<Boolean> haveOrders = _haveOrders;
+
+    public void checkOrders(String restaurantId, String locationId){
+        RestaurantEmployeeDI.checkActiveEmployeeOrders.invoke(restaurantId, locationId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Boolean aBoolean) {
+                        _haveOrders.postValue(aBoolean);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
     public void checkIsWorking(String restaurantId, String locationId){
         RestaurantEmployeeDI.checkIsWorkingUseCase.invoke(restaurantId, locationId)
                 .subscribeOn(Schedulers.io())

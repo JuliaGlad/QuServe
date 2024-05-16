@@ -8,6 +8,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +87,7 @@ public class WorkerDetailsFragment extends Fragment {
             models.addAll(Objects.requireNonNull(new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
             }.getType())));
         } catch (NullPointerException e){
-//            Log.d("NullPointerArguments", e.getMessage());
+            Log.e("NullPointerArguments", e.getMessage());
         }
     }
 
@@ -124,8 +125,15 @@ public class WorkerDetailsFragment extends Fragment {
             } else if (state instanceof WorkerDetailsState.Loading) {
 
             } else if (state instanceof WorkerDetailsState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployeeData(companyId, employeeId);
         });
     }
 
@@ -135,6 +143,7 @@ public class WorkerDetailsFragment extends Fragment {
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.worker_details_advise_box_text)));
         delegates.addAll(addActiveQueuesDelegates(models));
         mainAdapter.submitList(delegates);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private List<WorkerManageQueueDelegateItem> addActiveQueuesDelegates(List<ActiveQueueModel> models) {

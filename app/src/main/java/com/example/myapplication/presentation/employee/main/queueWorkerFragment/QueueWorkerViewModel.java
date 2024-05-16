@@ -60,7 +60,7 @@ public class QueueWorkerViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new QueueWorkerState.Error());
                     }
                 });
     }

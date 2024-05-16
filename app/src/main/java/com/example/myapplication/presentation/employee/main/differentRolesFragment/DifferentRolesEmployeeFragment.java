@@ -55,17 +55,15 @@ public class DifferentRolesEmployeeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DifferentRolesEmployeeViewModel.class);
+        getRoles();
+        viewModel.getEmployeeCompanyRoles(roleModels);
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentDifferentRolesEmployeeBinding.inflate(inflater, container, false);
-        String models = getArguments().getString(EMPLOYEE_ROLE);
-        roleModels = new Gson().fromJson(models, new TypeToken<List<EmployeeRoleModel>>() {
-        }.getType());
-        assert roleModels != null;
-        viewModel.getEmployeeCompanyRoles(roleModels);
+
         return binding.getRoot();
     }
 
@@ -88,6 +86,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(1, R.drawable.work_together_employee_wall_paper)));
         delegates.addAll(addDelegates(roleModels));
         mainAdapter.submitList(delegates);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private List<CompanyEmployeeDelegateItem> addDelegates(List<DifferentRoleModel> roleModels) {
@@ -137,9 +136,24 @@ public class DifferentRolesEmployeeFragment extends Fragment {
             } else if (state instanceof DifferentRoleState.Loading) {
 
             } else if (state instanceof DifferentRoleState.Error) {
-
+                setErrorLayout();
             }
         });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployeeCompanyRoles(roleModels);
+        });
+    }
+
+    private void getRoles() {
+        assert getArguments() != null;
+        String models = getArguments().getString(EMPLOYEE_ROLE);
+        roleModels = new Gson().fromJson(models, new TypeToken<List<EmployeeRoleModel>>() {
+        }.getType());
+        assert roleModels != null;
     }
 
 }

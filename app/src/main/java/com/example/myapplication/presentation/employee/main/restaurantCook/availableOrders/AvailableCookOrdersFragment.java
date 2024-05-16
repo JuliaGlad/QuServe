@@ -71,7 +71,7 @@ public class AvailableCookOrdersFragment extends Fragment {
             } else if (state instanceof AvailableCookOrdersState.Loading) {
 
             } else if (state instanceof AvailableCookOrdersState.Error) {
-
+                setErrorLayout();
             }
         });
 
@@ -83,6 +83,13 @@ public class AvailableCookOrdersFragment extends Fragment {
                 adapter.submitList(newItems);
                 items = newItems;
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getOrders(restaurantId, locationId);
         });
     }
 
@@ -106,5 +113,6 @@ public class AvailableCookOrdersFragment extends Fragment {
     private void buildList(List<AvailableOrdersModel> items) {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

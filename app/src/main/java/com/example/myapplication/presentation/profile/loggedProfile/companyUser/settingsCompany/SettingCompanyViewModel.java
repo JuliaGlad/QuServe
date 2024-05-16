@@ -40,7 +40,7 @@ public class SettingCompanyViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new CompanyUserState.Error());
                     }
                 });
     }
@@ -71,7 +71,7 @@ public class SettingCompanyViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new CompanyUserState.Error());
                     }
                 });
     }

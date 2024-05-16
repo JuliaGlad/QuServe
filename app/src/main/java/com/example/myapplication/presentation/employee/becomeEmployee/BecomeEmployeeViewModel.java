@@ -19,8 +19,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class BecomeEmployeeViewModel extends ViewModel {
 
-    String name = null;
-
     private final MutableLiveData<Uri> _image = new MutableLiveData<>();
     LiveData<Uri> image = _image;
 
@@ -50,7 +48,7 @@ public class BecomeEmployeeViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _image.postValue(Uri.EMPTY);
                     }
                 });
     }

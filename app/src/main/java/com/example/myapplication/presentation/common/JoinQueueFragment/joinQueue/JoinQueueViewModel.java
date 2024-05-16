@@ -71,7 +71,7 @@ public class JoinQueueViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new JoinQueueState.Error());
                     }
                 });
 

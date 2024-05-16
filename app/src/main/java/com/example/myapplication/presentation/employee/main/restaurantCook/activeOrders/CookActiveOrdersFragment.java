@@ -28,14 +28,15 @@ public class CookActiveOrdersFragment extends Fragment {
 
     private CookActiveOrdersViewModel viewModel;
     private FragmentCookActiveOrdersBinding binding;
+    private String restaurantId, locationId;
     private final ActiveOrdersAdapter adapter = new ActiveOrdersAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CookActiveOrdersViewModel.class);
-        String restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        String locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
+        restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
         viewModel.getOrders(restaurantId, locationId);
     }
 
@@ -61,8 +62,15 @@ public class CookActiveOrdersFragment extends Fragment {
             } else if (state instanceof CookActiveOrdersState.Loading) {
 
             } else if (state instanceof CookActiveOrdersState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getOrders(restaurantId, locationId);
         });
     }
 
@@ -82,5 +90,6 @@ public class CookActiveOrdersFragment extends Fragment {
     private void buildList(List<ActiveOrdersItemModel> models) {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

@@ -49,6 +49,8 @@ public class CommonCompanyRepository {
             userCompany.set(companyUser).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
                     emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -70,6 +72,8 @@ public class CommonCompanyRepository {
                             } else {
                                 emitter.onSuccess(false);
                             }
+                        }else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -114,7 +118,7 @@ public class CommonCompanyRepository {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            emitter.onError(new Throwable(e.getMessage()));
                         }
                     });
 
@@ -132,7 +136,7 @@ public class CommonCompanyRepository {
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
-                            if (snapshots.size() > 0) {
+                            if (!snapshots.isEmpty()) {
                                 List<CommonCompanyDto> companyDtos = new ArrayList<>();
                                 for (DocumentSnapshot snapshot : snapshots) {
                                     companyDtos.add(new CommonCompanyDto(
@@ -143,6 +147,8 @@ public class CommonCompanyRepository {
                                 }
                                 emitter.onSuccess(companyDtos);
                             }
+                        }else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
 

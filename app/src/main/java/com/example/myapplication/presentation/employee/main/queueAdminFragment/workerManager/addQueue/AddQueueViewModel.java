@@ -56,7 +56,7 @@ public class AddQueueViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new AddQueueState.Error());
                     }
                 });
     }

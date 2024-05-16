@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantLocationRepository {
 
@@ -34,8 +35,10 @@ public class RestaurantLocationRepository {
                 if (task.isSuccessful()) {
                     List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
                     List<LocationDto> locationDtos = new ArrayList<>();
-                    addLocationDtos(collRef, snapshots, locationDtos);
+                    addLocationDtos(collRef, snapshots, locationDtos, emitter);
                     emitter.onSuccess(locationDtos);
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -60,19 +63,21 @@ public class RestaurantLocationRepository {
             docRef.set(locationMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(path);
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
     }
 
-    private void addLocationDtos(CollectionReference collRef, List<DocumentSnapshot> snapshots, List<LocationDto> locationDtos) {
+    private void addLocationDtos(CollectionReference collRef, List<DocumentSnapshot> snapshots, List<LocationDto> locationDtos, SingleEmitter<List<LocationDto>> emitter) {
         for (int i = 0; i < snapshots.size(); i++) {
             DocumentSnapshot current = snapshots.get(i);
             DocumentReference locationRef = collRef.document(current.getId());
 
-            String cooksCount = getLocationCooks(locationRef);
-            String waitersCount = getLocationWaiters(locationRef);
-            String ordersCount = getLocationOrders(locationRef);
+            String cooksCount = getLocationCooks(locationRef, emitter);
+            String waitersCount = getLocationWaiters(locationRef, emitter);
+            String ordersCount = getLocationOrders(locationRef, emitter);
 
             locationDtos.add(new LocationDto(
                     current.getId(),
@@ -85,31 +90,37 @@ public class RestaurantLocationRepository {
         }
     }
 
-    private String getLocationOrders(DocumentReference locationRef) {
+    private String getLocationOrders(DocumentReference locationRef, SingleEmitter<List<LocationDto>> emitter) {
         List<DocumentSnapshot> orders = new ArrayList<>();
-        locationRef.collection(ACTIVE_ORDERS).get().addOnCompleteListener(taskCooks -> {
-            if (taskCooks.isSuccessful()) {
-                orders.addAll(taskCooks.getResult().getDocuments());
+        locationRef.collection(ACTIVE_ORDERS).get().addOnCompleteListener(taskOrders -> {
+            if (taskOrders.isSuccessful()) {
+                orders.addAll(taskOrders.getResult().getDocuments());
+            }else {
+                emitter.onError(new Throwable(taskOrders.getException()));
             }
         });
         return String.valueOf(orders.size());
     }
 
-    private String getLocationWaiters(DocumentReference locationRef) {
+    private String getLocationWaiters(DocumentReference locationRef, SingleEmitter<List<LocationDto>> emitter) {
         List<DocumentSnapshot> waiters = new ArrayList<>();
-        locationRef.collection(WAITERS).get().addOnCompleteListener(taskCooks -> {
-            if (taskCooks.isSuccessful()) {
-                waiters.addAll(taskCooks.getResult().getDocuments());
+        locationRef.collection(WAITERS).get().addOnCompleteListener(taskWaiters -> {
+            if (taskWaiters.isSuccessful()) {
+                waiters.addAll(taskWaiters.getResult().getDocuments());
+            } else {
+                emitter.onError(new Throwable(taskWaiters.getException()));
             }
         });
         return String.valueOf(waiters.size());
     }
 
-    private String getLocationCooks(DocumentReference locationRef) {
+    private String getLocationCooks(DocumentReference locationRef, SingleEmitter<List<LocationDto>> emitter) {
         List<DocumentSnapshot> cooks = new ArrayList<>();
         locationRef.collection(COOKS).get().addOnCompleteListener(taskCooks -> {
             if (taskCooks.isSuccessful()) {
                 cooks.addAll(taskCooks.getResult().getDocuments());
+            } else {
+                emitter.onError(new Throwable(taskCooks.getException()));
             }
         });
         return String.valueOf(cooks.size());

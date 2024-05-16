@@ -51,7 +51,7 @@ public class ChooseLocationViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new ChooseLocationState.Error());
                     }
                 });
     }

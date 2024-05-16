@@ -77,10 +77,12 @@ public class JoinQueueFragment extends Fragment {
                 JoinQueueModel model = ((JoinQueueState.Success)state).data;
                 Glide.with(JoinQueueFragment.this).load(model.getUri()).into(binding.qrCodeImage);
                 binding.queueName.setText(model.getName());
+                binding.errorLayout.errorLayout.setVisibility(View.GONE);
+
             } else if (state instanceof JoinQueueState.Loading){
 
             } else if (state instanceof JoinQueueState.Error){
-
+                setErrorLayout();
             }
         });
 
@@ -97,5 +99,12 @@ public class JoinQueueFragment extends Fragment {
             }
         });
 
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getQueueData(queueData);
+        });
     }
 }

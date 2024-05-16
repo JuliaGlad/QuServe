@@ -85,7 +85,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new HomeBasicUserState.Error());
                     }
                 });
     }
@@ -114,7 +114,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            _state.postValue(new HomeBasicUserState.Error());
                         }
                     });
         } else {
@@ -144,7 +144,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            _state.postValue(new HomeBasicUserState.Error());
                         }
                     });
         } else {

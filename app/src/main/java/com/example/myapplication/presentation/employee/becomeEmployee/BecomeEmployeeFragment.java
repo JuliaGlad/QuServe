@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.employee.becomeEmployee;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,10 @@ public class BecomeEmployeeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BecomeEmployeeViewModel.class);
         binding = FragmentBecomeEmployeeBinding.inflate(inflater, container, false);
 
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
 
         if (companyId != null) {
-           viewModel.getCompany(companyId);
+            viewModel.getCompany(companyId);
         }
 
         return binding.getRoot();
@@ -61,7 +62,7 @@ public class BecomeEmployeeFragment extends Fragment {
     private void setupObserves() {
 
         viewModel.isEmployee.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 Bundle bundle = new Bundle();
                 bundle.putString(COMPANY_ID, companyId);
 
@@ -75,7 +76,21 @@ public class BecomeEmployeeFragment extends Fragment {
         });
 
         viewModel.image.observe(getViewLifecycleOwner(), uri -> {
-                Glide.with(requireContext()).load(uri).into(binding.qrCodeImage);
+            if (!uri.equals(Uri.EMPTY)) {
+                Glide.with(requireContext())
+                        .load(uri)
+                        .into(binding.qrCodeImage);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
+            } else {
+                setErrorLayout();
+            }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getCompany(companyId);
         });
     }
 }

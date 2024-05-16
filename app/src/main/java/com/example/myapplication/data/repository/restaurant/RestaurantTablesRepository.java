@@ -44,6 +44,8 @@ public class RestaurantTablesRepository {
                                     document.getString(TABLE_NUMBER),
                                     document.getString(ORDER_ID)
                             ));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -68,6 +70,8 @@ public class RestaurantTablesRepository {
             docRef.set(table).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(path);
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -94,6 +98,8 @@ public class RestaurantTablesRepository {
                                 ));
                             }
                             emitter.onSuccess(tables);
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -110,12 +116,14 @@ public class RestaurantTablesRepository {
                     .document(tableId).delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
     }
 
-    public static class TableImages{
+    public static class TableImages {
         public Completable deleteQrCodeJpg(String tableId) {
             return Completable.create(emitter -> {
                 service.storageReference
@@ -124,6 +132,8 @@ public class RestaurantTablesRepository {
                         .delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -137,6 +147,8 @@ public class RestaurantTablesRepository {
                         .delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            }else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -152,6 +164,8 @@ public class RestaurantTablesRepository {
                 reference.putBytes(data).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         emitter.onComplete();
+                    }else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -177,6 +191,8 @@ public class RestaurantTablesRepository {
                         .getDownloadUrl().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onSuccess(task.getResult());
+                            }else {
+                                emitter.onSuccess(Uri.EMPTY);
                             }
                         });
             });
@@ -190,6 +206,8 @@ public class RestaurantTablesRepository {
                         .getDownloadUrl().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onSuccess(task.getResult());
+                            }else {
+                                emitter.onSuccess(Uri.EMPTY);
                             }
                         });
             });

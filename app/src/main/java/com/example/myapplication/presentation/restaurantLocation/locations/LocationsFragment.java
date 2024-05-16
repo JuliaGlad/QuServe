@@ -33,6 +33,7 @@ public class LocationsFragment extends Fragment {
 
     private LocationsViewModel viewModel;
     private FragmentLocationsBinding binding;
+    private String restaurantId;
     private RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
 
     @Override
@@ -40,7 +41,7 @@ public class LocationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LocationsViewModel.class);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        String restaurantId = sharedPreferences.getString(COMPANY_ID, null);
+        restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
     }
 
@@ -68,7 +69,7 @@ public class LocationsFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof LocationsState.Success) {
                 List<LocationsModel> models = ((LocationsState.Success) state).data;
-                if (models.size() > 0) {
+                if (!models.isEmpty()) {
                     initRecycler(models);
                 } else {
                     NavHostFragment.findNavController(this)
@@ -78,8 +79,15 @@ public class LocationsFragment extends Fragment {
             } else if (state instanceof LocationsState.Loading) {
 
             } else if (state instanceof LocationsState.Error) {
-
+                setError();
             }
+        });
+    }
+
+    private void setError() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getRestaurantLocations(restaurantId);
         });
     }
 

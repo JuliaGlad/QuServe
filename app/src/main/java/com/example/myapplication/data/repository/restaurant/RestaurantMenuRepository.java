@@ -58,7 +58,11 @@ public class RestaurantMenuRepository {
                             DISH_PRICE, price,
                             DISH_WEIGHT_OR_COUNT, weightOrCount)
                     .addOnCompleteListener(task -> {
-                        emitter.onComplete();
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
+                        }
                     });
         });
     }
@@ -117,6 +121,8 @@ public class RestaurantMenuRepository {
                                     document.getString(DISH_ESTIMATED_TIME_COOKING),
                                     (List<String>) document.get(INGREDIENT_TO_REMOVE)
                             ));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -181,6 +187,8 @@ public class RestaurantMenuRepository {
             menu.set(dish).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -204,6 +212,8 @@ public class RestaurantMenuRepository {
                             emitter.onComplete();
                         }
                     });
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -220,6 +230,8 @@ public class RestaurantMenuRepository {
                         .putFile(uri).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -237,6 +249,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -256,15 +270,12 @@ public class RestaurantMenuRepository {
 
                     tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), dishId));
                 }
-
                 emitter.onSuccess(tasks);
             });
         }
 
         public Single<List<ImageTaskNameDto>> getCategoriesImages(String restaurantId, List<String> categoriesNames) {
-
             List<ImageTaskNameDto> tasks = new ArrayList<>();
-
             return Single.create(emitter -> {
                 for (String category : categoriesNames) {
                     StorageReference reference = service.storageReference
@@ -287,6 +298,8 @@ public class RestaurantMenuRepository {
                         .getDownloadUrl().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onSuccess(new ImageDto(task.getResult()));
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -359,6 +372,8 @@ public class RestaurantMenuRepository {
                 docRef.set(topping).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -367,7 +382,7 @@ public class RestaurantMenuRepository {
         public Single<List<ImageTaskNameDto>> getToppingsImages(String restaurantId, String dishId, List<String> names) {
             List<ImageTaskNameDto> tasks = new ArrayList<>();
             return Single.create(emitter -> {
-                if (names != null && names.size() > 0) {
+                if (names != null && !names.isEmpty()) {
                     for (String name : names) {
                         StorageReference reference = service.storageReference
                                 .child(RESTAURANT_MENUS_PATH)
@@ -391,7 +406,11 @@ public class RestaurantMenuRepository {
                         .child(TOPPINGS + "/")
                         .child(name + JPG)
                         .delete().addOnCompleteListener(task -> {
-                            emitter.onComplete();
+                            if (task.isSuccessful()){
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
+                            }
                         });
             });
         }
@@ -410,6 +429,8 @@ public class RestaurantMenuRepository {
                         .delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -427,6 +448,8 @@ public class RestaurantMenuRepository {
                 basic.putFile(uri).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -489,6 +512,8 @@ public class RestaurantMenuRepository {
                             docRef.update(CHOICE_VARIANT, FieldValue.arrayUnion(variantsNames.get(j)));
                         }
                         emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
                     }
                 });
             });
@@ -509,6 +534,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -529,6 +556,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -550,6 +579,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -570,6 +601,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -589,6 +622,8 @@ public class RestaurantMenuRepository {
                         .delete().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -613,6 +648,8 @@ public class RestaurantMenuRepository {
                                         snapshot.getString(CHOICE_NAME),
                                         (List<String>) snapshot.get(CHOICE_VARIANT)
                                 ));
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -635,6 +672,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -676,6 +715,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });
@@ -695,6 +736,8 @@ public class RestaurantMenuRepository {
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
                             }
                         });
             });

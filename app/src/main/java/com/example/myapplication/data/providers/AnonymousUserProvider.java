@@ -7,8 +7,17 @@ import com.example.myapplication.data.dto.user.AnonymousUserDto;
 
 public class AnonymousUserProvider {
 
-    public static AnonymousUserEntity getUser(){
-        return App.getInstance().getDatabase().anonymousUserDao().getUser();
+    public static AnonymousUserDto getUser(){
+        AnonymousUserEntity entity = App.getInstance().getDatabase().anonymousUserDao().getUser();
+        if (entity != null) {
+            return new AnonymousUserDto(
+                    entity.getUserId(),
+                    entity.getParticipateInQueue(),
+                    entity.getRestaurantVisitor()
+            );
+        } else  {
+            return null;
+        }
     }
 
     public static void insertUser(AnonymousUserDto dto){
@@ -34,9 +43,9 @@ public class AnonymousUserProvider {
         userDao.update(entity);
     }
 
-    public static void deleteUser(AnonymousUserEntity entity){
+    public static void deleteUser(){
         AnonymousUserDao userDao = App.getInstance().getDatabase().anonymousUserDao();
-        userDao.delete(entity);
+        userDao.delete(userDao.getUser());
     }
 
 }

@@ -90,7 +90,11 @@ public class ParticipantsListFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof ParticipantsListState.Error){
-
+                binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+                binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+                    viewModel.getParticipantsList();
+                });
             }
         });
 
@@ -120,6 +124,7 @@ public class ParticipantsListFragment extends Fragment {
         addParticipantListDelegateItems(participantsSize);
         mainAdapter.submitList(itemsList);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void addParticipantListDelegateItems(int queueLength) {

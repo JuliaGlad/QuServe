@@ -53,7 +53,7 @@ public class CreateQueueViewModel extends ViewModel {
     private void createQueueDocument(String queueID) {
         QueueDI.createQueueDocumentUseCase.invoke(queueID, queueName, queueTime)
                 .flatMapCompletable(path -> {
-                    generateQrCode(path);
+                    generateQrCode(path, queueID);
                     return ProfileDI.updateOwnQueueUseCase.invoke(queueID);
                 })
                 .subscribeOn(Schedulers.io())
@@ -110,7 +110,7 @@ public class CreateQueueViewModel extends ViewModel {
                 });
     }
 
-    private void generateQrCode(String path) {
+    private void generateQrCode(String path, String queueId) {
 
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
@@ -120,9 +120,9 @@ public class CreateQueueViewModel extends ViewModel {
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            createPdfDocument(qrCode, path);
+            createPdfDocument(qrCode, queueId);
 
-            uploadImageToFireStorage(qrCode, path)
+            uploadImageToFireStorage(qrCode, queueId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override
@@ -142,7 +142,7 @@ public class CreateQueueViewModel extends ViewModel {
                     });
 
         } catch (WriterException e) {
-            e.printStackTrace();
+            Log.e("Exception", e.getMessage());
         }
     }
 

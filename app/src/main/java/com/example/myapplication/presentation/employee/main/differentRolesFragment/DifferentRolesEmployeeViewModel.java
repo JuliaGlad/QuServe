@@ -56,7 +56,7 @@ public class DifferentRolesEmployeeViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new DifferentRoleState.Error());
                     }
                 });
     }

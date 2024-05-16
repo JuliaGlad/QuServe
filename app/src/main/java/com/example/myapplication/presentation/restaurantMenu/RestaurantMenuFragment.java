@@ -108,7 +108,7 @@ public class RestaurantMenuFragment extends Fragment {
             } else if (state instanceof RestaurantMenuState.Loading) {
 
             } else if (state instanceof RestaurantMenuState.Error) {
-
+                setErrorLayout();
             }
         });
 
@@ -131,8 +131,15 @@ public class RestaurantMenuFragment extends Fragment {
         });
     }
 
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getMenuCategories(restaurantId);
+        });
+    }
+
     private void initDishRecycler(List<DishMenuModel> models) {
-        if (models.size() > 0) {
+        if (!models.isEmpty()) {
             List<DelegateItem> items = new ArrayList<>();
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
@@ -153,15 +160,16 @@ public class RestaurantMenuFragment extends Fragment {
             final List<DelegateItem> items = new ArrayList<>();
             gridAdapter.submitList(items);
         }
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {
         List<DelegateItem> items = new ArrayList<>();
-        if (models.size() > 0) {
+        if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 CategoryMenuModel current = models.get(i);
                 boolean isDefault = false;
-                if (i == 0) {
+                if (i == models.size() - 1) {
                     isDefault = true;
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();

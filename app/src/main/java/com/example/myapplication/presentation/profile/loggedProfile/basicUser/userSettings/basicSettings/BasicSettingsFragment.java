@@ -95,7 +95,7 @@ public class BasicSettingsFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof BasicSettingsState.Success) {
-                if (delegates.size() == 0) {
+                if (delegates.isEmpty()) {
                     SettingsUserModel model = ((BasicSettingsState.Success) state).data;
 
                     delegates.add(new SettingsUserItemDelegateItem(new SettingsUserItemModel(1, model.getName(), model.getEmail(), model.getUri())));
@@ -127,14 +127,22 @@ public class BasicSettingsFragment extends Fragment {
                     })));
 
                     mainAdapter.submitList(delegates);
+                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
             } else if (state instanceof BasicSettingsState.Loading) {
 
             } else if (state instanceof BasicSettingsState.Error) {
-
+                setErrorLayout();
             }
         });
 
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.retrieveUserData();
+        });
     }
 
 }

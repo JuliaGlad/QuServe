@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="button_secondary_color">@color/colorSecondary</color>
+    <color name="iconColor">@color/colorPrimary</color>
     <color name="colorPrimary">#91CEF5</color>
     <color name="colorOnPrimary">#00344B</color>
     <color name="colorPrimaryButton">#00344B</color>
@@ -18,7 +20,7 @@
     <color name="colorOnErrorTonal">#CB7A75</color>
     <color name="colorErrorContainerButtonBackground">#6B2724</color>
     <color name="colorPrimaryContainer">#004C6B</color>
-    <color name="colorOnPrimaryContainer">#00344B</color>
+    <color name="colorOnPrimaryContainer">#C6E7FF</color>
     <color name="colorPrimaryContainerVariant">#145C7A</color>
     <color name="colorSecondaryContainer">#064B72</color>
     <color name="colorOnSecondaryContainer">#CCE5FF</color>

@@ -36,8 +36,8 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(OrderDetailsWithIndicatorsViewModel.class);
-        path = getActivity().getIntent().getStringExtra(PATH);
-        tableNumber = getActivity().getIntent().getStringExtra(TABLE_NUMBER);
+        path = requireActivity().getIntent().getStringExtra(PATH);
+        tableNumber = requireActivity().getIntent().getStringExtra(TABLE_NUMBER);
         viewModel.getOrder(path);
     }
 
@@ -65,7 +65,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
             } else if (state instanceof OrderDetailsWithIndicatorsState.Loading){
 
             } else if (state instanceof OrderDetailsState.Error){
-
+                setErrorLayout();
             } else if (state instanceof OrderDetailsWithIndicatorsState.OrderIsFinished){
 
             }
@@ -81,6 +81,13 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
             if (aBoolean){
                 viewModel.finishOrder(path);
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getOrder(path);
         });
     }
 
@@ -113,5 +120,6 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

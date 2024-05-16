@@ -167,15 +167,19 @@ public class AddCategoryFragment extends Fragment {
         switch (page) {
             case PAGE_1:
                 if (ArgumentsCategory.name == null) {
-                    Snackbar.make(getView(), "You need to write name", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
                 } else {
                     NavHostFragment.findNavController(this)
                             .navigate(AddCategoryFragmentDirections.actionAddCategoryFragmentSelf(PAGE_2));
                 }
                 break;
             case PAGE_2:
-                viewModel.initCategoryData(restaurantId, requireView());
-                viewModel.setArgumentsNull();
+                if (ArgumentsCategory.chosenImage != Uri.EMPTY) {
+                    viewModel.initCategoryData(restaurantId, requireView());
+                    viewModel.setArgumentsNull();
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
 

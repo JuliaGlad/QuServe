@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +33,9 @@ import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.Bu
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
 
+import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
@@ -40,6 +44,9 @@ import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUser
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
 import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
+import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
 import com.example.myapplication.presentation.service.ScanCode;
 import com.example.myapplication.presentation.service.queue.QueueActivity;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -59,7 +66,7 @@ public class HomeBasisUserFragment extends Fragment {
 
     private HomeBasisUserViewModel viewModel;
     private FragmentHomeBasisUserBinding binding;
-    private ActivityResultLauncher<ScanOptions> joinQueueLauncher;
+    private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
     private final MainAdapter adapter = new MainAdapter();
 
     @Override
@@ -67,6 +74,17 @@ public class HomeBasisUserFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(HomeBasisUserViewModel.class);
         initJoinQueueLauncher();
+        initRestaurantOrderLauncher();
+    }
+
+    private void initRestaurantOrderLauncher() {
+        restaurantOrderLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                Intent intent = new Intent(requireContext(), RestaurantOrderMenuActivity.class);
+                intent.putExtra(RESTAURANT_DATA, result.getContents());
+                requireActivity().startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -85,7 +103,7 @@ public class HomeBasisUserFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.getRestaurant.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 viewModel.getQueueByParticipantPath();
             }
         });
@@ -115,8 +133,17 @@ public class HomeBasisUserFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof HomeBasicUserState.Error) {
-
+                binding.progressBar.setVisibility(View.GONE);
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getUserBooleanData();
         });
     }
 
@@ -138,31 +165,29 @@ public class HomeBasisUserFragment extends Fragment {
                         showAlreadyOwnDialog();
                     }
                 })));
+        delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, restaurantOrderLauncher)));
         delegates.addAll(actions);
 
         adapter.addDelegate(new SquareButtonDelegate());
         adapter.addDelegate(new HomeActionButtonDelegate());
+        adapter.addDelegate(new RestaurantOrderButtonDelegate());
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private List<HomeActionButtonDelegateItem> getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
         List<HomeActionButtonDelegateItem> delegates = new ArrayList<>();
 
-        if (companies != null && companies.size() > 0) {
+        if (companies != null && !companies.isEmpty()) {
             for (CompanyBasicUserModel current : companies) {
                 delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, OWNER,
                         () -> {
-                            String service = current.getService();
-                            switch (service) {
-                                case COMPANY_QUEUE:
-
-                                    break;
-                                case RESTAURANT:
-
-                                    break;
-                            }
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.nav_host_fragment_activity_main, CompanyUserFragment.class, null)
+                                    .commit();
                         })));
             }
         }
@@ -234,6 +259,7 @@ public class HomeBasisUserFragment extends Fragment {
         adapter.addDelegate(new ButtonWithDescriptionDelegate());
         binding.recyclerView.setAdapter(adapter);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
         adapter.submitList(list);
     }
 }

@@ -83,19 +83,19 @@ public class AddQueueFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof AddQueueState.Success){
-                List<AddQueueModel> queues = ((AddQueueState.Success)state).data;
+            if (state instanceof AddQueueState.Success) {
+                List<AddQueueModel> queues = ((AddQueueState.Success) state).data;
                 initRecycler(queues);
 
-            } else if (state instanceof AddQueueState.Loading){
-
-            } else if (state instanceof AddQueueState.Error){
-
+            } else if (state instanceof AddQueueState.Loading) {
+                binding.progressBar.setVisibility(View.VISIBLE);
+            } else if (state instanceof AddQueueState.Error) {
+                setError();
             }
         });
 
         viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
 
                 Bundle bundle = new Bundle();
                 bundle.putString(EMPLOYEE_NAME, employeeName);
@@ -105,6 +105,14 @@ public class AddQueueFragment extends Fragment {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_addQueueFragment_to_workerDetailsFragment, bundle);
             }
+        });
+    }
+
+    private void setError() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getCompanyQueues(companyId, ids);
         });
     }
 
@@ -125,5 +133,7 @@ public class AddQueueFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

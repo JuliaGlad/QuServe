@@ -1,7 +1,5 @@
 package com.example.myapplication.data;
 
-import com.example.myapplication.data.repository.restaurant.RestaurantMenuRepository;
-import com.example.myapplication.di.DI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,10 +18,6 @@ public class FirebaseUserService {
             INSTANCE = new FirebaseUserService();
         }
         return INSTANCE;
-    }
-
-    private boolean isAnonymous(){
-        return auth.getCurrentUser().isAnonymous();
     }
 
     private FirebaseUserService() {}

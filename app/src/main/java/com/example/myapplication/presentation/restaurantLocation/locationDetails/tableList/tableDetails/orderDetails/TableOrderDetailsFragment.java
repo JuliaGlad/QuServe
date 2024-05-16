@@ -34,15 +34,15 @@ public class TableOrderDetailsFragment extends Fragment {
     private TableOrderDetailsViewModel viewModel;
     private FragmentTableOrderDetailsBinding binding;
     private final DishTableDetailsAdapter adapter = new DishTableDetailsAdapter();
-    private String tableNumber;
+    private String tableNumber, orderId, locationId, restaurantId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TableOrderDetailsViewModel.class);
-        String orderId = getArguments().getString(ORDER_ID);
-        String locationId = getArguments().getString(LOCATION_ID);
-        String restaurantId = getArguments().getString(COMPANY_ID);
+        orderId = getArguments().getString(ORDER_ID);
+        locationId = getArguments().getString(LOCATION_ID);
+        restaurantId = getArguments().getString(COMPANY_ID);
         tableNumber = getArguments().getString(TABLE_NUMBER);
         viewModel.getTableOrderData(restaurantId, locationId, orderId);
     }
@@ -72,8 +72,15 @@ public class TableOrderDetailsFragment extends Fragment {
             } else if (state instanceof TableOrderDetailsState.Loading){
 
             } else if (state instanceof TableOrderDetailsState.Error){
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getTableOrderData(restaurantId, locationId, orderId);
         });
     }
 
@@ -85,6 +92,7 @@ public class TableOrderDetailsFragment extends Fragment {
             items.add(new DishTableDetailsItemModel(i, current.getName(), current.getCount()));
         }
         adapter.submitList(items);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     @Override

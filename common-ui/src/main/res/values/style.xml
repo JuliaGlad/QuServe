@@ -7,8 +7,8 @@
         <item name="boxCornerRadiusTopEnd">100dp</item>
         <item name="boxCornerRadiusTopStart">100dp</item>
         <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
-        <item name="boxBackgroundColor">?cardBackgroundColor</item>
-        <item name="android:textColorHint">?android:textColorHint</item>
+        <item name="boxBackgroundColor">@color/colorCardBackground</item>
+        <item name="android:textColorHint">@color/colorTextHint</item>
     </style>
 
     <style name="Widget.Material3.TextInputLayout.OutlinedBox.Email.QuServe" parent="Widget.Material3.TextInputEditText.OutlinedBox">
@@ -32,8 +32,8 @@
         <item name="boxCornerRadiusTopEnd">100dp</item>
         <item name="boxCornerRadiusTopStart">100dp</item>
         <item name="boxStrokeColor">@color/text_input_layout_stroke</item>
-        <item name="boxBackgroundColor">?cardBackgroundColor</item>
-        <item name="android:textColorHint">?android:textColorHint</item>
+        <item name="boxBackgroundColor">@color/colorCardBackground</item>
+        <item name="android:textColorHint">@color/colorTextHint</item>
     </style>
 
 

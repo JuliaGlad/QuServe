@@ -78,7 +78,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="@font/bold_roboto"
             android:text="Address"
-            android:textColor="@color/black"
+            android:textColor="@color/colorPrimary"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_hold" />
@@ -119,7 +119,7 @@
             android:fontFamily="@font/regular"
             android:text="@string/cancel"
             android:textAllCaps="false"
-            android:textColor="@color/map_blue"
+            android:textColor="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/address_line" />

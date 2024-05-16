@@ -148,6 +148,7 @@ public class CreateCompanyQueueFragment extends Fragment {
                 break;
 
             case PAGE_2:
+                binding.companyProgressBar.setProgress(25, true);
                 itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)));
                 itemList.add(new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
                     for (int i = 0; i < array.length; i++) {
@@ -159,6 +160,7 @@ public class CreateCompanyQueueFragment extends Fragment {
                 break;
 
             case PAGE_3:
+                binding.companyProgressBar.setProgress(50, true);
                 if (getArguments().getString(QUEUE_LOCATION_KEY) != null) {
                     queueLocation = getArguments().getString(QUEUE_LOCATION_KEY);
                     city = getArguments().getString(CITY_KEY);
@@ -176,9 +178,8 @@ public class CreateCompanyQueueFragment extends Fragment {
                 })));
                 break;
             case PAGE_4:
-
-                if (itemList.size() == 0) {
-
+                binding.companyProgressBar.setProgress(75, true);
+                if (itemList.isEmpty()) {
                     if (getArguments().getString(WORKERS_LIST) != null) {
                         String workers = getArguments().getString(WORKERS_LIST);
                         employeeModels = new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
@@ -201,7 +202,7 @@ public class CreateCompanyQueueFragment extends Fragment {
     }
 
     private void addWorkers() {
-        if (employeeModels.size() != 0) {
+        if (!employeeModels.isEmpty()) {
             for (int i = 0; i < employeeModels.size(); i++) {
                 itemList.add(new WorkerDelegateItem(new WorkerModel(i + 1, employeeModels.get(i).getName())));
             }
@@ -212,7 +213,7 @@ public class CreateCompanyQueueFragment extends Fragment {
         switch (page) {
             case PAGE_1:
                 if (queueName == null) {
-                    Snackbar.make(getView(), "You need to write name", Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
                 } else {
                     Bundle bundle = new Bundle();
                     bundle.putString(PAGE_KEY, PAGE_2);
@@ -226,6 +227,8 @@ public class CreateCompanyQueueFragment extends Fragment {
                     bundle.putString(PAGE_KEY, PAGE_3);
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.action_createCompanyQueueFragment_self, bundle);
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 }
                 break;
 
@@ -235,6 +238,8 @@ public class CreateCompanyQueueFragment extends Fragment {
                     bundle.putString(PAGE_KEY, PAGE_4);
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.action_createCompanyQueueFragment_self, bundle);
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 }
                 break;
 

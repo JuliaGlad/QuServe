@@ -109,10 +109,18 @@ public class OrderDetailsFragment extends Fragment {
             } else if (state instanceof OrderDetailsState.Loading) {
 
             } else if (state instanceof OrderDetailsState.Error) {
+                setErrorLayout();
 
             } else if (state instanceof OrderDetailsState.OrderIsFinished) {
                 navigateToFinishOrder();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getOrder(path, this.state);
         });
     }
 
@@ -139,5 +147,6 @@ public class OrderDetailsFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

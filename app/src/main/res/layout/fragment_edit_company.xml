@@ -58,15 +58,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textLayout_company_email"
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Email.QuServe"
-            android:layout_width="0dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.QuServe"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="10dp"
-            app:boxCornerRadiusBottomStart="30dp"
-            app:boxCornerRadiusTopStart="30dp"
-            app:layout_constraintEnd_toStartOf="@+id/button_change_email"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayout_company_phone">
 
@@ -74,25 +70,9 @@
                 android:id="@+id/editLayout_company_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <ImageButton
-            android:id="@+id/button_change_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/change_email_icon_background"
-            android:padding="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textLayout_company_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textLayout_company_email"
-            app:srcCompat="@drawable/baseline_cached_24"
-            app:tint="?colorPrimary" />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -156,6 +136,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <include layout="@layout/something_went_wrong_layout"
+                android:id="@+id/error_layout"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

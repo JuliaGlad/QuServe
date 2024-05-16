@@ -83,7 +83,7 @@ public class OrderDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new OrderDetailsState.Error());
                     }
                 });
     }

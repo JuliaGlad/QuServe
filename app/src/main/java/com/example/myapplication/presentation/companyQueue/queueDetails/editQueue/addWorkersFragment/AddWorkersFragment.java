@@ -147,12 +147,21 @@ public class AddWorkersFragment extends Fragment {
                 binding.recyclerView.setAdapter(adapter);
                 adapter.submitList(recyclerItems);
                 binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof AddWorkersState.Loading) {
                 binding.progressBar.setVisibility(View.VISIBLE);
             } else if (state instanceof AddWorkersState.Error) {
-
+                setErrorLayout();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getEmployees(companyId);
         });
     }
 

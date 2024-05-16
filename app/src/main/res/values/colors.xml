@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="button_secondary_color">@color/colorSecondary</color>
+    <color name="iconColor">@color/colorPrimary</color>
     <color name="colorPrimary">#266180</color>
     <color name="colorPrimaryButton">#266180</color>
     <color name="colorOnPrimary">#F7FCFF</color>

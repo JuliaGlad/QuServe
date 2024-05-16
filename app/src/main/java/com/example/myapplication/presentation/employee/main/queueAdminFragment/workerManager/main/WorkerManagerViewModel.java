@@ -52,7 +52,7 @@ public class WorkerManagerViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new WorkerManagerState.Error());
                     }
                 });
     }

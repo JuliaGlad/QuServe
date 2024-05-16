@@ -42,6 +42,7 @@ import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDe
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +53,9 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyDelegate;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyModel;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
@@ -99,31 +103,11 @@ public class AddDishFragment extends Fragment {
         }
 
         setMainAdapter();
-        initProgress();
+
         initNextButton();
         initCloseButton();
         initBackButton();
         setupObserves();
-    }
-
-    private void initProgress() {
-        switch (page) {
-            case PAGE_2:
-                binding.companyProgressBar.setProgress(17);
-                break;
-            case PAGE_3:
-                binding.companyProgressBar.setProgress(34);
-                break;
-            case PAGE_4:
-                binding.companyProgressBar.setProgress(51);
-                break;
-            case PAGE_5:
-                binding.companyProgressBar.setProgress(68);
-                break;
-            case PAGE_6:
-                binding.companyProgressBar.setProgress(85);
-                break;
-        }
     }
 
     @Override
@@ -144,6 +128,7 @@ public class AddDishFragment extends Fragment {
         mainAdapter.addDelegate(new EditTextDelegate());
         mainAdapter.addDelegate(new TextViewHeaderDelegate());
         mainAdapter.addDelegate(new DishItemDelegate());
+        mainAdapter.addDelegate(new PriceWithCurrencyDelegate());
 
         binding.recyclerView.setAdapter(mainAdapter);
     }
@@ -215,28 +200,49 @@ public class AddDishFragment extends Fragment {
     private void navigateNext(String page) {
         switch (page) {
             case PAGE_1:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_2, categoryId));
+                if (name != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_2, categoryId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_2:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_3, categoryId));
+                if (ingredients != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_3, categoryId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_3:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_4, categoryId));
+                if (weightCount != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_4, categoryId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_4:
-                NavHostFragment.findNavController(this)
-                        .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_5, categoryId));
+                if (price != null) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_5, categoryId));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();
+                }
                 break;
             case PAGE_5:
+                if (timeCooking == null){
+                    timeCooking = "???";
+                }
                 NavHostFragment.findNavController(this)
                         .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_6, categoryId));
                 break;
             case PAGE_6:
                 if (imageUri != null){
                     viewModel.initDishData(restaurantId, categoryId);
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();
                 }
                 break;
         }
@@ -254,6 +260,7 @@ public class AddDishFragment extends Fragment {
                 });
                 break;
             case PAGE_2:
+                binding.companyProgressBar.setProgress(15, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_ingredients, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.ingredients_potato_tomato_and_etc, ingredients, InputType.TYPE_CLASS_TEXT, true, string -> {
@@ -262,6 +269,7 @@ public class AddDishFragment extends Fragment {
                 });
                 break;
             case PAGE_3:
+                binding.companyProgressBar.setProgress(35, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_weight_or_amount_of_dish, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.weight_amount, weightCount, InputType.TYPE_CLASS_TEXT, true, string -> {
@@ -270,14 +278,16 @@ public class AddDishFragment extends Fragment {
                 });
                 break;
             case PAGE_4:
+                binding.companyProgressBar.setProgress(50, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_price, 24)),
-                        new EditTextDelegateItem(new EditTextModel(3, R.string.price, price, InputType.TYPE_CLASS_TEXT, true, string -> {
+                        new PriceWithCurrencyDelegateItem(new PriceWithCurrencyModel(3, price, string -> {
                             price = string;
                         }))
                 });
                 break;
             case PAGE_5:
+                binding.companyProgressBar.setProgress(70, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.estimated_time_cooking, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.time, timeCooking, InputType.TYPE_CLASS_TEXT, true, string -> {
@@ -286,6 +296,7 @@ public class AddDishFragment extends Fragment {
                 });
                 break;
             case PAGE_6:
+                binding.companyProgressBar.setProgress(85, true);
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_dish_photo, 24)));
                 items.add(new DishItemDelegateItem(new DishItemModel(2, name, weightCount, price, imageUri, null, this::initImagePicker)));
                 mainAdapter.submitList(items);

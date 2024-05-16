@@ -39,7 +39,7 @@ public class ToppingItemDelegate implements AdapterDelegate {
         void bind(ToppingModel model){
             binding.ingredientName.setText(model.name);
             String price = "+" + model.price;
-            binding.price.setText(price);
+            binding.price.setText(price.concat("₽"));
 
             if (model.uri != null){
                 Glide.with(itemView.getContext())

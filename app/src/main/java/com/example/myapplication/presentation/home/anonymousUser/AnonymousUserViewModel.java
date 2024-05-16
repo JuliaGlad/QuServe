@@ -3,6 +3,8 @@ package com.example.myapplication.presentation.home.anonymousUser;
 import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,11 +29,28 @@ public class AnonymousUserViewModel extends ViewModel {
     LiveData<AnonymousUserState> state = _state;
 
     public void getActions() {
-        AnonymousUserModel anonymous = ProfileDI.getAnonymousUserUseCase.invoke();
-        _state.postValue(new AnonymousUserState.ActionsGot(new AnonymousUserActionsHomeModel(
-                anonymous.getRestaurantVisitor(),
-                anonymous.getQueueParticipant()
-        )));
+        ProfileDI.getAnonymousUserUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<AnonymousUserModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull AnonymousUserModel anonymous) {
+                        _state.postValue(new AnonymousUserState.ActionsGot(new AnonymousUserActionsHomeModel(
+                                anonymous.getRestaurantVisitor(),
+                                anonymous.getQueueParticipant()
+                        )));
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+
     }
 
     public void getQueueByPath(String path) {
@@ -51,16 +70,16 @@ public class AnonymousUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            _state.postValue(new AnonymousUserState.Error());
                         }
                     });
         } else {
-            _state.postValue(new AnonymousUserState.QueueDataGot(NOT_PARTICIPATE_IN_QUEUE));
+            _state.postValue(new AnonymousUserState.QueueDataGot(path));
         }
     }
 
-    public void getOrderByPath(String path){
-        if (!path.equals(NOT_RESTAURANT_VISITOR)){
+    public void getOrderByPath(String path) {
+        if (!path.equals(NOT_RESTAURANT_VISITOR)) {
             RestaurantOrderDI.getOrderByPathUseCase.invoke(path)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new SingleObserver<OrderDetailsModel>() {
@@ -76,11 +95,11 @@ public class AnonymousUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            _state.postValue(new AnonymousUserState.Error());
                         }
                     });
         } else {
-            _state.postValue(new AnonymousUserState.RestaurantDataGot(NOT_RESTAURANT_VISITOR));
+            _state.postValue(new AnonymousUserState.RestaurantDataGot(path));
         }
     }
 }

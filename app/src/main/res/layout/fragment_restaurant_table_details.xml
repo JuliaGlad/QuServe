@@ -71,4 +71,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/table_header"
         app:layout_constraintStart_toEndOf="@+id/table_header"
         app:layout_constraintTop_toTopOf="@+id/table_header" />
+
+
+    <include layout="@layout/something_went_wrong_layout"
+        android:id="@+id/error_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

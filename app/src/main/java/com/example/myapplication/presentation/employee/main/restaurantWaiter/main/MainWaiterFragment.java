@@ -80,16 +80,7 @@ public class MainWaiterFragment extends Fragment {
             popupMenu.show();
 
             popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
-                if (items.size() == 0) {
-                    StopWaiterWorkDialogFragment dialogFragment = new StopWaiterWorkDialogFragment(restaurantId, locationId);
-                    dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_WAITER_WORK_DIALOG");
-                    dialogFragment.onDialogDismissedListener(bundle -> {
-                        navigateToStartWorking();
-                    });
-                } else {
-                    CannotStopWaiterWorkDialogFragment dialogFragment = new CannotStopWaiterWorkDialogFragment();
-                    dialogFragment.show(getActivity().getSupportFragmentManager(), "CANNOT_STOP_WAITER_WORK_DIALOG");
-                }
+                viewModel.checkOrders(restaurantId, locationId);
                 return false;
             });
         });
@@ -106,6 +97,21 @@ public class MainWaiterFragment extends Fragment {
     }
 
     private void setupObserves() {
+
+        viewModel.haveOrders.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (aBoolean) {
+                    StopWaiterWorkDialogFragment dialogFragment = new StopWaiterWorkDialogFragment(restaurantId, locationId);
+                    dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_WAITER_WORK_DIALOG");
+                    dialogFragment.onDialogDismissedListener(bundle -> {
+                        navigateToStartWorking();
+                    });
+                } else {
+                    CannotStopWaiterWorkDialogFragment dialogFragment = new CannotStopWaiterWorkDialogFragment();
+                    dialogFragment.show(getActivity().getSupportFragmentManager(), "CANNOT_STOP_WAITER_WORK_DIALOG");
+                }
+            }
+        });
 
         viewModel.isWorking.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && aBoolean) {

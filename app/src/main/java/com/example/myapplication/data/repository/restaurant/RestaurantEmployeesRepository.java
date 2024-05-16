@@ -32,9 +32,36 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableEmitter;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantEmployeesRepository {
+
+    public Single<Boolean> haveOrders(String restaurantId, String locationId){
+        return Single.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId)
+                    .collection(WAITERS)
+                    .document(service.auth.getCurrentUser().getUid())
+                    .get().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()){
+                            List<String> orders = (List<String>) task.getResult().get(ACTIVE_ORDERS_COUNT);
+                            assert orders != null;
+                            if (!orders.isEmpty()){
+                                emitter.onSuccess(true);
+                            } else {
+                                emitter.onSuccess(false);
+                            }
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
+                        }
+                    });
+        });
+    }
 
     public Completable deleteRestaurantEmployee(String restaurantId, String locationId, String userId, String role){
         return Completable.create(emitter -> {
@@ -54,6 +81,8 @@ public class RestaurantEmployeesRepository {
                     .delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()){
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable());
                         }
                     });
         });
@@ -68,8 +97,8 @@ public class RestaurantEmployeesRepository {
                             .collection(RESTAURANT_LOCATION)
                             .document(locationId);
             List<EmployeeRestaurantDto> employees = new ArrayList<>();
-            getCooks(employees, docRef);
-            getWaiters(employees, docRef);
+            getCooks(employees, docRef, emitter);
+            getWaiters(employees, docRef, emitter);
         });
     }
 
@@ -85,6 +114,8 @@ public class RestaurantEmployeesRepository {
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult().getBoolean(IS_WORKING));
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -103,6 +134,8 @@ public class RestaurantEmployeesRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -127,6 +160,8 @@ public class RestaurantEmployeesRepository {
                             docRef.set(waiter).addOnCompleteListener(taskWaiter -> {
                                 if (taskWaiter.isSuccessful()) {
                                     emitter.onComplete();
+                                } else {
+                                    emitter.onError(new Throwable(taskWaiter.getException()));
                                 }
                             });
                         }
@@ -150,8 +185,12 @@ public class RestaurantEmployeesRepository {
                             docRef.set(cook).addOnCompleteListener(taskAdd -> {
                                 if (taskAdd.isSuccessful()) {
                                     emitter.onComplete();
+                                } else {
+                                    emitter.onError(new Throwable(taskAdd.getException()));
                                 }
                             });
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
 
@@ -169,6 +208,8 @@ public class RestaurantEmployeesRepository {
                     .getDownloadUrl().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult());
+                        } else {
+                            emitter.onSuccess(Uri.EMPTY);
                         }
                     });
         });
@@ -185,6 +226,8 @@ public class RestaurantEmployeesRepository {
                     .getDownloadUrl().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult());
+                        } else {
+                            emitter.onSuccess(Uri.EMPTY);
                         }
                     });
         });
@@ -201,6 +244,8 @@ public class RestaurantEmployeesRepository {
                     .getDownloadUrl().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult());
+                        } else {
+                            emitter.onSuccess(Uri.EMPTY);
                         }
                     });
         });
@@ -216,6 +261,8 @@ public class RestaurantEmployeesRepository {
                     .getDownloadUrl().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onSuccess(task.getResult());
+                        } else {
+                            emitter.onSuccess(Uri.EMPTY);
                         }
                     });
         });
@@ -231,6 +278,8 @@ public class RestaurantEmployeesRepository {
                     .putBytes(bytes).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
@@ -246,12 +295,14 @@ public class RestaurantEmployeesRepository {
                     .putBytes(bytes).addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                        } else {
+                            emitter.onError(new Throwable(task.getException()));
                         }
                     });
         });
     }
 
-    private void getWaiters(List<EmployeeRestaurantDto> employees, DocumentReference docRef) {
+    private void getWaiters(List<EmployeeRestaurantDto> employees, DocumentReference docRef, SingleEmitter<List<EmployeeRestaurantDto>> emitter) {
         docRef.collection(WAITERS).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
@@ -262,11 +313,13 @@ public class RestaurantEmployeesRepository {
                             WAITER
                     ));
                 }
+            } else {
+                emitter.onError(new Throwable(task.getException()));
             }
         });
     }
 
-    private void getCooks(List<EmployeeRestaurantDto> employees, DocumentReference docRef) {
+    private void getCooks(List<EmployeeRestaurantDto> employees, DocumentReference docRef, SingleEmitter<List<EmployeeRestaurantDto>> emitter) {
         docRef.collection(COOKS).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
@@ -277,6 +330,8 @@ public class RestaurantEmployeesRepository {
                             COOK
                     ));
                 }
+            } else {
+                emitter.onError(new Throwable(task.getException()));
             }
         });
     }

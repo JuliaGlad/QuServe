@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantUserDI;
+import com.example.myapplication.presentation.employee.main.restaurantWaiter.startWork.state.StartWorkState;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -18,8 +19,8 @@ public class StartWorkViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isStarted = new MutableLiveData<>(false);
     LiveData<Boolean> isStarted = _isStarted;
 
-    private final MutableLiveData<String> _name = new MutableLiveData<>(null);
-    LiveData<String> name = _name;
+    private final MutableLiveData<StartWorkState> _name = new MutableLiveData<>(new StartWorkState.Loading());
+    LiveData<StartWorkState> name = _name;
 
     public void getRestaurantName(String restaurantId) {
         RestaurantUserDI.getRestaurantNameByIdsUseCase.invoke(restaurantId)
@@ -32,12 +33,12 @@ public class StartWorkViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull String name) {
-                        _name.postValue(name);
+                        _name.postValue(new StartWorkState.Success(name));
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _name.postValue(new StartWorkState.Error());
                     }
                 });
     }

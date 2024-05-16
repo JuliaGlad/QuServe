@@ -27,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddLocationBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,12 +90,17 @@ public class AddLocationFragment extends Fragment {
 
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            viewModel.addLocation(restaurantId, location, city);
+            if (location != null) {
+                viewModel.addLocation(restaurantId, location, city);
+            } else {
+                Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
+            }
         });
     }
 
     private void initRecycler() {
         try{
+            assert getArguments() != null;
             location = getArguments().getString(QUEUE_LOCATION_KEY);
             city = getArguments().getString(CITY_KEY);
         } catch (NullPointerException e){

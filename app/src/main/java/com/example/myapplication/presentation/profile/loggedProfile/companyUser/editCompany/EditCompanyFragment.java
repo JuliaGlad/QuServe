@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany;
 
 import static android.app.Activity.RESULT_OK;
+import static android.widget.Toast.LENGTH_LONG;
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
@@ -32,17 +33,21 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditCompanyBinding;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.model.EditCompanyModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.state.EditCompanyState;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.time.Duration;
 
 public class EditCompanyFragment extends Fragment {
 
     private EditCompanyViewModel viewModel;
     private FragmentEditCompanyBinding binding;
-    private String companyId, state, name, phone;
+    private String companyId, state, name, phone, email;
     private Uri imageUri = Uri.EMPTY;
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -56,7 +61,7 @@ public class EditCompanyFragment extends Fragment {
         companyId = sharedPreferences.getString(COMPANY_ID, null);
         state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
 
-        switch (state){
+        switch (state) {
             case COMPANY:
                 viewModel.getCompanyData(companyId);
                 break;
@@ -124,24 +129,27 @@ public class EditCompanyFragment extends Fragment {
     private void initSaveButton() {
         binding.buttonSave.setOnClickListener(v -> {
             name = binding.editLayoutCompanyName.getText().toString();
+            email = binding.editLayoutCompanyEmail.getText().toString();
             phone = binding.editLayoutCompanyPhone.getText().toString();
-            switch (state){
-                case COMPANY:
-                    viewModel.updateData(companyId, name, phone, imageUri);
-                    break;
-                case RESTAURANT:
-                    viewModel.updateRestaurantData(companyId, name, phone, imageUri);
-                    break;
+            if (name != null) {
+                switch (state) {
+                    case COMPANY:
+                        viewModel.updateData(companyId, name, phone, imageUri);
+                        break;
+                    case RESTAURANT:
+                        viewModel.updateRestaurantData(companyId, email, name, phone, imageUri);
+                        break;
+                }
+            } else {
+                Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), LENGTH_LONG).show();
             }
-
-
         });
     }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof EditCompanyState.Success){
-                EditCompanyModel model = ((EditCompanyState.Success)state).data;
+            if (state instanceof EditCompanyState.Success) {
+                EditCompanyModel model = ((EditCompanyState.Success) state).data;
                 binding.editLayoutCompanyName.setText(model.getName());
                 binding.editLayoutCompanyEmail.setText(model.getEmail());
                 binding.editLayoutCompanyPhone.setText(model.getPhone());
@@ -160,6 +168,7 @@ public class EditCompanyFragment extends Fragment {
                                 @Override
                                 public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
                                     binding.progressLayout.setVisibility(View.GONE);
+                                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
                                     return false;
                                 }
                             })
@@ -168,18 +177,34 @@ public class EditCompanyFragment extends Fragment {
 
                 } else {
                     binding.progressLayout.setVisibility(View.GONE);
+                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
 
-            } else if (state instanceof EditCompanyState.Loading){
+            } else if (state instanceof EditCompanyState.Loading) {
                 binding.progressLayout.setVisibility(View.VISIBLE);
-            } else if (state instanceof EditCompanyState.Error){
-
+            } else if (state instanceof EditCompanyState.Error) {
+                setErrorLayout();
             }
         });
 
         viewModel.navigateBack.observe(getViewLifecycleOwner(), navigate -> {
-            if (navigate){
+            if (navigate) {
                 requireActivity().finish();
+            }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.progressLayout.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            switch (state) {
+                case COMPANY:
+                    viewModel.getCompanyData(companyId);
+                    break;
+                case RESTAURANT:
+                    viewModel.getRestaurantData(companyId);
+                    break;
             }
         });
     }

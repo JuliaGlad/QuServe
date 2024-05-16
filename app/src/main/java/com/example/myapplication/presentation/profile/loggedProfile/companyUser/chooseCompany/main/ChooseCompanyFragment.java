@@ -114,10 +114,18 @@ public class ChooseCompanyFragment extends Fragment {
                 binding.progressBar.setVisibility(View.VISIBLE);
 
             } else if (state instanceof ChooseCompanyState.Error) {
-
+                setErrorLayout();
             }
         });
 
+    }
+
+    private void setErrorLayout() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getAllCompaniesList();
+        });
     }
 
     private void initNavigation() {
@@ -155,5 +163,6 @@ public class ChooseCompanyFragment extends Fragment {
         }
         mainAdapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 }

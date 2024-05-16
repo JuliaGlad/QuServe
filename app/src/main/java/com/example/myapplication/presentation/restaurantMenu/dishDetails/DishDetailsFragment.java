@@ -32,10 +32,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentDishDetailsBinding;
 import com.example.myapplication.presentation.dialogFragments.deleteToppingDialog.DeleteToppingDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.AddRequiredChoiceActivity;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.model.DishDetailsStateModel;
@@ -53,6 +55,7 @@ import com.example.myapplication.presentation.restaurantMenu.dishDetails.recycle
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.topping.ToppingDishDetailsModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.state.DishDetailsState;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +74,8 @@ public class DishDetailsFragment extends Fragment {
     private DishDetailsViewModel viewModel;
     private FragmentDishDetailsBinding binding;
     private String dishId, categoryId, restaurantId;
-    private ActivityResultLauncher<Intent> addToppingLauncher, launcherRequiredChoices;
+    private Uri imageUri = Uri.EMPTY;
+    private ActivityResultLauncher<Intent> addToppingLauncher, launcherRequiredChoices, imageLauncher;
     private List<DelegateItem> requiredChoiceItems = new ArrayList<>();
     private List<DelegateItem> toppingItems = new ArrayList<>();
     private final MainAdapter requiredChoiceAdapter = new MainAdapter();
@@ -86,6 +90,7 @@ public class DishDetailsFragment extends Fragment {
         restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         setToppingLauncher();
         setRequiredChoiceLauncher();
+        setImageLauncher();
     }
 
 
@@ -105,6 +110,40 @@ public class DishDetailsFragment extends Fragment {
         setupObserves();
         initSaveButton();
         initRemoveIngredients();
+        initChangePhoto();
+    }
+
+    private void initChangePhoto() {
+        binding.foodImage.setOnClickListener(v -> {
+            initImagePicker();
+        });
+    }
+
+    private void initImagePicker() {
+        ImagePicker.with(this)
+                .cropSquare()
+                .compress(512)
+                .maxResultSize(512, 512)
+                .createIntent(intent -> {
+                    imageLauncher.launch(intent);
+                    return null;
+                });
+    }
+
+    private void setImageLauncher() {
+        imageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            imageUri = data.getData();
+                            Glide.with(requireContext())
+                                    .load(imageUri)
+                                    .apply(RequestOptions.circleCropTransform())
+                                    .into(binding.foodImage);
+                        }
+                    }
+                });
     }
 
     private void initSaveButton() {
@@ -113,7 +152,7 @@ public class DishDetailsFragment extends Fragment {
             String price = binding.priceEditText.getText().toString();
             String ingredients = binding.ingredientsEditText.getText().toString();
             String weightOrCount = binding.weightEditText.getText().toString();
-            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, price, weightOrCount);
+            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, price, weightOrCount, imageUri);
         });
     }
 
@@ -127,7 +166,6 @@ public class DishDetailsFragment extends Fragment {
     private void setToppingAdapter() {
         toppingsAdapter.addDelegate(new ToppingDelegate());
         toppingsAdapter.addDelegate(new AddToppingDelegate());
-
         binding.toppingsRecycler.setAdapter(toppingsAdapter);
     }
 
@@ -144,17 +182,24 @@ public class DishDetailsFragment extends Fragment {
             if (state instanceof DishDetailsState.Success) {
                 DishDetailsStateModel model = ((DishDetailsState.Success) state).data;
                 initUi(model);
-
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof DishDetailsState.Loading) {
 
             } else if (state instanceof DishDetailsState.Error) {
-
+                setErrorLayout();
             }
         });
         viewModel.isUpdated.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 requireActivity().finish();
             }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getDishData(restaurantId, categoryId, dishId);
         });
     }
 
@@ -242,6 +287,7 @@ public class DishDetailsFragment extends Fragment {
         binding.nameEditText.setText(model.getName());
         binding.weightEditText.setText(model.getWeightOrCount());
         binding.ingredientsEditText.setText(model.getIngredients());
+        binding.priceEditText.setText(model.getPrice().concat("₽"));
 
         binding.buttonInfo.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(requireContext(), v);

@@ -125,6 +125,7 @@ public class SettingCompanyFragment extends Fragment {
 
         mainAdapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private void showDeleteDialog() {
@@ -151,25 +152,34 @@ public class SettingCompanyFragment extends Fragment {
         }
     }
 
-    private void setPreferencesToBasic() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString(COMPANY_ID, null).apply();
-        sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
-    }
-
     private void setupObserves(){
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof CompanyUserState.Success){
                 CompanyUserModel model = ((CompanyUserState.Success)state).data;
-                if (delegates.size() == 0){
+                if (delegates.isEmpty()){
                     initRecycler(model.getName(), model.getEmail(), model.getUri());
                 }
             } else if (state instanceof CompanyUserState.Loading){
                 binding.progressBar.setVisibility(View.VISIBLE);
             } else if (state instanceof CompanyUserState.Error){
-
+                setError();
             }
         });
 
+    }
+
+    private void setError() {
+        binding.progressBar.setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            switch (state){
+                case COMPANY:
+                    viewModel.getCompany(companyId);
+                    break;
+                case RESTAURANT:
+                    viewModel.getRestaurant(companyId);
+                    break;
+            }
+        });
     }
 }

@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,7 +26,7 @@ public class AlreadyOwnQueueViewModel extends ViewModel {
     public void finishQueue() {
         QueueDI.deleteQrCodeUseCase.invoke(queueId)
                 .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
-                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(queueId))
+                .andThen(ProfileDI.updateOwnQueueUseCase.invoke(NOT_QUEUE_OWNER))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

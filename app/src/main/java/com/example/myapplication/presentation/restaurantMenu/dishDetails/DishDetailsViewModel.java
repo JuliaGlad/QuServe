@@ -96,14 +96,15 @@ public class DishDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new DishDetailsState.Error());
                     }
                 });
 
     }
 
-    public void saveData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount) {
+    public void saveData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount, Uri uri) {
         RestaurantMenuDI.updateDishDataUseCase.invoke(restaurantId, categoryId, dishId, name, ingredients, price, weightOrCount)
+                .concatWith(RestaurantMenuDI.uploadDishImageUseCase.invoke(restaurantId, dishId, uri))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

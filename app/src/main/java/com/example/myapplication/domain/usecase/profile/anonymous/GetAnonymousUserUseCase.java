@@ -1,12 +1,18 @@
 package com.example.myapplication.domain.usecase.profile.anonymous;
 
-import com.example.myapplication.data.db.entity.AnonymousUserEntity;
-import com.example.myapplication.data.providers.AnonymousUserProvider;
+import android.util.Log;
+
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.profile.AnonymousUserModel;
 
+import io.reactivex.rxjava3.core.Single;
+
 public class GetAnonymousUserUseCase {
-    public AnonymousUserModel invoke(){
-        AnonymousUserEntity entity = AnonymousUserProvider.getUser();
-        return new AnonymousUserModel(entity.getRestaurantVisitor(), entity.getParticipateInQueue());
+    public Single<AnonymousUserModel> invoke() {
+        return ProfileDI.profileRepository.getAnonymousUser().map(anonymousUserDto ->
+                new AnonymousUserModel(
+                        anonymousUserDto.getRestaurantVisitor(),
+                        anonymousUserDto.getParticipateInQueue())
+        );
     }
 }

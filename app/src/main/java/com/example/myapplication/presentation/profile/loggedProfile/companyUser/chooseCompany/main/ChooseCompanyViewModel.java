@@ -51,7 +51,7 @@ public class ChooseCompanyViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new ChooseCompanyState.Error());
                     }
                 });
 

@@ -48,7 +48,7 @@ public class CookActiveOrdersViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new CookActiveOrdersState.Error());
                     }
                 });
     }

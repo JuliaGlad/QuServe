@@ -139,14 +139,9 @@ public class BasicUserServiceFragment extends Fragment {
                 new OptionImageButtonModel(1, R.drawable.queue_action_background, getResources().getString(R.string.queue), () -> {
                     ((MainActivity) requireActivity()).openQueueActivity();
                 }),
-                new OptionImageButtonModel(2, R.drawable.restaurant_action_background, getResources().getString(R.string.restaurant), () -> {
-                    setScanOptions();
-                }),
-                new OptionImageButtonModel(3, R.drawable.on_board_catering_background, getResources().getString(R.string.on_board_catering), () -> {
-
-                }),
+                new OptionImageButtonModel(2, R.drawable.restaurant_action_background, getResources().getString(R.string.restaurant), this::setScanOptions),
                 new OptionImageButtonModel(4, R.drawable.become_employee_background, getResources().getString(R.string.become_employee), () -> {
-                    if (getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, ANONYMOUS).equals(ANONYMOUS)) {
+                    if (requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, ANONYMOUS).equals(ANONYMOUS)) {
                         NeedAccountDialogFragment dialogFragment = new NeedAccountDialogFragment();
                         dialogFragment.show(getActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
                     } else {

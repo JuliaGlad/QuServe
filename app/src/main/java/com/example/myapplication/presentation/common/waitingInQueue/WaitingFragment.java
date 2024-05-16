@@ -53,7 +53,6 @@ public class WaitingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         sendNotification();
         setupObserves();
         setMainAdapter();
@@ -88,15 +87,16 @@ public class WaitingFragment extends Fragment {
     private void setupObserves() {
 
         viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 requireActivity().finish();
             }
         });
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof WaitingState.Success){
-                WaitingModel model = ((WaitingState.Success)state).data;
+            if (state instanceof WaitingState.Success) {
+                WaitingModel model = ((WaitingState.Success) state).data;
                 List<String> participantsList = model.getParticipants();
+                binding.queueName.setText(model.getName());
                 int peopleBeforeSize, midTime = 0;
                 for (int i = 0; i < participantsList.size(); i++) {
                     if (viewModel.checkParticipantsIndex(participantsList, i)) {
@@ -107,6 +107,17 @@ public class WaitingFragment extends Fragment {
                 }
                 initRecycler(model.getPath(), model.getParticipants().size(), midTime);
             }
+            else if (state instanceof WaitingState.Loading) {
+            } else if (state instanceof WaitingState.Error) {
+                setErrorLayout();
+            }
+        });
+    }
+
+    private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+            viewModel.getQueue();
         });
     }
 
@@ -134,5 +145,6 @@ public class WaitingFragment extends Fragment {
     private void buildList(DelegateItem[] items) {
         List<DelegateItem> list = Arrays.asList(items);
         mainAdapter.submitList(list);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }
