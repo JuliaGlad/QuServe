@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
+import com.example.myapplication.presentation.restaurantMenu.CategoryAddedModel;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
@@ -18,11 +19,12 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 
 public class AddCategoryViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> _onComplete = new MutableLiveData<>(false);
-    public LiveData<Boolean> onComplete = _onComplete;
+    private final MutableLiveData<CategoryAddedModel> _onComplete = new MutableLiveData<>(null);
+    public LiveData<CategoryAddedModel> onComplete = _onComplete;
 
     public void initCategoryData(String restaurantId, View view) {
         String categoryId = generateId();
@@ -51,7 +53,8 @@ public class AddCategoryViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _onComplete.postValue(true);
+                        _onComplete.postValue(new CategoryAddedModel(categoryId, uri, ArgumentsCategory.name));
+                        setArgumentsNull();
                     }
 
                     @Override

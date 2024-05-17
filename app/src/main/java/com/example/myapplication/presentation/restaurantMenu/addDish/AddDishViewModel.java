@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
+import com.example.myapplication.presentation.restaurantMenu.DishAddedModel;
 
 import java.util.Random;
 
@@ -14,8 +15,8 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddDishViewModel extends ViewModel {
-    private final MutableLiveData<Boolean> _onComplete = new MutableLiveData<>(false);
-    public LiveData<Boolean> onComplete = _onComplete;
+    private final MutableLiveData<DishAddedModel> _onComplete = new MutableLiveData<>(null);
+    public LiveData<DishAddedModel> onComplete = _onComplete;
 
     public void initDishData(String restaurantId, String categoryId) {
         String dishId = generateId();
@@ -30,7 +31,13 @@ public class AddDishViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _onComplete.postValue(true);
+                        _onComplete.postValue(new DishAddedModel(
+                                dishId,
+                                DishArguments.price,
+                                DishArguments.name,
+                                DishArguments.weightCount,
+                                DishArguments.imageUri
+                        ));
                     }
 
                     @Override

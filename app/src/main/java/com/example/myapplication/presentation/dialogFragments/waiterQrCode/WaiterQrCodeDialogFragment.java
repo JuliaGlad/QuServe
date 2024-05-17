@@ -28,7 +28,7 @@ public class WaiterQrCodeDialogFragment extends DialogFragment {
         DialogWaiterQrCodeBinding binding = DialogWaiterQrCodeBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
-        Glide.with(requireView())
+        Glide.with(requireContext())
                 .load(uri)
                 .into(binding.qrCode);
 

@@ -121,9 +121,9 @@ public class DishDetailsFragment extends Fragment {
 
     private void initImagePicker() {
         ImagePicker.with(this)
-                .cropSquare()
+                .crop()
                 .compress(512)
-                .maxResultSize(512, 512)
+                .maxResultSize(1080, 1900)
                 .createIntent(intent -> {
                     imageLauncher.launch(intent);
                     return null;
@@ -139,7 +139,6 @@ public class DishDetailsFragment extends Fragment {
                             imageUri = data.getData();
                             Glide.with(requireContext())
                                     .load(imageUri)
-                                    .apply(RequestOptions.circleCropTransform())
                                     .into(binding.foodImage);
                         }
                     }
@@ -172,7 +171,6 @@ public class DishDetailsFragment extends Fragment {
     private void setRequiredChoiceAdapter() {
         requiredChoiceAdapter.addDelegate(new RequiredChoiceHeaderDelegate());
         requiredChoiceAdapter.addDelegate(new HorizontalRecyclerDelegate());
-        requiredChoiceAdapter.addDelegate(new FloatingActionButtonDelegate());
 
         binding.requiredChoiceRecycler.setAdapter(requiredChoiceAdapter);
     }
@@ -346,7 +344,7 @@ public class DishDetailsFragment extends Fragment {
 
     private void initRequiredChoiceRecycler(List<RequiredChoiceDishDetailsModel> models) {
 
-        if (models != null && models.size() > 0) {
+        if (models != null && !models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 RequiredChoiceDishDetailsModel current = models.get(i);
                 RequiredChoiceAdapter adapter = new RequiredChoiceAdapter();
@@ -368,9 +366,6 @@ public class DishDetailsFragment extends Fragment {
                 requiredChoiceItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(i + 1, choiceItemModels, adapter)));
             }
         }
-        requiredChoiceItems.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(requiredChoiceItems.size(), () -> {
-            openAddRequiredChoiceActivity(categoryId, dishId);
-        })));
         requiredChoiceAdapter.submitList(requiredChoiceItems);
     }
 

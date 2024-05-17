@@ -30,7 +30,8 @@
                 android:fontFamily="@font/bold_roboto"
                 android:text="@string/join_queue"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/first_item_icon" />
+                app:layout_constraintTop_toBottomOf="@+id/first_item_icon"
+                app:lineHeight="24sp" />
 
             <ImageView
                 android:id="@+id/first_item_icon"

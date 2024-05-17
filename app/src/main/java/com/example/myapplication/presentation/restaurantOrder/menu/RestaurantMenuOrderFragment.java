@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.restaurantOrder.menu;
 
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -157,6 +158,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         i,
                         current.getName(),
                         current.getTask(),
+                        Uri.EMPTY,
                         0,
                         isDefault,
                         () -> {

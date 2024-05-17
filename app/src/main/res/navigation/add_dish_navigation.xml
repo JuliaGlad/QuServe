@@ -17,12 +17,5 @@
             app:argType="string"/>
         <argument android:name="id"
             app:argType="string"/>
-        <action
-            android:id="@+id/action_addDishFragment_to_dishAddedSuccessfullyFragment"
-            app:destination="@id/dishAddedSuccessfullyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/dishAddedSuccessfullyFragment"
-        android:name="com.example.myapplication.presentation.restaurantMenu.addDish.dishSuccessfulyAdded.DishAddedSuccessfullyFragment"
-        android:label="DishAddedSuccessfullyFragment" />
 </navigation>

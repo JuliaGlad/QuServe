@@ -154,7 +154,7 @@ public class BasicUserFragment extends Fragment {
     }
 
     private void updateItem() {
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             List<DelegateItem> listNew = new ArrayList<>(list);
             listNew.remove(listNew.size() - 1);
             listNew.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {

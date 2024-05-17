@@ -62,7 +62,6 @@ public class ChooseCategoryImageDelegate implements AdapterDelegate {
             binding.chosenImage.foodTitle.setText(model.name);
 
             if (!model.uri.equals(Uri.EMPTY)){
-                Log.i("Uri", model.uri.toString());
                 Glide.with(itemView.getContext())
                         .load(model.uri)
                         .into(binding.chosenImage.foodImage);

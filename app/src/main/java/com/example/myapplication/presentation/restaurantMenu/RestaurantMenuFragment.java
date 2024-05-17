@@ -1,12 +1,26 @@
 package com.example.myapplication.presentation.restaurantMenu;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.URI;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,11 +31,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantMenuBinding;
+
 import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegate;
 import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
+
+import com.example.myapplication.presentation.restaurantMenu.AddCategory.AddMenuCategoryActivity;
+import com.example.myapplication.presentation.restaurantMenu.addDish.AddDishActivity;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingDelegate;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingDelegateItem;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingModel;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;
@@ -30,6 +50,8 @@ import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.D
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
@@ -43,15 +65,61 @@ public class RestaurantMenuFragment extends Fragment {
     private FragmentRestaurantMenuBinding binding;
     private final MainAdapter horizontalAdapter = new MainAdapter();
     private final MainAdapter gridAdapter = new MainAdapter();
+    private ActivityResultLauncher<Intent> addCategoryLauncher, addDishLauncher;
+    private final List<DelegateItem> categories = new ArrayList<>();
+    List<DelegateItem> dishes = new ArrayList<>();
     private String restaurantId, categoryId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantMenuViewModel.class);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getMenuCategories(restaurantId);
+        initCategoryLauncher();
+        initDishLauncher();
+    }
+
+    private void initDishLauncher() {
+        addDishLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String dishId = result.getData().getStringExtra(DISH_ID);
+                        String dishName = result.getData().getStringExtra(DISH_NAME);
+                        String dishPrice = result.getData().getStringExtra(DISH_PRICE);
+                        String dishWeight = result.getData().getStringExtra(DISH_WEIGHT_OR_COUNT);
+                        Uri uri = Uri.parse(result.getData().getStringExtra(URI));
+                        int position = dishes.size();
+                        dishes.add(new DishItemDelegateItem(new DishItemModel(
+                                position, dishName, dishWeight, dishPrice, uri, null,
+                                () -> ((RestaurantMenuActivity) requireActivity()).openDishDetailsActivity(categoryId, dishId)
+                        )));
+                        gridAdapter.notifyItemInserted(position);
+                    }
+                });
+    }
+
+    private void initCategoryLauncher() {
+        addCategoryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String categoryId = result.getData().getStringExtra(COMPANY_ID);
+                        String name = result.getData().getStringExtra(COMPANY_NAME);
+                        Uri uri = Uri.parse(result.getData().getStringExtra(URI));
+                        int position = categories.size() - 1;
+                        categories.remove(position);
+                        horizontalAdapter.notifyItemRemoved(position);
+                        categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
+                                position, name, null, uri, 0, false, () -> {
+                            viewModel.getCategoryDishes(restaurantId, categoryId, false);
+                            this.categoryId = categoryId;
+                        }
+                        )));
+                        horizontalAdapter.notifyItemInserted(position);
+                        categories.add(new AddToppingDelegateItem(new AddToppingModel(categories.size(), this::launchAddCategory)));
+                    }
+                });
     }
 
     @Override
@@ -65,7 +133,7 @@ public class RestaurantMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
-        if (viewModel.checkUserID()){
+        if (viewModel.checkUserID()) {
             viewModel.signInAnonymously();
         } else {
             initUi();
@@ -81,13 +149,14 @@ public class RestaurantMenuFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAddDish.setOnClickListener(v -> {
             if (categoryId != null) {
-                ((RestaurantMenuActivity) requireActivity()).openAddDishActivity(categoryId);
+                openAddDishActivity(categoryId);
             }
         });
     }
 
     private void setHorizontalAdapter() {
         horizontalAdapter.addDelegate(new CategoryItemDelegate());
+        horizontalAdapter.addDelegate(new AddToppingDelegate());
         binding.categoryRecyclerView.setAdapter(horizontalAdapter);
     }
 
@@ -113,7 +182,7 @@ public class RestaurantMenuFragment extends Fragment {
         });
 
         viewModel.isSignIn.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 initUi();
             }
         });
@@ -133,29 +202,24 @@ public class RestaurantMenuFragment extends Fragment {
 
     private void setErrorLayout() {
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getMenuCategories(restaurantId);
-        });
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getMenuCategories(restaurantId));
     }
 
     private void initDishRecycler(List<DishMenuModel> models) {
         if (!models.isEmpty()) {
-            List<DelegateItem> items = new ArrayList<>();
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
-                items.add(new DishItemDelegateItem(new DishItemModel(
+                dishes.add(new DishItemDelegateItem(new DishItemModel(
                         i,
                         current.getName(),
                         current.getWeight(),
                         current.getPrice(),
-                        null,
+                        Uri.EMPTY,
                         current.getTask(),
-                        () -> {
-                            ((RestaurantMenuActivity)requireActivity()).openDishDetailsActivity(categoryId, current.getDishId());
-                        }
+                        () -> ((RestaurantMenuActivity) requireActivity()).openDishDetailsActivity(categoryId, current.getDishId())
                 )));
             }
-            gridAdapter.submitList(items);
+            gridAdapter.submitList(dishes);
         } else {
             final List<DelegateItem> items = new ArrayList<>();
             gridAdapter.submitList(items);
@@ -164,7 +228,6 @@ public class RestaurantMenuFragment extends Fragment {
     }
 
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {
-        List<DelegateItem> items = new ArrayList<>();
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 CategoryMenuModel current = models.get(i);
@@ -174,25 +237,39 @@ public class RestaurantMenuFragment extends Fragment {
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();
                 }
-                items.add(new CategoryItemDelegateItem(new CategoryItemModel(
+                categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
                         i,
                         current.getName(),
                         current.getTask(),
+                        Uri.EMPTY,
                         0,
                         isDefault,
                         () -> {
+                            int size = dishes.size();
+                            dishes.clear();
+                            gridAdapter.notifyItemRangeRemoved(0, size);
                             viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), false);
                             categoryId = current.getCategoryId();
                         })));
             }
         }
-        items.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                items.size() + 1,
-                getString(R.string.add_category), null, 0, false,
-                () -> {
-                    ((RestaurantMenuActivity)requireActivity()).openCategoryActivity();
-                }
+        categories.add(new AddToppingDelegateItem(new AddToppingModel(
+                categories.size() + 1,
+                this::launchAddCategory
         )));
-        horizontalAdapter.submitList(items);
+        horizontalAdapter.submitList(categories);
+    }
+
+    private void launchAddCategory() {
+        Intent intent = new Intent(requireActivity(), AddMenuCategoryActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        addCategoryLauncher.launch(intent);
+    }
+
+    public void openAddDishActivity(String categoryId) {
+        Intent intent = new Intent(requireActivity(), AddDishActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        intent.putExtra(CATEGORY_ID, categoryId);
+        addDishLauncher.launch(intent);
     }
 }

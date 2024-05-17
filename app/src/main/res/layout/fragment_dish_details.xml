@@ -30,50 +30,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/queue_background"
+                android:background="?colorSurfaceContainerLow"
+                android:src="@drawable/no_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/weight_edit_text"
+                style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
                 android:backgroundTint="?colorPrimary"
-                android:fontFamily="@font/bold_roboto"
                 android:text="100gr"
-                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/food_image" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/name_edit_text"
+                style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="?colorPrimary"
-                android:fontFamily="@font/bold_roboto"
                 android:text="WOK-Noodles"
-                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/weight_edit_text" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/price_edit_text"
+                style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="?colorPrimary"
-                android:fontFamily="@font/bold_roboto"
-                android:text="444 ₽ "
-                android:textSize="24sp"
+                android:text="444₽"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/ingredients_edit_text"
+                style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
@@ -89,8 +88,8 @@
                 android:id="@+id/to_remove_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
+
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/bold_roboto"
                 android:text="@string/remove_ingredients"
                 android:textColor="?colorPrimary"
@@ -114,9 +113,6 @@
                 android:id="@+id/required_choice_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
                 android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -127,25 +123,22 @@
                 android:id="@+id/toppings_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/bold_roboto"
                 android:text="@string/toppings"
                 android:textColor="?colorPrimary"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/required_choice_recycler"
-                app:layout_constraintTop_toBottomOf="@+id/required_choice_recycler" />
+                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton2" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/toppingsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="16dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/toppings_header" />
@@ -162,6 +155,17 @@
                 app:layout_constraintTop_toTopOf="@+id/name_edit_text"
                 app:tint="?colorPrimary" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:src="@drawable/ic_add"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/required_choice_recycler" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -170,6 +174,8 @@
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

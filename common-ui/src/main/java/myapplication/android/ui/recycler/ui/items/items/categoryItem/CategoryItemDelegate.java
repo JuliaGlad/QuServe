@@ -1,5 +1,6 @@
 package myapplication.android.ui.recycler.ui.items.items.categoryItem;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -23,7 +24,7 @@ public class CategoryItemDelegate implements AdapterDelegate {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, DelegateItem item, int position) {
-        ((ViewHolder) holder).bind((CategoryItemModel) item.content(), position);
+        ((ViewHolder) holder).bind((CategoryItemModel) item.content());
     }
 
     @Override
@@ -40,7 +41,7 @@ public class CategoryItemDelegate implements AdapterDelegate {
             binding = _binding;
         }
 
-        void bind(CategoryItemModel model, int position) {
+        void bind(CategoryItemModel model) {
 
             if (model.getDrawable() != 0) {
                 binding.foodImage.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), model.getDrawable(), itemView.getContext().getTheme()));
@@ -51,6 +52,12 @@ public class CategoryItemDelegate implements AdapterDelegate {
             });
 
             binding.foodTitle.setText(model.getName());
+
+            if (model.getUri() != Uri.EMPTY){
+                Glide.with(itemView.getContext())
+                        .load(model.getUri())
+                        .into(binding.foodImage);
+            }
 
             if (model.getTask() != null) {
                 model.getTask().addOnCompleteListener(task -> {

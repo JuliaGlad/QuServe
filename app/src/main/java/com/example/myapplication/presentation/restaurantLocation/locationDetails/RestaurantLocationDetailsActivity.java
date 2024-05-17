@@ -1,21 +1,14 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.myapplication.R;
-import com.example.myapplication.databinding.ActivityLocationsBinding;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.myapplication.databinding.ActivityRestaurantLocationDetailsBinding;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.TableListActivity;
-import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.addTable.AddTableActivity;
 
 public class RestaurantLocationDetailsActivity extends AppCompatActivity {
 

@@ -4,5 +4,5 @@ import android.net.Uri;
 
 class DishArguments {
     static String name, ingredients, weightCount, price, timeCooking;
-    static Uri imageUri;
+    static Uri imageUri = Uri.EMPTY;
 }

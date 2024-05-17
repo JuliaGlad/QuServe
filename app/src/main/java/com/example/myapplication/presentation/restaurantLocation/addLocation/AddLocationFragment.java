@@ -100,7 +100,6 @@ public class AddLocationFragment extends Fragment {
 
     private void initRecycler() {
         try{
-            assert getArguments() != null;
             location = getArguments().getString(QUEUE_LOCATION_KEY);
             city = getArguments().getString(CITY_KEY);
         } catch (NullPointerException e){

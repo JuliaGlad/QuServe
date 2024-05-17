@@ -16,7 +16,12 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_5;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_6;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
 
 import android.content.Context;
 import android.content.Intent;
@@ -134,11 +139,17 @@ public class AddDishFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.onComplete.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
+        viewModel.onComplete.observe(getViewLifecycleOwner(), model -> {
+            if (model != null) {
                 viewModel.setArgumentsNull();
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_addDishFragment_to_dishAddedSuccessfullyFragment);
+                Intent intent = new Intent();
+                intent.putExtra(DISH_ID, model.getDishId());
+                intent.putExtra(DISH_NAME, model.getName());
+                intent.putExtra(DISH_PRICE, model.getPrice());
+                intent.putExtra(DISH_WEIGHT_OR_COUNT, model.getWeightCount());
+                intent.putExtra(URI, model.getUri().toString());
+                requireActivity().setResult(RESULT_OK, intent);
+                requireActivity().finish();
             }
         });
     }

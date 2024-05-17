@@ -10,13 +10,15 @@ public class CategoryItemModel {
     int id;
     private final String name;
     private final Task<Uri> task;
+    private final Uri uri;
     private final int drawable;
     private final boolean isDefault;
     private final ButtonItemListener listener;
 
-    public CategoryItemModel(int id, String name, Task<Uri> task, int drawable, boolean isDefault, ButtonItemListener listener) {
+    public CategoryItemModel(int id, String name, Task<Uri> task, Uri uri, int drawable, boolean isDefault, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
+        this.uri = uri;
         this.drawable = drawable;
         this.task = task;
         this.isDefault = isDefault;
@@ -25,6 +27,10 @@ public class CategoryItemModel {
 
     public boolean compareTo(CategoryItemModel other){
         return this.hashCode() == other.hashCode();
+    }
+
+    public Uri getUri() {
+        return uri;
     }
 
     public int getDrawable() {

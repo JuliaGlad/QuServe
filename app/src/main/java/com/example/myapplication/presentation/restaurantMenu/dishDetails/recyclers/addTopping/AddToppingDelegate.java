@@ -39,7 +39,7 @@ public class AddToppingDelegate implements AdapterDelegate {
         }
 
         void bind(AddToppingModel model){
-            binding.item.setOnClickListener(v -> {
+            binding.button.setOnClickListener(v -> {
                 model.listener.onClick();
             });
         }

@@ -3,9 +3,11 @@ package com.example.myapplication.presentation.restaurantMenu.AddCategory.main;
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.URI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -109,7 +111,7 @@ public class AddCategoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (page.equals(PAGE_2)) {
             binding.buttonNext.setText(R.string.add);
-            binding.companyProgressBar.setProgress(50);
+            binding.companyProgressBar.setProgress(50, true);
         }
 
         setMainAdapter();
@@ -176,7 +178,6 @@ public class AddCategoryFragment extends Fragment {
             case PAGE_2:
                 if (ArgumentsCategory.chosenImage != Uri.EMPTY) {
                     viewModel.initCategoryData(restaurantId, requireView());
-                    viewModel.setArgumentsNull();
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 }
@@ -239,10 +240,14 @@ public class AddCategoryFragment extends Fragment {
 
     private void setupObserves() {
 
-        viewModel.onComplete.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_addCategoryFragment_to_categorySuccessfulyAddedFragment);
+        viewModel.onComplete.observe(getViewLifecycleOwner(), category -> {
+            if (category != null) {
+                Intent intent = new Intent();
+                intent.putExtra(COMPANY_ID, category.getId());
+                intent.putExtra(URI, String.valueOf(category.getUri()));
+                intent.putExtra(COMPANY_NAME, category.getName());
+                requireActivity().setResult(RESULT_OK, intent);
+                requireActivity().finish();
             }
         });
     }

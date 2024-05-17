@@ -86,9 +86,6 @@
             android:name=".presentation.restaurantLocation.locationDetails.tableList.TableListActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.restaurantLocation.locationDetails.tableList.addTable.AddTableActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity"
             android:exported="false" />
         <activity

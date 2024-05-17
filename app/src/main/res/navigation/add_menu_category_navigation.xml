@@ -15,12 +15,5 @@
             app:destination="@id/addCategoryFragment" />
         <argument android:name="page"
             app:argType="string"/>
-        <action
-            android:id="@+id/action_addCategoryFragment_to_categorySuccessfulyAddedFragment"
-            app:destination="@id/categorySuccessfulyAddedFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/categorySuccessfulyAddedFragment"
-        android:name="com.example.myapplication.presentation.restaurantMenu.AddCategory.success.CategorySuccessfulyAddedFragment"
-        android:label="CategorySuccessfulyAddedFragment" />
 </navigation>

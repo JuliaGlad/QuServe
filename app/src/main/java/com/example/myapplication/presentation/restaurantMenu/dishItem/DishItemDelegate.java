@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.restaurantMenu.dishItem;
 
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -46,7 +47,7 @@ public class DishItemDelegate implements AdapterDelegate {
                 });
             }
 
-            if (model.getUri() != null){
+            if (model.getUri() != Uri.EMPTY){
                 Glide.with(itemView.getContext())
                         .load(model.getUri())
                         .into(binding.dishImage);

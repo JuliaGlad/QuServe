@@ -50,6 +50,7 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
+import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyDelegate;
 import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.priceWithCurrency.PriceWithCurrencyModel;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
@@ -69,7 +70,7 @@ public class AddToppingFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AddToppingViewModel.class);
-        restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
 
         try {
             page = AddToppingFragmentArgs.fromBundle(getArguments()).getPage();
@@ -130,6 +131,7 @@ public class AddToppingFragment extends Fragment {
         adapter.addDelegate(new EditTextDelegate());
         adapter.addDelegate(new TextViewHeaderDelegate());
         adapter.addDelegate(new ToppingItemDelegate());
+        adapter.addDelegate(new PriceWithCurrencyDelegate());
 
         binding.recyclerView.setAdapter(adapter);
     }
@@ -152,7 +154,7 @@ public class AddToppingFragment extends Fragment {
                 });
                 break;
             case PAGE_2:
-                binding.progressBar.setProgress(35);
+                binding.progressBar.setProgress(35, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_topping_price, 24)),
                         new PriceWithCurrencyDelegateItem(new PriceWithCurrencyModel(3, price, string -> {
@@ -161,7 +163,7 @@ public class AddToppingFragment extends Fragment {
                 });
                 break;
             case PAGE_3:
-                binding.progressBar.setProgress(70);
+                binding.progressBar.setProgress(70, true);
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_topping_photo, 24)));
                 items.add(new ToppingDelegateItem(new ToppingModel(2, name, price, image, this::initImagePicker)));
                 adapter.submitList(items);
@@ -170,7 +172,7 @@ public class AddToppingFragment extends Fragment {
     }
 
     private void initBackButtonPressed() {
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 navigateBack();

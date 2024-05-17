@@ -3,24 +3,21 @@ package com.example.myapplication.presentation.home.restaurantUser;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantHomeBinding;
 import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationModel;
@@ -54,7 +51,7 @@ public class RestaurantHomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantHomeViewModel.class);
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPref.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
     }
@@ -88,13 +85,11 @@ public class RestaurantHomeFragment extends Fragment {
 
     private void setErrorLayout() {
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getRestaurantLocations(restaurantId);
-        });
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getRestaurantLocations(restaurantId));
     }
 
     private void initRecycler(List<RestaurantHomeLocationModel> models) {
-        if (models.size() > 0) {
+        if (models.isEmpty()) {
             initEmptyActionRecycler();
         } else {
             List<DelegateItem> delegates = new ArrayList<>();
@@ -122,9 +117,7 @@ public class RestaurantHomeFragment extends Fragment {
                     i,
                     current.getLocation(),
                     current.getActiveOrders(),
-                    () -> {
-                        ((MainActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId());
-                    }
+                    () -> ((MainActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId())
             )));
         }
         return delegates;
@@ -133,13 +126,9 @@ public class RestaurantHomeFragment extends Fragment {
     private void initEmptyActionRecycler() {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.here_you_will_see_all_your_available_actions)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_location), getString(R.string.create_new_restaurant_location_add_tables_and_employees_and_take_orders), R.drawable.ic_add_location, () -> {
-                    ((MainActivity) requireActivity()).openAddLocationsActivity();
-                })),
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_location), getString(R.string.create_new_restaurant_location_add_tables_and_employees_and_take_orders), R.drawable.ic_add_location, () -> ((MainActivity) requireActivity()).openAddLocationsActivity())),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.open_menu), getString(R.string.open_and_edit_restaurant_menu_so_your_visitors_can_use_it), R.drawable.ic_menu_book,
-                        () -> {
-                            ((MainActivity) requireActivity()).openRestaurantMenuActivity();
-                        }))
+                        () -> ((MainActivity) requireActivity()).openRestaurantMenuActivity()))
         });
     }
 

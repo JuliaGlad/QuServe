@@ -29,17 +29,4 @@ public class RestaurantMenuActivity extends AppCompatActivity {
         intent.putExtra(DISH_ID, dishId);
         startActivity(intent);
     }
-
-    public void openCategoryActivity(){
-        Intent intent = new Intent(this, AddMenuCategoryActivity.class);
-        intent.putExtra(PAGE_KEY, PAGE_1);
-        startActivity(intent);
-    }
-
-    public void openAddDishActivity(String categoryId){
-        Intent intent = new Intent(this, AddDishActivity.class);
-        intent.putExtra(PAGE_KEY, PAGE_1);
-        intent.putExtra(CATEGORY_ID, categoryId);
-        startActivity(intent);
-    }
 }

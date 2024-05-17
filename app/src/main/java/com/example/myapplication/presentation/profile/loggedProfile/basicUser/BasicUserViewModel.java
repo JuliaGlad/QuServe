@@ -100,46 +100,6 @@ public class BasicUserViewModel extends ViewModel {
                     }
                 });
     }
-
-    // if (!aBoolean) {
-//        return null;
-//    } else {
-//        return new BooleanData(true, companyNameIdModels);
-//    }
-    public void isCompanyExist() {
-        CommonCompanyDI.checkAnyCompanyExistUseCase.invoke()
-                .flatMap(aBoolean -> CommonCompanyDI.getAllServiceCompaniesUseCase.invoke(), (aBoolean, commonCompanyModels) -> {
-                    if (!aBoolean) {
-                        return null;
-                    } else {
-                        return new BooleanData(true, commonCompanyModels);
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<BooleanData>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull BooleanData booleanData) {
-                        if (booleanData != null) {
-                            if (booleanData.getList().size() == 1) {
-                                _companyId.postValue(booleanData.getList().get(0).getCompanyId());
-                                _checked.postValue(true);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-
-    }
-
     public void setBackground() {
         ProfileDI.getBackgroundImageUseCase.invoke()
                 .subscribeOn(Schedulers.io())
