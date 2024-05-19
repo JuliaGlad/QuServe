@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/waiting_turn_navigation.xml"
+    app:startDestination="@id/waitingFragment">
+
+    <fragment
+        android:id="@+id/waitingFragment"
+        android:name="com.example.myapplication.presentation.common.waitingInQueue.WaitingFragment"
+        android:label="fragment_waiting"
+        tools:layout="@layout/fragment_waiting" >
+        <action
+            android:id="@+id/action_waitingFragment_to_yourTurnFragment"
+            app:destination="@id/yourTurnFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/yourTurnFragment"
+        android:name="com.example.myapplication.presentation.common.waitingInQueue.yourTurn.YourTurnFragment"
+        android:label="YourTurnFragment" />
+</navigation>

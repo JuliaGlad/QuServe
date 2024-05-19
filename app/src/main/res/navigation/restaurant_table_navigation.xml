@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_restaurant_table_details" >
         <action
             android:id="@+id/action_restaurantTableDetailsFragment_to_restaurantTableOrderDetailsFragment"
-            app:destination="@id/restaurantTableOrderDetailsFragment" />
+            app:destination="@id/restaurantTableOrderDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment

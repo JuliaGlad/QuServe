@@ -28,7 +28,7 @@ public class EditTextDelegate implements AdapterDelegate {
         return item instanceof EditTextDelegateItem;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder  {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final RecyclerViewEditTextBinding binding;
 
@@ -39,12 +39,11 @@ public class EditTextDelegate implements AdapterDelegate {
 
         void bind(EditTextModel model) {
             binding.editLayout.setInputType(model.inputType);
-            if (model.text == null) {
-                binding.editLayout.setHint(model.hint);
-            } else {
-                binding.editLayout.setText(model.text);
-            }
-            if (!model.editable){
+
+            binding.editLayout.setHint(model.hint);
+            binding.editLayout.setText(model.text);
+
+            if (!model.editable) {
                 binding.editLayout.setFocusable(false);
                 binding.editLayout.setClickable(false);
                 binding.editLayout.setCursorVisible(false);
@@ -58,7 +57,7 @@ public class EditTextDelegate implements AdapterDelegate {
 
                 @Override
                 public void onTextChanged(CharSequence text, int start, int before, int count) {
-                        model.resultListener.getResult(text.toString());
+                    model.resultListener.getResult(text.toString());
                 }
 
                 @Override

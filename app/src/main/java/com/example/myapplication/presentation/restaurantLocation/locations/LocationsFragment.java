@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.restaurantLocation.locations;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -57,6 +58,23 @@ public class LocationsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initAddButton();
+        initBackButton();
+        handleBackButtonPressed();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
+    }
+
+    private void handleBackButtonPressed(){
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
     }
 
     private void initAddButton() {

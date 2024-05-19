@@ -46,7 +46,6 @@ public class QueueDetailsViewModel extends ViewModel {
                         if (queueInProgressModel.getInProgress().contains("Paused")) {
                             _isPaused.postValue(true);
                         }
-
                     }
 
                     @Override

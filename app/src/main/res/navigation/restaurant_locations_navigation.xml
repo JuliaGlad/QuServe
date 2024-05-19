@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_locations" >
         <action
             android:id="@+id/action_locationsFragment_to_addLocationFragment"
-            app:destination="@id/addLocationFragment" />
+            app:destination="@id/addLocationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_locationsFragment_to_noLocationsYetFragment"
-            app:destination="@id/noLocationsYetFragment" />
+            app:destination="@id/noLocationsYetFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/addLocationFragment"
@@ -24,13 +28,19 @@
         tools:layout="@layout/fragment_add_location" >
         <action
             android:id="@+id/action_addLocationFragment_to_locationsFragment"
-            app:destination="@id/locationsFragment" />
+            app:destination="@id/locationsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_addLocationFragment_to_noLocationsYetFragment"
-            app:destination="@id/noLocationsYetFragment" />
+            app:destination="@id/noLocationsYetFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_addLocationFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/noLocationsYetFragment"
@@ -38,7 +48,9 @@
         android:label="NoLocationsYetFragment" >
         <action
             android:id="@+id/action_noLocationsYetFragment_to_addLocationFragment"
-            app:destination="@id/addLocationFragment" />
+            app:destination="@id/addLocationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -47,6 +59,8 @@
         tools:layout="@layout/fragment_map" >
         <action
             android:id="@+id/action_mapFragment_to_addLocationFragment"
-            app:destination="@id/addLocationFragment" />
+            app:destination="@id/addLocationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 </navigation>

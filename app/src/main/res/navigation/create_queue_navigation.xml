@@ -15,11 +15,15 @@
             android:id="@+id/action_createQueueFragment_self"
             app:nullable="true"
             android:defaultValue="@null"
-            app:destination="@id/createQueueFragment" />
+            app:destination="@id/createQueueFragment"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim" />
         <action
             android:id="@+id/action_createQueueFragment_to_finishedQueueCreationFragment"
             android:defaultValue="@null"
-            app:destination="@id/finishedQueueCreationFragment" />
+            app:destination="@id/finishedQueueCreationFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <argument
             android:name="page"
             app:nullable="true"

@@ -11,10 +11,14 @@
         android:label="CompanyQueueDetailsFragment" >
         <action
             android:id="@+id/action_companyQueueDetailsFragment_to_companyQueueParticipantsListFragment"
-            app:destination="@id/companyQueueParticipantsListFragment" />
+            app:destination="@id/companyQueueParticipantsListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_companyQueueDetailsFragment_to_editQueueFragment"
-            app:destination="@id/editQueueFragment" />
+            app:destination="@id/editQueueFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/companyQueueParticipantsListFragment"
@@ -22,8 +26,11 @@
         android:label="CompanyQueueParticipantsListFragment" >
         <action
             android:id="@+id/action_companyQueueParticipantsListFragment_to_companyQueueDetailsFragment"
-            app:destination="@id/companyQueueDetailsFragment" />
+            app:destination="@id/companyQueueDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
+
     <fragment
         android:id="@+id/editQueueFragment"
         android:name="com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.EditQueueFragment"
@@ -31,17 +38,24 @@
         tools:layout="@layout/fragment_edit_queue" >
         <action
             android:id="@+id/action_editQueueFragment_to_companyQueueDetailsFragment"
-            app:destination="@id/companyQueueDetailsFragment" />
+            app:destination="@id/companyQueueDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_editQueueFragment_to_addWorkersFragment"
-            app:destination="@id/addWorkersFragment" />
+            app:destination="@id/addWorkersFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
+
     <fragment
         android:id="@+id/addWorkersFragment"
         android:name="com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.AddWorkersFragment"
         android:label="AddWorkersFragment" >
         <action
             android:id="@+id/action_addWorkersFragment_to_editQueueFragment"
-            app:destination="@id/editQueueFragment" />
+            app:destination="@id/editQueueFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 </navigation>

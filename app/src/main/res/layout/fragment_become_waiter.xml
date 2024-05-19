@@ -42,6 +42,8 @@
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         app:cardBackgroundColor="@color/transparent"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -84,8 +86,10 @@
         android:id="@+id/button_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="0dp"
+        android:clickable="true"
+        android:focusable="true"
         app:cardBackgroundColor="@color/transparent"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -121,14 +125,15 @@
 
     </androidx.cardview.widget.CardView>
 
-    <include layout="@layout/something_went_wrong_layout"
+    <include
         android:id="@+id/error_layout"
-        android:layout_height="match_parent"
+        layout="@layout/something_went_wrong_layout"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

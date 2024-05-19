@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
 import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.AlreadyOwnQueueDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.alreadyParticipateInQueue.AlreadyParticipateInQueueDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.service.ScanCode;
@@ -60,7 +62,9 @@ public class QueueFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.isParticipateInQueue.observe(getViewLifecycleOwner(), isParticipant -> {
+            if (isParticipant != null){
             isParticipateInQueue = isParticipant;
+            }
         });
 
         viewModel.isOwnQueue.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -133,8 +137,8 @@ public class QueueFragment extends Fragment {
     }
 
     private void showAlreadyParticipateDialog() {
-        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment();
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "ALREADY_PARTICIPATE_IN_QUEUE_DIALOG");
+        AlreadyParticipateInQueueDialogFragment dialogFragment = new AlreadyParticipateInQueueDialogFragment();
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_PARTICIPATE_IN_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
 
         });

@@ -10,7 +10,9 @@
         android:label="BecomeWaiterFragment" >
         <action
             android:id="@+id/action_becomeWaiterFragment_to_successfullyBecomeWaiter"
-            app:destination="@id/successfullyBecomeWaiter" />
+            app:destination="@id/successfullyBecomeWaiter"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/successfullyBecomeWaiter"

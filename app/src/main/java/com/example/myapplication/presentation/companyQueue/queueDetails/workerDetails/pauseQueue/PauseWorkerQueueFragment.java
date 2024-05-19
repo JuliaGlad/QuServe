@@ -71,8 +71,8 @@ public class PauseWorkerQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initBox();
-        binding.indicator.setMax((int) PROGRESS);
-        binding.indicator.setProgress(PROGRESS);
+        binding.indicator.setMax(PROGRESS);
+        binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
         initStopButton();
         startCountDown();
@@ -102,7 +102,7 @@ public class PauseWorkerQueueFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeMillis = millisUntilFinished;
-                binding.indicator.setProgress((int) (timeMillis - 1000));
+                binding.indicator.setProgress((int) (timeMillis - 1000), true);
                 updateTimer();
             }
 
@@ -126,7 +126,7 @@ public class PauseWorkerQueueFragment extends Fragment {
     private void initStopButton() {
         binding.buttonStopPause.setOnClickListener(v -> {
             StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
             dialogFragment.onDismissListener(bundle -> {
                 NavHostFragment.findNavController(this).popBackStack();
             });

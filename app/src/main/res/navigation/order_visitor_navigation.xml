@@ -9,7 +9,9 @@
 
       <action
           android:id="@+id/action_orderDetailsFragment_to_orderIsFinishedFragment"
-          app:destination="@id/orderIsFinishedFragment" />
+          app:destination="@id/orderIsFinishedFragment"
+          app:enterAnim="@anim/nav_default_enter_anim"
+          app:popExitAnim="@anim/nav_default_exit_anim"/>
    </fragment>
 
    <fragment

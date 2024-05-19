@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.presentation.common.waitingInQueue.model.WaitingModel;
 import com.example.myapplication.presentation.common.waitingInQueue.state.WaitingState;
 
@@ -48,9 +48,12 @@ public class WaitingViewModel extends ViewModel {
                     return QueueDI.addSnapshotQueueUseCase.invoke(queuePath);
                 })
                 .flatMapCompletable(documentSnapshot -> {
-                    String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
-                    String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                    return QueueDI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
+                    if (QueueDI.onContainParticipantUseCase.invoke(documentSnapshot)) {
+                        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+                        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+                        return QueueDI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
+                    }
+                    return null;
                 })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

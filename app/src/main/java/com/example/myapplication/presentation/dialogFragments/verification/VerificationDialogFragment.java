@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.dialogFragments.verification;
 
+import static com.example.myapplication.presentation.utils.Utils.IS_VERIFIED;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,48 +11,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.DialogVerificationLayoutBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
-import io.reactivex.rxjava3.core.SingleObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
 public class VerificationDialogFragment extends DialogFragment {
-
+    private DialogVerificationLayoutBinding binding;
     private VerificationDialogFragmentViewModel viewModel;
     private DialogDismissedListener listener;
     private boolean isVerified;
     private final String email, password;
 
-    public VerificationDialogFragment(String email, String password){
-        this.password = password;
+    public VerificationDialogFragment(String email, String password) {
         this.email = email;
+        this.password = password;
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         viewModel = new ViewModelProvider(this).get(VerificationDialogFragmentViewModel.class);
-        DialogVerificationLayoutBinding binding = DialogVerificationLayoutBinding.inflate(getLayoutInflater());
-
+        binding = DialogVerificationLayoutBinding.inflate(getLayoutInflater());
         setupObserves();
-
         binding.userEmail.setText(email);
-
         binding.buttonDone.setOnClickListener(v -> {
-
             viewModel.isVerified();
         });
-
         binding.buttonCancel.setOnClickListener(v -> {
-           dismiss();
+            viewModel.deleteNotVerifiedAccount(password);
         });
-
+        setCancelable(false);
         return builder.setView(binding.getRoot()).create();
     }
 
@@ -66,10 +60,18 @@ public class VerificationDialogFragment extends DialogFragment {
         }
     }
 
-    private void setupObserves(){
+    private void setupObserves() {
         viewModel.isVerified.observe(this, aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 isVerified = true;
+                dismiss();
+            } else {
+                Snackbar.make(binding.getRoot(), getString(R.string.email_is_not_verified), Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.isDeleted.observe(this, aBoolean -> {
+            if (aBoolean){
                 dismiss();
             }
         });

@@ -85,8 +85,8 @@ public class PausedQueueFragment extends Fragment {
 
         setupObserves();
         initBox();
-        binding.indicator.setMax((int) PROGRESS);
-        binding.indicator.setProgress(PROGRESS);
+        binding.indicator.setMax(PROGRESS);
+        binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
         initStopButton();
         startCountDown();
@@ -133,7 +133,7 @@ public class PausedQueueFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeMillis = millisUntilFinished;
-                binding.indicator.setProgress((int) (timeMillis - 1000));
+                binding.indicator.setProgress((int) (timeMillis - 1000), true);
                 updateTimer();
             }
 

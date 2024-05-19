@@ -5,8 +5,10 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRE
 
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.Objects;
+
 public class OnContainParticipantUseCase {
     public boolean invoke(DocumentSnapshot value){
-        return value.get(QUEUE_IN_PROGRESS).equals(service.auth.getCurrentUser().getUid());
+        return Objects.equals(value.get(QUEUE_IN_PROGRESS), service.auth.getCurrentUser().getUid());
     }
 }

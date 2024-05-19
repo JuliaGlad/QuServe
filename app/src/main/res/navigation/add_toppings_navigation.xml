@@ -22,7 +22,9 @@
             app:argType="string"/>
         <action
             android:id="@+id/action_addToppingFragment_to_toppingSuccessfullyAdded"
-            app:destination="@id/toppingSuccessfullyAdded" />
+            app:destination="@id/toppingSuccessfullyAdded"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"/>
 
     </fragment>
     <fragment

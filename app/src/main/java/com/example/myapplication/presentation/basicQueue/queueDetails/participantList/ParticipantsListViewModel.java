@@ -41,14 +41,8 @@ public class ParticipantsListViewModel extends ViewModel {
     public void getParticipantsList() {
         QueueDI.getParticipantsListUseCase.invoke()
                 .flatMapObservable(queueParticipantsListModel -> {
-                    if (queueParticipantsListModel.getParticipants().equals("[]")) {
-                        participantsSize = 0;
-                    } else {
-                        participantsSize = queueParticipantsListModel.getParticipants().size();
-                    }
-
+                    participantsSize = queueParticipantsListModel.getParticipants().size();
                     peoplePassed = 0;
-
                     _state.postValue(new ParticipantsListState.Success(queueParticipantsListModel.getParticipants()));
 
                     return QueueDI.addQueueSizeModelSnapShot.invoke(queueParticipantsListModel.getId());

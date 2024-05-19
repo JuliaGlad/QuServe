@@ -123,7 +123,6 @@ public class  AddRequiredChoiceFragment extends Fragment {
 
 
     private void onPageInit() {
-
         switch (page) {
             case PAGE_1:
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_choice_name, 24)));
@@ -151,7 +150,6 @@ public class  AddRequiredChoiceFragment extends Fragment {
         List<DelegateItem> newItems = new ArrayList<>(items);
         newItems.remove(newItems.size() - 1);
         int index = items.size() - 2;
-        Log.d("Index", "" + index);
         newItems.add(new RequiredChoiceEditDelegateItem(new RequiredChoiceEditItemModel(index, () -> {
         }, name -> {
             addToVariants(index, name);
@@ -177,7 +175,7 @@ public class  AddRequiredChoiceFragment extends Fragment {
     }
 
     private void initBackButtonPressed() {
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 navigateBack();
@@ -213,7 +211,7 @@ public class  AddRequiredChoiceFragment extends Fragment {
                 break;
             case PAGE_2:
                 NavHostFragment.findNavController(this)
-                        .navigate(AddRequiredChoiceFragmentDirections.actionAddRequiredChoiceFragmentSelf(dishId, categoryId, PAGE_2));
+                        .navigate(AddRequiredChoiceFragmentDirections.actionAddRequiredChoiceFragmentSelf(dishId, categoryId, PAGE_1));
                 break;
         }
     }

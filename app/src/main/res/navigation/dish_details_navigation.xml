@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_dish_details" >
         <action
             android:id="@+id/action_dishDetailsFragment_to_editRequiredChoiceFragment"
-            app:destination="@id/editRequiredChoiceFragment" />
+            app:destination="@id/editRequiredChoiceFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/editRequiredChoiceFragment"
@@ -21,6 +23,8 @@
         tools:layout="@layout/fragment_edit_required_choice" >
         <action
             android:id="@+id/action_editRequiredChoiceFragment_to_dishDetailsFragment"
-            app:destination="@id/dishDetailsFragment" />
+            app:destination="@id/dishDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 </navigation>

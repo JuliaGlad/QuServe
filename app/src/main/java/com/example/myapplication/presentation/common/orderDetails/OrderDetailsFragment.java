@@ -42,8 +42,8 @@ public class OrderDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(OrderDetailsViewModel.class);
-        path = getActivity().getIntent().getStringExtra(PATH);
-        state = getActivity().getIntent().getStringExtra(STATE);
+        path = requireActivity().getIntent().getStringExtra(PATH);
+        state = requireActivity().getIntent().getStringExtra(STATE);
         viewModel.getOrder(path, state);
     }
 

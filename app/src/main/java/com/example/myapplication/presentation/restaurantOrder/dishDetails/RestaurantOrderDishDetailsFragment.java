@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantOrderDishDetailsBinding;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOrder.IngredientsToRemoveOrderDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
@@ -60,7 +61,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
     private RestaurantOrderDishDetailsViewModel viewModel;
     private FragmentRestaurantOrderDishDetailsBinding binding;
-    private String dishId, categoryId, restaurantId, tablePath, type;
+    private String dishId, categoryId, restaurantId, tablePath, type, totalPrice;
     private ActivityResultLauncher<Intent> cartLauncher;
     private final List<VariantCartModel> chosenToppings = new ArrayList<>();
     private final List<String> chosenRemove = new ArrayList<>();
@@ -114,7 +115,6 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                     dishId, categoryId, name, weight, price,
                     String.valueOf(1), chosenToppings, Arrays.asList(chosenRequireChoices), chosenRemove
             );
-
             viewModel.addToCart(restaurantId, model);
             openCartActivity();
         });
@@ -148,7 +148,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 String name = model.getName();
                 String weight = model.getWeightOrCount();
-                String price = model.getPrice();
+                totalPrice = model.getPrice();
 
                 List<VariantsModel> toppings = model.getToppings();
                 List<RequiredChoiceOrderDishDetailsModel> requireChoices = model.getModels();
@@ -156,9 +156,9 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 chosenRequireChoices = new String[requireChoices.size()];
 
-                binding.nameText.setText(name);
-                binding.ingredientText.setText(model.getIngredients());
-                binding.priceEditText.setText(price.concat("₽"));
+                binding.name.setText(name);
+                binding.ingredients.setText(model.getIngredients());
+                binding.buttonOrder.setText(getString(R.string.add).concat(totalPrice + "₽"));
 
                 Glide.with(requireView())
                         .load(model.getUri())
@@ -166,7 +166,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 initToppingsRecycler(toppings);
                 initRequiredChoiceRecycler(requireChoices);
-                initOrderButton(name, weight, price);
+                initOrderButton(name, weight, totalPrice);
                 initRemove(toRemove);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantOrderDishDetailsState.Loading) {
@@ -197,7 +197,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         if (variants != null && !variants.isEmpty()) {
             for (int i = 0; i < variants.size(); i++) {
                 VariantsModel current = variants.get(i);
-                toppingItems.add(new ToppingsOrderDelegateItem(new ToppingsOrderModel(i, current.getName(), current.getPrice(), current.getUri(), chosenToppings)));
+                toppingItems.add(new ToppingsOrderDelegateItem(new ToppingsOrderModel(i, current.getName(), current.getPrice(), current.getUri(), totalPrice, chosenToppings)));
             }
         }
 

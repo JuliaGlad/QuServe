@@ -11,7 +11,9 @@
         android:label="BecomeEmployeeFragment" >
         <action
             android:id="@+id/action_becomeEmployeeFragment_to_successfullyBecomeEmployeeFragment"
-            app:destination="@id/successfullyBecomeEmployeeFragment" />
+            app:destination="@id/successfullyBecomeEmployeeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment

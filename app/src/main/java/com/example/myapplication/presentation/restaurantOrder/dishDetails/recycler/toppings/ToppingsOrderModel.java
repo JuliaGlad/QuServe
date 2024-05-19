@@ -16,13 +16,15 @@ public class ToppingsOrderModel {
     String price;
     Task<Uri> image;
     boolean isChosen = false;
+    String totalPrice;
     List<VariantCartModel> variants;
 
-    public ToppingsOrderModel(int id, String name, String price, Task<Uri> image, List<VariantCartModel> variants) {
+    public ToppingsOrderModel(int id, String name, String price, Task<Uri> image, String totalPrice, List<VariantCartModel> variants) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.image = image;
+        this.totalPrice = totalPrice;
         this.variants = variants;
     }
 

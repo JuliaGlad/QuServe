@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentWaitingBinding;
@@ -88,7 +89,8 @@ public class WaitingFragment extends Fragment {
 
         viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                requireActivity().finish();
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_waitingFragment_to_yourTurnFragment);
             }
         });
 

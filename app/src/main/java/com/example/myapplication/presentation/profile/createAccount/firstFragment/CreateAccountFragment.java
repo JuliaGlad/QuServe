@@ -2,6 +2,8 @@ package com.example.myapplication.presentation.profile.createAccount.firstFragme
 
 import static android.app.Activity.RESULT_OK;
 
+import static com.example.myapplication.presentation.utils.Utils.IS_VERIFIED;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,9 +31,6 @@ import com.example.myapplication.databinding.FragmentCreateAccountBinding;
 import com.example.myapplication.presentation.dialogFragments.verification.VerificationDialogFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
-/*
- * @author j.gladkikh
- */
 public class CreateAccountFragment extends Fragment {
 
     private FragmentCreateAccountBinding binding;
@@ -48,13 +47,12 @@ public class CreateAccountFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCreateAccountBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         setupObserves();
         initSignUpButton();
         initEditText();
@@ -64,7 +62,7 @@ public class CreateAccountFragment extends Fragment {
 
     private void initButtonBack() {
         binding.buttonBack.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().popBackStack();
+            NavHostFragment.findNavController(this).popBackStack();
         });
     }
 
@@ -93,15 +91,16 @@ public class CreateAccountFragment extends Fragment {
             }
 
             if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
+                binding.progressBar.setVisibility(View.VISIBLE);
                 viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
             }
         });
     }
 
     private void setupObserves() {
-
         viewModel.showDialog.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
+                binding.progressBar.setVisibility(View.GONE);
                 createVerificationDialog(email);
             }
         });
@@ -110,6 +109,8 @@ public class CreateAccountFragment extends Fragment {
             if (verified) {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createAccount_to_chooseFragment);
+            } else {
+                binding.progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -117,9 +118,9 @@ public class CreateAccountFragment extends Fragment {
     private void createVerificationDialog(String email) {
         VerificationDialogFragment dialogFragment = new VerificationDialogFragment(email, password);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "VERIFICATON_DIALOG");
-        DialogDismissedListener listener = (dialog) -> {
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_createAccount_to_chooseFragment);
+        DialogDismissedListener listener = bundle -> {
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_createAccount_to_chooseFragment);
         };
         dialogFragment.onDismissListener(listener);
     }
@@ -159,7 +160,7 @@ public class CreateAccountFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                if (!text.toString().isEmpty()){
+                if (!text.toString().isEmpty()) {
                     viewModel.removeEmailError();
                 }
             }
@@ -177,7 +178,7 @@ public class CreateAccountFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                if (!text.toString().isEmpty()){
+                if (!text.toString().isEmpty()) {
                     viewModel.removePasswordError();
                 }
             }
@@ -195,7 +196,7 @@ public class CreateAccountFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence text, int start, int before, int count) {
-                if (!text.toString().isEmpty()){
+                if (!text.toString().isEmpty()) {
                     viewModel.removeNameError();
                 }
             }

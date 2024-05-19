@@ -52,27 +52,37 @@ public class HomeFragment extends Fragment {
     }
 
     private void initStoriesRecycler() {
-
         buildList(new StoryModel[]{
                 new StoryModel(1, getString(R.string.features), R.drawable.story_primary_background, R.drawable.quserve_icon_drawable,
-                        () -> {
-                            openStoriesActivity(new int[]{
-                                    R.drawable.quserve_features_page1,
-                                    R.drawable.quserve_features_page2,
-                                    R.drawable.quserve_features_page3,
-                                    R.drawable.quserve_features_page4,
-                                    R.drawable.quserve_features_page5
-                            });
-                        }),
-                new StoryModel(1, getString(R.string.services), R.drawable.story_tertiary_background, R.drawable.create_image,
-                        () -> {
-
-                        }),
+                        () -> openStoriesActivity(new int[]{
+                                R.drawable.quserve_features_page1,
+                                R.drawable.quserve_features_page2,
+                                R.drawable.quserve_features_page3,
+                                R.drawable.quserve_features_page4,
+                                R.drawable.quserve_features_page5
+                        }, R.drawable.primary_quserve_features_background)),
+                new StoryModel(2, getString(R.string.services), R.drawable.story_tertiary_background, R.drawable.create_image,
+                        () -> openStoriesActivity(new int[]{
+                                R.drawable.basic_abilities_page1,
+                                R.drawable.basic_abilities_page2,
+                                R.drawable.basic_abilities_page3,
+                                R.drawable.basic_abilities_page4,
+                                R.drawable.basic_abilities_page5,
+                                R.drawable.basic_abilities_page6,
+                                R.drawable.basic_abilities_page7
+                        }, R.drawable.tertiary_stories_background)),
+                new StoryModel(3, getString(R.string.restaurant_title), R.drawable.story_teal_background, R.drawable.story_restaurant,
+                        () -> openStoriesActivity(new int[]{
+                                R.drawable.restaurant_page1,
+                                R.drawable.restaurant_page2,
+                                R.drawable.restaurant_page3,
+                                R.drawable.restaurant_page4,
+                        }, R.drawable.teal_stories_background))
         });
     }
 
-    private void openStoriesActivity(int[] ints) {
-        ((MainActivity)requireActivity()).openStoriesActivity(ints);
+    private void openStoriesActivity(int[] ints, int background) {
+        ((MainActivity)requireActivity()).openStoriesActivity(ints, background);
     }
 
     private void buildList(StoryModel[] storyModels) {

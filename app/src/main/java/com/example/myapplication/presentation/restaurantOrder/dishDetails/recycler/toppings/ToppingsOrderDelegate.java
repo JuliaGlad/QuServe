@@ -45,7 +45,7 @@ public class ToppingsOrderDelegate implements AdapterDelegate {
         void bind(ToppingsOrderModel model) {
             binding.buttonDelete.setVisibility(View.GONE);
             binding.ingredientName.setText(model.name);
-            binding.price.setText(model.price);
+            binding.price.setText(model.price.concat("₽"));
 
             model.image.addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -58,11 +58,13 @@ public class ToppingsOrderDelegate implements AdapterDelegate {
             binding.item.setOnClickListener(v -> {
                 if (!model.isChosen) {
                     model.isChosen = true;
+                    model.totalPrice = String.valueOf(Integer.parseInt(model.totalPrice) + Integer.parseInt(model.price));
                     binding.item.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
                     model.variants.add(new VariantCartModel(model.name, model.price));
                 } else {
                     model.isChosen = false;
                     binding.item.setStrokeColor(Color.TRANSPARENT);
+                    model.totalPrice = String.valueOf(Integer.parseInt(model.totalPrice) + Integer.parseInt(model.price));
                     for (int i = 0; i < model.variants.size(); i++) {
                         if (model.variants.get(i).getName().equals(model.name)){
                             model.variants.remove(i);

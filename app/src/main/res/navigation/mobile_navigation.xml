@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_chooseCityDialogFragment"
-            app:destination="@id/chooseCityDialogFragment" />
+            app:destination="@id/chooseCityDialogFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment
@@ -22,13 +24,19 @@
         tools:layout="@layout/fragment_service" >
         <action
             android:id="@+id/action_navigation_queue_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_navigation_queue_to_createAccount"
-            app:destination="@id/createAccount" />
+            app:destination="@id/createAccount"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_navigation_queue_to_becomeEmployeeOptionsFragment"
-            app:destination="@id/becomeEmployeeOptionsFragment" />
+            app:destination="@id/becomeEmployeeOptionsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
 
     <fragment
@@ -39,13 +47,19 @@
 
         <action
             android:id="@+id/action_navigation_profile_to_navigation_home"
-            app:destination="@id/navigation_home" />
+            app:destination="@id/navigation_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_navigation_profile_to_profileLoggedFragment"
-            app:destination="@id/profileLoggedFragment" />
+            app:destination="@id/profileLoggedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_navigation_profile_to_settingsFragment"
-            app:destination="@id/basicSettingsFragment" />
+            app:destination="@id/basicSettingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/createAccount"
@@ -54,7 +68,9 @@
         tools:layout="@layout/fragment_create_account" >
         <action
             android:id="@+id/action_createAccount_to_chooseFragment"
-            app:destination="@id/chooseFragment" />
+            app:destination="@id/chooseFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/profileLoggedFragment"
@@ -63,19 +79,29 @@
         tools:layout="@layout/fragment_profile_logged" >
         <action
             android:id="@+id/action_profileLoggedFragment_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_profileLoggedFragment_to_historyFragment"
-            app:destination="@id/historyFragment" />
+            app:destination="@id/historyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_profileLoggedFragment_to_basicSettingsFragment"
-            app:destination="@id/basicSettingsFragment" />
+            app:destination="@id/basicSettingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_profileLoggedFragment_to_navigation_queue"
-            app:destination="@id/navigation_queue" />
+            app:destination="@id/navigation_queue"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
         <action
             android:id="@+id/action_profileLoggedFragment_to_createAccount"
-            app:destination="@id/createAccount" />
+            app:destination="@id/createAccount"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
     </fragment>
 
     <fragment
@@ -84,22 +110,6 @@
         android:label="@string/history"
         tools:layout="@layout/fragment_history" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/basicSettingsFragment"-->
-<!--        android:name="com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.BasicSettingsFragment"-->
-<!--        android:label="@string/settings"-->
-<!--        tools:layout="@layout/fragment_basic_settings" >-->
-<!--        <action-->
-<!--            android:id="@+id/action_settingsFragment_to_navigation_profile"-->
-<!--            app:destination="@id/navigation_profile" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_settingsFragment_to_profileLoggedFragment"-->
-<!--            app:destination="@id/profileLoggedFragment" />-->
-<!--        <action-->
-<!--            android:id="@+id/action_settingsFragment_to_navigation_queue"-->
-<!--            app:destination="@id/navigation_queue" />-->
-<!--    </fragment>-->
-
     <fragment
         android:id="@+id/chooseFragment"
         android:name="com.example.myapplication.presentation.profile.createAccount.chooseFragment.ChooseFragment"
@@ -107,7 +117,9 @@
         tools:layout="@layout/fragment_choose" >
         <action
             android:id="@+id/action_chooseFragment_to_profileLoggedFragment"
-            app:destination="@id/profileLoggedFragment" />
+            app:destination="@id/profileLoggedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/chooseCityDialogFragment"
@@ -115,7 +127,9 @@
         android:label="ChooseCityDialogFragment" >
         <action
             android:id="@+id/action_chooseCityDialogFragment_to_navigation_home"
-            app:destination="@id/navigation_home" />
+            app:destination="@id/navigation_home"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_employee"

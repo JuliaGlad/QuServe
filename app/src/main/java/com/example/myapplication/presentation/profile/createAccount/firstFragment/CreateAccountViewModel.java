@@ -13,9 +13,6 @@ import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-/*
- * @author j.gladkikh
- */
 public class CreateAccountViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> _verified = new MutableLiveData<>(false);

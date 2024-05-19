@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation;
 
+import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.DRAWABLES;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
@@ -121,9 +122,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openStoriesActivity(int[] drawables){
+    public void openStoriesActivity(int[] drawables, int background){
         Intent intent = new Intent(this, StoriesActivity.class);
         intent.putExtra(DRAWABLES, drawables);
+        intent.putExtra(BACKGROUND_IMAGE, background);
         startActivity(intent);
     }
 

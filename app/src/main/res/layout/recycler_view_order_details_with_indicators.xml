@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android
-    ="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:layout_marginBottom="20dp"
-    android:background="@drawable/dialog_background">
+    android:background="@drawable/dialog_background"
+    android:padding="16dp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners"
         android:id="@+id/dish_image"
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/weight_count" />
+        app:layout_constraintTop_toTopOf="@+id/weight_count"
+        app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners" />
 
     <TextView
         android:id="@+id/dish_name"
@@ -66,10 +65,10 @@
 
     <ImageView
         android:id="@+id/add_item_icon"
+        android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        android:layout_width="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view_toppings"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"
@@ -77,20 +76,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_toppings"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_width="0dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        app:spanCount="6" />
 
     <ImageView
         android:id="@+id/remove_item_icon"
-        android:layout_height="16dp"
         android:layout_width="16dp"
+        android:layout_height="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
         app:layout_constraintStart_toStartOf="@+id/dish_name"
         app:layout_constraintTop_toTopOf="@+id/recycler_view_to_remove"
@@ -125,6 +124,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
         android:text="@string/done"
         app:layout_constraintEnd_toEndOf="@+id/recycler_view_to_remove"
         app:layout_constraintTop_toBottomOf="@+id/number_title" />

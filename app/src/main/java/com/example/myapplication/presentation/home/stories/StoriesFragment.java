@@ -1,8 +1,10 @@
 package com.example.myapplication.presentation.home.stories;
 
+import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.DRAWABLES;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +18,7 @@ import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQuServeFeaturesBinding;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;
@@ -33,6 +36,8 @@ public class StoriesFragment extends Fragment implements StoriesProgressView.Sto
         viewModel = new ViewModelProvider(this).get(StoriesViewModel.class);
         binding = FragmentQuServeFeaturesBinding.inflate(inflater, container, false);
         drawables = requireActivity().getIntent().getIntArrayExtra(DRAWABLES);
+        int background = requireActivity().getIntent().getIntExtra(BACKGROUND_IMAGE, 0);
+        binding.layout.setBackground(ResourcesCompat.getDrawable(getResources(), background, getActivity().getTheme()));
         if (drawables != null) {
             PROGRESS_COUNT = drawables.length;
         }

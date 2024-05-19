@@ -29,8 +29,8 @@
                 android:id="@+id/food_image"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:scaleType="centerCrop"
                 android:background="?colorSurfaceContainerLow"
+                android:scaleType="centerCrop"
                 android:src="@drawable/no_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="?colorPrimary"
-                android:text="444₽"
+                android:text="444"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name_edit_text" />
 
@@ -162,9 +162,19 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_add"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/required_choice_recycler" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:src="@drawable/ic_currency_ruble"
+                app:layout_constraintBottom_toBottomOf="@+id/price_edit_text"
+                app:layout_constraintStart_toEndOf="@+id/price_edit_text"
+                app:layout_constraintTop_toTopOf="@+id/price_edit_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
@@ -176,6 +186,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:focusable="true"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -183,14 +195,15 @@
         app:layout_constraintStart_toStartOf="parent" />
 
 
-    <include layout="@layout/something_went_wrong_layout"
+    <include
         android:id="@+id/error_layout"
-        android:layout_height="match_parent"
+        layout="@layout/something_went_wrong_layout"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -136,6 +136,7 @@ public class RestaurantHomeFragment extends Fragment {
         List<DelegateItem> list = Arrays.asList(items);
         adapter.addDelegate(new AdviseBoxDelegate());
         adapter.addDelegate(new ButtonWithDescriptionDelegate());
+        binding.recyclerView.setAdapter(adapter);
         adapter.submitList(list);
     }
 }

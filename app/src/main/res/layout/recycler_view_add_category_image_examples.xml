@@ -2,20 +2,20 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="20dp"
     android:layout_marginTop="24dp"
-    app:strokeColor="@color/transparent"
+    android:layout_marginEnd="20dp"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="20dp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="?colorSurfaceContainerLow"
         android:layout_width="110dp"
         android:layout_height="120dp"
+        android:background="?colorSurfaceContainerLow"
         android:padding="10dp">
 
         <ImageView

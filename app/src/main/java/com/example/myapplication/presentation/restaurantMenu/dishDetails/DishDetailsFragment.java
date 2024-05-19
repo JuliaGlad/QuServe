@@ -109,8 +109,15 @@ public class DishDetailsFragment extends Fragment {
         setToppingAdapter();
         setupObserves();
         initSaveButton();
+        initAddRequiredChoiceButton();
         initRemoveIngredients();
         initChangePhoto();
+    }
+
+    private void initAddRequiredChoiceButton() {
+        binding.floatingActionButton2.setOnClickListener(v -> {
+            openAddRequiredChoiceActivity(categoryId, dishId);
+        });
     }
 
     private void initChangePhoto() {
@@ -149,9 +156,10 @@ public class DishDetailsFragment extends Fragment {
         binding.buttonSave.setOnClickListener(v -> {
             String name = binding.nameEditText.getText().toString();
             String price = binding.priceEditText.getText().toString();
+            String finalPrice = price.substring(0, price.length() - 1);
             String ingredients = binding.ingredientsEditText.getText().toString();
             String weightOrCount = binding.weightEditText.getText().toString();
-            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, price, weightOrCount, imageUri);
+            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, finalPrice, weightOrCount, imageUri);
         });
     }
 

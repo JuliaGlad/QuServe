@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails.participantList;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class ParticipantsListFragment extends Fragment {
 
     private ParticipantsListViewModel viewModel;
     private FragmentParticipantsListBinding binding;
-    private List<DelegateItem> itemsList = new ArrayList<>();
+    private final List<DelegateItem> itemsList = new ArrayList<>();
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
@@ -44,19 +45,16 @@ public class ParticipantsListFragment extends Fragment {
         binding = FragmentParticipantsListBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(this).get(ParticipantsListViewModel.class);
         viewModel.getParticipantsList();
-
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setupObserves();
         setMainAdapter();
         initBackButton();
         initNextParticipantButton();
-
     }
 
     private void initNextParticipantButton() {
@@ -100,19 +98,15 @@ public class ParticipantsListFragment extends Fragment {
 
         viewModel.addParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                List<DelegateItem> newItems = new ArrayList<>(itemsList);
-                newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant))));
-                mainAdapter.submitList(newItems);
-                itemsList = newItems;
+                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant))));
+                mainAdapter.notifyItemInserted(itemsList.size() - 1);
             }
         });
 
         viewModel.removeParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                List<DelegateItem> newItems = new ArrayList<>(itemsList);
-                newItems.remove(1);
-                mainAdapter.submitList(newItems);
-                itemsList = newItems;
+                itemsList.remove(0);
+                mainAdapter.notifyItemRemoved(0);
             }
         });
 
@@ -120,7 +114,6 @@ public class ParticipantsListFragment extends Fragment {
     }
 
     private void initRecyclerView(int participantsSize) {
-        itemsList.add(new StatisticsDelegateItem(new StatisticsModel(1)));
         addParticipantListDelegateItems(participantsSize);
         mainAdapter.submitList(itemsList);
         binding.progressBar.setVisibility(View.GONE);
@@ -132,8 +125,6 @@ public class ParticipantsListFragment extends Fragment {
             for (int i = 0; i < queueLength; i++) {
                 itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
             }
-        } else {
-            itemsList.add(new StringTextViewDelegateItem(new StringTextViewModel(1, "No user yet", 24, View.TEXT_ALIGNMENT_CENTER)));
         }
     }
 }

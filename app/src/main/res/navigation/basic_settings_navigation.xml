@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_basic_settings" >
         <action
             android:id="@+id/action_basicSettingsFragment_to_privacySettingsFragment"
-            app:destination="@id/privacySettingsFragment" />
+            app:destination="@id/privacySettingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/privacySettingsFragment"

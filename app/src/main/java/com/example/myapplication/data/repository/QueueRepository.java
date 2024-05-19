@@ -287,7 +287,8 @@ public class QueueRepository {
             docRef.addSnapshotListener((value, error) -> {
                 List<String> newParticipants;
                 if (value != null) {
-                    newParticipants = new ArrayList<>(Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(",")));
+                    newParticipants = (List<String>) value.get(QUEUE_PARTICIPANTS_LIST);
+                    assert newParticipants != null;
                     emitter.onNext(newParticipants.size());
                 } else {
                     emitter.onError(new Throwable("Value is null"));

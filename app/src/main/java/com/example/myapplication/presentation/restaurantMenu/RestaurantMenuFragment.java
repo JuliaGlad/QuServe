@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +174,7 @@ public class RestaurantMenuFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof RestaurantMenuState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
-                initDishRecycler(models);
+                initDishRecycler(models, true);
             } else if (state instanceof RestaurantMenuState.Loading) {
 
             } else if (state instanceof RestaurantMenuState.Error) {
@@ -195,7 +196,7 @@ public class RestaurantMenuFragment extends Fragment {
 
         viewModel.newCategory.observe(getViewLifecycleOwner(), dishMenuModels -> {
             if (dishMenuModels != null) {
-                initDishRecycler(dishMenuModels);
+                initDishRecycler(dishMenuModels, false);
             }
         });
     }
@@ -205,8 +206,9 @@ public class RestaurantMenuFragment extends Fragment {
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getMenuCategories(restaurantId));
     }
 
-    private void initDishRecycler(List<DishMenuModel> models) {
+    private void initDishRecycler(List<DishMenuModel> models, boolean isDefault) {
         if (!models.isEmpty()) {
+            Log.i("Models size", models.size() + "");
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
                 dishes.add(new DishItemDelegateItem(new DishItemModel(
@@ -219,7 +221,18 @@ public class RestaurantMenuFragment extends Fragment {
                         () -> ((RestaurantMenuActivity) requireActivity()).openDishDetailsActivity(categoryId, current.getDishId())
                 )));
             }
-            gridAdapter.submitList(dishes);
+            if (!isDefault) {
+                if (!dishes.isEmpty()) {
+                    if (dishes.size() > 1) {
+                        gridAdapter.notifyItemRangeInserted(0, dishes.size() - 1);
+                    } else {
+                        gridAdapter.notifyItemInserted(0);
+                    }
+                }
+            } else {
+                gridAdapter.submitList(dishes);
+            }
+
         } else {
             final List<DelegateItem> items = new ArrayList<>();
             gridAdapter.submitList(items);
@@ -232,7 +245,7 @@ public class RestaurantMenuFragment extends Fragment {
             for (int i = 0; i < models.size(); i++) {
                 CategoryMenuModel current = models.get(i);
                 boolean isDefault = false;
-                if (i == models.size() - 1) {
+                if (i == 0) {
                     isDefault = true;
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();
@@ -248,8 +261,8 @@ public class RestaurantMenuFragment extends Fragment {
                             int size = dishes.size();
                             dishes.clear();
                             gridAdapter.notifyItemRangeRemoved(0, size);
-                            viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), false);
                             categoryId = current.getCategoryId();
+                            viewModel.getCategoryDishes(restaurantId, categoryId, false);
                         })));
             }
         }
