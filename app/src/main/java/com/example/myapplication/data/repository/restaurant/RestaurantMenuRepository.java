@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableEmitter;
 import io.reactivex.rxjava3.core.Single;
 
 public class RestaurantMenuRepository {
@@ -238,22 +239,26 @@ public class RestaurantMenuRepository {
         }
 
         public Completable uploadDishImage(String restaurantId, String dishId, Uri uri) {
-            StorageReference reference = service.storageReference
-                    .child(RESTAURANT_MENUS_PATH)
-                    .child(restaurantId + "/")
-                    .child(dishId + "/")
-                    .child(dishId + JPG);
+            if (uri != Uri.EMPTY) {
+                StorageReference reference = service.storageReference
+                        .child(RESTAURANT_MENUS_PATH)
+                        .child(restaurantId + "/")
+                        .child(dishId + "/")
+                        .child(dishId + JPG);
 
-            return Completable.create(emitter -> {
-                reference.putFile(uri)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                emitter.onComplete();
-                            } else {
-                                emitter.onError(new Throwable(task.getException()));
-                            }
-                        });
-            });
+                return Completable.create(emitter -> {
+                    reference.putFile(uri)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    emitter.onComplete();
+                                } else {
+                                    emitter.onError(new Throwable(task.getException()));
+                                }
+                            });
+                });
+            } else {
+                return Completable.create(CompletableEmitter::onComplete);
+            }
         }
 
         public Single<List<ImageTaskNameDto>> getDishesImages(String restaurantId, List<DishMenuOwnerModel> dishes) {

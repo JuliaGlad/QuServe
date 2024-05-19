@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.recycler;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder) holder).bind((IngredientToRemoveItemModel) getItem(position));
+        ((ViewHolder) holder).bind(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -42,6 +43,7 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
 
         void bind(IngredientToRemoveItemModel model) {
             if (model.listenerAdded != null) {
+                binding.editTextIngredientName.setText("");
                 setEditTextVisible();
                 binding.button.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.ic_round_done, itemView.getContext().getTheme()));
                 binding.button.setOnClickListener(v -> {
@@ -50,13 +52,13 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
                     binding.button.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.ic_edit, itemView.getContext().getTheme()));
                 });
             } else {
-                binding.textIngredientName.setText(model.name);
+                if (model.name != null) {
+                    binding.textIngredientName.setText(model.name);
+                }
                 initButtonEdit(model.name, model.listenerUpdated);
-
                 binding.buttonDelete.setOnClickListener(v -> {
                     model.listenerDelete.onClick();
                 });
-
             }
         }
 
@@ -68,11 +70,11 @@ public class IngredientToRemoveAdapter extends ListAdapter<IngredientToRemoveIte
 
         void initButtonEdit(String namePrevious, ButtonStringListener listener) {
             binding.button.setOnClickListener(v -> {
-
                 setEditTextVisible();
-                binding.editTextIngredientName.setText(namePrevious);
+                if (namePrevious != null) {
+                    binding.editTextIngredientName.setText(namePrevious);
+                }
                 binding.button.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.ic_round_done, itemView.getContext().getTheme()));
-
                 binding.button.setOnClickListener(view -> {
                     String name = binding.editTextIngredientName.getText().toString();
                     listener.onClick(name);

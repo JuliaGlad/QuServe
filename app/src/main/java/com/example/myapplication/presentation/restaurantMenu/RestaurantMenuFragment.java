@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.POSITION;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
@@ -66,7 +67,7 @@ public class RestaurantMenuFragment extends Fragment {
     private FragmentRestaurantMenuBinding binding;
     private final MainAdapter horizontalAdapter = new MainAdapter();
     private final MainAdapter gridAdapter = new MainAdapter();
-    private ActivityResultLauncher<Intent> addCategoryLauncher, addDishLauncher;
+    private ActivityResultLauncher<Intent> addCategoryLauncher, addDishLauncher, updateDishLauncher;
     private final List<DelegateItem> categories = new ArrayList<>();
     List<DelegateItem> dishes = new ArrayList<>();
     private String restaurantId, categoryId;
@@ -80,6 +81,28 @@ public class RestaurantMenuFragment extends Fragment {
         viewModel.getMenuCategories(restaurantId);
         initCategoryLauncher();
         initDishLauncher();
+        initUpdateLauncher();
+    }
+
+    private void initUpdateLauncher(){
+        updateDishLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        int position = result.getData().getIntExtra(POSITION, 0);
+                        String dishId = result.getData().getStringExtra(DISH_ID);
+                        String dishName = result.getData().getStringExtra(DISH_NAME);
+                        String dishPrice = result.getData().getStringExtra(DISH_PRICE);
+                        String dishWeight = result.getData().getStringExtra(DISH_WEIGHT_OR_COUNT);
+                        Uri uri = Uri.parse(result.getData().getStringExtra(URI));
+                        dishes.remove(position);
+                        gridAdapter.notifyItemRemoved(position);
+                        dishes.add(new DishItemDelegateItem(new DishItemModel(
+                                position, dishId, dishName, dishWeight, dishPrice, uri, null,
+                                () -> updateDish(dishId)
+                        )));
+                        gridAdapter.notifyItemInserted(dishes.size() - 1);
+                    }
+                });
     }
 
     private void initDishLauncher() {
@@ -93,8 +116,8 @@ public class RestaurantMenuFragment extends Fragment {
                         Uri uri = Uri.parse(result.getData().getStringExtra(URI));
                         int position = dishes.size();
                         dishes.add(new DishItemDelegateItem(new DishItemModel(
-                                position, dishName, dishWeight, dishPrice, uri, null,
-                                () -> ((RestaurantMenuActivity) requireActivity()).openDishDetailsActivity(categoryId, dishId)
+                                position, dishId, dishName, dishWeight, dishPrice, uri, null,
+                                () -> updateDish(dishId)
                         )));
                         gridAdapter.notifyItemInserted(position);
                     }
@@ -208,17 +231,17 @@ public class RestaurantMenuFragment extends Fragment {
 
     private void initDishRecycler(List<DishMenuModel> models, boolean isDefault) {
         if (!models.isEmpty()) {
-            Log.i("Models size", models.size() + "");
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
                 dishes.add(new DishItemDelegateItem(new DishItemModel(
                         i,
+                        current.getDishId(),
                         current.getName(),
                         current.getWeight(),
                         current.getPrice(),
                         Uri.EMPTY,
                         current.getTask(),
-                        () -> ((RestaurantMenuActivity) requireActivity()).openDishDetailsActivity(categoryId, current.getDishId())
+                        () -> updateDish(current.getDishId())
                 )));
             }
             if (!isDefault) {
@@ -238,6 +261,22 @@ public class RestaurantMenuFragment extends Fragment {
             gridAdapter.submitList(items);
         }
         binding.errorLayout.getRoot().setVisibility(View.GONE);
+    }
+
+    private void updateDish(String chosenId) {
+        int index = 0;
+        for (int j = 0; j < dishes.size(); j++) {
+            if (dishes.get(j) instanceof DishItemDelegateItem) {
+                DishItemModel item = ((DishItemDelegateItem)dishes.get(j)).content();
+                String currentId = item.getDishId();
+                if (currentId.equals(chosenId)){
+                    index = j;
+                    ((RestaurantMenuActivity) requireActivity())
+                            .openDishDetailsActivity(categoryId, chosenId, updateDishLauncher, index);
+                    break;
+                }
+            }
+        }
     }
 
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {

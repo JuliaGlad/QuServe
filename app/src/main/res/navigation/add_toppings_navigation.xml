@@ -10,7 +10,9 @@
         android:label="AddToppingFragment" >
         <action
             android:id="@+id/action_addToppingFragment_self"
-            app:destination="@id/addToppingFragment" />
+            app:destination="@id/addToppingFragment"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"/>
 
         <argument android:name="page"
             app:argType="string"/>

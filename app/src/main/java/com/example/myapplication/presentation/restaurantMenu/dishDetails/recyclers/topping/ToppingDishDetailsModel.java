@@ -17,6 +17,7 @@ public class ToppingDishDetailsModel {
     public ToppingDishDetailsModel(int id, String name, String price, Task<Uri> image, Uri uri, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
+        this.uri = uri;
         this.price = price;
         this.image = image;
         this.listener = listener;

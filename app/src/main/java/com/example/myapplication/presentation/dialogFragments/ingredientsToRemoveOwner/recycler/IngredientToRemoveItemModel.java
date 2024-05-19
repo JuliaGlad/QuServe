@@ -18,6 +18,10 @@ public class IngredientToRemoveItemModel {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public boolean compareTo(IngredientToRemoveItemModel other){
         return this.hashCode() == other.hashCode();
     }

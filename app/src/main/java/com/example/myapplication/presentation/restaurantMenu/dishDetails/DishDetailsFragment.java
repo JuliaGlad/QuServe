@@ -5,11 +5,17 @@ import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.Utils.POSITION;
+import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_NAME;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_IMAGE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
@@ -18,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,11 +77,12 @@ import myapplication.android.ui.recycler.ui.items.items.horizontalRecycler.Horiz
 import myapplication.android.ui.recycler.ui.items.items.horizontalRecycler.HorizontalRecyclerModel;
 
 public class DishDetailsFragment extends Fragment {
-
     private DishDetailsViewModel viewModel;
     private FragmentDishDetailsBinding binding;
-    private String dishId, categoryId, restaurantId;
+    private String dishId, categoryId, restaurantId, name, weight, price;
+    private int position;
     private Uri imageUri = Uri.EMPTY;
+    private Uri imagePrevious = Uri.EMPTY;
     private ActivityResultLauncher<Intent> addToppingLauncher, launcherRequiredChoices, imageLauncher;
     private List<DelegateItem> requiredChoiceItems = new ArrayList<>();
     private List<DelegateItem> toppingItems = new ArrayList<>();
@@ -88,11 +96,11 @@ public class DishDetailsFragment extends Fragment {
         dishId = getActivity().getIntent().getStringExtra(DISH_ID);
         categoryId = getActivity().getIntent().getStringExtra(CATEGORY_ID);
         restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        position = getActivity().getIntent().getIntExtra(POSITION, 0);
         setToppingLauncher();
         setRequiredChoiceLauncher();
         setImageLauncher();
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -154,12 +162,11 @@ public class DishDetailsFragment extends Fragment {
 
     private void initSaveButton() {
         binding.buttonSave.setOnClickListener(v -> {
-            String name = binding.nameEditText.getText().toString();
-            String price = binding.priceEditText.getText().toString();
-            String finalPrice = price.substring(0, price.length() - 1);
+            name = binding.nameEditText.getText().toString();
+            price = binding.priceEditText.getText().toString();
             String ingredients = binding.ingredientsEditText.getText().toString();
-            String weightOrCount = binding.weightEditText.getText().toString();
-            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, finalPrice, weightOrCount, imageUri);
+            weight = binding.weightEditText.getText().toString();
+            viewModel.saveData(restaurantId, categoryId, dishId, name, ingredients, price, weight, imageUri);
         });
     }
 
@@ -197,6 +204,19 @@ public class DishDetailsFragment extends Fragment {
         });
         viewModel.isUpdated.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
+                Intent intent = new Intent();
+                intent.putExtra(POSITION, position);
+                intent.putExtra(DISH_ID, dishId);
+                intent.putExtra(DISH_NAME, name);
+                intent.putExtra(DISH_WEIGHT_OR_COUNT, weight);
+                intent.putExtra(DISH_PRICE, price);
+
+                if (imageUri == Uri.EMPTY){
+                    imageUri = imagePrevious;
+                }
+
+                intent.putExtra(URI, String.valueOf(imageUri));
+                requireActivity().setResult(RESULT_OK, intent);
                 requireActivity().finish();
             }
         });
@@ -241,7 +261,6 @@ public class DishDetailsFragment extends Fragment {
 
     private void addNewRequireChoice(String name, String choiceId, ArrayList<String> variants) {
         List<DelegateItem> newItems = new ArrayList<>(requiredChoiceItems);
-        newItems.remove(requiredChoiceItems.size() - 1);
         RequiredChoiceAdapter adapter = new RequiredChoiceAdapter();
         newItems.add(new RequiredChoiceHeaderDelegateItem(new RequiredChoiceHeaderModel(requiredChoiceItems.size() - 1, name, () -> {
 
@@ -263,10 +282,6 @@ public class DishDetailsFragment extends Fragment {
         }
 
         newItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(requiredChoiceItems.size(), choiceItemModels, adapter)));
-        newItems.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(requiredChoiceItems.size(), () -> {
-           openAddRequiredChoiceActivity(categoryId, dishId);
-        })));
-
         requiredChoiceAdapter.submitList(newItems);
         requiredChoiceItems = newItems;
     }
@@ -286,14 +301,17 @@ public class DishDetailsFragment extends Fragment {
     }
 
     private void initUi(DishDetailsStateModel model) {
+
+        imagePrevious = model.getUri();
+
         Glide.with(requireContext())
-                .load(model.getUri())
+                .load(imagePrevious)
                 .into(binding.foodImage);
 
         binding.nameEditText.setText(model.getName());
         binding.weightEditText.setText(model.getWeightOrCount());
         binding.ingredientsEditText.setText(model.getIngredients());
-        binding.priceEditText.setText(model.getPrice().concat("₽"));
+        binding.priceEditText.setText(model.getPrice());
 
         binding.buttonInfo.setOnClickListener(v -> {
             PopupMenu popupMenu = new PopupMenu(requireContext(), v);
@@ -311,7 +329,7 @@ public class DishDetailsFragment extends Fragment {
     }
 
     private void initToppingsRecycler(List<VariantsModel> variants) {
-        if (variants != null && variants.size() > 0) {
+        if (variants != null && !variants.isEmpty()) {
             for (int i = 0; i < variants.size(); i++) {
                 VariantsModel current = variants.get(i);
                 int index = i;

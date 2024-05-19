@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.utils;
 
 public class Utils {
+    public static final String POSITION = "Position";
     public static final String IS_VERIFIED = "Is_Verified";
     public static final String EMPLOYEE = "Employee";
     public static final String DRAWABLES = "Drawables";

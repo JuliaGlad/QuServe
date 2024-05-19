@@ -2,9 +2,12 @@ package com.example.myapplication.presentation.dialogFragments.ingredientsToRemo
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,9 +16,11 @@ import com.example.myapplication.presentation.dialogFragments.ingredientsToRemov
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.recycler.IngredientToRemoveItemModel;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.state.IngredientToRemoveDialogState;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.dialog.MaterialDialogs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class IngredientsToRemoveDialogFragment extends DialogFragment {
 
@@ -40,16 +45,18 @@ public class IngredientsToRemoveDialogFragment extends DialogFragment {
 
         viewModel = new ViewModelProvider(this).get(IngredientsToRemoveViewModel.class);
         viewModel.getIngredientsToRemove(restaurantId, categoryId, dishId);
-
         binding = DialogIngredientsToRemoveBinding.inflate(getLayoutInflater());
         binding.recyclerView.setAdapter(adapter);
+
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        AlertDialog dialog = builder.setView(binding.getRoot()).create();
 
         setupObserves();
         initSaveButton();
         initAddButton();
 
-        return builder.setView(binding.getRoot()).create();
+        dialog.setOnShowListener(d -> dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE| WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM));
+        return dialog;
     }
 
     private void setupObserves() {
@@ -71,7 +78,7 @@ public class IngredientsToRemoveDialogFragment extends DialogFragment {
         });
 
         viewModel.isDeleted.observe(this, integer -> {
-            if (integer != null){
+            if (integer != null) {
                 int index = integer;
                 models.remove(index);
                 adapter.notifyItemRemoved(index);
@@ -104,7 +111,7 @@ public class IngredientsToRemoveDialogFragment extends DialogFragment {
     }
 
     private void initRecycler(List<String> ingredients) {
-        if (ingredients.size() > 0) {
+        if (!ingredients.isEmpty()) {
             for (int i = 0; i < ingredients.size(); i++) {
                 addItem(models, ingredients.get(i), i);
             }
@@ -116,7 +123,12 @@ public class IngredientsToRemoveDialogFragment extends DialogFragment {
         final String[] name = {ingredient};
         models.add(new IngredientToRemoveItemModel(index, ingredient,
                 () -> {
-                    viewModel.deleteIngredient(restaurantId, categoryId, dishId, name[0], index);
+                    for (int i = 0; i < models.size(); i++) {
+                        if (models.get(i).getName().equals(name[0])){
+                            viewModel.deleteIngredient(restaurantId, categoryId, dishId, name[0], i);
+                            break;
+                        }
+                    }
                 },
                 null,
                 nameString -> {

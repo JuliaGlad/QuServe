@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,7 +155,7 @@ public class AddToppingFragment extends Fragment {
                 });
                 break;
             case PAGE_2:
-                binding.progressBar.setProgress(35, true);
+                binding.progressBar.setProgress(40, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_topping_price, 24)),
                         new PriceWithCurrencyDelegateItem(new PriceWithCurrencyModel(3, price, string -> {

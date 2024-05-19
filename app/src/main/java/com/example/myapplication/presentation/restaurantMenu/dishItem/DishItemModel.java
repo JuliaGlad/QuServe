@@ -8,6 +8,7 @@ import myapplication.android.ui.listeners.ButtonItemListener;
 
 public class DishItemModel {
     private final int id;
+    private final String dishId;
     private final String name;
     private final String weight;
     private final String price;
@@ -15,9 +16,10 @@ public class DishItemModel {
     private final Uri uri;
     private final ButtonItemListener listener;
 
-    public DishItemModel(int id, String name, String weight, String price, Uri uri, Task<Uri> task, ButtonItemListener listener) {
+    public DishItemModel(int id, String dishId, String name, String weight, String price, Uri uri, Task<Uri> task, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
+        this.dishId = dishId;
         this.weight = weight;
         this.price = price;
         this.uri = uri;
@@ -27,6 +29,10 @@ public class DishItemModel {
 
     public boolean compareTo(DishItemModel other){
         return this.hashCode() == other.hashCode();
+    }
+
+    public String getDishId() {
+        return dishId;
     }
 
     public Uri getUri() {

@@ -309,7 +309,7 @@ public class AddDishFragment extends Fragment {
             case PAGE_6:
                 binding.companyProgressBar.setProgress(85, true);
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_dish_photo, 24)));
-                items.add(new DishItemDelegateItem(new DishItemModel(2, name, weightCount, price, imageUri, null, this::initImagePicker)));
+                items.add(new DishItemDelegateItem(new DishItemModel(2, null, name, weightCount, price, imageUri, null, this::initImagePicker)));
                 mainAdapter.submitList(items);
                 break;
         }
@@ -324,7 +324,7 @@ public class AddDishFragment extends Fragment {
                             imageUri = data.getData();
                             List<DelegateItem> newItems = new ArrayList<>(items);
                             newItems.remove(items.size() - 1);
-                            newItems.add(new DishItemDelegateItem(new DishItemModel(2, name, weightCount, price, imageUri, null, this::initImagePicker)));
+                            newItems.add(new DishItemDelegateItem(new DishItemModel(2,null, name, weightCount, price, imageUri, null, this::initImagePicker)));
                             mainAdapter.submitList(newItems);
                             items = newItems;
                         }
