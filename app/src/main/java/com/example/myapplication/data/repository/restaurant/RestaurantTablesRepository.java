@@ -11,6 +11,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_QR_CODES;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.restaurant.TableDto;
 import com.google.firebase.firestore.DocumentReference;
@@ -97,6 +98,7 @@ public class RestaurantTablesRepository {
                                         current.getString(ORDER_ID)
                                 ));
                             }
+                            Log.i("On success", String.valueOf(tables.size()));
                             emitter.onSuccess(tables);
                         } else {
                             emitter.onError(new Throwable(task.getException()));

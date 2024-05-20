@@ -58,10 +58,6 @@ public class SuccessfullyBecomeWaiterFragment extends Fragment {
 
     private void initSeeDetails() {
         binding.buttonSeeDetails.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.putExtra(COMPANY_ID, companyId);
-            intent.putExtra(EMPLOYEE_ROLE, WAITER);
-            requireActivity().setResult(Activity.RESULT_OK, intent);
             requireActivity().finish();
         });
     }

@@ -46,11 +46,12 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
         }
 
         void bind(CartDishItemModel models) {
-            String firstPrice = models.price;
+            String firstDishPrice = models.price;
+            int totalFirstPrice = Integer.parseInt(models.price) * Integer.parseInt(models.amount);
             binding.dishName.setText(models.name);
             binding.weightCount.setText(models.weight);
             binding.itemsCount.setText(models.amount);
-            binding.price.setText(String.valueOf(Integer.parseInt(models.price) * Integer.parseInt(models.amount)).concat("₽"));
+            binding.price.setText(String.valueOf(totalFirstPrice).concat("₽"));
 
             if (models.task != null){
                 models.task.addOnCompleteListener(task -> {
@@ -67,22 +68,20 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
             initToppingsRecycler(models.topping);
 
             binding.buttonAdd.setOnClickListener(v -> {
-                models.addListener.onClick();
                 models.amount = String.valueOf(Integer.parseInt(models.amount) + 1);
-                String newPrice = String.valueOf(Integer.parseInt(models.price) + Integer.parseInt(firstPrice));
+                String newPrice = String.valueOf(totalFirstPrice + Integer.parseInt(firstDishPrice));
                 models.price = newPrice;
-                models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) + Integer.parseInt(newPrice));
                 binding.price.setText(models.price.concat("₽"));
                 binding.itemsCount.setText(models.amount);
+                models.addListener.onClick();
             });
             binding.buttonRemove.setOnClickListener(v -> {
-                models.removeListener.onClick();
                 models.amount = String.valueOf(Integer.parseInt(models.amount) - 1);
-                String newPrice = String.valueOf(Integer.parseInt(models.price) - Integer.parseInt(firstPrice));
+                String newPrice = String.valueOf(Integer.parseInt(models.price) - Integer.parseInt(firstDishPrice));
                 models.price = newPrice;
-                models.totalPrice = String.valueOf(Integer.parseInt(models.totalPrice) - Integer.parseInt(firstPrice) - Integer.parseInt(newPrice));
                 binding.price.setText(models.price.concat("₽"));
                 binding.itemsCount.setText(models.amount);
+                models.removeListener.onClick(models.amount);
             });
         }
 

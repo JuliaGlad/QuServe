@@ -1,14 +1,12 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 
-import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
-
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -34,7 +31,10 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
     private final MutableLiveData<RestaurantOrderDishDetailsState> _state = new MutableLiveData<>(new RestaurantOrderDishDetailsState.Loading());
     LiveData<RestaurantOrderDishDetailsState> state = _state;
 
-    String name, price, timeCooking, ingredients, weightOrCount;
+    private final MutableLiveData<Integer> _price = new MutableLiveData<>(0);
+    LiveData<Integer> price = _price;
+
+    String name, dishPrice, timeCooking, ingredients, weightOrCount;
     Uri imageUri;
     List<String> ingredientsToRemove;
     List<String> toppingsNames = new ArrayList<>();
@@ -49,7 +49,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                     name = dishMenuOwnerModel.getName();
                     ingredients = dishMenuOwnerModel.getIngredients();
                     weightOrCount = dishMenuOwnerModel.getWeightCount();
-                    price = dishMenuOwnerModel.getPrice();
+                    dishPrice = dishMenuOwnerModel.getPrice();
                     timeCooking = dishMenuOwnerModel.getEstimatedTimeCooking();
                     ingredientsToRemove = dishMenuOwnerModel.getToRemove();
 
@@ -91,7 +91,7 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
                         }
 
                         _state.postValue(new RestaurantOrderDishDetailsState.Success(new RestaurantOrderDishDetailsModel(
-                                name, price, timeCooking, ingredients,
+                                name, dishPrice, timeCooking, ingredients,
                                 weightOrCount, ingredientsToRemove, toppings,
                                 models, imageUri
                         )));
@@ -105,7 +105,13 @@ public class RestaurantOrderDishDetailsViewModel extends ViewModel {
 
     }
 
+    public void setPrice(int value){
+        _price.postValue(value);
+    }
 
+    public int getPrice(){
+        return price.getValue().intValue();
+    }
 
     public void addToCart(String restaurantId, CartDishModel model) {
         RestaurantOrderDI.addDishToCartUseCase.invoke(restaurantId, model);

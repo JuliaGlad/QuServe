@@ -394,4 +394,6 @@
     <string name="you_can_now_go_to_service_point">Вам необходимо подойти к точке обслужвания!</string>
     <string name="email_is_not_verified">Email не подтвержден!</string>
     <string name="enter_queue_name">Введите название очереди:</string>
+    <string name="your_cart_is_empty">Ваша корзина пуста!</string>
+    <string name="looks_like_you_haven_t_added_any_dishes_to_your_cart_yet">Looks like you haven`t added any dishes to your cart yet</string>
 </resources>

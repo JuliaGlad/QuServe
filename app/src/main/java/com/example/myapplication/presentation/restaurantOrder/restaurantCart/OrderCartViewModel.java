@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,11 +26,24 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderCartViewModel extends ViewModel {
 
+    private final MutableLiveData<Integer> _price = new MutableLiveData<>(0);
+    LiveData<Integer> price = _price;
+
     private final MutableLiveData<Boolean> _isOrdered = new MutableLiveData<>(false);
     LiveData<Boolean> isOrdered = _isOrdered;
 
     private final MutableLiveData<OrderCartState> _state = new MutableLiveData<>(new OrderCartState.Loading());
     LiveData<OrderCartState> state = _state;
+
+    public void increasePrice(int newPrice) {
+        int previousPrice = price.getValue();
+        _price.setValue(previousPrice + newPrice);
+    }
+
+    public void decreasePrice(int newPrice){
+        int previousPrice = price.getValue();
+        _price.setValue(previousPrice - newPrice);
+    }
 
     public void getCartItems(String currentRestaurant) {
         List<CartDishModel> models = RestaurantOrderDI.getCartUseCase.invoke();
@@ -96,7 +111,7 @@ public class OrderCartViewModel extends ViewModel {
         return "@" + id;
     }
 
-    public void removeItemFromCart(String dishId){
+    public void removeItemFromCart(String dishId) {
         RestaurantOrderDI.removeFromCartUseCase.invoke(dishId);
     }
 

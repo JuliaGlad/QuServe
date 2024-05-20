@@ -86,18 +86,6 @@
                 app:layout_constraintStart_toStartOf="@+id/ingredients"
                 app:layout_constraintTop_toBottomOf="@+id/ingredients" />
 
-            <ImageButton
-                android:id="@+id/button_edit_ingredients"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/to_remove_header"
-                app:layout_constraintStart_toEndOf="@+id/to_remove_header"
-                app:layout_constraintTop_toTopOf="@+id/to_remove_header"
-                app:tint="?colorPrimary" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/required_choice_recycler"
                 android:layout_width="match_parent"
@@ -113,13 +101,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/bold_roboto"
                 android:text="@string/toppings"
                 android:textColor="?colorPrimary"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@+id/required_choice_recycler"
-                app:layout_constraintTop_toBottomOf="@+id/floatingActionButton2" />
+                app:layout_constraintTop_toBottomOf="@+id/required_choice_recycler" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/toppingsRecycler"
@@ -143,18 +131,6 @@
                 app:layout_constraintStart_toEndOf="@+id/name"
                 app:layout_constraintTop_toTopOf="@+id/name"
                 app:tint="?colorPrimary" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_add"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/required_choice_recycler" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

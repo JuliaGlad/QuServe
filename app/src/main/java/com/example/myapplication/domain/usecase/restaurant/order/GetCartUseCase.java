@@ -1,5 +1,7 @@
 package com.example.myapplication.domain.usecase.restaurant.order;
 
+import android.util.Log;
+
 import com.example.myapplication.data.db.entity.CartEntity;
 import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.example.myapplication.data.providers.CartProvider;
@@ -27,6 +29,7 @@ public class GetCartUseCase {
                 ));
             }
         }
+
         return models;
     }
 }

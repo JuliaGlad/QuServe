@@ -88,7 +88,7 @@ public class BecomeCookFragment extends Fragment {
                 bundle.putString(COMPANY_ID, restaurantId);
 
                 NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_becomeCookFragment_to_successfullyBecomeCookFragment);
+                        .navigate(R.id.action_becomeCookFragment_to_successfullyBecomeCookFragment, bundle);
             }
         });
 

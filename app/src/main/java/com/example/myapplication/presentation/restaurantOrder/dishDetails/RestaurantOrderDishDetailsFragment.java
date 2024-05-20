@@ -58,10 +58,10 @@ import myapplication.android.ui.recycler.ui.items.items.horizontalRecycler.Horiz
 import myapplication.android.ui.recycler.ui.items.items.horizontalRecycler.HorizontalRecyclerModel;
 
 public class RestaurantOrderDishDetailsFragment extends Fragment {
-
     private RestaurantOrderDishDetailsViewModel viewModel;
     private FragmentRestaurantOrderDishDetailsBinding binding;
-    private String dishId, categoryId, restaurantId, tablePath, type, totalPrice;
+    private String dishId, categoryId, restaurantId, tablePath, type;
+    private int totalPrice;
     private ActivityResultLauncher<Intent> cartLauncher;
     private final List<VariantCartModel> chosenToppings = new ArrayList<>();
     private final List<String> chosenRemove = new ArrayList<>();
@@ -106,11 +106,11 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         initToppingsAdapter();
         initRequiredChoiceAdapter();
         setupObserves();
-
     }
 
-    private void initOrderButton(String name, String weight, String price) {
+    private void initOrderButton(String name, String weight) {
         binding.buttonOrder.setOnClickListener(v -> {
+            String price = String.valueOf(totalPrice);
             CartDishModel model = new CartDishModel(
                     dishId, categoryId, name, weight, price,
                     String.valueOf(1), chosenToppings, Arrays.asList(chosenRequireChoices), chosenRemove
@@ -148,8 +148,8 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 String name = model.getName();
                 String weight = model.getWeightOrCount();
-                totalPrice = model.getPrice();
-
+                int price = Integer.parseInt(model.getPrice());
+                viewModel.setPrice(price);
                 List<VariantsModel> toppings = model.getToppings();
                 List<RequiredChoiceOrderDishDetailsModel> requireChoices = model.getModels();
                 List<String> toRemove = model.getIngredientsToRemove();
@@ -158,7 +158,6 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 binding.name.setText(name);
                 binding.ingredients.setText(model.getIngredients());
-                binding.buttonOrder.setText(getString(R.string.add).concat(totalPrice + "₽"));
 
                 Glide.with(requireView())
                         .load(model.getUri())
@@ -166,7 +165,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 initToppingsRecycler(toppings);
                 initRequiredChoiceRecycler(requireChoices);
-                initOrderButton(name, weight, totalPrice);
+                initOrderButton(name, weight);
                 initRemove(toRemove);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantOrderDishDetailsState.Loading) {
@@ -174,6 +173,12 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
             } else if (state instanceof RestaurantOrderDishDetailsState.Error) {
                 setError();
             }
+
+            viewModel.price.observe(getViewLifecycleOwner(), price -> {
+                totalPrice = price;
+                binding.buttonOrder.setText(getString(R.string.add).concat(" " + "+" + totalPrice + "₽"));
+            });
+
         });
     }
 
@@ -185,23 +190,36 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     }
 
     private void initRemove(List<String> toRemove) {
-        binding.toRemoveHeader.setOnClickListener(v -> {
-            IngredientsToRemoveOrderDialogFragment dialogFragment = new IngredientsToRemoveOrderDialogFragment(toRemove, chosenRemove);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "INGREDIENTS_TO_REMOVE_ORDER_DIALOG");
-            dialogFragment.OnDismissListener(bundle -> {
+        if (!toRemove.isEmpty()) {
+            binding.toRemoveHeader.setOnClickListener(v -> {
+                IngredientsToRemoveOrderDialogFragment dialogFragment = new IngredientsToRemoveOrderDialogFragment(toRemove, chosenRemove);
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "INGREDIENTS_TO_REMOVE_ORDER_DIALOG");
+                dialogFragment.OnDismissListener(bundle -> {
+                });
             });
-        });
+        } else {
+            binding.toRemoveHeader.setVisibility(View.GONE);
+        }
     }
 
     private void initToppingsRecycler(List<VariantsModel> variants) {
         if (variants != null && !variants.isEmpty()) {
             for (int i = 0; i < variants.size(); i++) {
                 VariantsModel current = variants.get(i);
-                toppingItems.add(new ToppingsOrderDelegateItem(new ToppingsOrderModel(i, current.getName(), current.getPrice(), current.getUri(), totalPrice, chosenToppings)));
+                toppingItems.add(new ToppingsOrderDelegateItem(new ToppingsOrderModel(i, current.getName(), current.getPrice(), current.getUri(), chosenToppings,
+                        () -> {
+                            int price = totalPrice + Integer.parseInt(current.getPrice());
+                            viewModel.setPrice(price);
+                        },
+                        () -> {
+                            int price = totalPrice - Integer.parseInt(current.getPrice());
+                            viewModel.setPrice(price);
+                        })));
             }
+            toppingsAdapter.submitList(toppingItems);
+        } else {
+            binding.toppingsHeader.setVisibility(View.GONE);
         }
-
-        toppingsAdapter.submitList(toppingItems);
     }
 
     private void initRequiredChoiceRecycler(List<RequiredChoiceOrderDishDetailsModel> models) {

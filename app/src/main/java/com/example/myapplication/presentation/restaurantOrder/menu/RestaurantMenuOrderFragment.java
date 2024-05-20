@@ -100,7 +100,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
             }
         });
 
-        viewModel.categories.observe(getActivity(), categoryMenuModels -> {
+        viewModel.categories.observe(requireActivity(), categoryMenuModels -> {
             if (categoryMenuModels != null) {
                 initCategoriesRecycler(categoryMenuModels);
             }
@@ -133,7 +133,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         null,
                         current.getTask(),
                         () -> {
-                            ((RestaurantOrderMenuActivity)requireActivity()).openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId());
+                            ((RestaurantOrderMenuActivity)requireActivity())
+                                    .openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId());
                         }
                 ));
             }

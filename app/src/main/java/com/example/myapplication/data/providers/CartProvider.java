@@ -1,5 +1,7 @@
 package com.example.myapplication.data.providers;
 
+import android.util.Log;
+
 import com.example.myapplication.app.App;
 import com.example.myapplication.data.db.dao.CartDao;
 import com.example.myapplication.data.db.entity.CartEntity;
@@ -7,6 +9,7 @@ import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CartProvider {
@@ -30,7 +33,7 @@ public class CartProvider {
         if (entity != null) {
             cartDtos = entity.dtos;
         }
-        if (cartDtos.size() > 0) {
+        if (!cartDtos.isEmpty()) {
             boolean isAdd = false;
 
             String dishId = dishDto.getDishId();
@@ -62,13 +65,14 @@ public class CartProvider {
             }
             if (!isAdd) {
                 cartDtos.add(dishDto);
-
             }
             cartDao.update(entity);
         } else {
-            List<CartDishDto> dtos = new ArrayList<>();
-            dtos.add(dishDto);
-            cartDao.insert(new CartEntity(restaurantId, dtos));
+            CartEntity newEntity = new CartEntity(restaurantId, Collections.emptyList());
+            cartDao.insert(newEntity);
+            CartEntity entityAdded = cartDao.getCart();
+            entityAdded.dtos.add(dishDto);
+            cartDao.update(entityAdded);
         }
     }
 

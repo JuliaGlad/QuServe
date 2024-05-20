@@ -7,6 +7,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,7 @@ public class TableListFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
             if (lastTableNumber != null) {
+                Log.e("Last table number", lastTableNumber + "");
                 viewModel.addTable(restaurantId, locationId, String.valueOf(lastTableNumber + 1));
             }
         });
@@ -111,15 +113,19 @@ public class TableListFragment extends Fragment {
     private void initRecycler(List<TableModel> tables) {
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(0, R.string.manage_your_restaurant_s_tables_and_view_active_orders)));
 
-        for (int i = tables.size() - 1; i >= 0; i -= 1) {
-            String id = tables.get(i).getTableId();
-            delegates.add(new TableListDelegateItem(new TableListModel(i, tables.get(i).getNumber(), () -> {
-                ((TableListActivity) requireActivity()).openRestaurantTableDetailsActivity(id, locationId);
-                requireActivity().finish();
-            })));
-            if (i == 0) {
-                lastTableNumber = Integer.parseInt(tables.get(i).getNumber());
+        if (!tables.isEmpty()) {
+            for (int i = tables.size() - 1; i >= 0; i -= 1) {
+                String id = tables.get(i).getTableId();
+                delegates.add(new TableListDelegateItem(new TableListModel(i, tables.get(i).getNumber(), () -> {
+                    ((TableListActivity) requireActivity()).openRestaurantTableDetailsActivity(id, locationId);
+                    requireActivity().finish();
+                })));
+                if (i == 0) {
+                    lastTableNumber = Integer.parseInt(tables.get(i).getNumber());
+                }
             }
+        } else {
+            lastTableNumber = 0;
         }
         adapter.submitList(delegates);
     }

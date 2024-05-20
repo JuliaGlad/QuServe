@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,9 +36,9 @@ public class OrderCartFragment extends Fragment {
 
     private OrderCartViewModel viewModel;
     private FragmentOrderCartBinding binding;
+    private final List<CartDishItemModel> items = new ArrayList<>();
     private final CartDishItemAdapter cartDishItemAdapter = new CartDishItemAdapter();
     private String restaurantId, path;
-    private int totalPrice;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,19 +92,24 @@ public class OrderCartFragment extends Fragment {
                 if (stateModel != null) {
                     List<CartDishModel> models = stateModel.getModels();
                     List<ImageTaskNameModel> uris = stateModel.getUris();
-                    List<CartDishItemModel> items = new ArrayList<>();
-                    for (int i = 0; i < models.size(); i++) {
-                        CartDishModel current = models.get(i);
-                        for (ImageTaskNameModel currentUri : uris) {
-                            if (currentUri.getName().equals(current.getDishId())) {
-                                getDishData(currentUri, current, items, i);
-                                break;
+                    if (!models.isEmpty()) {
+                        for (int i = 0; i < models.size(); i++) {
+                            CartDishModel current = models.get(i);
+                            for (ImageTaskNameModel currentUri : uris) {
+                                if (currentUri.getName().equals(current.getDishId())) {
+                                    getDishData(currentUri, current, items, i);
+                                    break;
+                                }
                             }
                         }
+
+                        binding.totalPrice.setText(String.valueOf(viewModel.price.getValue()).concat("₽"));
+                        cartDishItemAdapter.submitList(items);
+                        initOrderButton(items);
+                    } else {
+                        binding.emptyCartLayout.getRoot().setVisibility(View.VISIBLE);
+                        initOpenMenuButton();
                     }
-                    binding.totalPrice.setText(String.valueOf(totalPrice).concat("₽"));
-                    cartDishItemAdapter.submitList(items);
-                    initOrderButton(items);
                     binding.errorLayout.getRoot().setVisibility(View.GONE);
                 }
 
@@ -114,10 +120,20 @@ public class OrderCartFragment extends Fragment {
             }
         });
 
+        viewModel.price.observe(getViewLifecycleOwner(), price -> {
+            binding.totalPrice.setText(String.valueOf(price).concat("₽"));
+        });
+
         viewModel.isOrdered.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                ((OrderCartActivity)requireActivity()).openCreatedActivity();
+            if (aBoolean) {
+                ((OrderCartActivity) requireActivity()).openCreatedActivity();
             }
+        });
+    }
+
+    private void initOpenMenuButton() {
+        binding.emptyCartLayout.buttonOpenMenu.setOnClickListener(v -> {
+            finishActivity();
         });
     }
 
@@ -134,13 +150,12 @@ public class OrderCartFragment extends Fragment {
         for (VariantCartModel cartModel : current.getToppings()) {
             dishPrice += Integer.parseInt(cartModel.getPrice());
         }
-        String amount = current.getAmount();
         String dishId = current.getDishId();
-        totalPrice += (dishPrice * Integer.parseInt(current.getAmount()));
-        addToCartItems(currentUri, current, items, i, dishId, dishPrice, amount);
+        viewModel.increasePrice(dishPrice * Integer.parseInt(current.getAmount()));
+        addToCartItems(currentUri, current, items, i, dishId, dishPrice);
     }
 
-    private void addToCartItems(ImageTaskNameModel currentUri, CartDishModel current, List<CartDishItemModel> items, int i, String dishId, int dishPrice, String amount) {
+    private void addToCartItems(ImageTaskNameModel currentUri, CartDishModel current, List<CartDishItemModel> items, int i, String dishId, int dishPrice) {
         items.add(new CartDishItemModel(
                 i,
                 dishId,
@@ -148,22 +163,32 @@ public class OrderCartFragment extends Fragment {
                 current.getName(),
                 current.getWeight(),
                 String.valueOf(dishPrice),
-                String.valueOf(totalPrice),
-                amount,
+                current.getAmount(),
                 currentUri.getTask(),
                 current.getToRemove(),
                 current.getToppings(),
                 current.getRequiredChoices(),
                 () -> {
                     viewModel.increaseAmount(current);
+                    viewModel.increasePrice(dishPrice);
                 },
-                () -> {
-                    if (Integer.parseInt(amount) == 1){
+                amountNew -> {
+                    if (Integer.parseInt(amountNew) == 0) {
                         viewModel.removeItemFromCart(dishId);
-                        binding.totalPrice.setText(String.valueOf(totalPrice).concat("₽"));
+                        viewModel.decreasePrice(dishPrice);
+                        for (int j = 0; j < items.size(); j++) {
+                            if (items.get(j).getDishId().equals(current.getDishId())) {
+                                items.remove(j);
+                                cartDishItemAdapter.notifyItemRemoved(j);
+                                if (cartDishItemAdapter.getCurrentList().isEmpty()) {
+                                    binding.emptyCartLayout.getRoot().setVisibility(View.VISIBLE);
+                                }
+                                break;
+                            }
+                        }
                     } else {
                         viewModel.decrementAmount(current);
-                        binding.totalPrice.setText(String.valueOf(totalPrice).concat("₽"));
+                        viewModel.decreasePrice(dishPrice);
                     }
                 }
         ));
@@ -186,7 +211,7 @@ public class OrderCartFragment extends Fragment {
                             current.getRequiredChoices()
                     ));
                 }
-                viewModel.createOrder(restaurantId, String.valueOf(totalPrice), path, models);
+                viewModel.createOrder(restaurantId, String.valueOf(viewModel.price.getValue()), path, models);
             } else {
                 Snackbar.make(requireView(), getString(R.string.you_have_to_add_at_least_1_dish_to_create_order), Snackbar.LENGTH_LONG).show();
             }

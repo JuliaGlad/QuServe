@@ -5,48 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".presentation.employee.becomeEmployee.successfullyBecomeEmployee.SuccessfullyBecomeEmployeeFragment">
+    android:background="?colorSurface">
 
     <ImageView
-        android:id="@+id/success_image"
+        android:id="@+id/empty_cart_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/successfully_become_employee"
+        android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/empty_cart" />
 
     <TextView
-        android:id="@+id/success_text"
+        android:id="@+id/tile_empty_cart"
         style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="@string/you_have_become_cook"
+        android:text="@string/your_cart_is_empty"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_image" />
+        app:layout_constraintTop_toBottomOf="@+id/empty_cart_image" />
 
-    <include
-        android:id="@+id/info_box_layout"
-        layout="@layout/info_box_layout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/title_description"
+        style="@style/TextAppearance.Material3.BodyMedium.Regular.QuServe"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
+        android:textAlignment="center"
+        android:text="@string/looks_like_you_haven_t_added_any_dishes_to_your_cart_yet"
+        android:textColor="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/success_text" />
+        app:layout_constraintTop_toBottomOf="@+id/tile_empty_cart" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_see_details"
+    <Button
+        android:id="@+id/button_open_menu"
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ok"
-        android:clickable="true"
-        android:focusable="true"
+        android:text="@string/open_menu"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

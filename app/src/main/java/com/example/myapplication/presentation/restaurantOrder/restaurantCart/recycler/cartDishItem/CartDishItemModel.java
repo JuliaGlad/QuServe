@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.List;
 
 import myapplication.android.ui.listeners.ButtonItemListener;
+import myapplication.android.ui.listeners.ButtonStringListener;
 
 public class CartDishItemModel {
     int id;
@@ -17,15 +18,14 @@ public class CartDishItemModel {
     String weight;
     String amount;
     String price;
-    String totalPrice;
     Task<Uri> task;
     List<String> toRemove;
     List<VariantCartModel> topping;
     List<String> requiredChoices;
     ButtonItemListener addListener;
-    ButtonItemListener removeListener;
+    ButtonStringListener removeListener;
 
-    public CartDishItemModel(int id, String dishId, String categoryId , String name, String weight, String price, String totalPrice, String amount, Task<Uri> task, List<String> toRemove, List<VariantCartModel> topping, List<String> requiredChoices, ButtonItemListener addListener, ButtonItemListener removeListener) {
+    public CartDishItemModel(int id, String dishId, String categoryId , String name, String weight, String price, String amount, Task<Uri> task, List<String> toRemove, List<VariantCartModel> topping, List<String> requiredChoices, ButtonItemListener addListener, ButtonStringListener removeListener) {
         this.id = id;
         this.dishId = dishId;
         this.categoryId = categoryId;
@@ -33,7 +33,6 @@ public class CartDishItemModel {
         this.price = price;
         this.weight = weight;
         this.amount = amount;
-        this.totalPrice = totalPrice;
         this.task = task;
         this.toRemove = toRemove;
         this.topping = topping;

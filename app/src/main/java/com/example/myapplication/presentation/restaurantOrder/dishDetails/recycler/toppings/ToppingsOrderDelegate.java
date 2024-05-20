@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails.recycler.toppings;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class ToppingsOrderDelegate implements AdapterDelegate {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, DelegateItem item, int position) {
-        ((ViewHolder)holder).bind((ToppingsOrderModel) item.content());
+        ((ViewHolder) holder).bind((ToppingsOrderModel) item.content());
     }
 
     @Override
@@ -58,20 +59,21 @@ public class ToppingsOrderDelegate implements AdapterDelegate {
             binding.item.setOnClickListener(v -> {
                 if (!model.isChosen) {
                     model.isChosen = true;
-                    model.totalPrice = String.valueOf(Integer.parseInt(model.totalPrice) + Integer.parseInt(model.price));
                     binding.item.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
                     model.variants.add(new VariantCartModel(model.name, model.price));
+                    model.listenerAdd.onClick();
                 } else {
                     model.isChosen = false;
                     binding.item.setStrokeColor(Color.TRANSPARENT);
-                    model.totalPrice = String.valueOf(Integer.parseInt(model.totalPrice) + Integer.parseInt(model.price));
                     for (int i = 0; i < model.variants.size(); i++) {
-                        if (model.variants.get(i).getName().equals(model.name)){
+                        if (model.variants.get(i).getName().equals(model.name)) {
                             model.variants.remove(i);
                             break;
                         }
                     }
+                    model.listenerRemove.onClick();
                 }
+
             });
         }
     }

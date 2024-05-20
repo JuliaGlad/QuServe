@@ -401,4 +401,6 @@
     <string name="it_s_your_turn_now">It`s your turn now!</string>
     <string name="you_can_now_go_to_service_point">You can now go to service point</string>
     <string name="email_is_not_verified">Email is not verified!</string>
+    <string name="your_cart_is_empty">Your cart is empty!</string>
+    <string name="looks_like_you_haven_t_added_any_dishes_to_your_cart_yet">Looks like you haven`t added any dishes to your cart yet</string>
 </resources>
