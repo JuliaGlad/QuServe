@@ -4,6 +4,8 @@ import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE
 import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
 import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -41,6 +43,9 @@ public class HomeBasisUserViewModel extends ViewModel {
     QueueBasicUserHomeModel participantQueue = null;
     QueueBasicUserHomeModel restaurantVisitor = null;
     List<CompanyBasicUserModel> companies = new ArrayList<>();
+
+    private final MutableLiveData<String> _queueIdOwner = new MutableLiveData<>(null);
+    LiveData<String> queueIdOwner = _queueIdOwner;
 
     private final MutableLiveData<Boolean> _getRestaurant = new MutableLiveData<>(false);
     LiveData<Boolean> getRestaurant = _getRestaurant;
@@ -114,6 +119,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
+                            Log.d("Error company", e.getMessage());
                             _state.postValue(new HomeBasicUserState.Error());
                         }
                     });
@@ -144,6 +150,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
+                            Log.d("Error get restik", e.getMessage() + " " + isRestaurantVisitor);
                             _state.postValue(new HomeBasicUserState.Error());
                         }
                     });
@@ -174,7 +181,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            Log.d("Error queue by participant path", e.getMessage());
                         }
                     });
         } else {
@@ -203,11 +210,32 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-
+                            Log.d("Error queue by author id", e.getMessage());
                         }
                     });
         } else {
             _getQueueByAuthorId.postValue(true);
         }
+    }
+
+    public void getQueueData() {
+        QueueDI.getQueueByAuthorUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<QueueIdAndNameModel>() {
+                    @Override
+                    public void onSubscribe(@androidx.annotation.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@androidx.annotation.NonNull QueueIdAndNameModel queueIdAndNameModel) {
+                        _queueIdOwner.postValue(queueIdAndNameModel.getId());
+                    }
+
+                    @Override
+                    public void onError(@androidx.annotation.NonNull Throwable e) {
+
+                    }
+                });
     }
 }

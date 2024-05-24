@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:lineSpacingMultiplier="0.1"
         android:text="Text"
+        android:layout_marginStart="20dp"
         android:textColorHighlight="@color/colorTextHint"
         android:textColorHint="@color/colorTextHint"
         android:textColorLink="@color/colorTextHint"

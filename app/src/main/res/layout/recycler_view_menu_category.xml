@@ -3,19 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
-    android:clickable="true"
-    android:focusable="true"
     android:layout_width="140dp"
     android:layout_height="200dp"
     android:layout_marginStart="20dp"
-    app:strokeColor="@color/transparent"
     app:cardCornerRadius="20dp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="?colorSurfaceContainerLow"
         android:layout_width="140dp"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:background="?colorSurfaceContainerLow"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/food_image"

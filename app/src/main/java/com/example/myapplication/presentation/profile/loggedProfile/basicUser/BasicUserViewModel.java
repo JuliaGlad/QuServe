@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
@@ -10,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.di.company.CommonCompanyDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.common.ImageModel;
+import com.example.myapplication.domain.usecase.profile.GetProfileImageUseCase;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserDataModel;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BooleanData;
@@ -44,8 +48,15 @@ public class BasicUserViewModel extends ViewModel {
     private final MutableLiveData<BasicUserState> _state = new MutableLiveData<>(new BasicUserState.Loading());
     LiveData<BasicUserState> state = _state;
 
-    public void retrieveUserNameData() {
-        Single.zip(ProfileDI.getProfileImageUseCase.invoke(), ProfileDI.getUserEmailAndNameDataUseCase.invoke(), CommonCompanyDI.checkAnyCompanyExistUseCase.invoke(),
+    public void retrieveUserNameData(boolean hasInternetConnection) {
+        Single<ImageModel> imageModelSingle;
+        if(hasInternetConnection) {
+            imageModelSingle = ProfileDI.getProfileImageUseCase.invoke();
+        } else  {
+            imageModelSingle = Single.just(new ImageModel(Uri.EMPTY));
+        }
+        Single.zip(imageModelSingle,
+                        ProfileDI.getUserEmailAndNameDataUseCase.invoke(), CommonCompanyDI.checkAnyCompanyExistUseCase.invoke(),
                         (imageModel, userEmailAndNameModel, aBoolean) ->
                                 new BasicUserDataModel(
                                         userEmailAndNameModel.getName(),
@@ -74,10 +85,10 @@ public class BasicUserViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.d("On error basic user", "errror");
                         _state.postValue(new BasicUserState.Error());
                     }
                 });
+
     }
 
     public void uploadToFireStorage(Uri uri) {
@@ -100,6 +111,7 @@ public class BasicUserViewModel extends ViewModel {
                     }
                 });
     }
+
     public void setBackground() {
         ProfileDI.getBackgroundImageUseCase.invoke()
                 .subscribeOn(Schedulers.io())

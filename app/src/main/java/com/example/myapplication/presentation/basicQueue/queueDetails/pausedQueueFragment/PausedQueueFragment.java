@@ -2,23 +2,20 @@ package com.example.myapplication.presentation.basicQueue.queueDetails.pausedQue
 
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
 import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,16 +31,11 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPausedQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
 import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
-import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
-import com.example.myapplication.presentation.utils.workers.PauseAvailableWorker;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
+import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PausedQueueFragment extends Fragment {
 
@@ -51,6 +43,7 @@ public class PausedQueueFragment extends Fragment {
     private FragmentPausedQueueBinding binding;
     private long timeMillis;
     private String timeLeft, queueId;
+    private boolean isStopped = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,14 +57,19 @@ public class PausedQueueFragment extends Fragment {
 
         binding = FragmentPausedQueueBinding.inflate(inflater, container, false);
 
+
         if (getArguments() != null) {
             queueId = getArguments().getString(QUEUE_ID);
-            long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
-            long minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
-            long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
+            if (getArguments().getBoolean(IS_DEFAULT)) {
+                long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
+                long minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
+                long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
 
-            timeMillis = hours + minutes + seconds;
-            PROGRESS = (int) timeMillis;
+                timeMillis = hours + minutes + seconds;
+                PROGRESS = (int) timeMillis;
+            } else {
+                timeMillis = CURRENT_TIMER_TIME;
+            }
         } else {
             timeMillis = CURRENT_TIMER_TIME;
         }
@@ -100,7 +98,9 @@ public class PausedQueueFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((QueueDetailsActivity) requireActivity()).stopServiceForeground();
+        if (!isStopped) {
+            ((QueueDetailsActivity) requireActivity()).stopServiceForeground();
+        }
     }
 
     @Override
@@ -120,8 +120,9 @@ public class PausedQueueFragment extends Fragment {
     private void initStopButton() {
         binding.buttonStopPause.setOnClickListener(v -> {
             StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
             dialogFragment.onDismissListener(bundle -> {
+                isStopped = true;
                 NavHostFragment.findNavController(PausedQueueFragment.this)
                         .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
             });

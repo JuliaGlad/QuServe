@@ -27,7 +27,7 @@ public class CompanyListItemDelegate implements AdapterDelegate {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, DelegateItem item, int position) {
-        ((ViewHolder)holder).bind((CompanyListItemDelegateModel) item.content());
+        ((ViewHolder) holder).bind((CompanyListItemDelegateModel) item.content());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CompanyListItemDelegate implements AdapterDelegate {
         return item instanceof CompanyListItemDelegateItem;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         RecyclerViewCompanyListItemBinding binding;
 
@@ -44,7 +44,7 @@ public class CompanyListItemDelegate implements AdapterDelegate {
             binding = _binding;
         }
 
-        void bind(CompanyListItemDelegateModel model){
+        void bind(CompanyListItemDelegateModel model) {
 
             binding.companyName.setText(model.name);
 
@@ -52,8 +52,10 @@ public class CompanyListItemDelegate implements AdapterDelegate {
                 model.listener.onClick();
             });
 
+            if (model.uriTask != null) {
                 model.uriTask.addOnCompleteListener(new OnCompleteListener<Uri>() {
                     Uri uri = Uri.EMPTY;
+
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         try {
@@ -64,12 +66,12 @@ public class CompanyListItemDelegate implements AdapterDelegate {
                                         .apply(RequestOptions.circleCropTransform())
                                         .into(binding.companyLogo);
                             }
-                        } catch (RuntimeExecutionException e){
+                        } catch (RuntimeExecutionException e) {
                             Log.d("RuntimeExecutionException", e.getMessage());
                         }
                     }
                 });
-
+            }
         }
     }
 }

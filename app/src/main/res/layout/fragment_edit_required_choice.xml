@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".presentation.restaurantMenu.dishDetails.editRequiredChoice.EditRequiredChoiceFragment">
 
     <EditText
@@ -12,10 +11,11 @@
         style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/colorTextHint"
         android:hint="@string/choice_name"
         android:textAlignment="center"
         android:textColorHint="@color/colorTextHint"
-        android:backgroundTint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,9 +25,12 @@
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
         android:focusable="true"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -46,8 +49,8 @@
         android:id="@+id/button_add"
         android:layout_width="63dp"
         android:layout_height="55dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add"
@@ -58,24 +61,25 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
+        android:layout_marginStart="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_arrow_back"
         app:layout_constraintBottom_toBottomOf="@+id/choice_title_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/choice_title_edit_text" />
+        app:layout_constraintTop_toTopOf="@+id/choice_title_edit_text"
+        app:tint="?colorPrimary" />
 
     <ImageButton
         android:id="@+id/button_choice_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/baseline_menu_24"
+        android:layout_marginEnd="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/baseline_menu_24"
         app:layout_constraintBottom_toBottomOf="@+id/choice_title_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/choice_title_edit_text" />
-
+        app:layout_constraintTop_toTopOf="@+id/choice_title_edit_text"
+        app:tint="?colorPrimary" />
 
     <include layout="@layout/something_went_wrong_layout"
         android:id="@+id/error_layout"
@@ -86,5 +90,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

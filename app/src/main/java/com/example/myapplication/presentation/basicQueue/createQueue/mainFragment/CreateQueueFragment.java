@@ -66,6 +66,7 @@ public class CreateQueueFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(requireActivity()).get(CreateQueueViewModel.class);
         try {
+
             page = CreateQueueFragmentArgs.fromBundle(getArguments()).getPage();
         }catch (IllegalArgumentException e){
             page = requireActivity().getIntent().getStringExtra(PAGE_KEY);

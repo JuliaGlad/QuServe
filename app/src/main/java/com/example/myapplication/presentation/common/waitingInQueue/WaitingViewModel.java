@@ -1,5 +1,9 @@
 package com.example.myapplication.presentation.common.waitingInQueue;
 
+import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
+
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,6 +12,7 @@ import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.presentation.common.waitingInQueue.model.WaitingModel;
 import com.example.myapplication.presentation.common.waitingInQueue.state.WaitingState;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +21,7 @@ import java.util.Locale;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -47,31 +53,37 @@ public class WaitingViewModel extends ViewModel {
                     nameString = queueModel.getName();
                     return QueueDI.addSnapshotQueueUseCase.invoke(queuePath);
                 })
-                .flatMapCompletable(documentSnapshot -> {
-                    if (QueueDI.onContainParticipantUseCase.invoke(documentSnapshot)) {
-                        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
-                        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-                        return QueueDI.addQueueToHistoryUseCase.invoke(queueId, nameString, time, date);
-                    }
-                    return null;
-                })
                 .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onComplete() {
-                        _isAdded.postValue(true);
+                    public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (QueueDI.onContainParticipantUseCase.invoke(documentSnapshot)){
+                            addToHistory(documentSnapshot.getString(QUEUE_NAME_KEY));
+                            _isAdded.postValue(true);
+                        }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        _state.postValue(new WaitingState.Error());
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
                     }
                 });
+    }
+
+    public void addToHistory(String name){
+        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        QueueDI.addQueueToHistoryUseCase.invoke(queueId, name, time, date);
     }
 
     public boolean checkParticipantsIndex(List<String> participants, int index) {

@@ -18,12 +18,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AlreadyOwnQueueViewModel extends ViewModel {
 
-    private String queueId;
-
     private final MutableLiveData<Boolean> _isFinished = new MutableLiveData<>();
     LiveData<Boolean> isFinished = _isFinished;
 
-    public void finishQueue() {
+    public void finishQueue(String queueId) {
         QueueDI.deleteQrCodeUseCase.invoke(queueId)
                 .concatWith(QueueDI.finishQueueUseCase.invoke(queueId))
                 .andThen(ProfileDI.updateOwnQueueUseCase.invoke(NOT_QUEUE_OWNER))
@@ -45,27 +43,4 @@ public class AlreadyOwnQueueViewModel extends ViewModel {
                     }
                 });
     }
-
-
-    public void getQueueData() {
-        QueueDI.getQueueByAuthorUseCase.invoke()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<QueueIdAndNameModel>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
-                        queueId = queueIdAndNameModel.getId();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-                });
-    }
-
 }

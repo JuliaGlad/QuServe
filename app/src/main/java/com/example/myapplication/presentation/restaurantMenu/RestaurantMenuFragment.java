@@ -14,32 +14,27 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_PRICE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_WEIGHT_OR_COUNT;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.myapplication.databinding.FragmentRestaurantMenuBinding;
-
-import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegate;
-import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
-
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.AddMenuCategoryActivity;
+import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
+import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
+import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
 import com.example.myapplication.presentation.restaurantMenu.addDish.AddDishActivity;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.addTopping.AddToppingDelegateItem;
@@ -47,17 +42,15 @@ import com.example.myapplication.presentation.restaurantMenu.dishDetails.recycle
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;
-import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
-import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
-import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegate;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegate;
 import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
 

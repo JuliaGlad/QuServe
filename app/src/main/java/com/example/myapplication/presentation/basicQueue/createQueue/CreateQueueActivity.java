@@ -36,11 +36,6 @@ public class CreateQueueActivity extends AppCompatActivity {
         }
     }
 
-    public void openCompanyQueueDetailsActivity() {
-        Intent intent = new Intent(this, CompanyQueueDetailsActivity.class);
-        startActivity(intent);
-    }
-
     public void openQueueDetailsActivity() {
         Intent intent = new Intent(this, QueueDetailsActivity.class);
         startActivity(intent);

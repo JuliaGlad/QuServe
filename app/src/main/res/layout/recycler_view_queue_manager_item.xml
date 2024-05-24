@@ -5,9 +5,9 @@
     android:id="@+id/queue_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
     android:layout_marginTop="24dp"
-    android:clickable="true"
-    android:focusable="true"
+    android:layout_marginEnd="20dp"
     app:cardCornerRadius="40dp"
     app:cardElevation="0dp"
     app:strokeColor="@color/transparent">
@@ -15,7 +15,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorSurfaceContainerLow">
+        android:background="?colorSurfaceContainerLow"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/background"
@@ -36,10 +39,10 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
-            android:text="DeLTA Tech Corp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="DeLTA Tech Corp" />
 
         <TextView
             android:id="@+id/title_workers"
@@ -92,10 +95,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="+33"
             app:layout_constraintBottom_toBottomOf="@+id/second_worker"
             app:layout_constraintStart_toEndOf="@+id/third_worker"
-            app:layout_constraintTop_toTopOf="@+id/second_worker" />
+            app:layout_constraintTop_toTopOf="@+id/second_worker"
+            tools:text="+33" />
 
         <TextView
             android:id="@+id/location"
@@ -104,10 +107,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:text="Moscow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/queue_name"
-            app:layout_constraintTop_toBottomOf="@+id/queue_name" />
+            app:layout_constraintTop_toBottomOf="@+id/queue_name"
+            tools:text="Moscow" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

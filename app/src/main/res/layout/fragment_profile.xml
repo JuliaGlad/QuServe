@@ -105,6 +105,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/quserve_icon_drawable" />
 
+        <com.tuyenmonkey.mkloader.MKLoader
+            android:id="@+id/loader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/button_sign_in"
+            app:layout_constraintEnd_toEndOf="@id/button_sign_in"
+            app:layout_constraintStart_toStartOf="@id/button_sign_in"
+            app:layout_constraintTop_toTopOf="@id/button_sign_in"
+            android:visibility="gone"
+            app:mk_color="?colorPrimary"
+            app:mk_type="FishSpinner" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

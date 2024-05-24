@@ -2,18 +2,20 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:cardCornerRadius="100dp"
-    app:cardElevation="0dp"
     android:id="@+id/item"
-    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="20dp"
+    app:cardCornerRadius="100dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="?colorSurfaceContainerLow">
+        android:background="?colorSurfaceContainerLow"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/ingredient_name"
@@ -34,6 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@drawable/button_icons_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -47,6 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:background="@drawable/button_icons_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_delete"

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".presentation.restaurantOrder.restaurantCart.OrderCartFragment">
 
     <TextView
@@ -12,6 +11,8 @@
         style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/total"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -21,6 +22,7 @@
         style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:text="819 ₽"
         app:layout_constraintBottom_toBottomOf="@+id/header_total"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,6 +32,8 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="3dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="24dp"
         android:background="@color/colorPrimaryContainer"
         app:layout_constraintBottom_toTopOf="@+id/total_price"
@@ -50,11 +54,13 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
     <ImageButton
         android:id="@+id/button_menu"
@@ -77,5 +83,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

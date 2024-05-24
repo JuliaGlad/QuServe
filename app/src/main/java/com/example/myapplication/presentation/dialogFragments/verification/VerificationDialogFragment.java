@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.dialogFragments.verification;
 
-import static com.example.myapplication.presentation.utils.Utils.IS_VERIFIED;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -23,9 +21,9 @@ public class VerificationDialogFragment extends DialogFragment {
     private VerificationDialogFragmentViewModel viewModel;
     private DialogDismissedListener listener;
     private boolean isVerified;
-    private final String email, password;
+    private String email, password;
 
-    public VerificationDialogFragment(String email, String password) {
+    public void setup(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -62,16 +60,18 @@ public class VerificationDialogFragment extends DialogFragment {
 
     private void setupObserves() {
         viewModel.isVerified.observe(this, aBoolean -> {
-            if (aBoolean) {
-                isVerified = true;
-                dismiss();
-            } else {
-                Snackbar.make(binding.getRoot(), getString(R.string.email_is_not_verified), Snackbar.LENGTH_LONG).show();
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    isVerified = true;
+                    dismiss();
+                } else {
+                    Snackbar.make(binding.getRoot(), getString(R.string.email_is_not_verified), Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 
         viewModel.isDeleted.observe(this, aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 dismiss();
             }
         });

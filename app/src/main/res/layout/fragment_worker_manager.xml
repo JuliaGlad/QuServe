@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:paddingTop="20dp"
     tools:context=".presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity">
 
@@ -14,6 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/card_background"
         app:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +26,7 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:background="@color/transparent"
         app:layout_constraintBottom_toBottomOf="@+id/search_view"
         app:layout_constraintStart_toStartOf="parent"

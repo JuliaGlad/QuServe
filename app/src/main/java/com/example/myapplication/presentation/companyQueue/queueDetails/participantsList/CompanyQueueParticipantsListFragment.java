@@ -90,7 +90,6 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
 
     private void setMainAdapter() {
         mainAdapter.addDelegate(new ParticipantListDelegate());
-        mainAdapter.addDelegate(new StatisticsDelegate());
         mainAdapter.addDelegate(new StringTextViewDelegate());
         binding.recyclerView.setAdapter(mainAdapter);
     }
@@ -100,8 +99,6 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
             for (int i = 0; i < queueLength; i++) {
                 itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
             }
-        } else {
-            itemsList.add(new StringTextViewDelegateItem(new StringTextViewModel(1, "No user yet", 24, View.TEXT_ALIGNMENT_CENTER)));
         }
     }
 

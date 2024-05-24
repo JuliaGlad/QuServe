@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewWaitingItemBinding;
 import com.example.myapplication.di.QueueDI;
 
@@ -59,7 +60,11 @@ public class WaitingItemDelegate implements AdapterDelegate {
 
                             @Override
                             public void onNext(@NonNull Integer integer) {
-                                binding.description.setText(String.valueOf(integer));
+                                if (integer != 0) {
+                                    binding.description.setText(String.valueOf(integer));
+                                } else {
+                                    binding.description.setText(itemView.getContext().getString(R.string.you_are_next));
+                                }
                                 model.size -= 1;
                             }
 

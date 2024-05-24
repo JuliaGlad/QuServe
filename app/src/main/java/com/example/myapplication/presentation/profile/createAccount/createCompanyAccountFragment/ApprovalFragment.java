@@ -1,5 +1,9 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment;
 
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,10 +21,19 @@ import com.example.myapplication.databinding.FragmentApprovalBinding;
 
 public class ApprovalFragment extends Fragment {
 
-    FragmentApprovalBinding binding;
+    private FragmentApprovalBinding binding;
+    private String companyId, companyName, companyService;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        companyId = getArguments().getString(COMPANY_ID);
+        companyName = getArguments().getString(COMPANY_NAME);
+        companyService = getArguments().getString(COMPANY_SERVICE);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentApprovalBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -51,7 +64,10 @@ public class ApprovalFragment extends Fragment {
 
     private void finish() {
         Intent intent = new Intent();
-        getActivity().setResult(Activity.RESULT_OK, intent);
+        intent.putExtra(COMPANY_NAME, companyName);
+        intent.putExtra(COMPANY_ID, companyId);
+        intent.putExtra(COMPANY_SERVICE, companyService);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
         requireActivity().finish();
     }
 }

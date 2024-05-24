@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".presentation.profile.createAccount.createCompanyAccountFragment.main.CreateCompanyAccountFragment">
 
     <ImageButton
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="@color/transparent"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +22,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="70dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/button_next"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,26 +43,44 @@
         app:trackCornerRadius="10dp"
         app:trackThickness="12dp" />
 
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_next"
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/next"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
         android:focusable="true"
+        android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_next"
+        app:layout_constraintEnd_toEndOf="@id/button_next"
+        app:layout_constraintStart_toStartOf="@id/button_next"
+        app:layout_constraintTop_toTopOf="@id/button_next"
+        android:visibility="gone"
+        app:mk_color="?colorPrimary"
+        app:mk_type="FishSpinner" />
 
     <ImageButton
         android:id="@+id/button_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

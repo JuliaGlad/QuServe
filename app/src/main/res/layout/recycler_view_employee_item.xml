@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
-    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="20dp"
     android:background="@drawable/card_background"
     android:padding="16dp">
 
@@ -23,10 +25,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Employee name"
         app:layout_constraintEnd_toStartOf="@+id/button_delete"
         app:layout_constraintStart_toEndOf="@+id/employee_photo"
-        app:layout_constraintTop_toTopOf="@+id/employee_photo" />
+        app:layout_constraintTop_toTopOf="@+id/employee_photo"
+        tools:text="Employee name" />
 
     <TextView
         android:id="@+id/role_headline"
@@ -46,15 +48,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        android:text="Worker/Admin"
         app:layout_constraintStart_toEndOf="@+id/role_headline"
-        app:layout_constraintTop_toBottomOf="@+id/employee_name" />
+        app:layout_constraintTop_toBottomOf="@+id/employee_name"
+        tools:text="Worker/Admin" />
 
     <ImageButton
         android:id="@+id/button_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_icons_background"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

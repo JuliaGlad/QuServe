@@ -20,7 +20,12 @@ public class AlreadyOwnQueueDialogFragment extends DialogFragment {
     DialogAlreadyOwnQueueBinding binding;
     AlreadyOwnQueueViewModel viewModel;
     DialogDismissedListener listener;
+    private final String queueId;
     private boolean isFinished = false;
+
+    public AlreadyOwnQueueDialogFragment(String queueId) {
+        this.queueId = queueId;
+    }
 
     @NonNull
     @Override
@@ -32,10 +37,9 @@ public class AlreadyOwnQueueDialogFragment extends DialogFragment {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         setupObserves();
-        viewModel.getQueueData();
 
         binding.buttonFinish.setOnClickListener(v -> {
-            viewModel.finishQueue();
+            viewModel.finishQueue(queueId);
         });
 
         binding.buttonCancel.setOnClickListener(v -> {

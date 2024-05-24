@@ -7,7 +7,6 @@ import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.PDF;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.content.Context;
@@ -35,13 +34,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEditCompanyBinding;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.model.EditCompanyModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.editCompany.state.EditCompanyState;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.time.Duration;
 
 public class EditCompanyFragment extends Fragment {
 
@@ -57,7 +53,7 @@ public class EditCompanyFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(EditCompanyViewModel.class);
 
         setActivityResultLauncher();
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         companyId = sharedPreferences.getString(COMPANY_ID, null);
         state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
 

@@ -44,9 +44,9 @@ public class NotEmployeeYetFragment extends Fragment {
 
     private void initBecomeEmployee() {
         binding.buttonBecomeEmployee.setOnClickListener(v -> {
-            if (getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, null).equals(ANONYMOUS)) {
+            if (requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, ANONYMOUS).equals(ANONYMOUS)) {
                 NeedAccountDialogFragment needAccountDialogFragment = new NeedAccountDialogFragment();
-                needAccountDialogFragment.show(getActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
+                needAccountDialogFragment.show(requireActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
             } else {
                 ((MainActivity)requireActivity()).openBecomeEmployeeOptionsActivity();
             }

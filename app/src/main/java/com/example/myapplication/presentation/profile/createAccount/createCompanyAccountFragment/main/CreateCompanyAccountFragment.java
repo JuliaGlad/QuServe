@@ -4,7 +4,14 @@ import static com.example.myapplication.presentation.profile.createAccount.creat
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.name;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.phoneNumber;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.service;
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
@@ -12,7 +19,10 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_5;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.stringsServicesArray;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -132,9 +142,23 @@ public class CreateCompanyAccountFragment extends Fragment {
 
                 initWorker(companyId);
 
+
+                String state;
+                if (service.equals(stringsServicesArray[0])) {
+                    state = COMPANY_QUEUE;
+                } else {
+                    state = RESTAURANT;
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putString(COMPANY_NAME, name);
+                bundle.putString(COMPANY_SERVICE, state);
+                bundle.putString(COMPANY_ID, companyId);
+
                 viewModel.setArgumentsNull();
+
                 NavHostFragment.findNavController(this)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentToApprovalFragment());
+                        .navigate(R.id.action_createCompanyAccountFragment_to_approvalFragment, bundle);
             }
         });
 

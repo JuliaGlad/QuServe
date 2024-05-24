@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.dialogFragments.verification;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -14,17 +16,17 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class VerificationDialogFragmentViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> _isVerified = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> _isVerified = new MutableLiveData<>(null);
     LiveData<Boolean> isVerified = _isVerified;
 
-    private final MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>(false);
     LiveData<Boolean> isDeleted = _isDeleted;
 
-    public void isVerified(){
+    public void isVerified() {
         checkVerification();
     }
 
-    private void checkVerification(){
+    private void checkVerification() {
         ProfileDI.checkVerificationUseCase.invoke()
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Boolean>() {
@@ -45,7 +47,7 @@ public class VerificationDialogFragmentViewModel extends ViewModel {
                 });
     }
 
-    public void deleteNotVerifiedAccount(String password){
+    public void deleteNotVerifiedAccount(String password) {
         ProfileDI.deleteAccountUseCase.invoke(password)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
@@ -61,8 +63,8 @@ public class VerificationDialogFragmentViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
                     }
                 });
     }
+
 }

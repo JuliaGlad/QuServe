@@ -5,6 +5,8 @@
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     android:layout_marginBottom="20dp"
     android:background="@drawable/dialog_background"
     android:padding="16dp">
@@ -126,6 +128,7 @@
         android:layout_marginTop="16dp"
         android:clickable="true"
         android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:text="@string/done"
         app:layout_constraintEnd_toEndOf="@+id/recycler_view_to_remove"
         app:layout_constraintTop_toBottomOf="@+id/number_title" />
@@ -145,9 +148,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="1"
         app:layout_constraintStart_toEndOf="@+id/number_title"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove"
+        tools:text="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

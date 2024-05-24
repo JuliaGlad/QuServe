@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="you_are_next">Приготовьтесь! Вы следующий!</string>
+    <string name="no_estimated_time_yet">Приблизительного времени ожидания пока что нет!</string>
     <string name="restaurant_title">Ресторан</string>
     <string name="you_have_to_add_at_least_1_dish_to_create_order">Вы должны добавить хотя бы 1 блюдо для заказа</string>
     <string name="you_have_to_add_at_least_2_variants">Вы должны добавить хотя бы 2 варианта</string>
@@ -396,4 +398,5 @@
     <string name="enter_queue_name">Введите название очереди:</string>
     <string name="your_cart_is_empty">Ваша корзина пуста!</string>
     <string name="looks_like_you_haven_t_added_any_dishes_to_your_cart_yet">Looks like you haven`t added any dishes to your cart yet</string>
+    <string name="for_who_is_your_account">Для кого ваш аккаунт?</string>
 </resources>

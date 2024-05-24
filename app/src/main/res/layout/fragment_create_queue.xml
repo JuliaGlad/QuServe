@@ -56,6 +56,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_next"
+        app:layout_constraintEnd_toEndOf="@id/button_next"
+        app:layout_constraintStart_toStartOf="@id/button_next"
+        app:layout_constraintTop_toTopOf="@id/button_next"
+        android:visibility="gone"
+        app:mk_color="?colorPrimary"
+        app:mk_type="FishSpinner" />
+
     <ImageButton
         android:id="@+id/button_close"
         android:layout_width="wrap_content"

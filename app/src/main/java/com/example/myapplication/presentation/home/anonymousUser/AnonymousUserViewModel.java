@@ -47,7 +47,7 @@ public class AnonymousUserViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _state.postValue(new AnonymousUserState.Error());
                     }
                 });
 

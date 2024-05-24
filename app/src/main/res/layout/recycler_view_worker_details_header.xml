@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     android:layout_marginBottom="24dp">
 
     <ImageView
@@ -21,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
-        android:text="Employee Name"
+        tools:text="Employee Name"
         app:layout_constraintEnd_toStartOf="@+id/employee_photo"
         app:layout_constraintTop_toTopOf="@+id/employee_photo" />
 
@@ -31,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:text="Employee_role"
+        tools:text="Employee_role"
         android:textColor="@color/colorTextHint"
         app:layout_constraintEnd_toStartOf="@+id/employee_photo"
         app:layout_constraintTop_toBottomOf="@+id/employee_name" />

@@ -61,7 +61,6 @@ public class AnonymousUserFragment extends Fragment {
     private String restaurantPath;
     private final MainAdapter adapter = new MainAdapter();
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
-    private ActivityResultLauncher<Intent> createAccountLauncher;
     private final List<DelegateItem> items = new ArrayList<>();
     private final List<DelegateItem> actions = new ArrayList<>();
 
@@ -72,7 +71,6 @@ public class AnonymousUserFragment extends Fragment {
         viewModel.getActions();
         initJoinQueueLauncher();
         initRestaurantOrderLauncher();
-        initCreateAccountLauncher();
     }
 
     @Override
@@ -200,25 +198,5 @@ public class AnonymousUserFragment extends Fragment {
         scanOptions.setCaptureActivity(ScanCode.class);
         scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
         launcher.launch(scanOptions);
-    }
-
-    private void initCreateAccountLauncher() {
-        createAccountLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        requireActivity().getSupportFragmentManager()
-                                .beginTransaction()
-                                .setReorderingAllowed(true)
-                                .replace(R.id.logged_container, ProfileLoggedFragment.class, null)
-                                .commit();
-                    }
-                });
-    }
-
-    private void navigateToCreateAccount() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.nav_host_fragment_activity_main, CreateAccountFragment.class, null)
-                .commit();
     }
 }

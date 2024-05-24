@@ -6,14 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
-    android:clickable="true"
-    android:focusable="true"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     app:cardCornerRadius="100dp"
     app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
         android:background="@drawable/card_background"
         android:padding="16dp">
 
@@ -31,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="Employee name"
+            tools:text="Employee name"
             app:layout_constraintStart_toEndOf="@+id/employee_photo"
             app:layout_constraintTop_toTopOf="@+id/employee_photo" />
 

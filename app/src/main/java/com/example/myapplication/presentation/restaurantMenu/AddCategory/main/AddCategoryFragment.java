@@ -177,6 +177,7 @@ public class AddCategoryFragment extends Fragment {
                 break;
             case PAGE_2:
                 if (ArgumentsCategory.chosenImage != Uri.EMPTY) {
+                    binding.loader.setVisibility(View.VISIBLE);
                     viewModel.initCategoryData(restaurantId, requireView());
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
@@ -242,6 +243,7 @@ public class AddCategoryFragment extends Fragment {
 
         viewModel.onComplete.observe(getViewLifecycleOwner(), category -> {
             if (category != null) {
+                binding.loader.setVisibility(View.GONE);
                 Intent intent = new Intent();
                 intent.putExtra(COMPANY_ID, category.getId());
                 intent.putExtra(URI, String.valueOf(category.getUri()));

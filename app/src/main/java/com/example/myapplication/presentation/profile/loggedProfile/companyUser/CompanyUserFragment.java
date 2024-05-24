@@ -8,26 +8,21 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCompanyUserBinding;
@@ -54,7 +49,6 @@ public class CompanyUserFragment extends Fragment {
     private CompanyUserViewModel viewModel;
     private FragmentCompanyUserBinding binding;
     private String companyId, type;
-    private boolean isExist = true;
     private int editTextId = 0;
     private ActivityResultLauncher<Intent> launcher;
     private final List<DelegateItem> delegates = new ArrayList<>();
@@ -63,7 +57,7 @@ public class CompanyUserFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         companyId = sharedPreferences.getString(COMPANY_ID, null);
         type = sharedPreferences.getString(APP_STATE, null);
         initLauncher();
@@ -73,11 +67,11 @@ public class CompanyUserFragment extends Fragment {
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
                         sharedPreferences.edit().putString(COMPANY_ID, null).apply();
 
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         fragmentManager
                                 .beginTransaction()
                                 .setReorderingAllowed(true)
@@ -146,14 +140,13 @@ public class CompanyUserFragment extends Fragment {
         });
 
         viewModel.isExist.observe(getViewLifecycleOwner(), aBoolean -> {
-            isExist = aBoolean;
             if (!aBoolean) {
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
                 sharedPreferences.edit().putString(COMPANY_ID, null).apply();
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .setReorderingAllowed(true)
@@ -189,11 +182,11 @@ public class CompanyUserFragment extends Fragment {
 
         delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_person_filled_24, R.string.go_to_my_profile, () -> {
 
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
             sharedPreferences.edit().putString(COMPANY_ID, null).apply();
 
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager
                     .beginTransaction()
                     .setReorderingAllowed(true)

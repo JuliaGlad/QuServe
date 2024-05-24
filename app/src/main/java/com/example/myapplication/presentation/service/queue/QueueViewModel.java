@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.profile.UserActionsDataModel;
+import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.core.Observer;
@@ -15,6 +17,9 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class QueueViewModel extends ViewModel {
+
+    private final MutableLiveData<String> _queueIdOwner = new MutableLiveData<>(null);
+    LiveData<String> queueIdOwner = _queueIdOwner;
 
     private final MutableLiveData<String> _isOwnQueue = new MutableLiveData<>(null);
     LiveData<String> isOwnQueue = _isOwnQueue;
@@ -78,4 +83,25 @@ public class QueueViewModel extends ViewModel {
                 });
     }
 
+    public void getQueueData() {
+        QueueDI.getQueueByAuthorUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<QueueIdAndNameModel>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull QueueIdAndNameModel queueIdAndNameModel) {
+                        String queueId = queueIdAndNameModel.getId();
+                        _queueIdOwner.postValue(queueId);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
 }

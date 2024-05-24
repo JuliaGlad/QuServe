@@ -26,8 +26,8 @@ public class QueueDetailsViewModel extends ViewModel {
     private final MutableLiveData<QueueDetailsState> _state = new MutableLiveData<>(new QueueDetailsState.Loading());
     LiveData<QueueDetailsState> state = _state;
 
-    private final MutableLiveData<Boolean> _isPaused = new MutableLiveData<>(false);
-    LiveData<Boolean> isPaused = _isPaused;
+    private final MutableLiveData<String> _isPaused = new MutableLiveData<>(null);
+    LiveData<String> isPaused = _isPaused;
 
     private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>();
     public LiveData<Uri> pdfUri = _pdfUri;
@@ -44,7 +44,7 @@ public class QueueDetailsViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull QueueInProgressModel queueInProgressModel) {
                         if (queueInProgressModel.getInProgress().contains("Paused")) {
-                            _isPaused.postValue(true);
+                            _isPaused.postValue(queueInProgressModel.getId());
                         }
                     }
 

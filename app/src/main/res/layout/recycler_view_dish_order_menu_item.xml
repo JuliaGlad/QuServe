@@ -16,7 +16,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="170dp"
         android:layout_height="250dp"
-        android:background="?colorSurfaceContainerLow">
+        android:background="?colorSurfaceContainerLow"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/dish_image"
@@ -36,11 +39,11 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
-            android:text="Dish Name"
             app:layout_constraintBottom_toTopOf="@+id/button_add_to_cart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/weightCount" />
+            app:layout_constraintTop_toBottomOf="@id/weightCount"
+            tools:text="Dish Name" />
 
         <TextView
             android:id="@+id/weightCount"
@@ -48,19 +51,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="100gr"
             app:layout_constraintStart_toStartOf="@+id/dishName"
-            app:layout_constraintTop_toBottomOf="@+id/dish_image" />
+            app:layout_constraintTop_toBottomOf="@+id/dish_image"
+            tools:text="100gr" />
 
         <TextView
             android:id="@+id/price"
             style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="300 ₽"
             app:layout_constraintBottom_toBottomOf="@+id/button_add_to_cart"
             app:layout_constraintStart_toStartOf="@+id/dishName"
-            app:layout_constraintTop_toTopOf="@+id/button_add_to_cart" />
+            app:layout_constraintTop_toTopOf="@+id/button_add_to_cart"
+            tools:text="300 ₽" />
 
         <ImageButton
             android:id="@+id/button_add_to_cart"
@@ -71,6 +74,7 @@
             android:background="@drawable/icons_primary_rectangle_background"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="7dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

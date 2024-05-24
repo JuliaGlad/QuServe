@@ -18,8 +18,8 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _verified = new MutableLiveData<>(false);
     LiveData<Boolean> verified = _verified;
 
-    private final MutableLiveData<Boolean> _showDialog = new MutableLiveData<>(false);
-    LiveData<Boolean> showDialog = _showDialog;
+    private final MutableLiveData<Boolean> _created = new MutableLiveData<>(false);
+    LiveData<Boolean> created = _created;
 
     private final MutableLiveData<String> _emailError = new MutableLiveData<>(null);
 
@@ -27,12 +27,12 @@ public class CreateAccountViewModel extends ViewModel {
 
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
 
+    String vEmail, vPassword;
+
     public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
         ProfileDI.createAccountUseCase.invoke(email, password, userName)
-                .concatWith(
-                        ProfileDI.uploadProfileImageToFireStorageUseCase.invoke(uri)
-                                .andThen(ProfileDI.sendVerificationEmailUseCase.invoke())
-                )
+                .concatWith(ProfileDI.uploadProfileImageToFireStorageUseCase.invoke(uri))
+             //   .andThen(ProfileDI.sendVerificationEmailUseCase.invoke())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -42,7 +42,7 @@ public class CreateAccountViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _showDialog.postValue(true);
+                        _created.postValue(true);
                     }
 
                     @Override

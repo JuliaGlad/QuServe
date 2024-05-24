@@ -1,50 +1,42 @@
 package com.example.myapplication.presentation.home.basicUser;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentHomeBasisUserBinding;
 import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.AlreadyOwnQueueDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.alreadyParticipateInQueue.AlreadyParticipateInQueueDialogFragment;
+import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicUserModel;
+import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
+import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
+import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
-
-import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
-import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
-
 import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonModel;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
-import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicUserModel;
-import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
-import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
-import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
-import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
-import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
 import com.example.myapplication.presentation.service.ScanCode;
@@ -61,6 +53,9 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
+import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegate;
+import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.ButtonWithDescriptionModel;
 
 public class HomeBasisUserFragment extends Fragment {
 
@@ -120,6 +115,12 @@ public class HomeBasisUserFragment extends Fragment {
             }
         });
 
+        viewModel.queueIdOwner.observe(getViewLifecycleOwner(), queueId -> {
+            if (queueId != null) {
+                showAlreadyOwnDialog(queueId);
+            }
+        });
+
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof HomeBasicUserState.Success) {
                 HomeBasicUserModel model = ((HomeBasicUserState.Success) state).data;
@@ -130,17 +131,17 @@ public class HomeBasisUserFragment extends Fragment {
                 }
 
             } else if (state instanceof HomeBasicUserState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof HomeBasicUserState.Error) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 setErrorLayout();
             }
         });
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getUserBooleanData();
@@ -162,7 +163,7 @@ public class HomeBasisUserFragment extends Fragment {
                     if (own == null) {
                         ((MainActivity) requireActivity()).openCreateQueueActivity();
                     } else {
-                        showAlreadyOwnDialog();
+                        viewModel.getQueueData();
                     }
                 })));
         delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, restaurantOrderLauncher)));
@@ -173,7 +174,7 @@ public class HomeBasisUserFragment extends Fragment {
         adapter.addDelegate(new RestaurantOrderButtonDelegate());
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(delegates);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
@@ -238,18 +239,18 @@ public class HomeBasisUserFragment extends Fragment {
     }
 
     private void showAlreadyParticipateDialog() {
-        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment();
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "ALREADY_PARTICIPATE_IN_QUEUE_DIALOG");
+        AlreadyParticipateInQueueDialogFragment dialogFragment = new AlreadyParticipateInQueueDialogFragment();
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_PARTICIPATE_IN_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
 
         });
     }
 
-    private void showAlreadyOwnDialog() {
-        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment();
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "ALREADY_OWN_QUEUE_DIALOG");
+    private void showAlreadyOwnDialog(String queueId) {
+        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment(queueId);
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_OWN_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
-            ((QueueActivity) requireActivity()).openCreateQueueActivity();
+            ((MainActivity) requireActivity()).openCreateQueueActivity();
         });
     }
 
@@ -258,7 +259,7 @@ public class HomeBasisUserFragment extends Fragment {
         adapter.addDelegate(new AdviseBoxDelegate());
         adapter.addDelegate(new ButtonWithDescriptionDelegate());
         binding.recyclerView.setAdapter(adapter);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
         adapter.submitList(list);
     }

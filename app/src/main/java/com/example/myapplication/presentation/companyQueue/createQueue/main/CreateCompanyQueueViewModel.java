@@ -56,25 +56,25 @@ public class CreateCompanyQueueViewModel extends ViewModel {
     }
 
     private void createQueueDocument(String queueID, String companyId) {
-       CompanyQueueDI.createCompanyQueueDocumentUseCase.invoke(
-                queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels)
-               .subscribeOn(Schedulers.io())
-               .subscribe(new SingleObserver<String>() {
-                   @Override
-                   public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+        CompanyQueueDI.createCompanyQueueDocumentUseCase.invoke(
+                        queueID, city, queueTime, queueName, queueLocation, companyId, employeeModels)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
 
-                   }
+                    }
 
-                   @Override
-                   public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull String path) {
-                       generateQrCode(path, queueID);
-                   }
+                    @Override
+                    public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull String path) {
+                        generateQrCode(path, queueID);
+                    }
 
-                   @Override
-                   public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
 
-                   }
-               });
+                    }
+                });
     }
 
     private String generateID() {
@@ -169,17 +169,12 @@ public class CreateCompanyQueueViewModel extends ViewModel {
         File file = new File(folder.getAbsolutePath() + "/" + "QR-CODE.pdf");
 
         try {
-            if (file.exists()) {
-                FileOutputStream fos = new FileOutputStream(file);
-                pdfDocument.writeTo(fos);
-                pdfDocument.close();
-                fos.close();
+            FileOutputStream fos = new FileOutputStream(file);
+            pdfDocument.writeTo(fos);
+            pdfDocument.close();
+            fos.close();
 
-                uploadPdfToFireStorage(file, queueID);
-
-            } else {
-                Log.e("NOT EXIST!", "File does not exists");
-            }
+            uploadPdfToFireStorage(file, queueID);
 
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());

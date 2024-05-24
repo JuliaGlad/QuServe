@@ -73,7 +73,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof HomeQueueCompanyState.Success) {
                 List<QueueCompanyHomeModel> models = ((HomeQueueCompanyState.Success) state).data;
-                if (models != null && models.size() != 0) {
+                if (models != null && !models.isEmpty()) {
                     initRecycler(models);
                 } else {
                     initEmptyActionRecycler();
@@ -127,13 +127,14 @@ public class HomeQueueCompanyUserFragment extends Fragment {
 
     private void showEmployeeQrCodeDialog() {
         EmployeeQrCodeDialogFragment dialogFragment = new EmployeeQrCodeDialogFragment(companyId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "EMPLOYEE_QE_CODE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "EMPLOYEE_QE_CODE_DIALOG");
     }
 
     private void buildList(DelegateItem[] items) {
         List<DelegateItem> list = Arrays.asList(items);
         adapter.addDelegate(new AdviseBoxDelegate());
         adapter.addDelegate(new ButtonWithDescriptionDelegate());
+        binding.recyclerView.setAdapter(adapter);
         adapter.submitList(list);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
         binding.progressBar.setVisibility(View.GONE);

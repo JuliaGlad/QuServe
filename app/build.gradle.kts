@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("com.tuyenmonkey:mkloader:1.4.0")
     implementation("com.github.shts:StoriesProgressView:3.0.0")
     implementation("com.google.android.gms:play-services-tasks:18.1.0")
     implementation("com.google.code.gson:gson:2.8.9")

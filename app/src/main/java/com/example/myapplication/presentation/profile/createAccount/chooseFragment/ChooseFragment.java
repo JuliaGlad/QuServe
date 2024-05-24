@@ -1,12 +1,17 @@
 package com.example.myapplication.presentation.profile.createAccount.chooseFragment;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,18 +20,48 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentChooseBinding;
 import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 
 public class ChooseFragment extends Fragment {
 
-    FragmentChooseBinding binding;
+    private FragmentChooseBinding binding;
+    private ActivityResultLauncher<Intent> createCompanyLauncher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        createCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+
+                        String state = result.getData().getStringExtra(COMPANY_SERVICE);
+                        String companyId = result.getData().getStringExtra(COMPANY_ID);
+
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putString(APP_STATE, state).apply();
+                        sharedPreferences.edit().putString(COMPANY_ID, companyId).apply();
+
+                        NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_chooseFragment_to_profileLoggedFragment);
+                    }
+                });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +81,7 @@ public class ChooseFragment extends Fragment {
 
     private void initYourselfButton() {
         binding.forYourselfLayout.setOnClickListener(v -> {
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_chooseFragment_to_profileLoggedFragment);
@@ -55,7 +90,9 @@ public class ChooseFragment extends Fragment {
 
     private void initCompanyButton(){
         binding.forCompanyLayout.setOnClickListener(v -> {
-            ((MainActivity)requireActivity()).openCreateCompanyActivity();
+            Intent intent = new Intent(requireActivity(), CreateCompanyActivity.class);
+            intent.putExtra(PAGE_KEY, PAGE_1);
+            createCompanyLauncher.launch(intent);
         });
     }
 

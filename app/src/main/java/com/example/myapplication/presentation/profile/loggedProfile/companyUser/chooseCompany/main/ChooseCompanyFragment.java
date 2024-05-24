@@ -1,14 +1,15 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.main;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.CREATE_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_MANAGER;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.app.Activity;
@@ -17,21 +18,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentChooseCompanyBinding;
 import com.example.myapplication.domain.model.common.ImageTaskModel;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ChooseCompanyState;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.CompanyListModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.modelAndState.ListItemModel;
@@ -54,11 +54,13 @@ public class ChooseCompanyFragment extends Fragment {
     List<CompanyListModel> models = new ArrayList<>();
     List<Task<Uri>> imageList = new ArrayList<>();
     List<DelegateItem> delegates = new ArrayList<>();
+    private ActivityResultLauncher<Intent> launcher;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initCreateCompanyLauncher();
     }
 
     @Override
@@ -79,9 +81,47 @@ public class ChooseCompanyFragment extends Fragment {
         initAddButton();
     }
 
+    private void addCompanyDelegateItems(String companyName, Task<Uri> image, String service, String companyId){
+        delegates.add(new CompanyListItemDelegateItem(new CompanyListItemDelegateModel(
+                delegates.size(),
+                companyName,
+                image, () -> {
+
+            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            switch (service) {
+                case COMPANY_QUEUE:
+                    sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
+                    sharedPreferences.edit().putString(COMPANY_ID, companyId).apply();
+                    break;
+                case RESTAURANT:
+                    sharedPreferences.edit().putString(APP_STATE, RESTAURANT).apply();
+                    sharedPreferences.edit().putString(COMPANY_ID, companyId).apply();
+                    break;
+            }
+            initNavigation();
+        })
+        ));
+    }
+
+    private void initCreateCompanyLauncher(){
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        String companyName = data.getStringExtra(COMPANY_NAME);
+                        String companyId = data.getStringExtra(COMPANY_ID);
+                        String companyService = data.getStringExtra(COMPANY_SERVICE);
+                        addCompanyDelegateItems(companyName, null, companyService, companyId);;
+                        mainAdapter.notifyItemInserted(delegates.size() - 1);
+                    }
+                });
+    }
+
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            ((ChooseCompanyActivity) requireActivity()).openCreateCompanyActivity();
+            Intent intent = new Intent(requireActivity(), CreateCompanyActivity.class);
+            intent.putExtra(PAGE_KEY, PAGE_1);
+            launcher.launch(intent);
         });
     }
 
@@ -101,7 +141,7 @@ public class ChooseCompanyFragment extends Fragment {
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof ChooseCompanyState.Success) {
-                if (delegates.size() == 0) {
+                if (delegates.isEmpty()) {
                     ListItemModel model = ((ChooseCompanyState.Success) state).data;
                     models = model.getCompanyModels();
                     List<ImageTaskModel> tasks = model.getImageTaskModels();
@@ -129,8 +169,7 @@ public class ChooseCompanyFragment extends Fragment {
     }
 
     private void initNavigation() {
-        Intent intent = new Intent();
-        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().setResult(Activity.RESULT_OK);
         requireActivity().finish();
     }
 
@@ -138,28 +177,7 @@ public class ChooseCompanyFragment extends Fragment {
         for (int i = 0; i < models.size(); i++) {
             CompanyListModel current = models.get(i);
             String id = current.getId();
-            delegates.add(new CompanyListItemDelegateItem(new CompanyListItemDelegateModel(
-                    i,
-                    current.getName(),
-                    imageList.get(i), () -> {
-
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-
-                String service = current.getService();
-                switch (service) {
-                    case COMPANY_QUEUE:
-                        sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
-                        sharedPreferences.edit().putString(COMPANY_ID, id).apply();
-                        break;
-                    case RESTAURANT:
-                        sharedPreferences.edit().putString(APP_STATE, RESTAURANT).apply();
-                        sharedPreferences.edit().putString(COMPANY_ID, id).apply();
-                        break;
-                }
-                initNavigation();
-            })
-            ));
-
+            addCompanyDelegateItems(current.getName(), imageList.get(i), current.getService(), id);
         }
         mainAdapter.submitList(delegates);
         binding.progressBar.setVisibility(View.GONE);

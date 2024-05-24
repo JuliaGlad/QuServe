@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.utils.waitingNotification;
 
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
 
 import android.app.Notification;
@@ -17,15 +18,15 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.example.myapplication.R;
-import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
-import com.example.myapplication.presentation.utils.youtTurnNotification.YourTurnForegroundService;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -63,11 +64,7 @@ public class NotificationForegroundService extends Service {
                             intent.putExtra(PARTICIPANT_QUEUE_PATH, path);
                             startService(intent);
                         } else if (QueueDI.onContainParticipantUseCase.invoke(snapshot)) {
-                            stopForeground(true);
-                            stopSelf();
-                            Intent intent = new Intent(NotificationForegroundService.this, YourTurnForegroundService.class);
-                            intent.putExtra(PARTICIPANT_QUEUE_PATH, path);
-                            startService(intent);
+                            updateParticipate();
                         } else if (QueueDI.onParticipantLeftUseCase.invoke(snapshot)) {
                             stopForeground(true);
                             stopSelf();
@@ -84,6 +81,53 @@ public class NotificationForegroundService extends Service {
 
                     }
                 });
+    }
+
+    private void updateParticipate() {
+        ProfileDI.updateParticipateInQueueUseCase.invoke(NOT_PARTICIPATE_IN_QUEUE)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                        stopForeground(true);
+                        stopSelf();
+
+                        Intent intent = new Intent(NotificationForegroundService.this, WaitingActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(NotificationForegroundService.this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(NotificationForegroundService.this, NOTIFICATION_CHANNEL_ID)
+                                .setSmallIcon(R.drawable.ic_notifications)
+                                .setContentText(getString(R.string.you_can_now_go_to_service_point))
+                                .setContentTitle(getString(R.string.it_s_your_turn_now))
+                                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                                .setContentIntent(pendingIntent)
+                                .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+                        createBasicNotificationChannel(builder);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    private void createBasicNotificationChannel(NotificationCompat.Builder builder) {
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            Notification notification = builder.build();
+            notificationManager.notify(2, notification);
+        }
     }
 
     private void getQueueByParticipantId() {

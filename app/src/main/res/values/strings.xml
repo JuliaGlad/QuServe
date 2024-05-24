@@ -1,4 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="you_are_next">Get ready! You are next!</string>
+    <string name="no_estimated_time_yet">No estimated time yet!</string>
     <string name="restaurant_title">Restaurant</string>
     <string name="you_have_to_add_at_least_1_dish_to_create_order">You have to add at least 1 dish to create order</string>
     <string name="you_have_to_add_at_least_2_variants">You have to add at least 2 variants</string>
@@ -403,4 +405,8 @@
     <string name="email_is_not_verified">Email is not verified!</string>
     <string name="your_cart_is_empty">Your cart is empty!</string>
     <string name="looks_like_you_haven_t_added_any_dishes_to_your_cart_yet">Looks like you haven`t added any dishes to your cart yet</string>
+    <string name="about_us_text_1">QuServe - сервис, который решает проблему неудобного обслуживания в популярных общественных местах.</string>
+    <string name="abour_us_text_2">1 . Умная очередь для физических лиц и компаний. Приложение позволяте людям не стоять в живой очереди, а также на основе опыта предыдущих людей рассчитвает примерное время ожидания.</string>
+    <string name="about_us_text_3">2. Умное обслуживание ресторанов и кафе. Приложение упрощает процесс ожидание и делает его более удобным и надежным, как для посетителей, так и для сотрудников ресторана.</string>
+    <string name="for_who_is_your_account">For who is your account?</string>
 </resources>

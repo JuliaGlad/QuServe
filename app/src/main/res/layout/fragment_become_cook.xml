@@ -45,14 +45,13 @@
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/transparent"
         app:cardElevation="0dp"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/background_yes"
@@ -95,9 +94,9 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground">
 
             <ImageView
                 android:id="@+id/background_no"
@@ -130,6 +129,16 @@
         android:id="@+id/error_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/loading_layout"
+        android:id="@+id/progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -2,8 +2,6 @@ package com.example.myapplication.presentation.profile.createAccount.firstFragme
 
 import static android.app.Activity.RESULT_OK;
 
-import static com.example.myapplication.presentation.utils.Utils.IS_VERIFIED;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -98,10 +96,11 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.showDialog.observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.created.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 binding.progressBar.setVisibility(View.GONE);
-                createVerificationDialog(email);
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_createAccount_to_chooseFragment);
             }
         });
 
@@ -116,7 +115,13 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void createVerificationDialog(String email) {
-        VerificationDialogFragment dialogFragment = new VerificationDialogFragment(email, password);
+        VerificationDialogFragment dialogFragment = new VerificationDialogFragment();
+        if (email != null && password != null) {
+            viewModel.vEmail = email;
+            viewModel.vPassword = password;
+        }
+        dialogFragment.setup(viewModel.vEmail, viewModel.vPassword);
+
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "VERIFICATON_DIALOG");
         DialogDismissedListener listener = bundle -> {
             NavHostFragment.findNavController(this)

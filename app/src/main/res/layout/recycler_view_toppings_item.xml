@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
-    android:layout_marginTop="16dp"
-    android:layout_marginStart="20dp"
     android:layout_width="150dp"
-    android:layout_height="250dp">
+    android:layout_height="250dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="16dp"
+    android:gravity="center">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/item"
@@ -40,11 +40,11 @@
                 android:layout_marginBottom="10dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:text="Vegetables"
                 app:layout_constraintBottom_toTopOf="@+id/price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredient_image" />
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_image"
+                tools:text="Vegetables" />
 
             <TextView
                 android:id="@+id/price"
@@ -58,17 +58,20 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:text="+100"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="+100" />
 
             <ImageButton
                 android:id="@+id/button_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:padding="10dp"
                 android:background="@drawable/button_surface_containater_tonal_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ingredient_name"

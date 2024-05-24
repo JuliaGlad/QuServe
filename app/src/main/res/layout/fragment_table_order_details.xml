@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp"
     android:paddingTop="20dp"
     tools:context=".presentation.restaurantLocation.locationDetails.tableList.tableDetails.orderDetails.TableOrderDetailsFragment">
 
@@ -14,11 +12,12 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
+        android:layout_marginStart="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
     <TextView
         android:id="@+id/title_table"
@@ -46,12 +45,13 @@
         android:id="@+id/image_chef"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/ic_chef_hat"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_chef_hat"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_table" />
+        app:layout_constraintTop_toBottomOf="@+id/title_table"
+        app:tint="?colorPrimary" />
 
     <TextView
         android:id="@+id/cook_name"
@@ -68,11 +68,12 @@
         android:id="@+id/waiter_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
         android:src="@drawable/ic_waiter"
-        app:tint="?colorPrimary"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cook_name" />
+        app:layout_constraintTop_toBottomOf="@+id/cook_name"
+        app:tint="?colorPrimary" />
 
     <TextView
         android:id="@+id/waiter_name"
@@ -90,6 +91,7 @@
         style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="24dp"
         android:text="@string/dishes"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +99,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

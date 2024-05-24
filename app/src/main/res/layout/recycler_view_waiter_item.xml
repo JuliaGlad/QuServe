@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
-    app:cardCornerRadius="40dp"
-    app:cardElevation="0dp"
-    android:layout_marginTop="24dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="20dp"
+    app:cardCornerRadius="40dp"
+    app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="?colorSurfaceContainerLow">
+        android:background="?colorSurfaceContainerLow"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/table_number"
@@ -32,20 +34,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
-            android:text="Dish name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/count"
-            app:layout_constraintTop_toBottomOf="@+id/table_number" />
+            app:layout_constraintTop_toBottomOf="@+id/table_number"
+            tools:text="Dish name" />
 
         <TextView
             android:id="@+id/count"
             style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="2"
             app:layout_constraintBottom_toBottomOf="@+id/dishes_title"
             app:layout_constraintStart_toStartOf="@+id/table_number"
-            app:layout_constraintTop_toTopOf="@+id/dishes_title" />
+            app:layout_constraintTop_toTopOf="@+id/dishes_title"
+            tools:text="2" />
 
         <TextView
             android:id="@+id/served"
@@ -56,6 +58,7 @@
             android:background="@drawable/button_surface_containater_tonal_background"
             android:clickable="true"
             android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:paddingStart="32dp"
             android:paddingTop="10dp"
             android:paddingEnd="32dp"
@@ -70,10 +73,10 @@
             style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2"
             app:layout_constraintBottom_toBottomOf="@+id/table_number"
             app:layout_constraintStart_toEndOf="@+id/table_number"
-            app:layout_constraintTop_toTopOf="@+id/table_number" />
+            app:layout_constraintTop_toTopOf="@+id/table_number"
+            tools:text="2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

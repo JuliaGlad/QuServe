@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="20dp"
     android:layout_marginTop="24dp"
-    app:cardElevation="0dp"
+    android:layout_marginEnd="20dp"
     android:padding="20dp"
-    app:strokeColor="@color/transparent"
     app:cardBackgroundColor="@color/transparent"
-    app:cardCornerRadius="30dp">
+    app:cardCornerRadius="30dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/background"
@@ -33,10 +39,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="16dp"
-            android:text="Queue Third"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/background"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Queue Third" />
 
         <TextView
             android:id="@+id/description"
@@ -46,11 +52,11 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/roboto_medium"
             android:paddingBottom="16dp"
-            android:text="Queue Location"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/head_line"
-            app:layout_constraintTop_toBottomOf="@+id/head_line" />
+            app:layout_constraintTop_toBottomOf="@+id/head_line"
+            tools:text="Queue Location" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

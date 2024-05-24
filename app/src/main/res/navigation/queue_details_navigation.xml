@@ -10,10 +10,14 @@
         android:name="com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsFragment"
         android:label="fragment_queue_details"
         tools:layout="@layout/fragment_queue_details">
+
+
+
         <action
             android:id="@+id/action_queueDetailsFragment_to_participantsListFragment"
             android:defaultValue="@null"
             app:destination="@id/participantsListFragment" />
+
         <action
             android:id="@+id/action_queueDetailsFragment_to_pausedQueueFragment"
             android:defaultValue="@null"
@@ -22,7 +26,9 @@
             app:destination="@id/pausedQueueFragment"
             app:nullable="true"
             app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:popExitAnim="@anim/nav_default_exit_anim">
+        </action>
+
     </fragment>
 
     <fragment
@@ -35,6 +41,7 @@
             app:destination="@id/detailsQueueFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:popExitAnim="@anim/nav_default_exit_anim"/>
+
     </fragment>
     <fragment
         android:id="@+id/pausedQueueFragment"

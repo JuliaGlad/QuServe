@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".presentation.basicQueue.queueDetails.participantList.ParticipantsListFragment">
 
     <ImageButton
         android:id="@+id/imageButton_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:background="@color/transparent"
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintBottom_toBottomOf="@+id/header"
@@ -40,6 +40,9 @@
         style="@style/Widget.Material3.Button.QuServe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/next_participant"
@@ -54,9 +57,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/bold_roboto"
         android:text="@string/participants_list"
         app:layout_constraintStart_toEndOf="@+id/imageButton_back"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <include layout="@layout/loading_layout"
+        android:id="@+id/progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

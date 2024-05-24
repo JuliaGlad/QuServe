@@ -1,6 +1,6 @@
 package com.example.myapplication.data.repository.profile;
 
-import static com.example.myapplication.di.DI.service;
+ import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.Utils.BIRTHDAY_KEY;
@@ -32,19 +32,23 @@ import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.myapplication.app.App;
-import com.example.myapplication.data.db.entity.AnonymousUserEntity;
+import androidx.annotation.NonNull;
+ import androidx.core.content.ContextCompat;
+
+ import com.example.myapplication.app.App;
+import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.dto.user.AnonymousUserDto;
 import com.example.myapplication.data.dto.user.HistoryQueueDto;
-import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.dto.user.UserDto;
 import com.example.myapplication.data.providers.AnonymousUserProvider;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
-import com.example.myapplication.domain.model.profile.AnonymousUserModel;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -53,8 +57,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,7 +119,7 @@ public class ProfileRepository {
                     .document(service.auth.getCurrentUser().getUid())
                     .addSnapshotListener((value, error) -> {
                         if (value != null) {
-                            if (value.get(IS_RESTAURANT_VISITOR).equals(NOT_RESTAURANT_VISITOR)) {
+                            if (Objects.equals(value.get(IS_RESTAURANT_VISITOR), NOT_RESTAURANT_VISITOR)) {
                                 emitter.onComplete();
                             }
                         } else {
@@ -169,7 +171,7 @@ public class ProfileRepository {
 
     public Completable onPasswordCheck(String password) {
         return Completable.create(emitter -> {
-            AuthCredential authCredential = EmailAuthProvider.getCredential(service.auth.getCurrentUser().getEmail(), password);
+            AuthCredential authCredential = EmailAuthProvider.getCredential(Objects.requireNonNull(service.auth.getCurrentUser().getEmail()), password);
             service.auth.getCurrentUser().reauthenticate(authCredential).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
@@ -307,34 +309,41 @@ public class ProfileRepository {
                             .collection(USER_LIST)
                             .document(service.auth.getCurrentUser().getUid());
 
-                    Map<String, Object> user = new HashMap<>();
-
-                    user.put(OWN_QUEUE, NOT_QUEUE_OWNER);
-                    user.put(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR);
-                    user.put(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
-                    user.put(USER_NAME_KEY, userName);
-                    user.put(EMAIL_KEY, email);
-                    user.put(PHONE_NUMBER_KEY, "");
-                    user.put(GENDER_KEY, "");
-                    user.put(BIRTHDAY_KEY, "");
+                    Map<String, Object> user = getUserMap(email, userName);
 
                     docRef.set(user).addOnCompleteListener(task1 -> {
                         if (task1.isSuccessful()) {
                             UserDto userDto = new UserDto(
                                     userName, "", "",
                                     email, "",
-                                    NOT_QUEUE_OWNER, NOT_PARTICIPATE_IN_QUEUE, IS_RESTAURANT_VISITOR);
+                                    NOT_QUEUE_OWNER, NOT_PARTICIPATE_IN_QUEUE, NOT_RESTAURANT_VISITOR);
 
                             UserDatabaseProvider.insertUser(userDto);
 
                             emitter.onComplete();
                         } else {
+                            Log.d("Error create acc", task.getException().getMessage());
                             emitter.onError(new Throwable(task.getException()));
                         }
                     });
                 }
             });
         });
+    }
+
+    @NonNull
+    private  Map<String, Object> getUserMap(String email, String userName) {
+        Map<String, Object> user = new HashMap<>();
+
+        user.put(OWN_QUEUE, NOT_QUEUE_OWNER);
+        user.put(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR);
+        user.put(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
+        user.put(USER_NAME_KEY, userName);
+        user.put(EMAIL_KEY, email);
+        user.put(PHONE_NUMBER_KEY, "");
+        user.put(GENDER_KEY, "");
+        user.put(BIRTHDAY_KEY, "");
+        return user;
     }
 
     public Completable signInWithEmailAndPassword(String email, String password) {
@@ -629,8 +638,7 @@ public class ProfileRepository {
         }
 
         public Single<ImageDto> getProfileImage() {
-            return
-                    Single.create(emitter -> {
+            return Single.create(emitter -> {
                         StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
                         try {
                             local.getDownloadUrl().addOnCompleteListener(task -> {

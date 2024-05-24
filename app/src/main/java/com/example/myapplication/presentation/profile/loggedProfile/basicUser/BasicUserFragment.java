@@ -8,7 +8,10 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,11 +63,16 @@ public class BasicUserFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConnectivityManager connectivityManager = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+
         viewModel = new ViewModelProvider(this).get(BasicUserViewModel.class);
         setActivityResultLauncher();
         setChooseCompanyLauncher();
         setCreateCompanyLauncher();
-        viewModel.retrieveUserNameData();
+        viewModel.retrieveUserNameData(connected);
         viewModel.setBackground();
     }
 
@@ -129,11 +137,11 @@ public class BasicUserFragment extends Fragment {
             if (state instanceof BasicUserState.Success) {
                 BasicUserState.Success userModel = (BasicUserState.Success) state;
                 initRecycler(userModel.data.getUri(), userModel.data.getName(), userModel.data.getEmail());
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.errorLayout.setVisibility(View.GONE);
 
             } else if (state instanceof BasicUserState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof BasicUserState.Error) {
                 setError();
@@ -146,10 +154,10 @@ public class BasicUserFragment extends Fragment {
     }
 
     private void setError() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.retrieveUserNameData();
+            viewModel.retrieveUserNameData(false);
         });
     }
 
@@ -219,7 +227,7 @@ public class BasicUserFragment extends Fragment {
         chooseCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         fragmentManager
                                 .beginTransaction()
                                 .setReorderingAllowed(true)

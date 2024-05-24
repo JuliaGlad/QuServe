@@ -6,7 +6,6 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueBinding;
+import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.AlreadyOwnQueueDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.alreadyParticipateInQueue.AlreadyParticipateInQueueDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
-import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.service.ScanCode;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -58,6 +57,13 @@ public class QueueFragment extends Fragment {
         setupObserves();
         initCreateQueueButton();
         initJoinQueueButton();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void setupObserves() {
@@ -67,15 +73,19 @@ public class QueueFragment extends Fragment {
             }
         });
 
-        viewModel.isOwnQueue.observe(getViewLifecycleOwner(), aBoolean -> {
-            isOwnQueue = aBoolean;
+        viewModel.isOwnQueue.observe(getViewLifecycleOwner(), aBoolean -> isOwnQueue = aBoolean);
+
+        viewModel.queueIdOwner.observe(getViewLifecycleOwner(), queueId -> {
+            if (queueId != null){
+                showAlreadyOwnDialog(queueId);
+            }
         });
     }
 
     private void initJoinQueueButton() {
         binding.buttonJoinQueue.headLine.setText(getResources().getString(R.string.join_queue));
         binding.buttonJoinQueue.description.setText(getResources().getString(R.string.scan_queue_s_qr_code_and_join_it));
-        binding.buttonJoinQueue.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.qr_code, getContext().getTheme()));
+        binding.buttonJoinQueue.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.qr_code, requireContext().getTheme()));
 
         binding.buttonJoinQueue.item.setOnClickListener(v -> {
             if (isParticipateInQueue.equals(NOT_PARTICIPATE_IN_QUEUE)) {
@@ -105,16 +115,14 @@ public class QueueFragment extends Fragment {
         joinQueueLauncher.launch(scanOptions);
     }
 
-    private void showAlreadyOwnDialog() {
-        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment();
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "ALREADY_OWN_QUEUE_DIALOG");
-        dialogFragment.onDismissListener(bundle -> {
-            ((QueueActivity) requireActivity()).openCreateQueueActivity();
-        });
+    private void showAlreadyOwnDialog(String queueId) {
+        AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment(queueId);
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_OWN_QUEUE_DIALOG");
+        dialogFragment.onDismissListener(bundle -> ((QueueActivity) requireActivity()).openCreateQueueActivity());
     }
 
     private void initCreateQueueButton() {
-        binding.buttonCreateQueue.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_add_queue, getContext().getTheme()));
+        binding.buttonCreateQueue.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_add_queue, requireContext().getTheme()));
         binding.buttonCreateQueue.headLine.setText(getResources().getString(R.string.create_queue));
         binding.buttonCreateQueue.description.setText(getResources().getString(R.string.create_your_own_queue_so_people_can_join_it));
 
@@ -123,7 +131,7 @@ public class QueueFragment extends Fragment {
                 if (isOwnQueue.equals(NOT_QUEUE_OWNER)) {
                     ((QueueActivity) requireActivity()).openCreateQueueActivity();
                 } else {
-                    showAlreadyOwnDialog();
+                    viewModel.getQueueData();
                 }
             } else {
                 showYouNeedAccountDialog();

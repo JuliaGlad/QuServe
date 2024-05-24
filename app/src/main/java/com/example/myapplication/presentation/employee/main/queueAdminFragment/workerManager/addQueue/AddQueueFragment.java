@@ -88,7 +88,6 @@ public class AddQueueFragment extends Fragment {
                 initRecycler(queues);
 
             } else if (state instanceof AddQueueState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
             } else if (state instanceof AddQueueState.Error) {
                 setError();
             }
@@ -109,7 +108,6 @@ public class AddQueueFragment extends Fragment {
     }
 
     private void setError() {
-        binding.progressBar.setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getCompanyQueues(companyId, ids);
@@ -133,7 +131,6 @@ public class AddQueueFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
-        binding.progressBar.setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

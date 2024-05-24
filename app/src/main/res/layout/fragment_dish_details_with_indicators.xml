@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".presentation.restaurantOrder.restaurantCart.OrderCartFragment">
 
 
@@ -13,6 +12,8 @@
         style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/total"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -22,10 +23,11 @@
         style="@style/TextAppearance.Material3.TitleLarge.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="819 ₽"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/header_total"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/header_total" />
+        app:layout_constraintTop_toTopOf="@+id/header_total"
+        tools:text="819 ₽" />
 
     <View
         android:id="@+id/divider"
@@ -52,16 +54,28 @@
         android:id="@+id/button_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
         android:background="@color/transparent"
-        app:tint="?colorPrimary"
+        android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
     <include layout="@layout/something_went_wrong_layout"
         android:id="@+id/error_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/loading_layout"
+        android:id="@+id/progress_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

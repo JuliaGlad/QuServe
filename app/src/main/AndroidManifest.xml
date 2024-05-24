@@ -182,7 +182,6 @@
         <service android:name=".presentation.utils.queuePausedNotification.NotificationQueuePaused" />
         <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork" />
         <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService" />
-        <service android:name=".presentation.utils.youtTurnNotification.YourTurnForegroundService" />
         <service android:name=".presentation.utils.countdownTimer.TimerService" />
 
         <receiver

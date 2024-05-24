@@ -2,20 +2,15 @@ package com.example.myapplication.presentation.basicQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
@@ -24,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueDetailsBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.model.QueueDetailsModel;
@@ -36,20 +30,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import myapplication.android.ui.listeners.QueueDetailButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
+import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonDelegate;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.recycler.delegate.MainAdapter;
-import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailsButtonDelegateItem;
 
@@ -81,10 +70,13 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.isPaused.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+        viewModel.isPaused.observe(getViewLifecycleOwner(), queueId -> {
+            if (queueId != null){
+                Bundle bundle = new Bundle();
+                bundle.putString(QUEUE_ID, queueId);
+                bundle.putBoolean(IS_DEFAULT, false);
                 NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment);
+                        .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
             }
         });
 
@@ -150,11 +142,12 @@ public class QueueDetailsFragment extends Fragment {
     private void showTimePickerDialog(String queueId) {
         PauseQueueDialogFragment dialogFragment = new PauseQueueDialogFragment(queueId, null, BASIC);
 
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
 
         dialogFragment.onDismissListener(bundle -> {
             bundle.putString(QUEUE_ID, queueId);
             bundle.putString(APP_STATE, BASIC);
+            bundle.putBoolean(IS_DEFAULT, true);
             NavHostFragment.findNavController(QueueDetailsFragment.this)
                     .navigate(R.id.action_queueDetailsFragment_to_pausedQueueFragment, bundle);
         });
@@ -162,7 +155,7 @@ public class QueueDetailsFragment extends Fragment {
 
     private void showFinishQueueDialog() {
         final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, BASIC, null);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             requireActivity().finish();
         });

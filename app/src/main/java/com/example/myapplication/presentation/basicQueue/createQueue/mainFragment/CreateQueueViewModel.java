@@ -158,28 +158,17 @@ public class CreateQueueViewModel extends ViewModel {
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
         File file = new File(folder.getAbsolutePath() + "/" + "QR-CODE.pdf");
-
         try {
-            if (file.exists()) {
-                FileOutputStream fos = new FileOutputStream(file);
-                pdfDocument.writeTo(fos);
-                pdfDocument.close();
-                fos.close();
+            FileOutputStream fos = new FileOutputStream(file);
+            pdfDocument.writeTo(fos);
+            pdfDocument.close();
+            fos.close();
 
-                uploadPdfToFireStorage(file, queueID);
+            uploadPdfToFireStorage(file, queueID);
 
-                Log.e("File", file.getAbsolutePath() + queueID);
+            Log.e("File", file.getAbsolutePath() + queueID);
 
-            } else {
-
-                Log.e("NOT EXIST!", "File does not exists");
-            }
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
         } catch (IOException e) {
