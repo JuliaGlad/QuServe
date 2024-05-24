@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentDishDetailsWithIndicatorsBinding;
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsState;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.recycler.OrderDetailsWithIndicatorsAdapter;
@@ -63,11 +65,12 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
                 initRecycler(model.getModels());
 
             } else if (state instanceof OrderDetailsWithIndicatorsState.Loading){
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof OrderDetailsState.Error){
                 setErrorLayout();
             } else if (state instanceof OrderDetailsWithIndicatorsState.OrderIsFinished){
-
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_orderDetailsWithIndicatorsFragment_to_cookOrderIsFinishedFragment);
             }
         });
 
@@ -85,6 +88,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getOrder(path);
@@ -120,6 +124,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

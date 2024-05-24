@@ -5,7 +5,6 @@ import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -121,9 +120,9 @@ public class WorkerDetailsFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof WorkerDetailsState.Success) {
                 models.addAll(((WorkerDetailsState.Success) state).data);
-                initRecycler(models, employeeId, name, WORKER);
+                initRecycler(models, employeeId, name);
             } else if (state instanceof WorkerDetailsState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof WorkerDetailsState.Error) {
                 setErrorLayout();
             }
@@ -131,19 +130,21 @@ public class WorkerDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployeeData(companyId, employeeId);
         });
     }
 
-    private void initRecycler(List<ActiveQueueModel> models, String employeeId, String employeeName, String employeeRole) {
+    private void initRecycler(List<ActiveQueueModel> models, String employeeId, String employeeName) {
         List<DelegateItem> delegates = new ArrayList<>();
-        delegates.add(new WorkerDetailsHeaderDelegateItem(new WorkerDetailsHeaderModel(1, employeeId, employeeName, employeeRole)));
+        delegates.add(new WorkerDetailsHeaderDelegateItem(new WorkerDetailsHeaderModel(1, employeeId, employeeName, com.example.myapplication.presentation.utils.Utils.WORKER)));
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.worker_details_advise_box_text)));
         delegates.addAll(addActiveQueuesDelegates(models));
         mainAdapter.submitList(delegates);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
     private List<WorkerManageQueueDelegateItem> addActiveQueuesDelegates(List<ActiveQueueModel> models) {

@@ -98,7 +98,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
                 }
 
             } else if (state instanceof WorkerQueueDetailsState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof WorkerQueueDetailsState.Error){
                 setErrorLayout();
@@ -107,7 +107,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getCompanyQueueById(companyId, queueId);
@@ -163,7 +163,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
     private void showTimePickerDialog(String queueId) {
         PauseQueueDialogFragment dialogFragment = new PauseQueueDialogFragment(queueId, companyId, COMPANY);
 
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "PAUSE_QUEUE_DIALOG");
 
         dialogFragment.onDismissListener(bundle -> {
             bundle.putString(QUEUE_ID, queueId);
@@ -175,7 +175,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
 
     private void showFinishQueueDialog() {
         final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, COMPANY, companyId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             requireActivity().finish();
         });
@@ -184,7 +184,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
     private void buildList(DelegateItem[] items) {
         List<DelegateItem> list = Arrays.asList(items);
         mainAdapter.submitList(list);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.employee.main.companiesEmployees.employeesCompany.fragment.EmployeesFragment">
+    tools:context="com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.ChooseWorkersFragment">
 
     <ImageButton
         android:id="@+id/button_back"

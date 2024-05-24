@@ -91,6 +91,8 @@ public class AddLocationFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
             if (location != null) {
+                binding.loader.setVisibility(View.VISIBLE);
+                binding.buttonAdd.setEnabled(false);
                 viewModel.addLocation(restaurantId, location, city);
             } else {
                 Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();

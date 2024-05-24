@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -176,20 +177,8 @@
             app:srcCompat="@drawable/ic_arrow_back"
             app:tint="?colorPrimary" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/progress_layout"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent"
-            android:background="?colorSurface"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <include
-            android:id="@+id/progressBar"
+                android:id="@+id/progress_layout"
             style="?android:attr/progressBarStyle"
             layout="@layout/loading_layout"
             android:layout_width="0dp"

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.deleteWorkerFromQ
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,8 @@ public class DeleteWorkerFromQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonDelete.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDelete.setEnabled(false);
             viewModel.deleteFromQueue(companyId, queueId, employeeId);
         });
 

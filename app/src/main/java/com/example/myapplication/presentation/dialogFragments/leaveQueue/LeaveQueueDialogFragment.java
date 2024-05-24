@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.leaveQueue;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,8 @@ public class LeaveQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonLeave.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonLeave.setEnabled(false);
             viewModel.leaveQueue();
         });
 

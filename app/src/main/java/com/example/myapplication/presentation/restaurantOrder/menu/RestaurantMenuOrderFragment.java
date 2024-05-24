@@ -93,8 +93,9 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
                 initDishRecycler(models);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantMenuState.Loading) {
-
+                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantMenuState.Error) {
                 setErrorLayout();
             }
@@ -114,6 +115,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getMenuCategories(restaurantId);

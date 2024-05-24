@@ -1,6 +1,5 @@
 package com.example.myapplication.presentation.home.anonymousUser;
 
-import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -30,13 +28,9 @@ import com.example.myapplication.presentation.home.recycler.homeDelegates.action
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonDelegate;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderButtonModel;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder.RestaurantOrderDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
-import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.main.ProfileLoggedFragment;
 import com.example.myapplication.presentation.restaurantOrder.menu.RestaurantOrderMenuActivity;
 import com.example.myapplication.presentation.service.ScanCode;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -119,7 +113,7 @@ public class AnonymousUserFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof AnonymousUserState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof AnonymousUserState.Error) {
                 setErrorLayout();
@@ -152,14 +146,14 @@ public class AnonymousUserFragment extends Fragment {
                 } else {
                     initNoActionsRecycler();
                 }
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.errorLayout.setVisibility(View.GONE);
             }
         });
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getActions();

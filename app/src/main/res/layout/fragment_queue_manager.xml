@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="20dp"
-    tools:context=".presentation.employee.main.companiesEmployees.employeesCompany.fragment.EmployeesFragment">
+    tools:context=".presentation.companyQueue.queueManager.QueueManagerFragment">
 
     <ImageButton
         android:id="@+id/button_back"
@@ -69,16 +69,18 @@
 
     </LinearLayout>
 
-    <ProgressBar
+    <include
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <include layout="@layout/something_went_wrong_layout"
         android:id="@+id/error_layout"

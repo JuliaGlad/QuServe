@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.finishQueue;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,6 +41,8 @@ public class FinishQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonFinish.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonFinish.setEnabled(false);
             viewModel.finishQueue(queueId, type, companyId);
         });
 

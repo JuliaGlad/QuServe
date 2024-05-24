@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.finishRestaurantO
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,8 @@ public class FinishRestaurantOrderDialogFragment extends DialogFragment {
             dismiss();
         });
         binding.buttonFinish.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonFinish.setEnabled(false);
             viewModel.finishOrder(orderPath);
         });
 

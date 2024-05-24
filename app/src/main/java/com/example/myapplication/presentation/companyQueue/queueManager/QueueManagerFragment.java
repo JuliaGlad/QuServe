@@ -121,11 +121,11 @@ public class QueueManagerFragment extends Fragment {
                     binding.recyclerView.setAdapter(adapter);
                     binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
                     adapter.submitList(models);
-                    binding.progressBar.setVisibility(View.GONE);
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
                     binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
             } else if (state instanceof QueueManagerState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof QueueManagerState.Error) {
                 setErrorLayout();
@@ -134,7 +134,7 @@ public class QueueManagerFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getList(companyId);

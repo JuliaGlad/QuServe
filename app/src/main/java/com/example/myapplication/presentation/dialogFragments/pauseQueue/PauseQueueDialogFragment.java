@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,9 @@ public class PauseQueueDialogFragment extends DialogFragment {
         initSecondsPicker();
 
         binding.buttonPause.setOnClickListener(v -> {
+
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonPause.setEnabled(false);
 
             hours = binding.hoursPicker.getValue();
             minutes = binding.minutesPicker.getValue();

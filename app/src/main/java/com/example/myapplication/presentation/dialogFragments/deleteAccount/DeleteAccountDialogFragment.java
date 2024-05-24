@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.deleteAccount;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,8 @@ public class DeleteAccountDialogFragment extends DialogFragment {
 
         binding.buttonDelete.setOnClickListener(v -> {
             String password = binding.editLayoutPassword.getText().toString();
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDelete.setEnabled(false);
             viewModel.deleteAccount(password);
         });
 

@@ -132,7 +132,7 @@ public class CompanyUserFragment extends Fragment {
                 initRecycler(model);
 
             } else if (state instanceof CompanyUserState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof CompanyUserState.Error) {
                 setErrorLayout();
@@ -158,7 +158,7 @@ public class CompanyUserFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             switch (type){
@@ -195,7 +195,7 @@ public class CompanyUserFragment extends Fragment {
         })));
 
         mainAdapter.submitList(delegates);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 

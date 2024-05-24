@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.DialogUpdateEmailLayoutBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -50,13 +51,15 @@ public class ChangeEmailDialogFragment extends DialogFragment {
             email = binding.editLayoutNewEmail.getText().toString();
             password = binding.editLayoutPassword.getText().toString();
             if (email.isEmpty()) {
-                binding.editLayoutNewEmail.setError("This field is required!");
+                binding.editLayoutNewEmail.setError(getString(R.string.this_data_is_required));
             }
             if (password.isEmpty()) {
-                binding.editLayoutPassword.setError("This field is required!");
+                binding.editLayoutPassword.setError(getString(R.string.this_data_is_required));
             }
 
             if (!email.isEmpty() && !password.isEmpty()) {
+                binding.loader.setVisibility(View.VISIBLE);
+                binding.buttonSend.setEnabled(false);
                 viewModel.checkUser(password);
             }
         });

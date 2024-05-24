@@ -37,7 +37,7 @@ public class RestaurantLocationDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantLocationDetailsViewModel.class);
-        locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
+        locationId = requireActivity().getIntent().getStringExtra(LOCATION_ID);
     }
 
     @Override
@@ -84,12 +84,12 @@ public class RestaurantLocationDetailsFragment extends Fragment {
 
     private void openWaiterQrCodeDialog(Uri uri){
         WaiterQrCodeDialogFragment dialogFragment = new WaiterQrCodeDialogFragment(uri);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "COOK_QR_CODE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "COOK_QR_CODE_DIALOG");
     }
 
     private void openCookQrCodeDialog(Uri uri){
         CookQrCodeDialogFragment dialogFragment = new CookQrCodeDialogFragment(uri);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "COOK_QR_CODE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "COOK_QR_CODE_DIALOG");
     }
 
     private void buildList(OptionImageButtonModel[] models) {

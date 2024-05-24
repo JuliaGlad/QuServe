@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,6 +47,8 @@ public class DeleteRequiredChoiceDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonDelete.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDelete.setEnabled(false);
             viewModel.deleteChoice(restaurantId, categoryId, dishId, choiceId);
         });
 

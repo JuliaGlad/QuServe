@@ -65,7 +65,7 @@ public class SettingCompanyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(SettingCompanyViewModel.class);
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
         companyId = sharedPreferences.getString(COMPANY_ID, null);
 
@@ -112,19 +112,17 @@ public class SettingCompanyFragment extends Fragment {
         delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
 
             HelpDialogFragment dialogFragment = new HelpDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "HELP_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "HELP_DIALOG");
         })));
         delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_group, R.string.about_us, () -> {
 
             AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
         })));
-        delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, deleteTextId, () -> {
-            showDeleteDialog();
-        })));
+        delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, deleteTextId, this::showDeleteDialog)));
 
         mainAdapter.submitList(delegates);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
@@ -132,20 +130,20 @@ public class SettingCompanyFragment extends Fragment {
         switch (state){
             case COMPANY:
                 DeleteCompanyDialogFragment dialogFragment = new DeleteCompanyDialogFragment(companyId);
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_COMPANY_DIALOG");
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_COMPANY_DIALOG");
                 DialogDismissedListener listener = bundle -> {
                     Intent intent = new Intent();
-                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    requireActivity().setResult(Activity.RESULT_OK, intent);
                     requireActivity().finish();
                 };
                 dialogFragment.onDismissListener(listener);
                 break;
             case RESTAURANT:
                 DeleteRestaurantDialogFragment dialogFragmentRestaurant = new DeleteRestaurantDialogFragment(companyId);
-                dialogFragmentRestaurant.show(getActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_DIALOG");
+                dialogFragmentRestaurant.show(requireActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_DIALOG");
                 dialogFragmentRestaurant.onDismissListener(bundle -> {
                     Intent intent = new Intent();
-                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    requireActivity().setResult(Activity.RESULT_OK, intent);
                     requireActivity().finish();
                 });
                 break;
@@ -160,7 +158,7 @@ public class SettingCompanyFragment extends Fragment {
                     initRecycler(model.getName(), model.getEmail(), model.getUri());
                 }
             } else if (state instanceof CompanyUserState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof CompanyUserState.Error){
                 setError();
             }
@@ -169,7 +167,7 @@ public class SettingCompanyFragment extends Fragment {
     }
 
     private void setError() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             switch (state){

@@ -184,6 +184,8 @@ public class BasicUserFragment extends Fragment {
         );
 
         mainAdapter.submitList(list);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private ServiceItemDelegateItem addCompanyServiceDelegateItem() {

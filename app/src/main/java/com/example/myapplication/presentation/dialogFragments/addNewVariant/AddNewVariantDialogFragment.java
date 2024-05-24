@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,7 +21,10 @@ public class AddNewVariantDialogFragment extends DialogFragment {
 
     private AddNewVariantViewModel viewModel;
     private DialogDismissedListener listener;
-    private String restaurantId, categoryId, dishId, choiceId;
+    private final String restaurantId;
+    private final String categoryId;
+    private final String dishId;
+    private final String choiceId;
     private String addedName;
 
     public AddNewVariantDialogFragment(String restaurantId, String categoryId, String dishId, String choiceId) {
@@ -45,6 +49,8 @@ public class AddNewVariantDialogFragment extends DialogFragment {
 
         binding.buttonAdd.setOnClickListener(v -> {
             String newVariant = binding.editLayoutVariant.getText().toString();
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonAdd.setEnabled(false);
             viewModel.addVariant(restaurantId, categoryId, dishId, choiceId, newVariant);
         });
 

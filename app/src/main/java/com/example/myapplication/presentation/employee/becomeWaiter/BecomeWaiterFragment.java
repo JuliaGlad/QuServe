@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeWaiterBinding;
 import com.example.myapplication.presentation.employee.becomeWaiter.state.BecomeWaiterModel;
@@ -78,11 +83,23 @@ public class BecomeWaiterFragment extends Fragment {
                 binding.companyName.setText(model.getName());
                 Glide.with(requireView())
                         .load(model.getUri())
+                        .addListener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                                binding.progressLayout.getRoot().setVisibility(View.GONE);
+                                binding.errorLayout.getRoot().setVisibility(View.GONE);
+                                return true;
+                            }
+                        })
                         .into(binding.qrCodeImage);
-                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof BecomeWaiterState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof BecomeWaiterState.Error) {
                 setErrorLayout();
             }

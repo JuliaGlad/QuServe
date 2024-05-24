@@ -149,6 +149,7 @@ public class AddDishFragment extends Fragment {
                 intent.putExtra(DISH_WEIGHT_OR_COUNT, model.getWeightCount());
                 intent.putExtra(URI, model.getUri().toString());
                 requireActivity().setResult(RESULT_OK, intent);
+                binding.loader.setVisibility(View.GONE);
                 requireActivity().finish();
             }
         });
@@ -251,6 +252,8 @@ public class AddDishFragment extends Fragment {
                 break;
             case PAGE_6:
                 if (imageUri != null){
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.initDishData(restaurantId, categoryId);
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();

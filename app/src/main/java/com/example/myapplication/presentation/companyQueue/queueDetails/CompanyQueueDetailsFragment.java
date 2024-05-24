@@ -2,30 +2,24 @@ package com.example.myapplication.presentation.companyQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.PopupMenu;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCompanyQueueDetailsBinding;
@@ -38,18 +32,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
+import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonDelegate;
-
-import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import myapplication.android.ui.recycler.delegate.MainAdapter;
-import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegate;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailButtonModel;
 import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.QueueDetailsButtonDelegateItem;
 
@@ -127,7 +117,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
 
     private void showFinishQueueDialog() {
         final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, COMPANY, companyId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             requireActivity().finish();
         });
@@ -149,7 +139,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
     private void buildList(DelegateItem[] items) {
         list = Arrays.asList(items);
         mainAdapter.submitList(list);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
@@ -188,7 +178,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
                     initRecyclerView(queueId, model.getUri());
                 }
             } else if (state instanceof CompanyQueueDetailsState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof CompanyQueueDetailsState.Error) {
                 setErrorLayout();
@@ -202,7 +192,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getQueueRecycler(queueId, companyId);
@@ -210,7 +200,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
     }
 
     private void initBackButtonPressed(){
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 requireActivity().finish();

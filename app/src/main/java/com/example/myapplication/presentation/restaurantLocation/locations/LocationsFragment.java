@@ -41,7 +41,7 @@ public class LocationsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(LocationsViewModel.class);
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
     }
@@ -90,12 +90,13 @@ public class LocationsFragment extends Fragment {
                 if (!models.isEmpty()) {
                     initRecycler(models);
                 } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.action_locationsFragment_to_noLocationsYetFragment);
                 }
 
             } else if (state instanceof LocationsState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof LocationsState.Error) {
                 setError();
             }
@@ -103,6 +104,7 @@ public class LocationsFragment extends Fragment {
     }
 
     private void setError() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getRestaurantLocations(restaurantId);
@@ -127,5 +129,7 @@ public class LocationsFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

@@ -79,7 +79,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
                     initEmptyActionRecycler();
                 }
             } else if (state instanceof HomeQueueCompanyState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof HomeQueueCompanyState.Error) {
                 binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
                 binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
@@ -110,7 +110,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
         adapter.addDelegate(new QueueActionButtonDelegate());
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(delegates);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
@@ -137,7 +137,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(list);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
 }

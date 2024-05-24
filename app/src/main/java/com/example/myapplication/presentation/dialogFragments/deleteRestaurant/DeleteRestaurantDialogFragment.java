@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.deleteRestaurant;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +43,8 @@ public class DeleteRestaurantDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonDelete.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDelete.setEnabled(false);
             viewModel.deleteRestaurant(restaurantId);
         });
 

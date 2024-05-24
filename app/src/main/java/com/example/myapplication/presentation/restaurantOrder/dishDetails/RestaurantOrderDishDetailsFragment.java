@@ -167,9 +167,10 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 initRequiredChoiceRecycler(requireChoices);
                 initOrderButton(name, weight);
                 initRemove(toRemove);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantOrderDishDetailsState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantOrderDishDetailsState.Error) {
                 setError();
             }
@@ -183,6 +184,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     }
 
     private void setError() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getDishData(restaurantId, categoryId, dishId, type);

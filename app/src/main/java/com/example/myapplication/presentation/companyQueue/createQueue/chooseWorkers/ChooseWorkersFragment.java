@@ -148,7 +148,7 @@ public class ChooseWorkersFragment extends Fragment {
                     if (current.getRole().equals(WORKER)) {
                         String type = NOT_CHOSEN;
 
-                        if (chosen.size() > 0) {
+                        if (!chosen.isEmpty()) {
                             for (int j = 0; j < chosen.size(); j++) {
                                 if (chosen.get(j).getUserId().equals(current.getId())) {
                                     type = CHOSEN;
@@ -169,11 +169,11 @@ public class ChooseWorkersFragment extends Fragment {
                 binding.recyclerView.setAdapter(adapter);
                 adapter.submitList(workerItems);
 
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof ChooseWorkersState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof ChooseWorkersState.Error) {
                 setErrorLayout();
             }
@@ -181,7 +181,7 @@ public class ChooseWorkersFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployees(companyId);

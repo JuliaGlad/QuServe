@@ -151,7 +151,7 @@ public class ChooseCompanyFragment extends Fragment {
                     initRecycler();
                 }
             } else if (state instanceof ChooseCompanyState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof ChooseCompanyState.Error) {
                 setErrorLayout();
@@ -161,7 +161,7 @@ public class ChooseCompanyFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getAllCompaniesList();
@@ -180,7 +180,7 @@ public class ChooseCompanyFragment extends Fragment {
             addCompanyDelegateItems(current.getName(), imageList.get(i), current.getService(), id);
         }
         mainAdapter.submitList(delegates);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 }

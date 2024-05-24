@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="Table №"
+        android:text="@string/table"
         app:layout_constraintBottom_toBottomOf="@+id/button_back"
         app:layout_constraintStart_toEndOf="@+id/button_back"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,10 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:text="9"
         app:layout_constraintBottom_toBottomOf="@+id/button_back"
         app:layout_constraintStart_toEndOf="@+id/title_table"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="9" />
 
     <ImageView
         android:id="@+id/image_chef"
@@ -59,10 +59,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Cook name"
         app:layout_constraintBottom_toBottomOf="@+id/image_chef"
         app:layout_constraintStart_toEndOf="@+id/image_chef"
-        app:layout_constraintTop_toTopOf="@+id/image_chef" />
+        app:layout_constraintTop_toTopOf="@+id/image_chef"
+        tools:text="Cook name" />
 
     <ImageView
         android:id="@+id/waiter_image"
@@ -81,10 +81,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Waiter name"
         app:layout_constraintBottom_toBottomOf="@+id/waiter_image"
         app:layout_constraintStart_toEndOf="@+id/waiter_image"
-        app:layout_constraintTop_toTopOf="@+id/waiter_image" />
+        app:layout_constraintTop_toTopOf="@+id/waiter_image"
+        tools:text="Waiter name" />
 
     <TextView
         android:id="@+id/dishes_title"
@@ -108,15 +108,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dishes_title" />
 
-
-    <include layout="@layout/something_went_wrong_layout"
-        android:id="@+id/error_layout"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <include
+        android:id="@+id/error_layout"
+        layout="@layout/something_went_wrong_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

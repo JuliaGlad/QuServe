@@ -1,33 +1,23 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile;
 
 import static android.app.Activity.RESULT_OK;
-
 import static com.example.myapplication.presentation.utils.Utils.EMAIL;
 import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
-import static com.google.common.base.StandardSystemProperty.USER_NAME;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
-import android.widget.DatePicker;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -41,7 +31,6 @@ import com.example.myapplication.databinding.FragmentEditProfileBinding;
 import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.basicUserStateAndModel.BasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditBasicUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.model.EditUserModel;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -64,7 +53,7 @@ public class EditProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEditProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -84,7 +73,7 @@ public class EditProfileFragment extends Fragment {
     private void initChangeEmail() {
         binding.buttonChangeEmail.setOnClickListener(v -> {
             ChangeEmailDialogFragment dialogFragment = new ChangeEmailDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "CHANGE_EMAIL_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "CHANGE_EMAIL_DIALOG");
             DialogDismissedListener listener = bundle -> {
 
                 email = bundle.getString(EMAIL);
@@ -186,19 +175,19 @@ public class EditProfileFragment extends Fragment {
 
                                 @Override
                                 public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                    binding.progressLayout.setVisibility(View.GONE);
+                                    binding.progressLayout.getRoot().setVisibility(View.GONE);
                                     return false;
                                 }
                             })
                             .apply(RequestOptions.circleCropTransform())
                             .into(binding.profilePhoto);
                 } else {
-                    binding.progressLayout.setVisibility(View.GONE);
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
                 }
 
 
             } else if (state instanceof EditBasicUserState.Loading) {
-                binding.progressLayout.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof EditBasicUserState.Error) {
 
@@ -208,14 +197,14 @@ public class EditProfileFragment extends Fragment {
         viewModel.openSuccessDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
                 EmailUpdateSuccessfulDialogFragment dialogFragment = new EmailUpdateSuccessfulDialogFragment();
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
             }
         });
 
         viewModel.openVerifyDialog.observe(getViewLifecycleOwner(), password -> {
             if (password != null) {
                 VerifyBeforeUpdateDialogFragment dialogFragment = new VerifyBeforeUpdateDialogFragment(email, password);
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "VERIFY_BEFORE_UPDATE_DIALOG");
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "VERIFY_BEFORE_UPDATE_DIALOG");
                 DialogDismissedListener dismissedListener = object -> {
                     viewModel.updateEmailField(email);
                 };

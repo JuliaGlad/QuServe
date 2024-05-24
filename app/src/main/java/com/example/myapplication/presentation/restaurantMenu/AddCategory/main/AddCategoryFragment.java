@@ -178,6 +178,7 @@ public class AddCategoryFragment extends Fragment {
             case PAGE_2:
                 if (ArgumentsCategory.chosenImage != Uri.EMPTY) {
                     binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.initCategoryData(restaurantId, requireView());
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();

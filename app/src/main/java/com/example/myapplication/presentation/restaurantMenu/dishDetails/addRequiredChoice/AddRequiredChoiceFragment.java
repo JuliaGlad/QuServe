@@ -60,7 +60,7 @@ public class  AddRequiredChoiceFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AddRequiredChoiceViewModel.class);
-        restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         try {
             page = AddRequiredChoiceFragmentArgs.fromBundle(getArguments()).getPage();
             categoryId = AddRequiredChoiceFragmentArgs.fromBundle(getArguments()).getCategoryId();
@@ -114,6 +114,9 @@ public class  AddRequiredChoiceFragment extends Fragment {
                 bundle.putString(CHOICE_ID, choiceId);
                 bundle.putString(CHOICE_NAME, RequiredChoiceArguments.name);
                 bundle.putStringArrayList(CHOICE_VARIANT, arrayList);
+
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonNext.setEnabled(true);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_addRequiredChoiceFragment_to_requiredChoiceSuccessfullyAdded, bundle);
@@ -195,6 +198,8 @@ public class  AddRequiredChoiceFragment extends Fragment {
                 break;
             case PAGE_2:
                 if (RequiredChoiceArguments.variants.size() >= 2) {
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.addChoice(restaurantId, categoryId, dishId);
                 } else {
                     Snackbar.make(requireView(), getString(R.string.you_have_to_add_at_least_2_variants), Snackbar.LENGTH_LONG).show();

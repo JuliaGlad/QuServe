@@ -44,8 +44,8 @@ public class OrderCartFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(OrderCartViewModel.class);
-        restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        path = getActivity().getIntent().getStringExtra(TABLE_PATH);
+        restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        path = requireActivity().getIntent().getStringExtra(TABLE_PATH);
         viewModel.getCartItems(restaurantId);
     }
 
@@ -110,11 +110,12 @@ public class OrderCartFragment extends Fragment {
                         binding.emptyCartLayout.getRoot().setVisibility(View.VISIBLE);
                         initOpenMenuButton();
                     }
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
                     binding.errorLayout.getRoot().setVisibility(View.GONE);
                 }
 
             } else if (state instanceof OrderCartState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof OrderCartState.Error) {
                 setErrorLayout();
             }

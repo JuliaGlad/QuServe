@@ -3,11 +3,11 @@ package com.example.myapplication.presentation.common.finishedQueueCreation;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,13 +27,17 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentFinishedQueueCreationBinding;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.common.finishedQueueCreation.state.FinishedQueueState;
 import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
-import com.example.myapplication.presentation.utils.workers.BasicQueueMidTimeWorker;
 import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
+import com.example.myapplication.presentation.utils.workers.BasicQueueMidTimeWorker;
 import com.example.myapplication.presentation.utils.workers.CompanyQueueFinishWorker;
 import com.example.myapplication.presentation.utils.workers.CompanyQueueMidTimeWorker;
 
@@ -45,7 +49,9 @@ public class FinishedQueueCreationFragment extends Fragment {
 
     private FinishedQueueCreationViewModel viewModel;
     private FragmentFinishedQueueCreationBinding binding;
-    private String type, name, companyId, queueId;
+    private String type;
+    private String companyId;
+    private String queueId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,8 +59,7 @@ public class FinishedQueueCreationFragment extends Fragment {
         type = getArguments().getString(STATE);
         queueId = getArguments().getString(QUEUE_ID);
         if (type.equals(COMPANY)) {
-            name = getActivity().getIntent().getStringExtra(COMPANY_NAME);
-            companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+            companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         }
     }
 
@@ -77,7 +82,7 @@ public class FinishedQueueCreationFragment extends Fragment {
         initSeeDetails();
         viewModel.getQrCode(queueId);
 
-        switch (type){
+        switch (type) {
             case BASIC:
                 setupBasicObserves();
                 viewModel.delayBasicQueueFinish();
@@ -92,18 +97,29 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
 
-    private void setMainObserves(){
+    private void setMainObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof FinishedQueueState.Success) {
                 Uri uri = ((FinishedQueueState.Success) state).data;
                 Glide.with(this)
                         .load(uri)
+                        .addListener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                                binding.progressBar.getRoot().setVisibility(View.GONE);
+                                binding.errorLayout.getRoot().setVisibility(View.GONE);
+                                return true;
+                            }
+                        })
                         .into(binding.qrCodeImage);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof FinishedQueueState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof FinishedQueueState.Error) {
                 setErrorLayout();
@@ -112,7 +128,7 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getQrCode(queueId);
@@ -121,7 +137,7 @@ public class FinishedQueueCreationFragment extends Fragment {
 
     private void setupBasicObserves() {
         viewModel.queue.observe(getViewLifecycleOwner(), time -> {
-            if (time != null){
+            if (time != null) {
                 addFinishBasicQueueDelayWorker(time);
             }
         });
@@ -129,7 +145,7 @@ public class FinishedQueueCreationFragment extends Fragment {
 
     private void setupCompanyObserves() {
         viewModel.queue.observe(getViewLifecycleOwner(), time -> {
-            if (time != null){
+            if (time != null) {
                 addFinishCompanyQueueDelayWorker(time);
             }
         });
@@ -184,8 +200,8 @@ public class FinishedQueueCreationFragment extends Fragment {
         WorkManager.getInstance(requireContext()).enqueue(request);
     }
 
-    private void addFinishBasicQueueDelayWorker(String time){
-         if (!time.equals(stringsTimeArray[0])) {
+    private void addFinishBasicQueueDelayWorker(String time) {
+        if (!time.equals(stringsTimeArray[0])) {
             List<String> list = Arrays.asList(time.split(" "));
             int number = Integer.parseInt(list.get(0));
             TimeUnit timeUnit = TimeUnit.valueOf(list.get(1));

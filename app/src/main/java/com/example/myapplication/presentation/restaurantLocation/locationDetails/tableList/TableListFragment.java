@@ -91,9 +91,9 @@ public class TableListFragment extends Fragment {
                 List<TableModel> tables = ((TableListState.Success) state).data;
                 initRecycler(tables);
             } else if (state instanceof TableListState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof TableListState.Error) {
-
+                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
             }
         });
         viewModel.isAdded.observe(getViewLifecycleOwner(), tableId -> {
@@ -128,5 +128,7 @@ public class TableListFragment extends Fragment {
             lastTableNumber = 0;
         }
         adapter.submitList(delegates);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

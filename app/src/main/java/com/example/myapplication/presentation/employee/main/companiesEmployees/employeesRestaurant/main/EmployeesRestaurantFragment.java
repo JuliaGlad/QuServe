@@ -38,17 +38,17 @@ public class EmployeesRestaurantFragment extends Fragment {
 
     private EmployeesRestaurantViewModel viewModel;
     private FragmentEmployeesRestaurantBinding binding;
-    private RestaurantEmployeeItemAdapter adapter = new RestaurantEmployeeItemAdapter();
-    private List<RestaurantEmployeeItemModel> basicList = new ArrayList<>();
-    private List<RestaurantEmployeeItemModel> waiterList = new ArrayList<>();
-    private List<RestaurantEmployeeItemModel> cooksList = new ArrayList<>();
+    private final RestaurantEmployeeItemAdapter adapter = new RestaurantEmployeeItemAdapter();
+    private final List<RestaurantEmployeeItemModel> basicList = new ArrayList<>();
+    private final List<RestaurantEmployeeItemModel> waiterList = new ArrayList<>();
+    private final List<RestaurantEmployeeItemModel> cooksList = new ArrayList<>();
     private String restaurantId, locationId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(EmployeesRestaurantViewModel.class);
-        restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         locationId = getArguments().getString(LOCATION_ID);
         viewModel.getEmployees(restaurantId, locationId);
     }
@@ -151,15 +151,14 @@ public class EmployeesRestaurantFragment extends Fragment {
 
                 for (int i = 0; i < employees.size(); i++) {
                     EmployeeModel current = employees.get(i);
-                    int index = i;
                     basicList.add(new RestaurantEmployeeItemModel(i, current.getName(), current.getRole(), current.getId(), () -> {
-                        showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole(), index);
+                        showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole());
                     }));
                 }
                 initSubLists();
                 initRecycler();
             } else if (state instanceof EmployeeState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EmployeeState.Error) {
                 setErrorLayout();
             }
@@ -167,16 +166,16 @@ public class EmployeesRestaurantFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployees(restaurantId, locationId);
         });
     }
 
-    private void showDeleteRestaurantEmployeeDialog(String userId, String role, int index) {
+    private void showDeleteRestaurantEmployeeDialog(String userId, String role) {
         DeleteRestaurantEmployeeDialogFragment dialogFragment = new DeleteRestaurantEmployeeDialogFragment(restaurantId, locationId, userId, role);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_EMPLOYEE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_EMPLOYEE_DIALOG");
         dialogFragment.onDialogDismissedListener(bundle -> {
             removeItemFromList(userId, role);
         });
@@ -186,7 +185,7 @@ public class EmployeesRestaurantFragment extends Fragment {
         for (int i = 0; i < basicList.size(); i++) {
             if (basicList.get(i).getEmployeeId().equals(userId)) {
                 basicList.remove(i);
-                if (adapter.getCurrentList().equals(basicList)){
+                if (adapter.getCurrentList().equals(basicList)) {
                     adapter.notifyItemRemoved(i);
                 }
                 break;
@@ -198,7 +197,7 @@ public class EmployeesRestaurantFragment extends Fragment {
                 for (int i = 0; i < cooksList.size(); i++) {
                     if (cooksList.get(i).getEmployeeId().equals(userId)) {
                         cooksList.remove(i);
-                        if (adapter.getCurrentList().equals(cooksList)){
+                        if (adapter.getCurrentList().equals(cooksList)) {
                             adapter.notifyItemRemoved(i);
                         }
                         break;
@@ -209,7 +208,7 @@ public class EmployeesRestaurantFragment extends Fragment {
                 for (int i = 0; i < waiterList.size(); i++) {
                     if (waiterList.get(i).getEmployeeId().equals(userId)) {
                         waiterList.remove(i);
-                        if (adapter.getCurrentList().equals(waiterList)){
+                        if (adapter.getCurrentList().equals(waiterList)) {
                             adapter.notifyItemRemoved(i);
                         }
                         break;
@@ -223,7 +222,7 @@ public class EmployeesRestaurantFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(adapter);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 

@@ -163,8 +163,8 @@ public class EditCompanyFragment extends Fragment {
 
                                 @Override
                                 public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                    binding.progressLayout.setVisibility(View.GONE);
-                                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
+                                    binding.progressLayout.getRoot().setVisibility(View.GONE);
+                                    binding.errorlayout.getRoot().setVisibility(View.GONE);
                                     return false;
                                 }
                             })
@@ -172,12 +172,12 @@ public class EditCompanyFragment extends Fragment {
                             .into(binding.companyLogo);
 
                 } else {
-                    binding.progressLayout.setVisibility(View.GONE);
-                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
+                    binding.errorlayout.getRoot().setVisibility(View.GONE);
                 }
 
             } else if (state instanceof EditCompanyState.Loading) {
-                binding.progressLayout.setVisibility(View.VISIBLE);
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EditCompanyState.Error) {
                 setErrorLayout();
             }
@@ -191,9 +191,9 @@ public class EditCompanyFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressLayout.setVisibility(View.GONE);
-        binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
+        binding.errorlayout.getRoot().setVisibility(View.VISIBLE);
+        binding.errorlayout.getRoot().setOnClickListener(v -> {
             switch (state) {
                 case COMPANY:
                     viewModel.getCompanyData(companyId);

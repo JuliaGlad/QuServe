@@ -64,6 +64,8 @@ public class ChangeRoleDialogFragment extends DialogFragment {
         });
 
         binding.buttonSend.setOnClickListener(v -> {
+            binding.loaderCancel.setVisibility(View.VISIBLE);
+            binding.buttonSend.setEnabled(false);
             viewModel.updateField(newRole, employeeId, companyId);
         });
 

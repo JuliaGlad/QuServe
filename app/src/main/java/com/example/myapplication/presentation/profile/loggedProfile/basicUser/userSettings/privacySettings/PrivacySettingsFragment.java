@@ -74,7 +74,7 @@ public class PrivacySettingsFragment extends Fragment {
     private void initRecycler(){
         delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(1, R.drawable.ic_mail, R.string.change_email, () -> {
             ChangeEmailDialogFragment dialogFragment = new ChangeEmailDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "CHANGE_EMAIL_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "CHANGE_EMAIL_DIALOG");
             DialogDismissedListener listener = bundle -> {
 
                 email = bundle.getString(EMAIL);
@@ -87,10 +87,10 @@ public class PrivacySettingsFragment extends Fragment {
         delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_lock_reset, R.string.update_password, () -> {
 
             UpdatePasswordDialogFragment dialogFragment = new UpdatePasswordDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "UPDATE_PASSWORD_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "UPDATE_PASSWORD_DIALOG");
             DialogDismissedListener listener = bundle -> {
                 EmailUpdateSuccessfulDialogFragment successDialog = new EmailUpdateSuccessfulDialogFragment();
-                successDialog.show(getActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
+                successDialog.show(requireActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
             };
             dialogFragment.onDismissListener(listener);
 
@@ -98,9 +98,9 @@ public class PrivacySettingsFragment extends Fragment {
         delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, R.string.delete_account, () -> {
 
             DeleteAccountDialogFragment dialogFragment = new DeleteAccountDialogFragment();
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_ACCOUNT_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_ACCOUNT_DIALOG");
             DialogDismissedListener listener = bundle -> {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
                 sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
                 requireActivity().finish();
             };
@@ -111,7 +111,6 @@ public class PrivacySettingsFragment extends Fragment {
     }
 
     private void setAdapter(){
-
         mainAdapter.addDelegate(new ServiceItemDelegate());
         mainAdapter.addDelegate(new ServiceRedItemDelegate());
 
@@ -122,13 +121,13 @@ public class PrivacySettingsFragment extends Fragment {
         viewModel.openSuccessDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
                 EmailUpdateSuccessfulDialogFragment dialogFragment = new EmailUpdateSuccessfulDialogFragment();
-                dialogFragment.show(getActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
             }
         });
 
         viewModel.openVerifyDialog.observe(getViewLifecycleOwner(), aBoolean -> {
             VerifyBeforeUpdateDialogFragment dialogFragment = new VerifyBeforeUpdateDialogFragment(email, password);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "VERIFY_BEFORE_UPDATE_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "VERIFY_BEFORE_UPDATE_DIALOG");
             DialogDismissedListener dismissedListener = object -> {
                 viewModel.updateEmailField(email);
             };

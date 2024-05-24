@@ -1,7 +1,6 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails.participantList;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +24,7 @@ import myapplication.android.ui.recycler.ui.items.items.participantListItem.Part
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListModel;
 import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsDelegate;
-import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsModel;
 import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewModel;
 
 public class ParticipantsListFragment extends Fragment {
 
@@ -85,10 +80,10 @@ public class ParticipantsListFragment extends Fragment {
                 initRecyclerView(participants.size());
 
             } else if (state instanceof  ParticipantsListState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof ParticipantsListState.Error){
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
                 binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
                     viewModel.getParticipantsList();
@@ -116,7 +111,7 @@ public class ParticipantsListFragment extends Fragment {
     private void initRecyclerView(int participantsSize) {
         addParticipantListDelegateItems(participantsSize);
         mainAdapter.submitList(itemsList);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 

@@ -2,8 +2,10 @@ package com.example.myapplication.presentation.dialogFragments.waiterQrCode;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +13,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.databinding.DialogWaiterQrCodeBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -28,8 +34,22 @@ public class WaiterQrCodeDialogFragment extends DialogFragment {
         DialogWaiterQrCodeBinding binding = DialogWaiterQrCodeBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
+        binding.loader.setVisibility(View.VISIBLE);
+
         Glide.with(requireContext())
                 .load(uri)
+                .addListener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                        binding.loader.setVisibility(View.GONE);
+                        return true;
+                    }
+                })
                 .into(binding.qrCode);
 
         binding.buttonOk.setOnClickListener(v -> {

@@ -3,16 +3,13 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.editQue
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -127,11 +124,11 @@ public class EditQueueFragment extends Fragment {
                             }));
                 }
                 adapter.submitList(list);
-                binding.progressBar.setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof EditQueueState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof EditQueueState.Error) {
                 setError();
@@ -158,7 +155,7 @@ public class EditQueueFragment extends Fragment {
     }
 
     private void setError() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getQueueData(companyId, queueId);
@@ -167,7 +164,7 @@ public class EditQueueFragment extends Fragment {
 
     private void showDeleteDialog(String companyId, String queueId, String id) {
         DeleteWorkerFromQueueDialogFragment dialogFragment = new DeleteWorkerFromQueueDialogFragment(companyId, queueId, id);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_WORKER_FROM_QUEUE");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_WORKER_FROM_QUEUE");
         dialogFragment.onDismissListener(bundle -> {
             removeEmployee(id);
         });

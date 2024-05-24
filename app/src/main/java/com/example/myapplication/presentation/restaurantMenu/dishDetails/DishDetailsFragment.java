@@ -197,7 +197,7 @@ public class DishDetailsFragment extends Fragment {
                 initUi(model);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof DishDetailsState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof DishDetailsState.Error) {
                 setErrorLayout();
             }
@@ -223,6 +223,7 @@ public class DishDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getDishData(restaurantId, categoryId, dishId);
@@ -343,6 +344,8 @@ public class DishDetailsFragment extends Fragment {
             openAddToppingsActivity(categoryId, dishId);
         })));
         toppingsAdapter.submitList(toppingItems);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void openAddToppingsActivity(String categoryId, String dishId) {

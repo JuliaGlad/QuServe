@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.common.JoinQueueFragment.joinQueu
 
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.databinding.FragmentJoinQueueBinding;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.model.JoinQueueModel;
@@ -75,12 +80,27 @@ public class JoinQueueFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof JoinQueueState.Success){
                 JoinQueueModel model = ((JoinQueueState.Success)state).data;
-                Glide.with(JoinQueueFragment.this).load(model.getUri()).into(binding.qrCodeImage);
+                Glide.with(JoinQueueFragment.this)
+                        .load(model.getUri())
+                        .addListener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
+                                binding.progressBar.getRoot().setVisibility(View.GONE);
+                                binding.errorLayout.getRoot().setVisibility(View.GONE);
+                                return true;
+                            }
+                        })
+                        .into(binding.qrCodeImage);
                 binding.queueName.setText(model.getName());
                 binding.errorLayout.errorLayout.setVisibility(View.GONE);
 
             } else if (state instanceof JoinQueueState.Loading){
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof JoinQueueState.Error){
                 setErrorLayout();
             }

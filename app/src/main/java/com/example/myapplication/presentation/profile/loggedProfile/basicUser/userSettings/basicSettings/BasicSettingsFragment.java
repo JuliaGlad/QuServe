@@ -1,17 +1,13 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings;
 
 import static android.content.Context.MODE_PRIVATE;
-
 import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,32 +101,33 @@ public class BasicSettingsFragment extends Fragment {
                     })));
                     delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
                         HelpDialogFragment dialogFragment = new HelpDialogFragment();
-                        dialogFragment.show(getActivity().getSupportFragmentManager(), "HELP_DIALOG");
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "HELP_DIALOG");
                     })));
                     delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_group, R.string.about_us, () -> {
                         AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
-                        dialogFragment.show(getActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
                     })));
 
                     delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(5, R.drawable.ic_logout, R.string.logout, () -> {
                         LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
-                        dialogFragment.show(getActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
                         DialogDismissedListener listener = bundle -> {
 
-                            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
                             sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
                             sharedPreferences.edit().putString(COMPANY_ID, null).apply();
 
-                            getActivity().finish();
+                            requireActivity().finish();
                         };
                         dialogFragment.onDismissListener(listener);
                     })));
 
                     mainAdapter.submitList(delegates);
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
                     binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
             } else if (state instanceof BasicSettingsState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof BasicSettingsState.Error) {
                 setErrorLayout();
             }
@@ -139,6 +136,7 @@ public class BasicSettingsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.retrieveUserData();

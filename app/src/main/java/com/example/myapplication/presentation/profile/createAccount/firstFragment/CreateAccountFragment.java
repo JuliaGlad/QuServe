@@ -89,7 +89,7 @@ public class CreateAccountFragment extends Fragment {
             }
 
             if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.loader.setVisibility(View.VISIBLE);
                 viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
             }
         });
@@ -98,7 +98,7 @@ public class CreateAccountFragment extends Fragment {
     private void setupObserves() {
         viewModel.created.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.loader.setVisibility(View.GONE);
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createAccount_to_chooseFragment);
             }
@@ -109,7 +109,7 @@ public class CreateAccountFragment extends Fragment {
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createAccount_to_chooseFragment);
             } else {
-                binding.progressBar.setVisibility(View.GONE);
+                binding.loader.setVisibility(View.GONE);
             }
         });
     }

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.updatePasswordDia
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,9 @@ public class UpdatePasswordDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonSend.setOnClickListener(v -> {
+
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSend.setEnabled(false);
 
             String oldPassword = binding.editLayoutOldPassword.getText().toString();
             String newPassword = binding.editLayoutNewPassword.getText().toString();

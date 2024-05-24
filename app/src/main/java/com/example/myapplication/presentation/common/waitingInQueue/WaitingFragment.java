@@ -110,6 +110,7 @@ public class WaitingFragment extends Fragment {
                 initRecycler(model.getPath(), model.getParticipants().size(), midTime);
             }
             else if (state instanceof WaitingState.Loading) {
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof WaitingState.Error) {
                 setErrorLayout();
             }
@@ -117,6 +118,7 @@ public class WaitingFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getQueue();
@@ -150,11 +152,13 @@ public class WaitingFragment extends Fragment {
                 new WaitingItemDelegateItem(new WaitingItemModel(4, path, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))
         });
+
     }
 
     private void buildList(DelegateItem[] items) {
         List<DelegateItem> list = Arrays.asList(items);
         mainAdapter.submitList(list);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

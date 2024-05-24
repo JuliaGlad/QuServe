@@ -90,7 +90,7 @@ public class MainWaiterFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString(LOCATION_ID, locationId);
         bundle.putString(COMPANY_ID, restaurantId);
-        getActivity().getSupportFragmentManager()
+        requireActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.employee_nav_container, StartWorkFragment.class, bundle)
                 .commit();
@@ -102,13 +102,13 @@ public class MainWaiterFragment extends Fragment {
             if (aBoolean != null){
                 if (aBoolean) {
                     StopWaiterWorkDialogFragment dialogFragment = new StopWaiterWorkDialogFragment(restaurantId, locationId);
-                    dialogFragment.show(getActivity().getSupportFragmentManager(), "STOP_WAITER_WORK_DIALOG");
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_WAITER_WORK_DIALOG");
                     dialogFragment.onDialogDismissedListener(bundle -> {
                         navigateToStartWorking();
                     });
                 } else {
                     CannotStopWaiterWorkDialogFragment dialogFragment = new CannotStopWaiterWorkDialogFragment();
-                    dialogFragment.show(getActivity().getSupportFragmentManager(), "CANNOT_STOP_WAITER_WORK_DIALOG");
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "CANNOT_STOP_WAITER_WORK_DIALOG");
                 }
             }
         });
@@ -128,9 +128,10 @@ public class MainWaiterFragment extends Fragment {
                 initRecycler(model.getDishes());
 
             } else if (state instanceof MainWaiterState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof MainWaiterState.Error) {
-
+                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
             }
         });
 
@@ -145,7 +146,7 @@ public class MainWaiterFragment extends Fragment {
         viewModel.removed.observe(getViewLifecycleOwner(), index -> {
             if (index != null) {
                 items.remove(index.intValue());
-                adapter.notifyItemRemoved(index.intValue());
+                adapter.notifyItemRemoved(index);
             }
         });
     }
@@ -156,6 +157,7 @@ public class MainWaiterFragment extends Fragment {
             addWaiterItem(items, i, current);
         }
         adapter.submitList(items);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
     private void addWaiterItem(List<WaiterItemModel> items, int index, WaiterReadyDishesModel mainWaiterStateModel) {

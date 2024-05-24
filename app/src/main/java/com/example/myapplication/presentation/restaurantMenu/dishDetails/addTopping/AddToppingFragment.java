@@ -121,6 +121,8 @@ public class AddToppingFragment extends Fragment {
                 bundle.putString(TOPPING_IMAGE, String.valueOf(image));
 
                 viewModel.setArgumentsNull();
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonNext.setEnabled(true);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_addToppingFragment_to_toppingSuccessfullyAdded, bundle);
@@ -217,6 +219,8 @@ public class AddToppingFragment extends Fragment {
                 break;
             case PAGE_3:
                 if (image != null) {
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.initData(restaurantId, categoryId, dishId);
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();

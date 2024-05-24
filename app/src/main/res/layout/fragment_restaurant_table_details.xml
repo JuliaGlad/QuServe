@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="20dp"
-    tools:context=".presentation.basicQueue.queueDetails.QueueDetailsFragment">
+    tools:context=".presentation.restaurantLocation.locationDetails.tableList.tableDetails.RestaurantTableDetailsFragment">
 
     <ImageButton
         android:id="@+id/button_back"
@@ -51,36 +51,38 @@
         app:layout_constraintStart_toEndOf="@+id/button_back"
         app:layout_constraintTop_toTopOf="@+id/button_back" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
+    <TextView
+        android:id="@+id/table_number"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/table_header"
+        app:layout_constraintStart_toEndOf="@+id/table_header"
+        app:layout_constraintTop_toTopOf="@+id/table_header"
+        tools:text="11" />
+
+
+    <include
+        android:id="@+id/error_layout"
+        layout="@layout/something_went_wrong_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/table_number"
-        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="11"
-        app:layout_constraintBottom_toBottomOf="@+id/table_header"
-        app:layout_constraintStart_toEndOf="@+id/table_header"
-        app:layout_constraintTop_toTopOf="@+id/table_header" />
-
-
-    <include layout="@layout/something_went_wrong_layout"
-        android:id="@+id/error_layout"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
+    <include
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -115,7 +115,7 @@ public class RestaurantTableDetailsFragment extends Fragment {
                 binding.tableNumber.setText(tableNumber);
                 initRecycler(model.getQrCode());
             } else if (state instanceof TableDetailsState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof TableDetailsState.Error) {
                 setErrorLayout();
             }
@@ -130,7 +130,7 @@ public class RestaurantTableDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getTableData(restaurantId, locationId, tableId));
     }
@@ -158,7 +158,7 @@ public class RestaurantTableDetailsFragment extends Fragment {
     private void buildList(DelegateItem[] delegates) {
         List<DelegateItem> items = Arrays.asList(delegates);
         adapter.submitList(items);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.logout;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ public class LogoutDialogFragment extends DialogFragment {
         DialogLogoutLayoutBinding binding = DialogLogoutLayoutBinding.inflate(getLayoutInflater());
 
         binding.buttonLogout.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonLogout.setEnabled(false);
             viewModel.logout();
             isLogout = true;
             dismiss();

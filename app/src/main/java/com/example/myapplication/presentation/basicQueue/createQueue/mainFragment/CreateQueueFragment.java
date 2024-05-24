@@ -146,6 +146,8 @@ public class CreateQueueFragment extends Fragment {
             case PAGE_2:
                 if (queueTime != null) {
                     if (askPermission()) {
+                        binding.loader.setVisibility(View.VISIBLE);
+                        binding.buttonNext.setEnabled(false);
                         viewModel.initQueueData();
                         viewModel.setArgumentsNull();
                     }
@@ -204,6 +206,9 @@ public class CreateQueueFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, BASIC);
                 bundle.putString(QUEUE_ID, Arguments.queueID);
+
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonNext.setEnabled(true);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createQueueFragment_to_finishedQueueCreationFragment, bundle);

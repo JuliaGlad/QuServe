@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.employee.becomeCook.main;
 
-import android.net.Uri;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantUserDI;
-import com.example.myapplication.domain.model.restaurant.RestaurantNameIdModel;
 import com.example.myapplication.presentation.employee.becomeCook.state.BecomeCookState;
 import com.example.myapplication.presentation.employee.becomeCook.state.BecomeCookStateModel;
 
@@ -17,7 +14,6 @@ import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
-import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class BecomeCookViewModel extends ViewModel {

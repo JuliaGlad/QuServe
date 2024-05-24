@@ -35,8 +35,8 @@ public class CookActiveOrdersFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CookActiveOrdersViewModel.class);
-        restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
+        restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        locationId = requireActivity().getIntent().getStringExtra(LOCATION_ID);
         viewModel.getOrders(restaurantId, locationId);
     }
 
@@ -58,9 +58,8 @@ public class CookActiveOrdersFragment extends Fragment {
             if (state instanceof CookActiveOrdersState.Success) {
                 List<CookActiveOrderStateModel> models = ((CookActiveOrdersState.Success) state).data;
                 initRecycler(models);
-
             } else if (state instanceof CookActiveOrdersState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof CookActiveOrdersState.Error) {
                 setErrorLayout();
             }
@@ -68,6 +67,7 @@ public class CookActiveOrdersFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getOrders(restaurantId, locationId);
@@ -90,6 +90,6 @@ public class CookActiveOrdersFragment extends Fragment {
     private void buildList(List<ActiveOrdersItemModel> models) {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
-        binding.errorLayout.getRoot().setVisibility(View.GONE);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
     }
 }

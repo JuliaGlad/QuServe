@@ -38,6 +38,8 @@ public class AlreadyParticipateInQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonLeave.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonLeave.setEnabled(false);
             viewModel.leaveQueue();
         });
 

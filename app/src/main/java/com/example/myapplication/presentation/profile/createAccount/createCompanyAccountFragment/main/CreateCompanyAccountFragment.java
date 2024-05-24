@@ -109,7 +109,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 break;
             case PAGE_4:
                 binding.companyProgressBar.setProgress(75);
-                binding.buttonNext.setText("Send for review");
+                binding.buttonNext.setText(getString(R.string.finish));
                 break;
         }
 
@@ -156,6 +156,8 @@ public class CreateCompanyAccountFragment extends Fragment {
                 bundle.putString(COMPANY_ID, companyId);
 
                 viewModel.setArgumentsNull();
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonNext.setEnabled(true);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createCompanyAccountFragment_to_approvalFragment, bundle);
@@ -234,6 +236,8 @@ public class CreateCompanyAccountFragment extends Fragment {
                 if (service == null) {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 } else {
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.initData();
                 }
                 break;

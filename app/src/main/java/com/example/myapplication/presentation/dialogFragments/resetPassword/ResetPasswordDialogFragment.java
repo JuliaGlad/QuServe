@@ -39,30 +39,14 @@ public class ResetPasswordDialogFragment extends DialogFragment {
 
         binding.buttonSend.setOnClickListener(v -> {
 
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSend.setEnabled(false);
+
             initEditText();
 
             String email = binding.editLayoutEmail.getText().toString();
             if (!email.isEmpty()) {
-                viewModel.sendResetPasswordEmail(email)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new SingleObserver<Boolean>() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onSuccess(@io.reactivex.rxjava3.annotations.NonNull Boolean aBoolean) {
-                                isSend = aBoolean;
-                                dismiss();
-                            }
-
-                            @Override
-                            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
-
-                            }
-                        });
-
+                viewModel.sendResetPasswordEmail(email);
             } else {
                 binding.editLayoutEmail.setError("This field is required");
             }
@@ -113,8 +97,15 @@ public class ResetPasswordDialogFragment extends DialogFragment {
     }
 
     private void setupObserves() {
-        viewModel.emailError.observe(getViewLifecycleOwner(), message -> {
+        viewModel.emailError.observe(this, message -> {
             binding.editLayoutEmail.setError(message);
+        });
+
+        viewModel.isSend.observe(this, aBoolean -> {
+            if (aBoolean){
+                isSend = true;
+                dismiss();
+            }
         });
     }
 }

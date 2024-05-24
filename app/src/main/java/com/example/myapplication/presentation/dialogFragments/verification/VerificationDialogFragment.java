@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.verification;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +38,8 @@ public class VerificationDialogFragment extends DialogFragment {
         setupObserves();
         binding.userEmail.setText(email);
         binding.buttonDone.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDone.setEnabled(false);
             viewModel.isVerified();
         });
         binding.buttonCancel.setOnClickListener(v -> {

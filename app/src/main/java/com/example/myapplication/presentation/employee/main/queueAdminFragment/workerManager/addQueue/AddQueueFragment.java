@@ -70,6 +70,8 @@ public class AddQueueFragment extends Fragment {
 
     private void initButtonOk() {
         binding.buttonOk.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonOk.setEnabled(false);
             viewModel.addEmployeeToQueue(chosen, companyId, employeeId, employeeName);
         });
     }
@@ -88,6 +90,7 @@ public class AddQueueFragment extends Fragment {
                 initRecycler(queues);
 
             } else if (state instanceof AddQueueState.Loading) {
+                binding.loadingLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof AddQueueState.Error) {
                 setError();
             }
@@ -101,6 +104,9 @@ public class AddQueueFragment extends Fragment {
                 bundle.putString(COMPANY_EMPLOYEE, employeeId);
                 bundle.putString(COMPANY_ID, companyId);
 
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonOk.setEnabled(true);
+
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_addQueueFragment_to_workerDetailsFragment, bundle);
             }
@@ -108,6 +114,7 @@ public class AddQueueFragment extends Fragment {
     }
 
     private void setError() {
+        binding.loader.setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getCompanyQueues(companyId, ids);
@@ -132,5 +139,6 @@ public class AddQueueFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
+        binding.loadingLayout.getRoot().setVisibility(View.GONE);
     }
 }

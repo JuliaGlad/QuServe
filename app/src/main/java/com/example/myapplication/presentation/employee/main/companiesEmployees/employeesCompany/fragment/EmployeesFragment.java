@@ -52,7 +52,7 @@ public class EmployeesFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(EmployeesViewModel.class);
         binding = FragmentEmployeesBinding.inflate(inflater, container, false);
-        companyId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        companyId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         viewModel.getEmployees(companyId);
         return binding.getRoot();
     }
@@ -154,7 +154,7 @@ public class EmployeesFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(employeeItemAdapter);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
@@ -254,7 +254,7 @@ public class EmployeesFragment extends Fragment {
                 initSubLists();
                 initRecycler();
             } else if (state instanceof EmployeeState.Loading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EmployeeState.Error) {
                 setErrorLayout();
             }
@@ -262,7 +262,7 @@ public class EmployeesFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployees(companyId);
@@ -271,7 +271,7 @@ public class EmployeesFragment extends Fragment {
 
     private void showDeleteDialog(String employeeId, String companyId) {
         DeleteEmployeeFromCompanyDialogFragment dialogFragment = new DeleteEmployeeFromCompanyDialogFragment(employeeId, companyId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_EMPLOYEE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_EMPLOYEE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             removeEmployee(employeeId, bundle.getString(EMPLOYEE_ROLE));
         });

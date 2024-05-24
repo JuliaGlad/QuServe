@@ -86,6 +86,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(1, R.drawable.work_together_employee_wall_paper)));
         delegates.addAll(addDelegates(roleModels));
         mainAdapter.submitList(delegates);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
@@ -134,7 +135,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
                 List<DifferentRoleModel> models = ((DifferentRoleState.Success) state).data;
                 initRecycler(models);
             } else if (state instanceof DifferentRoleState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof DifferentRoleState.Error) {
                 setErrorLayout();
             }
@@ -142,6 +143,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployeeCompanyRoles(roleModels);

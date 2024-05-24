@@ -76,7 +76,7 @@ public class RestaurantHomeFragment extends Fragment {
                 initRecycler(models);
 
             } else if (state instanceof RestaurantHomeState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantHomeState.Error) {
                 setErrorLayout();
             }
@@ -84,6 +84,7 @@ public class RestaurantHomeFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getRestaurantLocations(restaurantId));
     }
@@ -105,6 +106,7 @@ public class RestaurantHomeFragment extends Fragment {
             adapter.addDelegate(new HomeRestaurantLocationDelegate());
             binding.recyclerView.setAdapter(adapter);
             adapter.submitList(delegates);
+            binding.progressBar.getRoot().setVisibility(View.GONE);
             binding.errorLayout.errorLayout.setVisibility(View.GONE);
         }
     }

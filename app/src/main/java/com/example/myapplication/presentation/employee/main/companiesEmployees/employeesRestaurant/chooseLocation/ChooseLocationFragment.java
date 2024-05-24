@@ -75,7 +75,7 @@ public class ChooseLocationFragment extends Fragment {
                 }
 
             } else if (state instanceof ChooseLocationState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof ChooseLocationState.Error) {
                 setErrorLayout();
             }
@@ -83,6 +83,7 @@ public class ChooseLocationFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getRestaurantLocations(restaurantId);
@@ -104,7 +105,7 @@ public class ChooseLocationFragment extends Fragment {
                     () -> {
                         Bundle bundle = new Bundle();
                         bundle.putString(LOCATION_ID, locationId);
-                        getActivity().getSupportFragmentManager()
+                        requireActivity().getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.employee_nav_container, EmployeesRestaurantFragment.class, bundle)
                                 .commit();
@@ -113,6 +114,7 @@ public class ChooseLocationFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 

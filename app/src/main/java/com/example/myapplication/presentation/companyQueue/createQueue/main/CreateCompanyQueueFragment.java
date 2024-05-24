@@ -245,6 +245,8 @@ public class CreateCompanyQueueFragment extends Fragment {
 
             case PAGE_4:
                 if (askPermission()) {
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonNext.setEnabled(false);
                     viewModel.initQueueData(companyId);
                 }
                 break;
@@ -301,6 +303,9 @@ public class CreateCompanyQueueFragment extends Fragment {
                 bundle.putString(COMPANY_ID, companyId);
                 bundle.putString(QUEUE_ID, queueId);
                 bundle.putString(COMPANY_NAME, queueName);
+
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonNext.setEnabled(true);
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createCompanyQueueFragment_to_finishedQueueCreationFragment, bundle);

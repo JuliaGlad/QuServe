@@ -48,6 +48,8 @@ public class VerifyBeforeUpdateDialogFragment extends DialogFragment {
         binding.userEmail.setText(email);
 
         binding.buttonDone.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonDone.setEnabled(false);
             viewModel.checkVerification(email, password);
         });
 

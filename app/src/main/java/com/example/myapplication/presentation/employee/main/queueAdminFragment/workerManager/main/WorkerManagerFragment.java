@@ -105,10 +105,11 @@ public class WorkerManagerFragment extends Fragment {
                 }
                 binding.recyclerView.setAdapter(adapter);
                 adapter.submitList(models);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof WorkerManagerState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof WorkerManagerState.Error) {
                 setErrorLayout();
             }
@@ -116,6 +117,7 @@ public class WorkerManagerFragment extends Fragment {
     }
 
     private void setErrorLayout() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployees(companyId);

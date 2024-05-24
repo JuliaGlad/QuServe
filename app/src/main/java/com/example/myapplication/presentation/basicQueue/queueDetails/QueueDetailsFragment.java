@@ -91,7 +91,7 @@ public class QueueDetailsFragment extends Fragment {
                 }
 
             } else if (state instanceof QueueDetailsState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof QueueDetailsState.Error){
                 setErrorLayout();
@@ -105,7 +105,7 @@ public class QueueDetailsFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getQueueRecycler();
@@ -185,7 +185,7 @@ public class QueueDetailsFragment extends Fragment {
     private void buildList(DelegateItem[] items) {
         list = Arrays.asList(items);
         mainAdapter.submitList(list);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

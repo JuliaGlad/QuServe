@@ -102,7 +102,7 @@ public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull Integer integer) {
-                        if (integer.intValue() == 0){
+                        if (integer == 0){
                             _isFinished.postValue(true);
                         } else {
                             _isReady.postValue(index);

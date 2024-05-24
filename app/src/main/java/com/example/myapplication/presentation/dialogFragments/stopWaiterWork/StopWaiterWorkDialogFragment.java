@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.dialogFragments.stopWaiterWork;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,8 @@ public class StopWaiterWorkDialogFragment extends DialogFragment {
         });
 
         binding.buttonStop.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonStop.setEnabled(false);
             viewModel.updateIsWorking(restaurantId, locationId);
         });
 

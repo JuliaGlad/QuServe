@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.restaurantMenu.RestaurantMenuFragment">
+    tools:context=".presentation.restaurantOrder.menu.RestaurantMenuOrderFragment">
 
     <ImageButton
         android:id="@+id/button_back"
@@ -85,6 +85,16 @@
 
     <include layout="@layout/something_went_wrong_layout"
         android:id="@+id/error_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/loading_layout"
+        android:id="@+id/progress_layout"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:visibility="gone"

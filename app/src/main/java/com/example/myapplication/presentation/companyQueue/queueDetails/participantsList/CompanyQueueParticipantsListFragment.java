@@ -106,7 +106,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
         itemsList.add(new StatisticsDelegateItem(new StatisticsModel(1)));
         addParticipantListDelegateItems(participantsSize);
         mainAdapter.submitList(itemsList);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
@@ -136,7 +136,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
                 initRecycler(participants.size());
 
             } else if (state instanceof CompanyParticipantsState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof CompanyParticipantsState.Error){
                 setErrorLayout();
@@ -146,7 +146,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getParticipantsList(queueId, companyId);

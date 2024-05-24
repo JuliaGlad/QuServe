@@ -192,7 +192,7 @@ public class RestaurantMenuFragment extends Fragment {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
                 initDishRecycler(models, true);
             } else if (state instanceof RestaurantMenuState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantMenuState.Error) {
                 setErrorLayout();
             }
@@ -253,11 +253,12 @@ public class RestaurantMenuFragment extends Fragment {
             final List<DelegateItem> items = new ArrayList<>();
             gridAdapter.submitList(items);
         }
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void updateDish(String chosenId) {
-        int index = 0;
+        int index;
         for (int j = 0; j < dishes.size(); j++) {
             if (dishes.get(j) instanceof DishItemDelegateItem) {
                 DishItemModel item = ((DishItemDelegateItem)dishes.get(j)).content();

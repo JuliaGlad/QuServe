@@ -70,7 +70,7 @@ public class TableOrderDetailsFragment extends Fragment {
                 initRecycler(model.getDishes());
 
             } else if (state instanceof TableOrderDetailsState.Loading){
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof TableOrderDetailsState.Error){
                 setErrorLayout();
             }
@@ -92,6 +92,7 @@ public class TableOrderDetailsFragment extends Fragment {
             items.add(new DishTableDetailsItemModel(i, current.getName(), current.getCount()));
         }
         adapter.submitList(items);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 

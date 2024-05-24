@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     app:layout_constraintBottom_toTopOf="@+id/button_order"
-    tools:context=".presentation.restaurantMenu.dishDetails.DishDetailsFragment">
+    tools:context=".presentation.restaurantOrder.dishDetails.RestaurantOrderDishDetailsFragment">
 
 
     <androidx.core.widget.NestedScrollView
@@ -44,9 +44,9 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="?colorPrimary"
-                android:text="100gr"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/food_image" />
+                app:layout_constraintTop_toBottomOf="@+id/food_image"
+                tools:text="100gr" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/name"
@@ -55,9 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:backgroundTint="?colorPrimary"
-                android:text="WOK-Noodles"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/weight" />
+                app:layout_constraintTop_toBottomOf="@+id/weight"
+                tools:text="WOK-Noodles" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/ingredients"
@@ -68,11 +68,11 @@
                 android:layout_marginEnd="20dp"
                 android:backgroundTint="?colorPrimary"
                 android:fontFamily="@font/regular"
-                android:text="Extra tofu, carrot, chicken, vegetables and teriyaki sause"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                tools:text="Extra tofu, carrot, chicken, vegetables and teriyaki sause" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/to_remove_header"
@@ -144,12 +144,23 @@
         android:layout_marginEnd="20dp"
         android:clickable="true"
         android:focusable="true"
-        android:text="Add +456₽"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Add +456₽" />
 
+    <include
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/error_layout"

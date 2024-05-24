@@ -47,7 +47,7 @@ public class EditRequiredChoiceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(EditRequiredChoiceViewModel.class);
 
-        restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
         categoryId = getArguments().getString(CATEGORY_ID);
         dishId = getArguments().getString(DISH_ID);
         choiceId = getArguments().getString(CHOICE_ID);
@@ -86,7 +86,7 @@ public class EditRequiredChoiceFragment extends Fragment {
 
     private void showAddDialog() {
         AddNewVariantDialogFragment dialogFragment = new AddNewVariantDialogFragment(restaurantId, categoryId, dishId, choiceId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "ADD_NEW_VARIANT_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ADD_NEW_VARIANT_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             String name = bundle.getString(CHOICE_NAME);
             List<EditRequiredChoiceItemModel> newItems = new ArrayList<>(items);
@@ -117,7 +117,7 @@ public class EditRequiredChoiceFragment extends Fragment {
 
     private void showDeleteChoiceDialog() {
         DeleteRequiredChoiceDialogFragment dialogFragment = new DeleteRequiredChoiceDialogFragment(restaurantId, categoryId, dishId, choiceId);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "DELETE_REQUIRED_CHOICE_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_REQUIRED_CHOICE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
             navigateBack();
         });
@@ -136,7 +136,7 @@ public class EditRequiredChoiceFragment extends Fragment {
                 initRecycler(model.getVariants());
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof EditRequiredChoiceState.Loading) {
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EditRequiredChoiceState.Error) {
                 setError();
             }
@@ -160,6 +160,7 @@ public class EditRequiredChoiceFragment extends Fragment {
     }
 
     private void setError() {
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getData(restaurantId, categoryId, dishId, choiceId);
@@ -173,6 +174,8 @@ public class EditRequiredChoiceFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
     private void addVariant(List<EditRequiredChoiceItemModel> items, int index, String name) {
