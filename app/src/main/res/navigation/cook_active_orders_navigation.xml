@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cook_active_orders_navigation.xml"
+    app:startDestination="@id/cookOrderIsFinishedFragment">
+
+    <fragment
+        android:id="@+id/orderDetailsWithIndicatorsFragment"
+        tools:layout="com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.OrderDetailsWithIndicatorsFragment">
+        <action
+            android:id="@+id/action_orderDetailsWithIndicatorsFragment_to_cookOrderIsFinishedFragment"
+            app:destination="@id/cookOrderIsFinishedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cookOrderIsFinishedFragment"
+        android:name="com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.orderIsFinishedCook.CookOrderIsFinishedFragment"
+        android:label="CookOrderIsFinishedFragment" />
+
+</navigation>
