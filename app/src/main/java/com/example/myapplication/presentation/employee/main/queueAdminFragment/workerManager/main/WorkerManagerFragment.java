@@ -38,7 +38,7 @@ public class WorkerManagerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(WorkerManagerViewModel.class);
-        companyId = getActivity().getIntent().getStringExtra(COMPANY_ID);
+        companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         viewModel.getEmployees(companyId);
     }
 
@@ -87,24 +87,11 @@ public class WorkerManagerFragment extends Fragment {
             if (state instanceof WorkerManagerState.Success) {
                 models = new ArrayList<>();
                 List<CompanyEmployeeModel> previous = ((WorkerManagerState.Success) state).data;
-                for (int i = 0; i < previous.size(); i++) {
-                    CompanyEmployeeModel current = previous.get(i);
-                    String name = current.getName();
-                    String id = current.getEmployeeId();
-                    models.add(new WorkerManagerModel(
-                            i, id, name, current.getCount(),
-                            () -> {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(EMPLOYEE_NAME, name);
-                                bundle.putString(COMPANY_EMPLOYEE, id);
-                                bundle.putString(COMPANY_ID, companyId);
-                                NavHostFragment.findNavController(this)
-                                        .navigate(R.id.action_workerManagerFragment_to_workerDetailsFragment, bundle);
-                            }
-                    ));
+                if (!previous.isEmpty()) {
+                    initRecycler(previous);
+                } else {
+                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
                 }
-                binding.recyclerView.setAdapter(adapter);
-                adapter.submitList(models);
                 binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
@@ -114,6 +101,27 @@ public class WorkerManagerFragment extends Fragment {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initRecycler(List<CompanyEmployeeModel> previous) {
+        for (int i = 0; i < previous.size(); i++) {
+            CompanyEmployeeModel current = previous.get(i);
+            String name = current.getName();
+            String id = current.getEmployeeId();
+            models.add(new WorkerManagerModel(
+                    i, id, name, current.getCount(),
+                    () -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(EMPLOYEE_NAME, name);
+                        bundle.putString(COMPANY_EMPLOYEE, id);
+                        bundle.putString(COMPANY_ID, companyId);
+                        NavHostFragment.findNavController(this)
+                                .navigate(R.id.action_workerManagerFragment_to_workerDetailsFragment, bundle);
+                    }
+            ));
+        }
+        binding.recyclerView.setAdapter(adapter);
+        adapter.submitList(models);
     }
 
     private void setErrorLayout() {

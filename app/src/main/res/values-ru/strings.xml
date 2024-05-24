@@ -399,4 +399,11 @@
     <string name="your_cart_is_empty">Ваша корзина пуста!</string>
     <string name="looks_like_you_haven_t_added_any_dishes_to_your_cart_yet">Looks like you haven`t added any dishes to your cart yet</string>
     <string name="for_who_is_your_account">Для кого ваш аккаунт?</string>
+    <string name="you_don_t_have_any_employees_yet">You don`t have any employees yet!</string>
+    <string name="you_don_t_have_any_tables_yet">You don`t have any tables yet</string>
+    <string name="you_don_t_have_any_queues_yet">You don`t have any queues yet!</string>
+    <string name="you_don_t_have_any_orders_yet">You don`t have any orders yet!</string>
+    <string name="you_don_t_have_any_categories_yet">You don`t have any categories yet!</string>
+    <string name="there_is_no_dishes_in_this_category_yet">There is no dishes in this category yet!</string>
+    <string name="there_is_no_participants_yet">There is no participants yet!</string>
 </resources>

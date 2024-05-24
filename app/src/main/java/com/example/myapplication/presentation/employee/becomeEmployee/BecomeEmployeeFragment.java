@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.becomeEmployee;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,9 +31,10 @@ public class BecomeEmployeeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BecomeEmployeeViewModel.class);
         binding = FragmentBecomeEmployeeBinding.inflate(inflater, container, false);
 
-        companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        companyId = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
 
         if (companyId != null) {
+            binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             viewModel.getCompany(companyId);
         }
 
@@ -80,6 +82,7 @@ public class BecomeEmployeeFragment extends Fragment {
                 Glide.with(requireContext())
                         .load(uri)
                         .into(binding.qrCodeImage);
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else {
                 setErrorLayout();

@@ -115,7 +115,7 @@ public class EmployeesFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
             EmployeeQrCodeDialogFragment dialogFragment = new EmployeeQrCodeDialogFragment(companyId);
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "EMPLOYEE_QE_CODE_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "EMPLOYEE_QE_CODE_DIALOG");
         });
     }
 
@@ -162,6 +162,9 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < basicList.size(); i++) {
             if (basicList.get(i).getEmployeeId().equals(userId)) {
                 basicList.remove(i);
+                if (binding.tabLayout.getTabAt(0).isSelected()){
+                    employeeItemAdapter.notifyItemRemoved(i);
+                }
                 break;
             }
         }
@@ -171,6 +174,9 @@ public class EmployeesFragment extends Fragment {
                 for (int i = 0; i < adminList.size(); i++) {
                     if (adminList.get(i).getEmployeeId().equals(userId)) {
                         adminList.remove(i);
+                        if (binding.tabLayout.getTabAt(1).isSelected()){
+                            employeeItemAdapter.notifyItemRemoved(i);
+                        }
                         break;
                     }
                 }
@@ -179,10 +185,14 @@ public class EmployeesFragment extends Fragment {
                 for (int i = 0; i < workerList.size(); i++) {
                     if (workerList.get(i).getEmployeeId().equals(userId)) {
                         workerList.remove(i);
+                        if (binding.tabLayout.getTabAt(2).isSelected()){
+                            employeeItemAdapter.notifyItemRemoved(i);
+                        }
                         break;
                     }
                 }
         }
+
     }
 
     private void addToAdmins(String id) {
@@ -219,46 +229,55 @@ public class EmployeesFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof EmployeeState.Success) {
                 List<EmployeeModel> models = ((EmployeeState.Success) state).data;
-                for (int i = 0; i < models.size(); i++) {
-                    EmployeeModel current = models.get(i);
-
-                    String id = current.getId();
-                    String name = current.getName();
-                    String role = current.getRole();
-
-                    final ChangeRoleDialogFragment[] dialogFragment = {new ChangeRoleDialogFragment(companyId, id, role)};
-
-                    basicList.add(new EmployeeItemModel(i, this, name, id, role, companyId, dialogFragment[0], () -> {
-
-                        dialogFragment[0].show(getActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
-
-                        DialogDismissedListener listener = bundleDialog -> {
-                            if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
-                                addToAdmins(id);
-                                dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, ADMIN);
-                            } else {
-                                addToWorkers(id);
-                                dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, WORKER);
-                            }
-                        };
-
-                        dialogFragment[0].onDismissListener(listener);
-                    }, () -> {
-
-                        showDeleteDialog(id, companyId);
-
-                    }));
-
-
+                if (!models.isEmpty()){
+                    initBasicList(models);
+                    initSubLists();
+                    initRecycler();
+                } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
+                    binding.constraintLayout.setVisibility(View.VISIBLE);
                 }
-                initSubLists();
-                initRecycler();
             } else if (state instanceof EmployeeState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EmployeeState.Error) {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initBasicList(List<EmployeeModel> models) {
+        for (int i = 0; i < models.size(); i++) {
+            EmployeeModel current = models.get(i);
+
+            String id = current.getId();
+            String name = current.getName();
+            String role = current.getRole();
+
+            final ChangeRoleDialogFragment[] dialogFragment = {new ChangeRoleDialogFragment(companyId, id, role)};
+
+            basicList.add(new EmployeeItemModel(i, this, name, id, role, companyId, dialogFragment[0], () -> {
+
+                dialogFragment[0].show(requireActivity().getSupportFragmentManager(), "CHANGE_ROLE_DIALOG");
+
+                DialogDismissedListener listener = bundleDialog -> {
+                    if (bundleDialog.getString(EMPLOYEE_ROLE).equals(ADMIN)) {
+                        addToAdmins(id);
+                        dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, ADMIN);
+                    } else {
+                        addToWorkers(id);
+                        dialogFragment[0] = new ChangeRoleDialogFragment(companyId, id, WORKER);
+                    }
+                };
+
+                dialogFragment[0].onDismissListener(listener);
+            }, () -> {
+
+                showDeleteDialog(id, companyId);
+
+            }));
+
+
+        }
     }
 
     private void setErrorLayout() {

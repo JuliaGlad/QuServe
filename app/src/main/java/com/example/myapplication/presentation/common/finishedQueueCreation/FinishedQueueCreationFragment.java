@@ -103,20 +103,10 @@ public class FinishedQueueCreationFragment extends Fragment {
                 Uri uri = ((FinishedQueueState.Success) state).data;
                 Glide.with(this)
                         .load(uri)
-                        .addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                binding.progressBar.getRoot().setVisibility(View.GONE);
-                                binding.errorLayout.getRoot().setVisibility(View.GONE);
-                                return true;
-                            }
-                        })
                         .into(binding.qrCodeImage);
+
+                binding.progressBar.getRoot().setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof FinishedQueueState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);

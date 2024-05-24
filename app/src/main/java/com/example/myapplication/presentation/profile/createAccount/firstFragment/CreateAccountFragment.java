@@ -90,6 +90,7 @@ public class CreateAccountFragment extends Fragment {
 
             if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
                 binding.loader.setVisibility(View.VISIBLE);
+                binding.buttonSignUp.setEnabled(false);
                 viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
             }
         });

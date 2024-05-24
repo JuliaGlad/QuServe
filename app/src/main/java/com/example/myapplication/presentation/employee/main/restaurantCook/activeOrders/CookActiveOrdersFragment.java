@@ -51,13 +51,28 @@ public class CookActiveOrdersFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof CookActiveOrdersState.Success) {
                 List<CookActiveOrderStateModel> models = ((CookActiveOrdersState.Success) state).data;
-                initRecycler(models);
+                if (!models.isEmpty()) {
+                    initRecycler(models);
+                } else {
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
+                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+                        requireActivity().finish();
+                    });
+                }
             } else if (state instanceof CookActiveOrdersState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof CookActiveOrdersState.Error) {

@@ -59,19 +59,8 @@ public class EmployeeQrCodeDialogFragment extends DialogFragment {
             if (uri != Uri.EMPTY) {
                 Glide.with(requireContext())
                         .load(uri)
-                        .addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                binding.loader.setVisibility(View.GONE);
-                                return true;
-                            }
-                        })
                         .into(binding.qrCode);
+                binding.loader.setVisibility(View.GONE);
             }
         });
     }

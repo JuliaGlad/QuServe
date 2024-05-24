@@ -15,6 +15,7 @@ import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.D
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -151,5 +152,9 @@ public class RestaurantMenuViewModel extends ViewModel {
                         _state.postValue(new RestaurantMenuState.Error());
                     }
                 });
+    }
+
+    public void setSuccess() {
+        _state.postValue(new RestaurantMenuState.Success(Collections.emptyList()));
     }
 }

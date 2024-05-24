@@ -56,6 +56,13 @@ public class QueueManagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initChooseCity();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void initChooseCity() {
@@ -103,26 +110,15 @@ public class QueueManagerFragment extends Fragment {
             if (state instanceof QueueManagerState.Success) {
                 if (models.isEmpty()) {
                     List<QueueManagerModel> queueManagerModels = ((QueueManagerState.Success) state).data;
-                    for (int i = 0; i < queueManagerModels.size(); i++) {
-                        QueueManagerModel current = queueManagerModels.get(i);
-                        String queueId = current.getId();
-                        models.add(new ManagerItemModel(
-                                i,
-                                queueId,
-                                current.getName(),
-                                current.getWorkersCount(),
-                                current.getLocation(),
-                                current.getCity(),
-                                () -> {
-                                    ((QueueManagerActivity) requireActivity()).openQueueDetails(companyId, queueId);
-                                })
-                        );
+                    if (!queueManagerModels.isEmpty()) {
+                        initRecycler(queueManagerModels);
+                    } else {
+                        binding.progressBar.getRoot().setVisibility(View.GONE);
+                        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+                            requireActivity().finish();
+                        });
                     }
-                    binding.recyclerView.setAdapter(adapter);
-                    binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
-                    adapter.submitList(models);
-                    binding.progressBar.getRoot().setVisibility(View.GONE);
-                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
                 }
             } else if (state instanceof QueueManagerState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
@@ -131,6 +127,29 @@ public class QueueManagerFragment extends Fragment {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initRecycler(List<QueueManagerModel> queueManagerModels) {
+        for (int i = 0; i < queueManagerModels.size(); i++) {
+            QueueManagerModel current = queueManagerModels.get(i);
+            String queueId = current.getId();
+            models.add(new ManagerItemModel(
+                    i,
+                    queueId,
+                    current.getName(),
+                    current.getWorkersCount(),
+                    current.getLocation(),
+                    current.getCity(),
+                    () -> {
+                        ((QueueManagerActivity) requireActivity()).openQueueDetails(companyId, queueId);
+                    })
+            );
+        }
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
+        adapter.submitList(models);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private void setErrorLayout() {

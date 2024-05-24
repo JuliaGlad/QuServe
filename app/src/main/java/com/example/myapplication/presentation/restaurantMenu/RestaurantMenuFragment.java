@@ -77,7 +77,7 @@ public class RestaurantMenuFragment extends Fragment {
         initUpdateLauncher();
     }
 
-    private void initUpdateLauncher(){
+    private void initUpdateLauncher() {
         updateDishLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK && result.getData() != null) {
@@ -108,6 +108,9 @@ public class RestaurantMenuFragment extends Fragment {
                         String dishWeight = result.getData().getStringExtra(DISH_WEIGHT_OR_COUNT);
                         Uri uri = Uri.parse(result.getData().getStringExtra(URI));
                         int position = dishes.size();
+                        if (dishes.isEmpty()){
+                            binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
+                        }
                         dishes.add(new DishItemDelegateItem(new DishItemModel(
                                 position, dishId, dishName, dishWeight, dishPrice, uri, null,
                                 () -> updateDish(dishId)
@@ -190,7 +193,12 @@ public class RestaurantMenuFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof RestaurantMenuState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
-                initDishRecycler(models, true);
+                if (!models.isEmpty()) {
+                    initDishRecycler(models, true);
+                } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
+                    binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
+                }
             } else if (state instanceof RestaurantMenuState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantMenuState.Error) {
@@ -212,7 +220,12 @@ public class RestaurantMenuFragment extends Fragment {
 
         viewModel.newCategory.observe(getViewLifecycleOwner(), dishMenuModels -> {
             if (dishMenuModels != null) {
-                initDishRecycler(dishMenuModels, false);
+                if (!dishMenuModels.isEmpty()) {
+                    binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
+                    initDishRecycler(dishMenuModels, false);
+                } else {
+                    binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -261,9 +274,9 @@ public class RestaurantMenuFragment extends Fragment {
         int index;
         for (int j = 0; j < dishes.size(); j++) {
             if (dishes.get(j) instanceof DishItemDelegateItem) {
-                DishItemModel item = ((DishItemDelegateItem)dishes.get(j)).content();
+                DishItemModel item = ((DishItemDelegateItem) dishes.get(j)).content();
                 String currentId = item.getDishId();
-                if (currentId.equals(chosenId)){
+                if (currentId.equals(chosenId)) {
                     index = j;
                     ((RestaurantMenuActivity) requireActivity())
                             .openDishDetailsActivity(categoryId, chosenId, updateDishLauncher, index);

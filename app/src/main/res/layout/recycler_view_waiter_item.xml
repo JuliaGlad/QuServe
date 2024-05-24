@@ -56,8 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/button_surface_containater_tonal_background"
-            android:clickable="true"
-            android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:paddingStart="32dp"
             android:paddingTop="10dp"

@@ -67,7 +67,15 @@ public class AvailableCookOrdersFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof AvailableCookOrdersState.Success) {
                 List<AvailableOrdersStateModel> models = ((AvailableCookOrdersState.Success) state).data;
-                initRecycler(models);
+                if (!models.isEmpty()) {
+                    initRecycler(models);
+                } else {
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
+                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+                        requireActivity().finish();
+                    });
+                }
             } else if (state instanceof AvailableCookOrdersState.Loading) {
 
             } else if (state instanceof AvailableCookOrdersState.Error) {

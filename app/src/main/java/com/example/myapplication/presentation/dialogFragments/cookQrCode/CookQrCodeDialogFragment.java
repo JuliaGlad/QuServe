@@ -34,23 +34,13 @@ public class CookQrCodeDialogFragment extends DialogFragment {
         DialogCookQrCodeBinding binding = DialogCookQrCodeBinding.inflate(getLayoutInflater());
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
-        binding.loader.setVisibility(View.GONE);
+        binding.loader.setVisibility(View.VISIBLE);
 
         Glide.with(requireContext())
                 .load(uri)
-                .addListener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                        binding.loader.setVisibility(View.VISIBLE);
-                        return true;
-                    }
-                })
                 .into(binding.qrCode);
+
+        binding.loader.setVisibility(View.GONE);
 
         binding.buttonOk.setOnClickListener(v -> {
             dismiss();

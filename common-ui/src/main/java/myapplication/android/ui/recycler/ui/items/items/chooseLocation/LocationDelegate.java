@@ -35,7 +35,7 @@ public class LocationDelegate implements AdapterDelegate {
         }
 
         void bind(LocationModel model){
-            binding.buttonOpenMap.setOnClickListener(v -> {
+            binding.item.setOnClickListener(v -> {
                 model.listener.onClick();
             });
             binding.editLayoutEmail.setText(model.location);

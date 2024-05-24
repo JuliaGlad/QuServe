@@ -29,9 +29,6 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.Ba
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment;
 
-/*
- * @author j.gladkikh
- */
 public class ProfileLoggedFragment extends Fragment {
     FragmentProfileLoggedBinding binding;
     ProfileLoggedFragmentViewModel viewModel;
@@ -47,13 +44,13 @@ public class ProfileLoggedFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(ProfileLoggedFragmentViewModel.class);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         type = sharedPreferences.getString(APP_STATE, ANONYMOUS);
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentProfileLoggedBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -70,7 +67,7 @@ public class ProfileLoggedFragment extends Fragment {
         super.onResume();
         if (!viewModel.checkAuth() || viewModel.isNull()) {
             type = ANONYMOUS;
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
             fragmentManager
                     .beginTransaction()

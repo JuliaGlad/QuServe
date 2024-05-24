@@ -27,8 +27,7 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/colorTextHint"
         android:fontFamily="@font/bold_roboto"
-        android:hint="@string/queue_name"
-        android:text="Queue Name"
+        tools:text="Qu"
         android:textColorHint="@color/colorTextHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +42,6 @@
         android:layout_marginTop="20dp"
         android:text="@string/location"
         android:backgroundTint="@color/colorTextHint"
-        android:hint="@string/location"
         android:textColorHint="@color/colorTextHint"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toBottomOf="@+id/header" />

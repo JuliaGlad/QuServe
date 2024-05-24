@@ -166,7 +166,8 @@ public class BasicUserFragment extends Fragment {
             List<DelegateItem> listNew = new ArrayList<>(list);
             listNew.remove(listNew.size() - 1);
             listNew.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_buisness_center_24, R.string.go_to_company, () -> {
-                ((MainActivity) requireActivity()).openChooseCompanyActivity(COMPANY_DETAILS);
+                Intent intent = new Intent(requireActivity(), ChooseCompanyActivity.class);
+                chooseCompanyLauncher.launch(intent);
             })));
             mainAdapter.submitList(listNew);
         }

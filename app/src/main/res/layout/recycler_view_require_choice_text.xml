@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/colorSurfaceContainerLowest"
-    app:cardCornerRadius="40dp"
     android:layout_marginTop="7dp"
     android:layout_marginBottom="7dp"
+    app:cardBackgroundColor="@color/colorSurfaceContainerLowest"
+    app:cardCornerRadius="40dp"
     app:strokeColor="@color/transparent">
 
     <LinearLayout
@@ -23,9 +23,9 @@
             style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Variant name"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Variant name" />
 
     </LinearLayout>
 

@@ -53,7 +53,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(CompanyQueueParticipantsListViewModel.class);
         binding = FragmentParticipantsListBinding.inflate(inflater, container, false);
-        viewModel.getParticipantsList( queueId, companyId);
+        viewModel.getParticipantsList(queueId, companyId);
         return binding.getRoot();
     }
 
@@ -99,12 +99,18 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
             for (int i = 0; i < queueLength; i++) {
                 itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
             }
+        } else {
+            binding.noParticipants.setVisibility(View.VISIBLE);
         }
     }
 
     private void initRecycler(int participantsSize) {
         itemsList.add(new StatisticsDelegateItem(new StatisticsModel(1)));
-        addParticipantListDelegateItems(participantsSize);
+        if (participantsSize != 0) {
+            addParticipantListDelegateItems(participantsSize);
+        } else {
+            binding.noParticipants.setVisibility(View.GONE);
+        }
         mainAdapter.submitList(itemsList);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
@@ -113,7 +119,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
     private void setupObserves() {
 
         viewModel.addParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 List<DelegateItem> newItems = new ArrayList<>(itemsList);
                 newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant))));
                 mainAdapter.submitList(newItems);
@@ -122,7 +128,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
         });
 
         viewModel.removeParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 List<DelegateItem> newItems = new ArrayList<>(itemsList);
                 newItems.remove(1);
                 mainAdapter.submitList(newItems);
@@ -131,14 +137,14 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
         });
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof CompanyParticipantsState.Success){
-                List<String> participants = ((CompanyParticipantsState.Success)state).data;
+            if (state instanceof CompanyParticipantsState.Success) {
+                List<String> participants = ((CompanyParticipantsState.Success) state).data;
                 initRecycler(participants.size());
 
-            } else if (state instanceof CompanyParticipantsState.Loading){
+            } else if (state instanceof CompanyParticipantsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
-            } else if (state instanceof CompanyParticipantsState.Error){
+            } else if (state instanceof CompanyParticipantsState.Error) {
                 setErrorLayout();
             }
         });

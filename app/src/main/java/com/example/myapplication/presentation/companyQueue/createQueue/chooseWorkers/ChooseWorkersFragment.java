@@ -59,7 +59,7 @@ public class ChooseWorkersFragment extends Fragment {
             Log.d("Chosen is null", e.getMessage());
         }
 
-        initSearchView();
+
     }
 
     private void initSearchView() {
@@ -100,7 +100,7 @@ public class ChooseWorkersFragment extends Fragment {
 
         initOkButton();
         initBackButtonPressed();
-
+        initSearchView();
         return binding.getRoot();
     }
 
@@ -137,37 +137,39 @@ public class ChooseWorkersFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof ChooseWorkersState.Success) {
 
                 List<EmployeeStateModel> models = ((ChooseWorkersState.Success) state).data;
+                if (!models.isEmpty()) {
+                    for (int i = 0; i < models.size(); i++) {
+                        EmployeeStateModel current = models.get(i);
+                        if (current.getRole().equals(WORKER)) {
+                            String type = NOT_CHOSEN;
 
-                for (int i = 0; i < models.size(); i++) {
-                    EmployeeStateModel current = models.get(i);
-                    if (current.getRole().equals(WORKER)) {
-                        String type = NOT_CHOSEN;
-
-                        if (!chosen.isEmpty()) {
-                            for (int j = 0; j < chosen.size(); j++) {
-                                if (chosen.get(j).getUserId().equals(current.getId())) {
-                                    type = CHOSEN;
+                            if (!chosen.isEmpty()) {
+                                for (int j = 0; j < chosen.size(); j++) {
+                                    if (chosen.get(j).getUserId().equals(current.getId())) {
+                                        type = CHOSEN;
+                                    }
                                 }
                             }
+
+                            workerItems.add(new WorkerItemModel(
+                                    i,
+                                    current.getName(),
+                                    current.getId(),
+                                    type,
+                                    chosen
+                            ));
                         }
-
-                        workerItems.add(new WorkerItemModel(
-                                i,
-                                current.getName(),
-                                current.getId(),
-                                type,
-                                chosen
-                        ));
                     }
-                }
 
-                binding.recyclerView.setAdapter(adapter);
-                adapter.submitList(workerItems);
+                    binding.recyclerView.setAdapter(adapter);
+                    adapter.submitList(workerItems);
+                } else {
+//                    binding.noEmployeesYet.setVisibility(View.VISIBLE);
+                }
 
                 binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);

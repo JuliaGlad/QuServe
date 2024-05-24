@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:gravity="center"
-    android:layout_marginTop="40dp"
-    android:layout_marginStart="20dp"
     android:layout_width="130dp"
-    android:layout_height="230dp">
+    android:layout_height="230dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginTop="40dp"
+    android:gravity="center">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/item"
@@ -40,11 +40,11 @@
                 android:layout_marginBottom="10dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:text="Vegetables"
                 app:layout_constraintBottom_toTopOf="@+id/price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredient_image" />
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_image"
+                tools:text="Vegetables" />
 
             <TextView
                 android:id="@+id/price"
@@ -58,9 +58,9 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="20dp"
                 android:paddingBottom="10dp"
-                android:text="+100"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="+100" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

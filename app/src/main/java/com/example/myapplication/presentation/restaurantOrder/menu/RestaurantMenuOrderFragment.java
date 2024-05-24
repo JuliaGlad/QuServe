@@ -38,6 +38,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private FragmentRestaurantMenuOrderBinding binding;
     private final MainAdapter horizontalAdapter = new MainAdapter();
     private final DishOrderItemAdapter gridAdapter = new DishOrderItemAdapter();
+    private final List<DelegateItem> categories = new ArrayList<>();
     private String restaurantId, categoryId, tablePath;
 
     @Override
@@ -91,7 +92,15 @@ public class RestaurantMenuOrderFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof RestaurantMenuState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
-                initDishRecycler(models);
+                if (!categories.isEmpty()) {
+                    if (!models.isEmpty()) {
+                        initDishRecycler(models);
+                    } else {
+                        binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    binding.constraintLayoutEmptyCategories.setVisibility(View.VISIBLE);
+                }
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantMenuState.Loading) {
@@ -109,7 +118,12 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
         viewModel.newCategory.observe(getViewLifecycleOwner(), dishMenuModels -> {
             if (dishMenuModels != null) {
-                initDishRecycler(dishMenuModels);
+                if (!dishMenuModels.isEmpty()) {
+                    binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
+                    initDishRecycler(dishMenuModels);
+                } else {
+                    binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -147,7 +161,6 @@ public class RestaurantMenuOrderFragment extends Fragment {
     }
 
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {
-        List<DelegateItem> items = new ArrayList<>();
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 CategoryMenuModel current = models.get(i);
@@ -157,7 +170,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();
                 }
-                items.add(new CategoryItemDelegateItem(new CategoryItemModel(
+                categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
                         i,
                         current.getName(),
                         current.getTask(),
@@ -170,6 +183,6 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         })));
             }
         }
-        horizontalAdapter.submitList(items);
+        horizontalAdapter.submitList(categories);
     }
 }

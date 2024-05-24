@@ -23,9 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/regular"
-            android:text="Table №"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Table №" />
 
         <TextView
             android:id="@+id/dishes_title"
@@ -33,9 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Dishes:"
             app:layout_constraintStart_toStartOf="@+id/table_number"
-            app:layout_constraintTop_toBottomOf="@+id/table_number" />
+            app:layout_constraintTop_toBottomOf="@+id/table_number"
+            tools:text="Dishes:" />
 
         <TextView
             android:id="@+id/count"
@@ -43,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
-            android:text="4"
             app:layout_constraintBottom_toBottomOf="@+id/dishes_title"
             app:layout_constraintStart_toEndOf="@+id/dishes_title"
-            app:layout_constraintTop_toTopOf="@+id/dishes_title" />
+            app:layout_constraintTop_toTopOf="@+id/dishes_title"
+            tools:text="4" />
 
         <TextView
             android:id="@+id/button_accept"
@@ -55,8 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/button_surface_containater_tonal_background"
-            android:clickable="true"
-            android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:paddingStart="32dp"
             android:paddingTop="10dp"

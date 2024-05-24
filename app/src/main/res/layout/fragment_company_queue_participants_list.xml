@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.myapplication.presentation.companyQueue.queueDetails.participantsList.CompanyQueueParticipantsListFragment">
 
+    <TextView
+        android:id="@+id/no_participants"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/there_is_no_participants_yet"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView6" />
+
     <ImageButton
         android:id="@+id/imageButton_back"
         android:layout_width="wrap_content"
@@ -26,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@id/barrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/barrier"
@@ -72,5 +84,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/queue_members"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

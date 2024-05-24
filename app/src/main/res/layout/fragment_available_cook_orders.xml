@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="20dp"
-    tools:context=".presentation.employee.main.restaurantCook.activeOrders.CookActiveOrdersFragment">
+    tools:context=".presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersFragment">
 
     <ImageButton
         android:id="@+id/button_back"
@@ -52,6 +52,14 @@
         android:id="@+id/progress_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <include layout="@layout/empty_list_layout"
+        android:id="@+id/empty_layout"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,8 +14,6 @@
         android:layout_width="110dp"
         android:layout_height="120dp"
         android:background="?colorSurfaceContainerLow"
-        android:clickable="true"
-        android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
         android:padding="10dp">
 

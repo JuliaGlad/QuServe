@@ -41,6 +41,11 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
+import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegate;
+import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableModel;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 
 public class WorkerDetailsFragment extends Fragment {
 
@@ -147,11 +152,15 @@ public class WorkerDetailsFragment extends Fragment {
         binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
-    private List<WorkerManageQueueDelegateItem> addActiveQueuesDelegates(List<ActiveQueueModel> models) {
-        List<WorkerManageQueueDelegateItem> delegates = new ArrayList<>();
-        for (int i = 0; i < models.size(); i++) {
-            ActiveQueueModel current = models.get(i);
-            delegates.add(new WorkerManageQueueDelegateItem(new WorkerManagerQueueModel(i + 2, current.getName(), current.getLocation())));
+    private List<DelegateItem> addActiveQueuesDelegates(List<ActiveQueueModel> models) {
+        List<DelegateItem> delegates = new ArrayList<>();
+        if (!models.isEmpty()) {
+            for (int i = 0; i < models.size(); i++) {
+                ActiveQueueModel current = models.get(i);
+                delegates.add(new WorkerManageQueueDelegateItem(new WorkerManagerQueueModel(i + 2, current.getName(), current.getLocation())));
+            }
+        } else {
+            delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(3, R.drawable.questions_wall_paper)));
         }
         return delegates;
     }
@@ -160,6 +169,7 @@ public class WorkerDetailsFragment extends Fragment {
         mainAdapter.addDelegate(new AdviseBoxDelegate());
         mainAdapter.addDelegate(new WorkerDetailsHeaderDelegate());
         mainAdapter.addDelegate(new WorkerManagerQueueDelegate());
+        mainAdapter.addDelegate(new ImageViewDrawableDelegate());
         binding.recyclerView.setAdapter(mainAdapter);
     }
 }

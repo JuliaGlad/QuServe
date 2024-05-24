@@ -78,7 +78,7 @@ public class AddDishFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AddDishViewModel.class);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         try {
             page = AddDishFragmentArgs.fromBundle(getArguments()).getPage();

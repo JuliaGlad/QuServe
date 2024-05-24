@@ -14,8 +14,6 @@
         android:layout_width="140dp"
         android:layout_height="200dp"
         android:background="?colorSurfaceContainerLow"
-        android:clickable="true"
-        android:focusable="true"
         android:foreground="?attr/selectableItemBackground">
 
         <ImageView

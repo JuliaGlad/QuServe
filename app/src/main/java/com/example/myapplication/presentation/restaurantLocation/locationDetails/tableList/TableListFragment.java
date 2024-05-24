@@ -72,7 +72,6 @@ public class TableListFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
             if (lastTableNumber != null) {
-                Log.e("Last table number", lastTableNumber + "");
                 viewModel.addTable(restaurantId, locationId, String.valueOf(lastTableNumber + 1));
             }
         });
@@ -89,7 +88,11 @@ public class TableListFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof TableListState.Success) {
                 List<TableModel> tables = ((TableListState.Success) state).data;
-                initRecycler(tables);
+                if (!tables.isEmpty()) {
+                    initRecycler(tables);
+                } else {
+                    binding.constraintLayout.setVisibility(View.VISIBLE);
+                }
             } else if (state instanceof TableListState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof TableListState.Error) {
@@ -98,6 +101,7 @@ public class TableListFragment extends Fragment {
         });
         viewModel.isAdded.observe(getViewLifecycleOwner(), tableId -> {
             if (tableId != null) {
+                binding.constraintLayout.setVisibility(View.GONE);
                 lastTableNumber += 1;
                 int position = delegates.size();
                 delegates.add(new TableListDelegateItem(new TableListModel(position, String.valueOf(lastTableNumber), () -> {

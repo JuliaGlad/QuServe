@@ -147,22 +147,30 @@ public class EmployeesRestaurantFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof EmployeeState.Success) {
-                List<EmployeeModel> employees = ((EmployeeState.Success) state).data;
-
-                for (int i = 0; i < employees.size(); i++) {
-                    EmployeeModel current = employees.get(i);
-                    basicList.add(new RestaurantEmployeeItemModel(i, current.getName(), current.getRole(), current.getId(), () -> {
-                        showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole());
-                    }));
+                List<EmployeeModel> employees = ((EmployeeState.Success)state).data;
+                if (!employees.isEmpty()) {
+                    initBasicList(employees);
+                    initSubLists();
+                    initRecycler();
+                } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
+                    binding.constraintLayout.setVisibility(View.VISIBLE);
                 }
-                initSubLists();
-                initRecycler();
             } else if (state instanceof EmployeeState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof EmployeeState.Error) {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initBasicList(List<EmployeeModel> employees) {
+        for (int i = 0; i < employees.size(); i++) {
+            EmployeeModel current = employees.get(i);
+            basicList.add(new RestaurantEmployeeItemModel(i, current.getName(), current.getRole(), current.getId(), () -> {
+                showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole());
+            }));
+        }
     }
 
     private void setErrorLayout() {

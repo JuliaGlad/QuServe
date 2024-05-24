@@ -59,9 +59,14 @@ public class QueueWorkerFragment extends Fragment {
                 QueueWorkerStateModel model = ((QueueWorkerState.Success) state).data;
                 binding.companyName.setText(model.getCompanyName());
                 List<ActiveQueueModel> queues = model.getModels();
-                initRecycler(queues);
+                if (!queues.isEmpty()) {
+                    initRecycler(queues);
+                } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
+                    binding.constraintLayout.setVisibility(View.VISIBLE);
+                }
             } else if (state instanceof QueueWorkerState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof QueueWorkerState.Error){
                 setErrorLayout();
             }
@@ -69,7 +74,7 @@ public class QueueWorkerFragment extends Fragment {
     }
 
     private void setErrorLayout() {
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
             viewModel.getEmployeeActiveQueues(companyId);
@@ -95,7 +100,7 @@ public class QueueWorkerFragment extends Fragment {
     private void submitList(List<WorkerActiveQueueModel> models) {
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(models);
-        binding.progressBar.setVisibility(View.GONE);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }
