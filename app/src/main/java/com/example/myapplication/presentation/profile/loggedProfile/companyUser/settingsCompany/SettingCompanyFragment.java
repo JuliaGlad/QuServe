@@ -94,6 +94,13 @@ public class SettingCompanyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setAdapter();
         setupObserves();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void setAdapter(){

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -66,9 +67,10 @@ public class EditQueueFragment extends Fragment {
                         current.getName(),
                         current.getRole(),
                         () -> {
-
+                            showDeleteDialog(companyId, queueId, current.getId());
                         }
                 ));
+                adapter.notifyItemInserted(list.size() - 1);
             }
         }
         binding = FragmentEditQueueBinding.inflate(inflater, container, false);
@@ -81,6 +83,16 @@ public class EditQueueFragment extends Fragment {
         setupObserves();
         initAddButton();
         initSaveButton();
+        handleBackButtonPressed();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateBack();
+            }
+        });
     }
 
     private void initAddButton() {
@@ -112,16 +124,18 @@ public class EditQueueFragment extends Fragment {
                 binding.header.setText(model.getName());
                 binding.locationEdit.setText(model.getLocation());
                 binding.recyclerView.setAdapter(adapter);
-                for (int i = 0; i < employees.size(); i++) {
-                    EmployeeModel current = employees.get(i);
-                    list.add(new QueueEmployeeModel(
-                            i,
-                            current.getId(),
-                            current.getName(),
-                            current.getRole(),
-                            () -> {
-                                showDeleteDialog(companyId, queueId, current.getId());
-                            }));
+                if (list.isEmpty()) {
+                    for (int i = 0; i < employees.size(); i++) {
+                        EmployeeModel current = employees.get(i);
+                        list.add(new QueueEmployeeModel(
+                                i,
+                                current.getId(),
+                                current.getName(),
+                                current.getRole(),
+                                () -> {
+                                    showDeleteDialog(companyId, queueId, current.getId());
+                                }));
+                    }
                 }
                 adapter.submitList(list);
                 binding.progressBar.getRoot().setVisibility(View.GONE);
@@ -142,16 +156,18 @@ public class EditQueueFragment extends Fragment {
 
         viewModel.saved.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-
-                Bundle bundle = new Bundle();
-
-                bundle.putString(QUEUE_NAME_KEY, name);
-
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_editQueueFragment_to_companyQueueDetailsFragment, bundle);
+                navigateBack();
             }
         });
 
+    }
+
+    private void navigateBack() {
+        Bundle bundle = new Bundle();
+        bundle.putString(QUEUE_NAME_KEY, name);
+
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_editQueueFragment_to_companyQueueDetailsFragment, bundle);
     }
 
     private void setError() {
@@ -174,6 +190,13 @@ public class EditQueueFragment extends Fragment {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getEmployeeId().equals(id)) {
                 list.remove(i);
+                adapter.notifyItemRemoved(i);
+                for (int j = 0; j < employees.size(); j++) {
+                    if (employees.get(j).getId().equals(id)){
+                        employees.remove(j);
+                        break;
+                    }
+                }
                 break;
             }
         }

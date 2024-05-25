@@ -53,7 +53,8 @@ public class WorkerDetailsFragment extends Fragment {
     private FragmentWorkerDetailsBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
     private String name, employeeId, companyId;
-    List<ActiveQueueModel> models = new ArrayList<>();
+    private final List<ActiveQueueModel> models = new ArrayList<>();
+    private final List<DelegateItem> delegates = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,12 +87,12 @@ public class WorkerDetailsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        try{
+        try {
             String workers = getArguments().getString(QUEUE_LIST);
             models.addAll(Objects.requireNonNull(new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
             }.getType())));
-        } catch (NullPointerException e){
-            Log.e("NullPointerArguments", e.getMessage());
+        } catch (NullPointerException e) {
+            Log.e("NullPointerArguments", "no queues");
         }
     }
 
@@ -124,8 +125,10 @@ public class WorkerDetailsFragment extends Fragment {
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof WorkerDetailsState.Success) {
-                models.addAll(((WorkerDetailsState.Success) state).data);
-                initRecycler(models, employeeId, name);
+                if (delegates.isEmpty()) {
+                    models.addAll(((WorkerDetailsState.Success) state).data);
+                    initRecycler(models, employeeId, name);
+                }
             } else if (state instanceof WorkerDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof WorkerDetailsState.Error) {
@@ -153,14 +156,11 @@ public class WorkerDetailsFragment extends Fragment {
     }
 
     private List<DelegateItem> addActiveQueuesDelegates(List<ActiveQueueModel> models) {
-        List<DelegateItem> delegates = new ArrayList<>();
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 ActiveQueueModel current = models.get(i);
                 delegates.add(new WorkerManageQueueDelegateItem(new WorkerManagerQueueModel(i + 2, current.getName(), current.getLocation())));
             }
-        } else {
-            delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(3, R.drawable.questions_wall_paper)));
         }
         return delegates;
     }

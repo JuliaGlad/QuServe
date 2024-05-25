@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.restaurantLocation;
 
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,12 +18,10 @@ import com.example.myapplication.presentation.restaurantLocation.locationDetails
 
 public class LocationsActivity extends AppCompatActivity {
 
-    ActivityLocationsBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLocationsBinding.inflate(getLayoutInflater());
+        com.example.myapplication.databinding.ActivityLocationsBinding binding = ActivityLocationsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_locations_activity);
@@ -37,14 +36,15 @@ public class LocationsActivity extends AppCompatActivity {
         }
     }
 
+
     public void openLocationDetailsActivity(String locationId){
         Intent intent = new Intent(this, RestaurantLocationDetailsActivity.class);
         intent.putExtra(LOCATION_ID, locationId);
         startActivity(intent);
     }
 
-    public void openAddLocationActivity(){
+    public void openAddLocationActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, AddLocationActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 }

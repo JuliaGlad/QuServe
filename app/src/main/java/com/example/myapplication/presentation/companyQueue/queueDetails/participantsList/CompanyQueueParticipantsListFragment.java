@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,26 +91,20 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
 
     private void setMainAdapter() {
         mainAdapter.addDelegate(new ParticipantListDelegate());
-        mainAdapter.addDelegate(new StringTextViewDelegate());
         binding.recyclerView.setAdapter(mainAdapter);
     }
 
     private void addParticipantListDelegateItems(int queueLength) {
-        if (queueLength != 0) {
-            for (int i = 0; i < queueLength; i++) {
-                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
-            }
-        } else {
-            binding.noParticipants.setVisibility(View.VISIBLE);
+        for (int i = 0; i < queueLength; i++) {
+            itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
         }
     }
 
     private void initRecycler(int participantsSize) {
-        itemsList.add(new StatisticsDelegateItem(new StatisticsModel(1)));
         if (participantsSize != 0) {
             addParticipantListDelegateItems(participantsSize);
         } else {
-            binding.noParticipants.setVisibility(View.GONE);
+            binding.noParticipants.setVisibility(View.VISIBLE);
         }
         mainAdapter.submitList(itemsList);
         binding.progressBar.getRoot().setVisibility(View.GONE);
@@ -117,7 +112,6 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.addParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 List<DelegateItem> newItems = new ArrayList<>(itemsList);

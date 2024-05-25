@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_restaurant_location_navigation"
+    app:startDestination="@id/addLocationFragment">
+
+    <fragment
+        android:id="@+id/addLocationFragment"
+        android:name="com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationFragment"
+        android:label="@string/add_location"
+        tools:layout="@layout/fragment_add_location">
+
+        <action
+            android:id="@+id/action_addLocationFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.myapplication.presentation.companyQueue.createQueue.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_addLocationFragment"
+            app:destination="@id/addLocationFragment" />
+    </fragment>
+
+</navigation>

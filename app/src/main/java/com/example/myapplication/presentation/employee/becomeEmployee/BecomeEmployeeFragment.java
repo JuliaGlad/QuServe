@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,7 @@ public class BecomeEmployeeFragment extends Fragment {
                 binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else {
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
                 setErrorLayout();
             }
         });

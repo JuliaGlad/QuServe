@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAvailableCookOrdersBinding;
 import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.recycler.AvailableOrdersAdapter;
@@ -71,10 +72,7 @@ public class AvailableCookOrdersFragment extends Fragment {
                     initRecycler(models);
                 } else {
                     binding.progressLayout.getRoot().setVisibility(View.GONE);
-                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
-                    binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
-                        requireActivity().finish();
-                    });
+                    initEmptyOrders();
                 }
             } else if (state instanceof AvailableCookOrdersState.Loading) {
 
@@ -91,6 +89,15 @@ public class AvailableCookOrdersFragment extends Fragment {
                 adapter.submitList(newItems);
                 items = newItems;
             }
+        });
+    }
+
+    private void initEmptyOrders() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.there_are_no_available_orders_yet));
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_your_visitors_create_any_orders_and_then_come_back));
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+            requireActivity().finish();
         });
     }
 

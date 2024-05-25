@@ -1,12 +1,19 @@
 package com.example.myapplication.presentation.restaurantLocation.locations;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -21,6 +28,11 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentLocationsBinding;
+import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
 import com.example.myapplication.presentation.restaurantLocation.locations.model.LocationsModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationAdapter;
@@ -35,7 +47,9 @@ public class LocationsFragment extends Fragment {
     private LocationsViewModel viewModel;
     private FragmentLocationsBinding binding;
     private String restaurantId;
-    private RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
+    private final List<RestaurantLocationModel> items = new ArrayList<>();
+    private ActivityResultLauncher<Intent> addLocationLauncher;
+    private final RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,6 +58,32 @@ public class LocationsFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        addLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+
+                        String city = result.getData().getStringExtra(CITY_KEY);
+                        String location = result.getData().getStringExtra(LOCATION);
+                        String locationId = result.getData().getStringExtra(LOCATION_ID);
+
+                        items.add(new RestaurantLocationModel(
+                                items.size(),
+                                locationId,
+                                location,
+                                city,
+                                "0",
+                                "0",
+                                () -> {
+                                    ((LocationsActivity)requireActivity()).openLocationDetailsActivity(locationId);
+                                }
+                        ));
+                        adapter.notifyItemInserted(items.size() - 1);
+                    }
+                });
     }
 
     @Override
@@ -79,7 +119,7 @@ public class LocationsFragment extends Fragment {
 
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            ((LocationsActivity)requireActivity()).openAddLocationActivity();
+            ((LocationsActivity)requireActivity()).openAddLocationActivity(addLocationLauncher);
         });
     }
 
@@ -112,7 +152,6 @@ public class LocationsFragment extends Fragment {
     }
 
     private void initRecycler(List<LocationsModel> models) {
-        List<RestaurantLocationModel> items = new ArrayList<>();
         for (int i = 0; i < models.size(); i++) {
             LocationsModel current = models.get(i);
             items.add(new RestaurantLocationModel(

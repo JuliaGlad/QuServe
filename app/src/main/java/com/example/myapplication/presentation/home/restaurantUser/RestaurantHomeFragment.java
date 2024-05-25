@@ -1,19 +1,30 @@
 package com.example.myapplication.presentation.home.restaurantUser;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantHomeBinding;
@@ -45,6 +56,9 @@ public class RestaurantHomeFragment extends Fragment {
     private RestaurantHomeViewModel viewModel;
     private FragmentRestaurantHomeBinding binding;
     private String restaurantId;
+    private ActivityResultLauncher<Intent> addLocationLauncher;
+    private List<DelegateItem> recyclerItems = new ArrayList<>();
+    private List<DelegateItem> emptyRecyclerItems = new ArrayList<>();
     private final MainAdapter adapter = new MainAdapter();
 
     @Override
@@ -54,7 +68,43 @@ public class RestaurantHomeFragment extends Fragment {
         SharedPreferences sharedPref = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPref.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
+        initLauncher();
     }
+
+    private void initLauncher() {
+        addLocationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+
+                        String location = result.getData().getStringExtra(LOCATION);
+                        String locationId = result.getData().getStringExtra(LOCATION_ID);
+
+                        if (recyclerItems.isEmpty()){
+                            recyclerItems.addAll(emptyRecyclerItems);
+
+                            recyclerItems.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.add_location, R.string.open_menu, R.drawable.ic_add_location, R.drawable.ic_menu_book,
+                                    () -> ((MainActivity)requireActivity()).openAddLocationsActivity(addLocationLauncher),
+                                    () -> ((MainActivity)requireActivity()).openRestaurantMenuActivity())));
+
+                            adapter.submitList(recyclerItems);
+
+                            clearRecycler();
+                        }
+
+                        recyclerItems.add(new HomeRestaurantLocationDelegateItem(new HomeRestaurantLocationModel(
+                                recyclerItems.size(),
+                                location,
+                                "0",
+                                () -> {
+                                    ((MainActivity)requireActivity()).openLocationDetailsActivity(locationId);
+                                }
+                        )));
+                        adapter.notifyItemInserted(recyclerItems.size() - 1);
+                    }
+                });
+    }
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -67,6 +117,15 @@ public class RestaurantHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        setAdapter();
+    }
+
+    private void setAdapter() {
+        adapter.addDelegate(new AdviseBoxDelegate());
+        adapter.addDelegate(new ButtonWithDescriptionDelegate());
+        adapter.addDelegate(new SquareButtonDelegate());
+        adapter.addDelegate(new HomeRestaurantLocationDelegate());
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void setupObserves() {
@@ -93,19 +152,15 @@ public class RestaurantHomeFragment extends Fragment {
         if (models.isEmpty()) {
             initEmptyActionRecycler();
         } else {
-            List<DelegateItem> delegates = new ArrayList<>();
-            delegates.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.add_location, R.string.open_menu, R.drawable.ic_add_location, R.drawable.ic_menu_book,
+            recyclerItems.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.add_location, R.string.open_menu, R.drawable.ic_add_location, R.drawable.ic_menu_book,
                     () -> {
-                        ((MainActivity)requireActivity()).openAddLocationsActivity();
+                        ((MainActivity)requireActivity()).openAddLocationsActivity(addLocationLauncher);
                     },
                     () -> {
                         ((MainActivity)requireActivity()).openRestaurantMenuActivity();
                     })));
-            delegates.addAll(addLocations(models));
-            adapter.addDelegate(new SquareButtonDelegate());
-            adapter.addDelegate(new HomeRestaurantLocationDelegate());
-            binding.recyclerView.setAdapter(adapter);
-            adapter.submitList(delegates);
+            recyclerItems.addAll(addLocations(models));
+            adapter.submitList(recyclerItems);
             binding.progressBar.getRoot().setVisibility(View.GONE);
             binding.errorLayout.errorLayout.setVisibility(View.GONE);
         }
@@ -128,17 +183,24 @@ public class RestaurantHomeFragment extends Fragment {
     private void initEmptyActionRecycler() {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.here_you_will_see_all_your_available_actions)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_location), getString(R.string.create_new_restaurant_location_add_tables_and_employees_and_take_orders), R.drawable.ic_add_location, () -> ((MainActivity) requireActivity()).openAddLocationsActivity())),
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_location), getString(R.string.create_new_restaurant_location_add_tables_and_employees_and_take_orders), R.drawable.ic_add_location,
+                        () -> ((MainActivity) requireActivity()).openAddLocationsActivity(addLocationLauncher))),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.open_menu), getString(R.string.open_and_edit_restaurant_menu_so_your_visitors_can_use_it), R.drawable.ic_menu_book,
                         () -> ((MainActivity) requireActivity()).openRestaurantMenuActivity()))
         });
     }
 
     private void buildList(DelegateItem[] items) {
-        List<DelegateItem> list = Arrays.asList(items);
-        adapter.addDelegate(new AdviseBoxDelegate());
-        adapter.addDelegate(new ButtonWithDescriptionDelegate());
-        binding.recyclerView.setAdapter(adapter);
-        adapter.submitList(list);
+        emptyRecyclerItems = Arrays.asList(items);
+        adapter.submitList(emptyRecyclerItems);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+    }
+
+    private void clearRecycler() {
+        recyclerItems.remove(0);
+        recyclerItems.remove(1);
+        adapter.notifyItemRangeRemoved(0, 3);
+        recyclerItems.remove(0);
+        adapter.notifyItemRemoved(0);
     }
 }

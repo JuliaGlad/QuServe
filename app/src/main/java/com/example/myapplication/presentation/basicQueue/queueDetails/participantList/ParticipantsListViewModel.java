@@ -63,7 +63,6 @@ public class ParticipantsListViewModel extends ViewModel {
                         } else if (participantsSize > queueSizeModel.getSize()) {
                             participantsSize = queueSizeModel.getSize();
                             _removeParticipant.postValue(true);
-
                         }
                     }
 

@@ -6,17 +6,6 @@
     android:paddingTop="20dp"
     tools:context="com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation.ChooseLocationFragment">
 
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?colorPrimary" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -26,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_back"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <include layout="@layout/something_went_wrong_layout"
         android:id="@+id/error_layout"
@@ -42,6 +30,27 @@
     <include
         android:id="@+id/progress_layout"
         layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.Material3.TitleSmall.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/choose_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
+        android:id="@+id/no_location_layout"
+        layout="@layout/fragment_no_locations_yet"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"

@@ -416,5 +416,13 @@
     <string name="you_don_t_have_any_categories_yet">You don`t have any categories yet!</string>
     <string name="there_is_no_categories_in_this_menu_yet">There is no categories in this menu yet!</string>
     <string name="there_is_no_dishes_in_this_category_yet">There is no dishes in this category yet!</string>
-    <string name="there_is_no_participants_yet">There is no participants yet!</string>
+    <string name="there_is_no_participants_yet">There are no participants yet!</string>
+    <string name="there_are_no_available_orders_yet">There are no available orders yet!</string>
+    <string name="wait_until_your_visitors_create_any_orders_and_then_come_back">Wait until your visitors create any orders and then come back!</string>
+    <string name="you_don_t_have_any_active_orders_yet">You don`t have any active orders yet</string>
+    <string name="view_available_orders_in_your_restaurant_and_select_them_and_then_come_back">View available orders in your restaurant and select them and then come back!</string>
+    <string name="create_new_queues_in_your_company_and_then_come_back">Create new queues in your company and then come back!</string>
+    <string name="there_are_no_workers_in_this_company_yet">There are no workers in this company yet!</string>
+    <string name="wait_until_any_new_employees_will_join_your_company">Wait until any new employees will join your company</string>
+    <string name="choose_location">Choose location</string>
 </resources>

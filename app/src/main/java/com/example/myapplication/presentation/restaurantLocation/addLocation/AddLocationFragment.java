@@ -7,9 +7,12 @@ import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -80,10 +83,14 @@ public class AddLocationFragment extends Fragment {
     }
 
     private void setupObserves() {
-        viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_addLocationFragment_to_locationsFragment);
+        viewModel.isAdded.observe(getViewLifecycleOwner(), locationId -> {
+            if (locationId != null){
+                Intent intent = new Intent();
+                intent.putExtra(LOCATION_ID, locationId);
+                intent.putExtra(LOCATION, location);
+                intent.putExtra(CITY_KEY, city);
+                requireActivity().setResult(Activity.RESULT_OK, intent);
+                requireActivity().finish();
             }
         });
     }

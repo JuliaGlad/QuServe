@@ -20,14 +20,13 @@ import com.example.myapplication.databinding.FragmentSuccessfulyBecomeEmployeeBi
 public class SuccessfullyBecomeEmployeeFragment extends Fragment {
 
     private FragmentSuccessfulyBecomeEmployeeBinding binding;
-    private String companyId;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSuccessfulyBecomeEmployeeBinding.inflate(inflater, container, false);
         binding.infoBoxLayout.body.setText(getResources().getString(R.string.now_you_can_manage_given_to_you_companies_queues));
-        companyId = getArguments().getString(COMPANY_ID);
+        String companyId = getArguments().getString(COMPANY_ID);
         return binding.getRoot();
     }
 
@@ -39,11 +38,13 @@ public class SuccessfullyBecomeEmployeeFragment extends Fragment {
     }
 
     private void initSeeDetailsButton() {
-        requireActivity().finish();
+        binding.buttonSeeDetails.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void handleButtonBackPressed(){
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 requireActivity().finish();

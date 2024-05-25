@@ -34,7 +34,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
     private final MutableLiveData<List<EmployeeRoleModel>> _roles = new MutableLiveData<>(null);
     LiveData<List<EmployeeRoleModel>> roles = _roles;
 
-    private final List<EmployeeRoleModel> models = new ArrayList<>();
+        List<EmployeeRoleModel> models = new ArrayList<>();
 
     private final MutableLiveData<Bundle> _isWorking = new MutableLiveData<>(null);
     LiveData<Bundle> isWorking = _isWorking;
@@ -96,7 +96,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<UserEmployeeModel> userEmployeeModels) {
-                        if (userEmployeeModels.size() > 0) {
+                        if (!userEmployeeModels.isEmpty()) {
                             for (UserEmployeeModel user : userEmployeeModels) {
                                 models.add(new EmployeeRoleModel(
                                         user.getRole(),
@@ -131,7 +131,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull List<UserEmployeeModel> userEmployeeModels) {
-                        if (userEmployeeModels.size() > 0) {
+                        if (!userEmployeeModels.isEmpty()) {
                             for (int i = 0; i < userEmployeeModels.size(); i++) {
                                 UserEmployeeModel current = userEmployeeModels.get(i);
                                 models.add(new EmployeeRoleModel(

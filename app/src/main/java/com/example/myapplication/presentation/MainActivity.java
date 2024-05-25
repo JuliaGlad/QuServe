@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -103,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openAddLocationsActivity(){
+    public void openAddLocationsActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, AddLocationActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openCookActiveOrdersActivity(String restaurantId, String locationId){

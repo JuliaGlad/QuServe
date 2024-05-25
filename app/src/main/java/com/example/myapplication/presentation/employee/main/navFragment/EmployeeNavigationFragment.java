@@ -42,6 +42,8 @@ import com.example.myapplication.presentation.employee.main.restaurantWaiter.sta
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.EmployeesFragment;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 public class EmployeeNavigationFragment extends Fragment {
 
     private EmployeeNavigationViewModel viewModel;
@@ -51,7 +53,7 @@ public class EmployeeNavigationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(EmployeeNavigationViewModel.class);
-    }
+     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -67,7 +69,7 @@ public class EmployeeNavigationFragment extends Fragment {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         String state = sharedPreferences.getString(APP_STATE, ANONYMOUS);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
         switch (state) {
             case ANONYMOUS:
@@ -103,7 +105,7 @@ public class EmployeeNavigationFragment extends Fragment {
     private void setupObserves() {
         viewModel.isEmployee.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null && !aBoolean) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .replace(R.id.employee_nav_container, NotEmployeeYetFragment.class, null)
@@ -118,12 +120,12 @@ public class EmployeeNavigationFragment extends Fragment {
             if (bundle != null){
                 boolean isWorking = bundle.getBoolean(IS_WORKING);
                 if (isWorking) {
-                    getActivity().getSupportFragmentManager()
+                    requireActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                             .commit();
                 } else {
-                    getActivity().getSupportFragmentManager()
+                    requireActivity().getSupportFragmentManager()
                             .beginTransaction()
                             .replace(R.id.employee_nav_container, StartWorkFragment.class, bundle)
                             .commit();
@@ -139,7 +141,7 @@ public class EmployeeNavigationFragment extends Fragment {
 
         viewModel.roles.observe(getViewLifecycleOwner(), roles -> {
             if (roles != null) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 if (roles.size() > 1) {
                     Bundle bundle = new Bundle();
                     bundle.putString(EMPLOYEE_ROLE, new Gson().toJson(roles));

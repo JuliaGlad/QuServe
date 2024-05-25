@@ -115,6 +115,8 @@ public class QueueManagerFragment extends Fragment {
                     } else {
                         binding.progressBar.getRoot().setVisibility(View.GONE);
                         binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                        binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_any_queues_yet));
+                        binding.emptyLayout.infoBox.body.setText(getString(R.string.create_new_queues_in_your_company_and_then_come_back));
                         binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
                             requireActivity().finish();
                         });

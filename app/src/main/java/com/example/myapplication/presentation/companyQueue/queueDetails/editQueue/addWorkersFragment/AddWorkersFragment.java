@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -65,6 +66,16 @@ public class AddWorkersFragment extends Fragment {
         initSearchView();
         initOkButton();
         initButtonBack();
+        handleBackButtonPressed();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateBack();
+            }
+        });
     }
 
     private void initSearchView() {
@@ -94,13 +105,7 @@ public class AddWorkersFragment extends Fragment {
     }
 
     private void initButtonBack() {
-        binding.buttonBack.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString(COMPANY_ID, companyId);
-            bundle.putString(QUEUE_ID, queueId);
-            navigateBack(bundle);
-        });
-
+        binding.buttonBack.setOnClickListener(v -> navigateBack());
     }
 
     private void initOkButton() {
@@ -113,10 +118,7 @@ public class AddWorkersFragment extends Fragment {
 
         viewModel.isAdded.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                Bundle bundle = new Bundle();
-                bundle.putString(COMPANY_ID, companyId);
-                bundle.putString(QUEUE_ID, queueId);
-                navigateBack(bundle);
+                navigateBack();
             }
         });
 
@@ -124,28 +126,16 @@ public class AddWorkersFragment extends Fragment {
             if (state instanceof AddWorkersState.Success) {
 
                 List<AddWorkerModel> models = ((AddWorkersState.Success) state).data;
-                recyclerItems = new ArrayList<>();
-
-                List<String> ids = new ArrayList<>();
-                for (int i = 0; i < alreadyChosen.size(); i++) {
-                    ids.add(alreadyChosen.get(i).getId());
+                initRecyclerItem(models);
+                if (!recyclerItems.isEmpty()) {
+                    binding.recyclerView.setAdapter(adapter);
+                    adapter.submitList(recyclerItems);
+                } else {
+                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+                        navigateBack();
+                    });
                 }
-
-                for (int i = 0; i < models.size(); i++) {
-                    AddWorkerModel current = models.get(i);
-                    if (!ids.contains(current.getId())) {
-                        recyclerItems.add(new AddWorkerRecyclerModel(
-                                i,
-                                current.getName(),
-                                current.getId(),
-                                NOT_CHOSEN,
-                                chosen
-                        ));
-                    }
-                }
-
-                binding.recyclerView.setAdapter(adapter);
-                adapter.submitList(recyclerItems);
                 binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
@@ -157,6 +147,28 @@ public class AddWorkersFragment extends Fragment {
         });
     }
 
+    private void initRecyclerItem(List<AddWorkerModel> models) {
+        recyclerItems = new ArrayList<>();
+
+        List<String> ids = new ArrayList<>();
+        for (int i = 0; i < alreadyChosen.size(); i++) {
+            ids.add(alreadyChosen.get(i).getId());
+        }
+
+        for (int i = 0; i < models.size(); i++) {
+            AddWorkerModel current = models.get(i);
+            if (!ids.contains(current.getId())) {
+                recyclerItems.add(new AddWorkerRecyclerModel(
+                        i,
+                        current.getName(),
+                        current.getId(),
+                        NOT_CHOSEN,
+                        chosen
+                ));
+            }
+        }
+    }
+
     private void setErrorLayout() {
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
@@ -165,7 +177,10 @@ public class AddWorkersFragment extends Fragment {
         });
     }
 
-    private void navigateBack(Bundle bundle) {
+    private void navigateBack() {
+        Bundle bundle = new Bundle();
+        bundle.putString(COMPANY_ID, companyId);
+        bundle.putString(QUEUE_ID, queueId);
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_addWorkersFragment_to_editQueueFragment, bundle);
     }

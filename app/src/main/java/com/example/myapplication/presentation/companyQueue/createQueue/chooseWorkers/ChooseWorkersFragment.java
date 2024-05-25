@@ -100,8 +100,17 @@ public class ChooseWorkersFragment extends Fragment {
 
         initOkButton();
         initBackButtonPressed();
+        initBackButton();
         initSearchView();
         return binding.getRoot();
+    }
+
+    private void initBackButton() {
+         binding.buttonBack.setOnClickListener(v -> {
+             Bundle bundle = new Bundle();
+             bundle.putString(PAGE_KEY, PAGE_4);
+             navigateBack(bundle);
+         });
     }
 
     private void navigateBack(Bundle bundle) {
@@ -168,7 +177,7 @@ public class ChooseWorkersFragment extends Fragment {
                     binding.recyclerView.setAdapter(adapter);
                     adapter.submitList(workerItems);
                 } else {
-//                    binding.noEmployeesYet.setVisibility(View.VISIBLE);
+                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
                 }
 
                 binding.progressLayout.getRoot().setVisibility(View.GONE);

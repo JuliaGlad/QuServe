@@ -28,8 +28,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AddLocationViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> _isAdded = new MutableLiveData<>();
-    LiveData<Boolean> isAdded = _isAdded;
+    private final MutableLiveData<String> _isAdded = new MutableLiveData<>();
+    LiveData<String> isAdded = _isAdded;
 
     public void addLocation(String restaurantId, String location, String city) {
 
@@ -135,7 +135,7 @@ public class AddLocationViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _isAdded.postValue(true);
+                        _isAdded.postValue(locationId);
                     }
 
                     @Override

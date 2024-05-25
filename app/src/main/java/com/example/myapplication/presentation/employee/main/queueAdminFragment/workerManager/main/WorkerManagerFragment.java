@@ -54,6 +54,13 @@ public class WorkerManagerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initSearchView();
+        initButtonBack();
+    }
+
+    private void initButtonBack() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void initSearchView() {
@@ -90,7 +97,7 @@ public class WorkerManagerFragment extends Fragment {
                 if (!previous.isEmpty()) {
                     initRecycler(previous);
                 } else {
-                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    initEmptyLayout();
                 }
                 binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
@@ -100,6 +107,15 @@ public class WorkerManagerFragment extends Fragment {
             } else if (state instanceof WorkerManagerState.Error) {
                 setErrorLayout();
             }
+        });
+    }
+
+    private void initEmptyLayout() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.there_are_no_workers_in_this_company_yet));
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_any_new_employees_will_join_your_company));
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+            requireActivity().finish();
         });
     }
 

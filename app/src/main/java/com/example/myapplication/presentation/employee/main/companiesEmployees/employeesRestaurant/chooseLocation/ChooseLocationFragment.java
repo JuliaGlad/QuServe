@@ -30,6 +30,7 @@ import com.example.myapplication.presentation.restaurantLocation.locations.model
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationAdapter;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.state.LocationsState;
+import com.example.myapplication.presentation.restaurantLocation.noLocationsYet.NoLocationsYetFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +71,9 @@ public class ChooseLocationFragment extends Fragment {
                 if (!models.isEmpty()) {
                     initRecycler(models);
                 } else {
-                    NavHostFragment.findNavController(this)
-                            .navigate(R.id.action_locationsFragment_to_noLocationsYetFragment);
+                    binding.title.setVisibility(View.GONE);
+                    binding.progressLayout.getRoot().setVisibility(View.GONE);
+                    initEmptyLayout();
                 }
 
             } else if (state instanceof ChooseLocationState.Loading) {
@@ -80,6 +82,15 @@ public class ChooseLocationFragment extends Fragment {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initEmptyLayout() {
+        binding.noLocationLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.noLocationLayout.infoBox.body.setText(getString(R.string.create_your_first_location_and_assign_employees));
+        binding.noLocationLayout.buttonAdd.setEnabled(false);
+        binding.noLocationLayout.buttonAdd.setVisibility(View.GONE);
+        binding.noLocationLayout.buttonBack.setVisibility(View.GONE);
+        binding.noLocationLayout.buttonBack.setEnabled(false);
     }
 
     private void setErrorLayout() {

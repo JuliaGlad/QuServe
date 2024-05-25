@@ -124,21 +124,6 @@ public class CompanyQueueRepository {
                 userRole.put(QUEUE_NAME_KEY, current.getName());
 
                 userDoc.set(userRole);
-
-                DocumentReference companyEmployeeName = service.fireStore
-                        .collection(COMPANY_LIST)
-                        .document(companyId)
-                        .collection(EMPLOYEES)
-                        .document(employeeId);
-
-                companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-                    if (taskGetEmployee.isSuccessful()) {
-                        int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
-                        companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1));
-                    } else {
-                        emitter.onError(new Throwable(taskGetEmployee.getException()));
-                    }
-                });
             }
             emitter.onComplete();
         });
@@ -185,24 +170,13 @@ public class CompanyQueueRepository {
 
                 setWorkerToQueue(docRef, current);
                 setActiveQueueToEmployee(companyId, queueId, queueName, location, current);
-
-                DocumentReference companyEmployeeName = service.fireStore
-                        .collection(COMPANY_LIST)
-                        .document(companyId)
-                        .collection(EMPLOYEES)
-                        .document(current.getId());
-
-                companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-                    if (taskGetEmployee.isSuccessful()) {
-                        int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
-                        companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues + 1)).addOnCompleteListener(taskActiveUpdate -> {
-                            emitter.onComplete();
-                        });
-                    } else {
-                        emitter.onError(new Throwable(taskGetEmployee.getException()));
-                    }
-                });
             }
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    int previous = Integer.parseInt(task.getResult().getString(WORKERS_COUNT));
+                    increaseWorkersCount(emitter, docRef, previous, employee.size());
+                }
+            });
             emitter.onComplete();
         });
     }
@@ -220,7 +194,7 @@ public class CompanyQueueRepository {
                     .delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             docRef.get().addOnCompleteListener(taskGet -> {
-                                getEmployeeData(companyId, employeeId, emitter, taskGet, docRef);
+                                getEmployeeData(emitter, taskGet, docRef);
                             });
                         } else {
                             emitter.onError(new Throwable(task.getException()));
@@ -316,10 +290,8 @@ public class CompanyQueueRepository {
             docRef.addSnapshotListener((value, error) -> {
                 List<String> newParticipants;
                 if (value != null) {
-                    newParticipants = Arrays.asList(value.get(QUEUE_PARTICIPANTS_LIST).toString().split(","));
-                    if (newParticipants != null) {
-                        emitter.onNext(newParticipants.size());
-                    }
+                    newParticipants = (List<String>) value.get(QUEUE_PARTICIPANTS_LIST);
+                    emitter.onNext(newParticipants.size());
                 } else {
                     emitter.onError(new Throwable("Value is null"));
                 }
@@ -502,19 +474,19 @@ public class CompanyQueueRepository {
         });
     }
 
-    private void getEmployeeData(String companyId, String employeeId, CompletableEmitter emitter, Task<DocumentSnapshot> taskGet, DocumentReference docRef) {
+    private void getEmployeeData(CompletableEmitter emitter, Task<DocumentSnapshot> taskGet, DocumentReference docRef) {
         if (taskGet.isSuccessful()) {
             int count = Integer.parseInt(Objects.requireNonNull(taskGet.getResult().getString(WORKERS_COUNT)));
-            updateWorkersCount(companyId, employeeId, emitter, docRef, count);
+            decreaseWorkersCount(emitter, docRef, count);
         } else {
             emitter.onError(new Throwable(taskGet.getException()));
         }
     }
 
-    private void updateWorkersCount(String companyId, String employeeId, CompletableEmitter emitter, DocumentReference docRef, int count) {
+    private void decreaseWorkersCount(CompletableEmitter emitter, DocumentReference docRef, int count) {
         docRef.update(WORKERS_COUNT, String.valueOf(count - 1)).addOnCompleteListener(taskUpdate -> {
             if (taskUpdate.isSuccessful()) {
-                updateActiveQueuesCount(companyId, employeeId, emitter);
+                emitter.onComplete();
 
             } else {
                 emitter.onError(new Throwable(taskUpdate.getException()));
@@ -522,24 +494,12 @@ public class CompanyQueueRepository {
         });
     }
 
-    private void updateActiveQueuesCount(String companyId, String employeeId, CompletableEmitter emitter) {
-        DocumentReference companyEmployeeName = service.fireStore
-                .collection(COMPANY_LIST)
-                .document(companyId)
-                .collection(EMPLOYEES)
-                .document(employeeId);
-
-        companyEmployeeName.get().addOnCompleteListener(taskGetEmployee -> {
-            if (taskGetEmployee.isSuccessful()) {
-                int activeQueues = Integer.parseInt(taskGetEmployee.getResult().getString(ACTIVE_QUEUES_COUNT));
-                companyEmployeeName.update(ACTIVE_QUEUES_COUNT, String.valueOf(activeQueues - 1))
-                        .addOnCompleteListener(taskActiveUpdate -> {
-                            if (taskActiveUpdate.isSuccessful()) {
-                                emitter.onComplete();
-                            } else {
-                                emitter.onError(new Throwable(taskActiveUpdate.getException()));
-                            }
-                        });
+    private void increaseWorkersCount(CompletableEmitter emitter, DocumentReference docRef, int previous, int count) {
+        docRef.update(WORKERS_COUNT, String.valueOf(previous + count)).addOnCompleteListener(taskUpdate -> {
+            if (taskUpdate.isSuccessful()) {
+                emitter.onComplete();
+            } else {
+                emitter.onError(new Throwable(taskUpdate.getException()));
             }
         });
     }

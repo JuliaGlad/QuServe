@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCookActiveOrdersBinding;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.recycler.ActiveOrdersAdapter;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.recycler.ActiveOrdersItemModel;
@@ -68,16 +69,22 @@ public class CookActiveOrdersFragment extends Fragment {
                     initRecycler(models);
                 } else {
                     binding.progressLayout.getRoot().setVisibility(View.GONE);
-                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
-                    binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
-                        requireActivity().finish();
-                    });
+                    initEmptyLayout();
                 }
             } else if (state instanceof CookActiveOrdersState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof CookActiveOrdersState.Error) {
                 setErrorLayout();
             }
+        });
+    }
+
+    private void initEmptyLayout() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_any_active_orders_yet));
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.view_available_orders_in_your_restaurant_and_select_them_and_then_come_back));
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+            requireActivity().finish();
         });
     }
 
