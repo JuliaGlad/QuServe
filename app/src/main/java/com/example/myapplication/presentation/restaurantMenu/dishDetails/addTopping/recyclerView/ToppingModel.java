@@ -18,4 +18,8 @@ public class ToppingModel {
         this.uri = uri;
         this.listener = listener;
     }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
+    }
 }

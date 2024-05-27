@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.menu.recycler;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,7 @@ public class DishOrderItemAdapter extends ListAdapter<DishOrderModel, RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((ViewHolder)holder).bind((DishOrderModel) getItem(position));
+        ((ViewHolder)holder).bind(getItem(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -37,6 +38,7 @@ public class DishOrderItemAdapter extends ListAdapter<DishOrderModel, RecyclerVi
         }
 
         void bind(DishOrderModel model){
+            binding.loader.setVisibility(View.VISIBLE);
             binding.dishName.setText(model.getName());
             binding.price.setText(model.getPrice().concat("₽"));
 
@@ -46,6 +48,7 @@ public class DishOrderItemAdapter extends ListAdapter<DishOrderModel, RecyclerVi
                         Glide.with(itemView.getContext())
                                 .load(task.getResult())
                                 .into(binding.dishImage);
+                        binding.loader.setVisibility(View.GONE);
                     }
                 });
             }

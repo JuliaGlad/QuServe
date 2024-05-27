@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,7 @@ public class TableOrderDetailsFragment extends Fragment {
         locationId = getArguments().getString(LOCATION_ID);
         restaurantId = getArguments().getString(COMPANY_ID);
         tableNumber = getArguments().getString(TABLE_NUMBER);
-        viewModel.getTableOrderData(restaurantId, locationId, orderId);
+
     }
 
     @Override
@@ -58,20 +59,42 @@ public class TableOrderDetailsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        initButtonBack();
+        if (orderId != null) {
+            viewModel.getTableOrderData(restaurantId, locationId, orderId);
+        } else {
+            binding.progressBar.getRoot().setVisibility(View.GONE);
+            initEmptyLayout();
+        }
+    }
+
+    private void initButtonBack() {
+        binding.buttonBack.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+    }
+
+    private void initEmptyLayout() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.there_is_no_order_on_this_table_yet));
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_anybody_creates_an_order_and_then_come_back));
     }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof TableOrderDetailsState.Success){
-                TableOrderDetailsStateModel model = ((TableOrderDetailsState.Success)state).data;
+            if (state instanceof TableOrderDetailsState.Success) {
+                TableOrderDetailsStateModel model = ((TableOrderDetailsState.Success) state).data;
                 binding.cookName.setText(model.getCookName());
                 binding.waiterName.setText(model.getWaiterName());
                 binding.number.setText(tableNumber);
                 initRecycler(model.getDishes());
 
-            } else if (state instanceof TableOrderDetailsState.Loading){
+            } else if (state instanceof TableOrderDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
-            } else if (state instanceof TableOrderDetailsState.Error){
+            } else if (state instanceof TableOrderDetailsState.Error) {
                 setErrorLayout();
             }
         });

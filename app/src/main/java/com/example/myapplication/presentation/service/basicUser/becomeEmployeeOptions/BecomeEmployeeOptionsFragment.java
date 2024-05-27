@@ -2,8 +2,10 @@ package com.example.myapplication.presentation.service.basicUser.becomeEmployeeO
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COOK_DATA;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.WAITER_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,7 +53,7 @@ public class BecomeEmployeeOptionsFragment extends Fragment {
         launcherWaiter = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), BecomeWaiterActivity.class);
-                intent.putExtra(EMPLOYEE_DATA, result.getContents());
+                intent.putExtra(WAITER_DATA, result.getContents());
                 launcherEmployee.launch(intent);
             }
         });
@@ -87,7 +89,7 @@ public class BecomeEmployeeOptionsFragment extends Fragment {
         launcherCook = registerForActivityResult(new ScanContract(), result -> {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), BecomeCookActivity.class);
-                intent.putExtra(EMPLOYEE_DATA, result.getContents());
+                intent.putExtra(COOK_DATA, result.getContents());
                 launcherEmployee.launch(intent);
             }
         });

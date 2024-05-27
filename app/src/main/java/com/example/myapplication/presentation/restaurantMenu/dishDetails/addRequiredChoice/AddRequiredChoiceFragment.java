@@ -87,6 +87,13 @@ public class  AddRequiredChoiceFragment extends Fragment {
         setAdapter();
         setupObserves();
         initNextButton();
+        initButtonBack();
+    }
+
+    private void initButtonBack() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     @Override
@@ -134,6 +141,7 @@ public class  AddRequiredChoiceFragment extends Fragment {
                 })));
                 break;
             case PAGE_2:
+                binding.progressBar.setProgress(50, true);
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_at_least_2_variant, 24)));
                 items.add(new RequiredChoiceEditDelegateItem(new RequiredChoiceEditItemModel(1, () -> {
                 }, name -> {

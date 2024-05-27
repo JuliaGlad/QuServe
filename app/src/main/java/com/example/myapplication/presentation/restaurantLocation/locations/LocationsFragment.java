@@ -161,9 +161,7 @@ public class LocationsFragment extends Fragment {
                     current.getCity(),
                     current.getWaitersCount(),
                     current.getCooksCount(),
-                    () -> {
-                        ((LocationsActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId());
-                    }
+                    () -> ((LocationsActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId())
             ));
         }
         binding.recyclerView.setAdapter(adapter);

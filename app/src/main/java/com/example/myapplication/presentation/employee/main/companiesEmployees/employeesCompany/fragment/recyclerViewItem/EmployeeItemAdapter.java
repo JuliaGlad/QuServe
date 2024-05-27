@@ -4,9 +4,11 @@ import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,7 +52,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
         }
 
         void bind(EmployeeItemModel model) {
-
+            binding.loader.setVisibility(View.VISIBLE);
             binding.employeeName.setText(model.getName());
             binding.role.setText(model.role);
 
@@ -69,11 +71,13 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
                                         .load(imageModel.getImageUri())
                                         .apply(RequestOptions.circleCropTransform())
                                         .into(binding.employeePhoto);
+                                binding.loader.setVisibility(View.GONE);
                             } else {
                                 Glide.with(itemView.getContext())
-                                        .load(itemView.getContext().getDrawable(R.drawable.avatar))
+                                        .load(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.avatar, itemView.getContext().getTheme()))
                                         .apply(RequestOptions.circleCropTransform())
                                         .into(binding.employeePhoto);
+                                binding.loader.setVisibility(View.GONE);
                             }
                         }
 

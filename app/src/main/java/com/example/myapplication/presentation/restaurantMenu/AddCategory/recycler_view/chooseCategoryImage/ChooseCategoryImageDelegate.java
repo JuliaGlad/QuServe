@@ -73,8 +73,9 @@ public class ChooseCategoryImageDelegate implements AdapterDelegate {
 
             for (int i = 0; i < model.drawables.size(); i++) {
                 int current = model.drawables.get(i);
-                items.add(new CategoryImageExampleDelegateItem(new CategoryImageExampleModel(i, current, drawable -> {
-                    ArgumentsCategory.chosenImage = drawable;
+                int index = i;
+                items.add(new CategoryImageExampleDelegateItem(new CategoryImageExampleModel(index, current, drawable -> {
+                    ArgumentsCategory.chosenImage = model.drawablesIds.get(index);
                     binding.chosenImage.foodImage.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), drawable, itemView.getContext().getTheme()));
                 })));
             }

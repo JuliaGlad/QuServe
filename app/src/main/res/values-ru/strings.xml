@@ -114,11 +114,11 @@
     <string name="yes">Да!</string>
     <string name="no">Нет</string>
     <string name="download_pdf">Скачать pdf</string>
-    <string name="dowload_pdf_description">Распечатайте Qr-код, чтобы можно было легко присоединиться к очереди</string>
+    <string name="dowload_pdf_description">Распечатайте Qr-код для присоединения к очереди</string>
     <string name="pause_queue">Приостановить</string>
     <string name="pause_queue_description">Немного отдохните и затем возвращайтесь к работе</string>
     <string name="participants_list">Участники</string>
-    <string name="participants_list_description">Обслуживайте людей, продвигайте очередь и смотрите статистику</string>
+    <string name="participants_list_description">Обслуживайте людей и продвигайте очередь</string>
     <string name="finish_queue">Завершить очередь</string>
     <string name="are_you_sure">Вы уверены</string>
     <string name="you_want_to_download_qr_code_pdf_file">Вы хотите скачать этот pdf?</string>
@@ -221,7 +221,8 @@
     <string name="change_role">Поменять роль</string>
     <string name="change_your_employee_s_role_in_company">Поменять роль сотрудника в компании</string>
     <string name="manages_workers">Рабочие компании</string>
-    <string name="manages_company_n_queues">Просматривайте активные очереди компании и управляйте ими</string>
+    <string name="admin">Админ</string>
+    <string name="manages_company_n_queues">Управляет активными очередями и назначает работников</string>
     <string name="worker">Рабочий</string>
     <string name="serves_customers">Обслуживайте посетителей</string>
     <string name="change">Изменить</string>
@@ -413,4 +414,8 @@
     <string name="create_new_queues_in_your_company_and_then_come_back">Create new queues in your company and then come back!</string>
     <string name="wait_until_any_new_employees_will_join_your_company">Wait until any new employees will join your company</string>
     <string name="choose_location">Choose location</string>
+    <string name="there_is_no_order_on_this_table_yet">There is no order on this table yet!</string>
+    <string name="wait_until_anybody_creates_an_order_and_then_come_back">Wait until anybody creates an order and then come back!</string>
+    <string name="you_don_t_have_any_dishes_in_this_category_yet">You don`t have any dishes in this category yet!</string>
+    <string name="manages_nassigned_queues">Продвигает назначенные очереди и обслуживает посетителей</string>
 </resources>

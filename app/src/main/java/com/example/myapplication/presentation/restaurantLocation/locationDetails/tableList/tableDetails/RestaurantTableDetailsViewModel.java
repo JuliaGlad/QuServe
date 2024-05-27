@@ -23,7 +23,7 @@ public class RestaurantTableDetailsViewModel extends ViewModel {
     private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>(Uri.EMPTY);
     LiveData<Uri> pdfUri = _pdfUri;
 
-    private final MutableLiveData<TableDetailsState> _state = new MutableLiveData<>();
+    private final MutableLiveData<TableDetailsState> _state = new MutableLiveData<>(new TableDetailsState.Loading());
     LiveData<TableDetailsState> state = _state;
 
     public void getTableData(String restaurantId, String locationId, String tableId) {

@@ -63,13 +63,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/button_next"
         app:layout_constraintEnd_toEndOf="@id/button_next"
         app:layout_constraintStart_toStartOf="@id/button_next"
         app:layout_constraintTop_toTopOf="@+id/button_next"
-        app:mk_color="?colorOnPrimary"
+        app:mk_color="?colorPrimary"
         app:mk_type="FishSpinner" />
 
     <ImageButton

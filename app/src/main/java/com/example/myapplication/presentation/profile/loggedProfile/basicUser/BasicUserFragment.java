@@ -125,7 +125,8 @@ public class BasicUserFragment extends Fragment {
         });
 
         viewModel.uri.observe(getViewLifecycleOwner(), uri -> {
-            Glide.with(this).load(uri)
+            Glide.with(this)
+                    .load(uri)
                     .into(binding.background);
         });
 

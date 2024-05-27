@@ -77,6 +77,29 @@
             app:srcCompat="@drawable/ic_add"
             app:tint="?colorOnPrimaryContainer" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/loader"
+            android:background="?colorSurfaceContainerLow"
+            app:layout_constraintBottom_toBottomOf="@+id/dish_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.tuyenmonkey.mkloader.MKLoader
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:mk_color="?colorPrimary"
+                app:mk_type="FishSpinner" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -5,8 +5,8 @@
     android:id="@+id/queue_details_button_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
     android:layout_marginStart="20dp"
+    android:layout_marginTop="24dp"
     android:layout_marginEnd="20dp"
     android:background="@drawable/card_background"
     android:padding="20dp">
@@ -28,15 +28,13 @@
         style="@style/TextAppearance.Material3.BodySmall.Regular.QuServe"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:lineSpacingMultiplier="1"
-        android:text="TextView"
         android:textColorHighlight="@color/colorTextHint"
         android:textColorHint="@color/colorTextHint"
         android:textColorLink="@color/colorTextHint"
-        app:layout_constraintBottom_toBottomOf="@+id/icon"
         app:layout_constraintEnd_toStartOf="@+id/icon_next"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:text="TextView" />
 
     <ImageView
         android:id="@+id/icon_next"
@@ -51,15 +49,16 @@
     <TextView
         android:id="@+id/title"
         style="@style/TextAppearance.Material3.BodyMedium.Bold.QuServe"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:lineSpacingMultiplier="1"
-        android:text="Title"
+        tools:text="Title"
         android:textColorHighlight="@color/colorTextHint"
         android:textColorHint="@color/colorTextHint"
         android:textColorLink="@color/colorTextHint"
+        app:layout_constraintEnd_toStartOf="@+id/icon_next"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="@+id/icon" />
 

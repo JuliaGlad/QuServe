@@ -177,6 +177,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         Uri.EMPTY,
                         0,
                         isDefault,
+                        false,
                         () -> {
                             viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), false);
                             categoryId = current.getCategoryId();

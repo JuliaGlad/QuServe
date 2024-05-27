@@ -12,7 +12,6 @@ import static com.example.myapplication.presentation.utils.Utils.URI;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -49,8 +48,6 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegate;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.editText.EditTextModel;
-import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListModel;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegate;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.textView.TextViewHeaderModel;
@@ -60,7 +57,7 @@ public class AddCategoryFragment extends Fragment {
     private AddCategoryViewModel viewModel;
     private FragmentAddCategoryBinding binding;
     private MainAdapter mainAdapter = new MainAdapter();
-    private List<DelegateItem> items = new ArrayList<>();
+    private final List<DelegateItem> items = new ArrayList<>();
     private ActivityResultLauncher<Intent> activityResultLauncher;
     private Uri imageUri = Uri.EMPTY;
     private String page, restaurantId;
@@ -87,11 +84,9 @@ public class AddCategoryFragment extends Fragment {
                         if (data != null) {
                             ArgumentsCategory.chosenImage = data.getData();
                             imageUri = data.getData();
-                            List<DelegateItem> newItems = new ArrayList<>(items);
-                            newItems.remove(items.size() - 1);
-                            newItems.add( new ChooseCategoryImageDelegateItem(new ChooseCategoryImageModel(2, getDrawables(), ArgumentsCategory.name, imageUri, this::initImagePicker)));
-                            mainAdapter.submitList(newItems);
-                            items = newItems;
+                            ChooseCategoryImageModel model = (ChooseCategoryImageModel) items.get(items.size() - 1).content();
+                            model.setUri(imageUri);
+                            mainAdapter.notifyItemChanged(items.size() - 1);
                         }
                     }
                 });
@@ -161,7 +156,8 @@ public class AddCategoryFragment extends Fragment {
                 R.drawable.sushi_image,
                 R.drawable.wok_noodles_image,
                 R.drawable.cold_dishes_image,
-                R.drawable.flour_products_image
+                R.drawable.flour_products_image,
+                R.drawable.fast_food_image
         );
     }
 
@@ -177,9 +173,10 @@ public class AddCategoryFragment extends Fragment {
                 break;
             case PAGE_2:
                 if (ArgumentsCategory.chosenImage != Uri.EMPTY) {
+                    Log.d("chosen image", String.valueOf(ArgumentsCategory.chosenImage));
                     binding.loader.setVisibility(View.VISIBLE);
                     binding.buttonNext.setEnabled(false);
-                    viewModel.initCategoryData(restaurantId, requireView());
+                    viewModel.initCategoryData(restaurantId);
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_data_is_required), Snackbar.LENGTH_LONG).show();
                 }

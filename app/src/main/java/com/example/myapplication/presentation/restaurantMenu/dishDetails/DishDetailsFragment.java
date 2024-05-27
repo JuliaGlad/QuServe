@@ -69,6 +69,8 @@ import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonDelegate;
 import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.floatingActionButton.FloatingActionButtonModel;
@@ -93,10 +95,10 @@ public class DishDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(DishDetailsViewModel.class);
-        dishId = getActivity().getIntent().getStringExtra(DISH_ID);
-        categoryId = getActivity().getIntent().getStringExtra(CATEGORY_ID);
-        restaurantId = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
-        position = getActivity().getIntent().getIntExtra(POSITION, 0);
+        dishId = requireActivity().getIntent().getStringExtra(DISH_ID);
+        categoryId = requireActivity().getIntent().getStringExtra(CATEGORY_ID);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
+        position = requireActivity().getIntent().getIntExtra(POSITION, 0);
         setToppingLauncher();
         setRequiredChoiceLauncher();
         setImageLauncher();
@@ -278,8 +280,22 @@ public class DishDetailsFragment extends Fragment {
         List<RequiredChoiceItemModel> choiceItemModels = new ArrayList<>();
 
         for (int i = 0; i < variants.size(); i++) {
+            int index = i;
             String choice = variants.get(i);
-            choiceItemModels.add(new RequiredChoiceItemModel(i, choice));
+            choiceItemModels.add(new RequiredChoiceItemModel(index, choice, false, () -> {
+                for (int j = 0; j < requiredChoiceItems.size(); j++) {
+                    if (requiredChoiceItems.get(j) instanceof RequiredChoiceItemModel) {
+                        RequiredChoiceItemModel model = (RequiredChoiceItemModel) requiredChoiceItems.get(j).content();
+                        if (model.isChosen()) {
+                            model.setChosen(false);
+                            requiredChoiceAdapter.notifyItemChanged(j);
+                        }
+                    }
+                }
+                CategoryItemModel model = (CategoryItemModel) requiredChoiceItems.get(index).content();
+                model.setChosen(true);
+                requiredChoiceAdapter.notifyItemChanged(index);
+            }));
         }
 
         newItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(requiredChoiceItems.size(), choiceItemModels, adapter)));
@@ -325,8 +341,12 @@ public class DishDetailsFragment extends Fragment {
         binding.buttonEditIngredients.setOnClickListener(v -> {
 
         });
-        initRequiredChoiceRecycler(model.getModels());
-        initToppingsRecycler(model.getToppings());
+        if (requiredChoiceItems.isEmpty()) {
+            initRequiredChoiceRecycler(model.getModels());
+        }
+        if (toppingItems.isEmpty()) {
+            initToppingsRecycler(model.getToppings());
+        }
     }
 
     private void initToppingsRecycler(List<VariantsModel> variants) {
@@ -340,9 +360,7 @@ public class DishDetailsFragment extends Fragment {
                         })));
             }
         }
-        toppingItems.add(new AddToppingDelegateItem(new AddToppingModel(toppingItems.size(), () -> {
-            openAddToppingsActivity(categoryId, dishId);
-        })));
+        toppingItems.add(new AddToppingDelegateItem(new AddToppingModel(toppingItems.size(), () -> openAddToppingsActivity(categoryId, dishId))));
         toppingsAdapter.submitList(toppingItems);
         binding.progressLayout.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
@@ -378,17 +396,29 @@ public class DishDetailsFragment extends Fragment {
                 RequiredChoiceDishDetailsModel current = models.get(i);
                 RequiredChoiceAdapter adapter = new RequiredChoiceAdapter();
                 List<RequiredChoiceItemModel> choiceItemModels = new ArrayList<>();
-                for (String choice : current.getVariantsName()) {
-                    choiceItemModels.add(new RequiredChoiceItemModel(i, choice));
+
+                for (int j = 0; j < current.getVariantsName().size(); j++) {
+                    int index = j;
+                    String choice = current.getVariantsName().get(j);
+                    boolean isChosen = j == 0;
+                    choiceItemModels.add(new RequiredChoiceItemModel(index, choice, isChosen, () -> {
+                        for (int k = 0; k < choiceItemModels.size(); k++) {
+                            RequiredChoiceItemModel model = choiceItemModels.get(k);
+                            if (model.isChosen()) {
+                                model.setChosen(false);
+                                adapter.notifyItemChanged(k);
+                            }
+                        }
+                        RequiredChoiceItemModel model = choiceItemModels.get(index);
+                        model.setChosen(true);
+                        adapter.notifyItemChanged(index);
+                    }));
                 }
                 requiredChoiceItems.add(new RequiredChoiceHeaderDelegateItem(new RequiredChoiceHeaderModel(i, current.getName(), () -> {
-
                     Bundle bundle = new Bundle();
-
                     bundle.putString(CHOICE_ID, current.getId());
                     bundle.putString(CATEGORY_ID, categoryId);
                     bundle.putString(DISH_ID, dishId);
-
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.action_dishDetailsFragment_to_editRequiredChoiceFragment, bundle);
                 })));

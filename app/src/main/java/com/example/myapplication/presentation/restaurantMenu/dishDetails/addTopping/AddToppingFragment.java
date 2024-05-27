@@ -36,6 +36,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddToppingBinding;
+import com.example.myapplication.presentation.restaurantMenu.AddCategory.recycler_view.chooseCategoryImage.ChooseCategoryImageModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.recyclerView.ToppingDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.recyclerView.ToppingItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.addTopping.recyclerView.ToppingModel;
@@ -64,7 +65,7 @@ public class AddToppingFragment extends Fragment {
     private FragmentAddToppingBinding binding;
     private MainAdapter adapter = new MainAdapter();
     private ActivityResultLauncher<Intent> launcherToppings;
-    private List<DelegateItem> items = new ArrayList<>();
+    private final List<DelegateItem> items = new ArrayList<>();
     private String page, restaurantId, categoryId, dishId;
 
     @Override
@@ -247,11 +248,9 @@ public class AddToppingFragment extends Fragment {
                         Intent data = result.getData();
                         if (data != null) {
                             image = data.getData();
-                            List<DelegateItem> newItems = new ArrayList<>(items);
-                            newItems.remove(items.size() - 1);
-                            newItems.add(new ToppingDelegateItem(new ToppingModel(2, name, price, image, this::initImagePicker)));
-                            adapter.submitList(newItems);
-                            items = newItems;
+                            ToppingModel model = (ToppingModel) items.get(items.size() - 1).content();
+                            model.setUri(image);
+                            adapter.notifyItemChanged(items.size() - 1);
                         }
                     }
                 });

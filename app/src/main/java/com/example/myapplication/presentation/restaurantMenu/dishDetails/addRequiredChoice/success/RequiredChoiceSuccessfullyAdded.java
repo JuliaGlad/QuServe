@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.restaurantMenu.dishDetails.addRequiredChoice.success;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
 
@@ -24,12 +25,13 @@ import java.util.List;
 public class RequiredChoiceSuccessfullyAdded extends Fragment {
 
     private FragmentRequireChoiceSuccessfullyAddedBinding binding;
-    private String name;
+    private String name, choiceId;
     private ArrayList<String> variant;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        choiceId = getArguments().getString(CHOICE_ID);
         name = getArguments().getString(CHOICE_NAME);
         variant = getArguments().getStringArrayList(CHOICE_VARIANT);
     }
@@ -50,7 +52,7 @@ public class RequiredChoiceSuccessfullyAdded extends Fragment {
     }
 
     private void handleBackButtonPressed() {
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 navigateBack();
@@ -66,10 +68,10 @@ public class RequiredChoiceSuccessfullyAdded extends Fragment {
 
     private void navigateBack() {
         Intent intent = new Intent();
+        intent.putExtra(CHOICE_ID, choiceId);
         intent.putExtra(CHOICE_NAME, name);
         intent.putStringArrayListExtra(CHOICE_VARIANT, variant);
-
-        getActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
         requireActivity().finish();
     }
 }

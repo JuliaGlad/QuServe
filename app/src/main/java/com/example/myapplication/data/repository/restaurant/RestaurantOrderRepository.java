@@ -151,7 +151,7 @@ public class RestaurantOrderRepository {
                     removeOrderFromWaiter(collRef, waiterId, orderId).addOnCompleteListener(taskRemove -> {
                         if (taskRemove.isSuccessful()) {
                             deleteOrderDocumentByPath(orderPath, emitter);
-                        }else {
+                        } else {
                             emitter.onError(new Throwable(taskRemove.getException()));
                         }
                     });
@@ -159,16 +159,6 @@ public class RestaurantOrderRepository {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
-        });
-    }
-
-    private void deleteOrderDocumentByPath(String orderPath, CompletableEmitter emitter) {
-        service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
-            if (taskDocument.isSuccessful()) {
-                emitter.onComplete();
-            }else {
-                emitter.onError(new Throwable(taskDocument.getException()));
-            }
         });
     }
 
@@ -279,6 +269,32 @@ public class RestaurantOrderRepository {
         });
     }
 
+    private void deleteOrderDocumentByPath(String orderPath, CompletableEmitter emitter) {
+        DocumentReference locationRef =
+                service.fireStore.collection(orderPath).getParent();
+        locationRef.get().addOnCompleteListener(taskGet -> {
+            if (taskGet.isSuccessful()){
+                int currentCount = Integer.parseInt(taskGet.getResult().getString(ACTIVE_ORDERS));
+                locationRef.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
+                    if (taskUpdate.isSuccessful()){
+                        service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
+                            if (taskDocument.isSuccessful()) {
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(taskDocument.getException()));
+                            }
+                        });
+                    } else {
+                        emitter.onError(new Throwable(taskUpdate.getException()));
+                    }
+                });
+            } else {
+                emitter.onError(new Throwable(taskGet.getException()));
+            }
+        });
+
+    }
+
     private void getDishes(String path, SingleEmitter<OrderDto> emitter, CollectionReference dishes, DocumentReference parentDoc, DocumentSnapshot snapshot) {
         dishes.get().addOnCompleteListener(taskDishes -> {
             List<ActiveOrderDishDto> dtos = new ArrayList<>();
@@ -368,15 +384,19 @@ public class RestaurantOrderRepository {
 
                 String locationId = pathDoc.getParent().getParent().getId();
 
-                DocumentReference docRef = service.fireStore.collection(RESTAURANT_LIST)
+                DocumentReference locationDoc = service.fireStore.collection(RESTAURANT_LIST)
                         .document(restaurantId)
                         .collection(RESTAURANT_LOCATION)
-                        .document(locationId)
-                        .collection(ACTIVE_ORDERS)
-                        .document(orderId);
+                        .document(locationId);
+
+                DocumentReference docRef =
+                        locationDoc
+                                .collection(ACTIVE_ORDERS)
+                                .document(orderId);
 
                 String orderPath = docRef.getPath();
                 CollectionReference collRef = docRef.collection(DISHES);
+
                 CollectionReference collRefLocationWaiters = service.fireStore.collection(RESTAURANT_LIST)
                         .document(restaurantId)
                         .collection(RESTAURANT_LOCATION)
@@ -394,17 +414,35 @@ public class RestaurantOrderRepository {
                         order.put(WAITER, waiterId);
                         order.put(DISHES_COUNT, String.valueOf(models.size()));
 
-                        docRef.set(order).addOnCompleteListener(taskOrder -> {
-                            if (taskOrder.isSuccessful()) {
-                                setOrderDishesDocument(models, collRef);
-                                emitter.onSuccess(orderPath);
-                            } else {
-                                emitter.onError(new Throwable(taskOrder.getException()));
-                            }
-                        });
+                        setOrder(models, emitter, docRef, order, collRef, locationDoc, orderPath);
                     }
                 });
             });
+        });
+    }
+
+    private void setOrder(List<OrderDishesModel> models, SingleEmitter<String> emitter, DocumentReference docRef, HashMap<String, Object> order, CollectionReference collRef, DocumentReference locationDoc, String orderPath) {
+        docRef.set(order).addOnCompleteListener(taskOrder -> {
+            if (taskOrder.isSuccessful()) {
+                setOrderDishesDocument(models, collRef);
+
+                locationDoc.get().addOnCompleteListener(taskGet -> {
+                    if (taskGet.isSuccessful()) {
+                        int currentCount = Integer.parseInt(taskGet.getResult().getString(ACTIVE_ORDERS));
+                        docRef.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
+                            if (taskUpdate.isSuccessful()){
+                                emitter.onSuccess(orderPath);
+                            } else {
+                                emitter.onError(new Throwable(taskUpdate.getException()));
+                            }
+                        });
+                    } else {
+                        emitter.onError(new Throwable(taskGet.getException()));
+                    }
+                });
+            } else {
+                emitter.onError(new Throwable(taskOrder.getException()));
+            }
         });
     }
 

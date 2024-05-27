@@ -83,21 +83,9 @@ public class BecomeWaiterFragment extends Fragment {
                 binding.companyName.setText(model.getName());
                 Glide.with(requireView())
                         .load(model.getUri())
-                        .addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                binding.progressLayout.getRoot().setVisibility(View.GONE);
-                                binding.errorLayout.getRoot().setVisibility(View.GONE);
-                                return true;
-                            }
-                        })
                         .into(binding.qrCodeImage);
-
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof BecomeWaiterState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof BecomeWaiterState.Error) {

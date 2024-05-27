@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.restaurantMenu.dishItem;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,19 +41,28 @@ public class DishItemDelegate implements AdapterDelegate {
         }
 
         void bind(DishItemModel model) {
+            binding.loader.setVisibility(View.VISIBLE);
+
+            if (model.isAdding()){
+                binding.loader.setVisibility(View.GONE);
+            }
+
             if (model.getTask() != null) {
                 model.getTask().addOnCompleteListener(task -> {
-                    Glide.with(itemView.getContext())
-                            .load(task.getResult())
-                            .into(binding.dishImage);
+                    if (task.isSuccessful()) {
+                        Glide.with(itemView.getContext())
+                                .load(task.getResult())
+                                .into(binding.dishImage);
+                        binding.loader.setVisibility(View.GONE);
+                    }
                 });
             }
 
             if (model.getUri() != Uri.EMPTY){
-                Log.i("Uri", String.valueOf(model.getUri()));
                 Glide.with(itemView.getContext())
                         .load(model.getUri())
                         .into(binding.dishImage);
+                binding.loader.setVisibility(View.GONE);
             }
 
             binding.dishName.setText(model.getName());

@@ -38,7 +38,7 @@ public class WaiterItemAdapter extends ListAdapter<WaiterItemModel, RecyclerView
 
         void bind(WaiterItemModel model){
             binding.count.setText(model.count);
-            binding.tableNumber.setText(model.tableNumber);
+            binding.number.setText(model.tableNumber);
             binding.dishesTitle.setText(model.name);
             binding.served.setOnClickListener(v -> {
                 model.listener.onClick();

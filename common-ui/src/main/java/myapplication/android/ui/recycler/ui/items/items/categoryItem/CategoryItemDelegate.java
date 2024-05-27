@@ -1,6 +1,7 @@
 package myapplication.android.ui.recycler.ui.items.items.categoryItem;
 
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -9,13 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import myapplication.android.common_ui.R;
 import myapplication.android.common_ui.databinding.RecyclerViewMenuCategoryBinding;
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class CategoryItemDelegate implements AdapterDelegate {
-
-    int selectedPosition;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -48,8 +48,16 @@ public class CategoryItemDelegate implements AdapterDelegate {
             }
 
             binding.item.setOnClickListener(v -> {
-                model.getListener().onClick();
+                 model.getListener().onClick();
             });
+
+            if (model.isChosen()) {
+                binding.layout.setBackgroundColor(itemView.getResources().getColor(R.color.colorPrimaryContainer, itemView.getContext().getTheme()));
+                binding.foodTitle.setTextColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
+            } else  {
+                binding.layout.setBackgroundColor(itemView.getResources().getColor(R.color.colorCardBackground, itemView.getContext().getTheme()));
+                binding.foodTitle.setTextColor(itemView.getResources().getColor(R.color.colorTextHint, itemView.getContext().getTheme()));
+            }
 
             binding.foodTitle.setText(model.getName());
 

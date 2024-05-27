@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.example.myapplication.presentation.dialogFragments.deleteTable.Delete
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.state.TableDetailsState;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.state.TableDetailsStateModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class RestaurantTableDetailsFragment extends Fragment {
     private RestaurantTableDetailsViewModel viewModel;
     private FragmentRestaurantTableDetailsBinding binding;
     private final MainAdapter adapter = new MainAdapter();
+    private List<DelegateItem> items = new ArrayList<>();
     private String restaurantId, locationId, tableId, tableNumber, orderId;
 
     @Override
@@ -110,10 +113,12 @@ public class RestaurantTableDetailsFragment extends Fragment {
         viewModel.state.observe(requireActivity(), state -> {
             if (state instanceof TableDetailsState.Success) {
                 TableDetailsStateModel model = ((TableDetailsState.Success) state).data;
-                tableNumber = model.getNumber();
-                orderId = model.getOrderId();
-                binding.tableNumber.setText(tableNumber);
-                initRecycler(model.getQrCode());
+                if (items.isEmpty()) {
+                    tableNumber = model.getNumber();
+                    orderId = model.getOrderId();
+                    binding.tableNumber.setText(tableNumber);
+                    initRecycler(model.getQrCode());
+                }
             } else if (state instanceof TableDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof TableDetailsState.Error) {
@@ -156,7 +161,7 @@ public class RestaurantTableDetailsFragment extends Fragment {
     }
 
     private void buildList(DelegateItem[] delegates) {
-        List<DelegateItem> items = Arrays.asList(delegates);
+        items = Arrays.asList(delegates);
         adapter.submitList(items);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);

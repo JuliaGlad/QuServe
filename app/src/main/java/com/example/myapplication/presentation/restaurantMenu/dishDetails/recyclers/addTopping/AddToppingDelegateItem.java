@@ -22,6 +22,6 @@ public class AddToppingDelegateItem implements DelegateItem<AddToppingModel> {
 
     @Override
     public boolean compareToOther(DelegateItem other) {
-        return other.content() == content();
+        return ((AddToppingModel) other.content()).equals(value);
     }
 }

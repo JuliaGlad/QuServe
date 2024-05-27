@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.restaurantLocation.locationDetail
 
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Context;
@@ -40,7 +41,7 @@ public class TableListFragment extends Fragment {
     private TableListViewModel viewModel;
     private FragmentTableListBinding binding;
     private String locationId, restaurantId;
-    private Integer lastTableNumber = null;
+    private Integer lastTableNumber = 0;
     private final MainAdapter adapter = new MainAdapter();
     private final List<DelegateItem> delegates = new ArrayList<>();
 
@@ -72,6 +73,8 @@ public class TableListFragment extends Fragment {
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
             if (lastTableNumber != null) {
+                binding.buttonAdd.setEnabled(false);
+                binding.loader.setVisibility(View.VISIBLE);
                 viewModel.addTable(restaurantId, locationId, String.valueOf(lastTableNumber + 1));
             }
         });
@@ -91,6 +94,7 @@ public class TableListFragment extends Fragment {
                 if (!tables.isEmpty()) {
                     initRecycler(tables);
                 } else {
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
                     binding.constraintLayout.setVisibility(View.VISIBLE);
                 }
             } else if (state instanceof TableListState.Loading) {
@@ -102,6 +106,10 @@ public class TableListFragment extends Fragment {
         viewModel.isAdded.observe(getViewLifecycleOwner(), tableId -> {
             if (tableId != null) {
                 binding.constraintLayout.setVisibility(View.GONE);
+
+                binding.buttonAdd.setEnabled(true);
+                binding.loader.setVisibility(View.GONE);
+
                 lastTableNumber += 1;
                 int position = delegates.size();
                 delegates.add(new TableListDelegateItem(new TableListModel(position, String.valueOf(lastTableNumber), () -> {
@@ -109,7 +117,11 @@ public class TableListFragment extends Fragment {
                     requireActivity().finish();
                 }
                 )));
-                adapter.notifyItemInserted(position);
+                if (position != 0) {
+                    adapter.notifyItemInserted(position);
+                } else {
+                    adapter.submitList(delegates);
+                }
             }
         });
     }
@@ -118,16 +130,15 @@ public class TableListFragment extends Fragment {
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(0, R.string.manage_your_restaurant_s_tables_and_view_active_orders)));
 
         if (!tables.isEmpty()) {
-            for (int i = tables.size() - 1; i >= 0; i -= 1) {
+            for (int i = 0; i < tables.size(); i++) {
                 String id = tables.get(i).getTableId();
                 delegates.add(new TableListDelegateItem(new TableListModel(i, tables.get(i).getNumber(), () -> {
                     ((TableListActivity) requireActivity()).openRestaurantTableDetailsActivity(id, locationId);
                     requireActivity().finish();
                 })));
-                if (i == 0) {
-                    lastTableNumber = Integer.parseInt(tables.get(i).getNumber());
-                }
+
             }
+            lastTableNumber = tables.size();
         } else {
             lastTableNumber = 0;
         }

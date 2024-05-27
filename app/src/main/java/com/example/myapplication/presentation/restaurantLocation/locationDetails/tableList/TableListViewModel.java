@@ -118,8 +118,6 @@ public class TableListViewModel extends ViewModel {
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            createPdfDocument(qrCode, path);
-
             uploadImageToFireStorage(qrCode, tableId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
@@ -130,7 +128,7 @@ public class TableListViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
-                            _isAdded.postValue(tableId);
+                            createPdfDocument(qrCode,tableId);
                         }
 
                         @Override
@@ -145,7 +143,8 @@ public class TableListViewModel extends ViewModel {
     }
 
     private void uploadPdfToFireStorage(File file, String tableId) {
-        RestaurantTableDI.uploadTableQrCodePdfUseCase.invoke(file, tableId).subscribeOn(Schedulers.io())
+        RestaurantTableDI.uploadTableQrCodePdfUseCase.invoke(file, tableId)
+                .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -154,7 +153,8 @@ public class TableListViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        Log.d("Upload to FireStorage", "uploaded");
+                        Log.d("Table id", tableId);
+                        _isAdded.postValue(tableId);
                     }
 
                     @Override
@@ -176,28 +176,17 @@ public class TableListViewModel extends ViewModel {
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
-
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
-
-        File file = new File(folder.getAbsolutePath() + "/" + "QR-CODE.pdf");
-
+        File file = new File(folder.getAbsolutePath() + "/" + "Table.pdf");
         try {
-            if (file.exists()) {
-                FileOutputStream fos = new FileOutputStream(file);
-                pdfDocument.writeTo(fos);
-                pdfDocument.close();
-                fos.close();
+            FileOutputStream fos = new FileOutputStream(file);
+            pdfDocument.writeTo(fos);
+            pdfDocument.close();
+            fos.close();
 
-                uploadPdfToFireStorage(file, tableId);
+            uploadPdfToFireStorage(file, tableId);
 
-                Log.e("File", file.getAbsolutePath() + tableId);
+            Log.e("File", file.getName() + tableId);
 
-            } else {
-
-                Log.e("NOT EXIST!", "File does not exists");
-            }
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());
         } catch (IOException e) {

@@ -19,6 +19,7 @@ import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_5;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.stringsServicesArray;
+import static com.example.myapplication.presentation.utils.Utils.stringsServicesArrayRussian;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.content.Context;
@@ -200,8 +201,9 @@ public class CreateCompanyAccountFragment extends Fragment {
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.choose_service, 24)),
                         new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(1, R.array.services, R.string.select_item, serviceString -> {
-                            for (String item : stringsServicesArray) {
-                                if (serviceString.equals(item)) {
+                            for (int i = 0; i < stringsServicesArray.length; i++) {
+                                String item = stringsServicesArray[i];
+                                if (serviceString.equals(item) || serviceString.equals(stringsServicesArrayRussian[i])){
                                     service = item;
                                     break;
                                 }

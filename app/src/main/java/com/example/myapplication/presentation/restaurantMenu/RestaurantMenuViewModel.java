@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.restaurantMenu;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -69,7 +71,7 @@ public class RestaurantMenuViewModel extends ViewModel {
         RestaurantMenuDI.getCategoriesUseCase.invoke(restaurantId)
                 .flatMap(categoryModels -> {
                     List<String> categoryNames = new ArrayList<>();
-                    if (categoryModels.size() > 0) {
+                    if (!categoryModels.isEmpty()) {
                         for (CategoryModel current : categoryModels) {
                             models.add(current);
                             categoryNames.add(current.getName());

@@ -21,6 +21,7 @@ public class Utils {
     public static final String APP_PREFERENCES = "AppPreferences";
     public static final String EMPLOYEE_DATA = "EmployeeData";
     public static final String WAITER_DATA = "WaiterData";
+    public static final String COOK_DATA = "CookData";
     public static final String ACTIVE_QUEUES_COUNT = "ActiveQueuesCount";
     public static final String COMPANY_OWNER = "CompanyOwner";
     public static final String COMPANY_LIST = "CompanyList";
@@ -125,5 +126,6 @@ public class Utils {
     public static final String YOUR_TURN_CHANNEL_NAME = "Your turn";
     public static final String PAUSED = "Paused";
     public static final String[] stringsTimeArray = {"NO_SET_LIFE_TIME", "3 HOURS", "12 HOURS", "1 DAYS", "30 DAYS", "182 DAYS", "365 DAYS"};
-    public static final String[] stringsServicesArray = {"Queue", "Restaurant", "On-Board catering"};
+    public static final String[] stringsServicesArray = {"Queue", "Restaurant"};
+    public static final String[] stringsServicesArrayRussian = {"Очередь", "Ресторан"};
 }

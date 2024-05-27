@@ -37,11 +37,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:foreground="@color/transparent"
         android:src="@drawable/ic_add"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/button_add"
+        app:layout_constraintEnd_toEndOf="@+id/button_add"
+        app:layout_constraintStart_toStartOf="@+id/button_add"
+        app:layout_constraintTop_toTopOf="@+id/button_add"
+        app:mk_color="?colorOnPrimaryContainer"
+        app:mk_type="FishSpinner" />
 
     <TextView
         android:id="@+id/header"

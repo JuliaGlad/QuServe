@@ -67,7 +67,7 @@ public class CommonCompanyRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> snapshots = task.getResult().getDocuments();
-                            if (snapshots.size() > 0) {
+                            if (!snapshots.isEmpty()) {
                                 emitter.onSuccess(true);
                             } else {
                                 emitter.onSuccess(false);

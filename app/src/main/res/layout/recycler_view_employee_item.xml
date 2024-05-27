@@ -65,4 +65,17 @@
         app:srcCompat="@drawable/ic_delete"
         app:tint="?colorPrimary" />
 
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/employee_photo"
+        app:layout_constraintEnd_toEndOf="@+id/employee_photo"
+        app:layout_constraintStart_toStartOf="@+id/employee_photo"
+        app:layout_constraintTop_toTopOf="@+id/employee_photo"
+        app:mk_color="?colorPrimary"
+        app:mk_type="FishSpinner" /> /
+
 </androidx.constraintlayout.widget.ConstraintLayout>

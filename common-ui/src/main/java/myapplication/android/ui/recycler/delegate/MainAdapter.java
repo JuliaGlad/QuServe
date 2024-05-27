@@ -32,6 +32,10 @@ public class MainAdapter extends ListAdapter<DelegateItem, RecyclerView.ViewHold
         delegates.get(getItemViewType(position)).onBindViewHolder(holder, getItem(position), position);
     }
 
+    public void notifyChanged() {
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         for (int i = 0; i < delegates.size(); i++) {

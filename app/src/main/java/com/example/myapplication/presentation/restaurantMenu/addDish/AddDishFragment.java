@@ -244,14 +244,14 @@ public class AddDishFragment extends Fragment {
                 }
                 break;
             case PAGE_5:
-                if (timeCooking == null){
+                if (timeCooking == null) {
                     timeCooking = "???";
                 }
                 NavHostFragment.findNavController(this)
                         .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_6, categoryId));
                 break;
             case PAGE_6:
-                if (imageUri != null){
+                if (imageUri != null) {
                     binding.loader.setVisibility(View.VISIBLE);
                     binding.buttonNext.setEnabled(false);
                     viewModel.initDishData(restaurantId, categoryId);
@@ -269,7 +269,7 @@ public class AddDishFragment extends Fragment {
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.enter_dish_name, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.name, name, InputType.TYPE_CLASS_TEXT, true, stringName -> {
-                            name  = stringName;
+                            name = stringName;
                         }))
                 });
                 break;
@@ -305,14 +305,14 @@ public class AddDishFragment extends Fragment {
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.estimated_time_cooking, 24)),
                         new EditTextDelegateItem(new EditTextModel(3, R.string.time, timeCooking, InputType.TYPE_CLASS_TEXT, true, string -> {
-                            timeCooking  = string;
+                            timeCooking = string;
                         }))
                 });
                 break;
             case PAGE_6:
                 binding.companyProgressBar.setProgress(85, true);
                 items.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_dish_photo, 24)));
-                items.add(new DishItemDelegateItem(new DishItemModel(2, null, name, weightCount, price, imageUri, null, this::initImagePicker)));
+                items.add(new DishItemDelegateItem(new DishItemModel(2, null, name, weightCount, price, imageUri, null, true, this::initImagePicker)));
                 mainAdapter.submitList(items);
                 break;
         }
@@ -325,11 +325,9 @@ public class AddDishFragment extends Fragment {
                         Intent data = result.getData();
                         if (data != null) {
                             imageUri = data.getData();
-                            List<DelegateItem> newItems = new ArrayList<>(items);
-                            newItems.remove(items.size() - 1);
-                            newItems.add(new DishItemDelegateItem(new DishItemModel(2,null, name, weightCount, price, imageUri, null, this::initImagePicker)));
-                            mainAdapter.submitList(newItems);
-                            items = newItems;
+                            DishItemModel model = (DishItemModel) items.get(items.size() - 1).content();
+                            model.setUri(imageUri);
+                            mainAdapter.notifyItemChanged(items.size() - 1);
                         }
                     }
                 });

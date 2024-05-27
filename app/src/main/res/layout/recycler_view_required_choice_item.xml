@@ -13,6 +13,7 @@
     app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?colorSurfaceContainer"
@@ -26,9 +27,10 @@
             style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="First"
+            android:textColor="@color/colorTextHint"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="First" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -16,9 +16,8 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/weight_count"
+        app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners" />
 
     <TextView
@@ -48,9 +47,9 @@
         style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/items_count"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/items_count"
+        app:layout_constraintTop_toBottomOf="@+id/dish_image"
         tools:text="444 ₽" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -119,7 +118,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="16dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/items_count"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/items_count"
         app:srcCompat="@drawable/ic_add" />
@@ -134,7 +133,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="16dp"
         android:paddingBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/items_count"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/items_count"
         app:layout_constraintTop_toTopOf="@+id/items_count"
         app:srcCompat="@drawable/baseline_remove_24" />
@@ -144,12 +143,11 @@
         style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:background="@color/colorSurfaceContainerHighest"
         android:padding="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_add"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove"
+        app:layout_constraintTop_toBottomOf="@+id/dish_image"
         tools:text="1" />
 
 

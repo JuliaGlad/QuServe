@@ -82,20 +82,11 @@ public class JoinQueueFragment extends Fragment {
                 JoinQueueModel model = ((JoinQueueState.Success)state).data;
                 Glide.with(JoinQueueFragment.this)
                         .load(model.getUri())
-                        .addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                binding.progressBar.getRoot().setVisibility(View.GONE);
-                                binding.errorLayout.getRoot().setVisibility(View.GONE);
-                                return true;
-                            }
-                        })
                         .into(binding.qrCodeImage);
+
+                binding.progressBar.getRoot().setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
+
                 binding.queueName.setText(model.getName());
                 binding.errorLayout.errorLayout.setVisibility(View.GONE);
 

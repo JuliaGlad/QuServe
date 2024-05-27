@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.becomeCook.main;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.COOK_DATA;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
 
 import android.graphics.drawable.Drawable;
@@ -35,7 +36,7 @@ public class BecomeCookFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeCookViewModel.class);
-        path = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        path = requireActivity().getIntent().getStringExtra(COOK_DATA);
         viewModel.getData(path);
     }
 
@@ -76,20 +77,11 @@ public class BecomeCookFragment extends Fragment {
 
                 Glide.with(requireView())
                         .load(model.getUri())
-                        .addListener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                                binding.errorLayout.getRoot().setVisibility(View.GONE);
-                                binding.progressLayout.getRoot().setVisibility(View.GONE);
-                                return true;
-                            }
-                        })
                         .into(binding.qrCodeImage);
+
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
+
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof BecomeCookState.Loading) {

@@ -52,6 +52,13 @@ public class RestaurantLocationDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initRecycler();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void initRecycler() {

@@ -180,8 +180,13 @@ public class RestaurantTablesRepository {
                                 .child(TABLE_QR_CODES)
                                 .child(tableId + "/" + tableId + PDF);
 
-                reference.putFile(Uri.fromFile(file)).addOnCompleteListener(task -> emitter.onComplete())
-                        .addOnFailureListener(e -> emitter.onError(new Throwable(e.getMessage())));
+                reference.putFile(Uri.fromFile(file)).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException().getMessage()));
+                    }
+                });
             });
         }
 
