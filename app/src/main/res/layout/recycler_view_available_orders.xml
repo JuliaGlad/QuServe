@@ -23,9 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/regular"
+            android:text="@string/table"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Table №" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/dishes_title"
@@ -33,9 +33,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:text="@string/dishes"
             app:layout_constraintStart_toStartOf="@+id/table_number"
-            app:layout_constraintTop_toBottomOf="@+id/table_number"
-            tools:text="Dishes:" />
+            app:layout_constraintTop_toBottomOf="@+id/table_number" />
 
         <TextView
             android:id="@+id/count"

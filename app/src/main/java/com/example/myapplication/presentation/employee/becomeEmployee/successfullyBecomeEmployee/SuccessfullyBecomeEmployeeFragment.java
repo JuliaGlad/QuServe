@@ -1,7 +1,11 @@
 package com.example.myapplication.presentation.employee.becomeEmployee.successfullyBecomeEmployee;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.WORKER;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -20,13 +24,14 @@ import com.example.myapplication.databinding.FragmentSuccessfulyBecomeEmployeeBi
 public class SuccessfullyBecomeEmployeeFragment extends Fragment {
 
     private FragmentSuccessfulyBecomeEmployeeBinding binding;
+    private String companyId;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentSuccessfulyBecomeEmployeeBinding.inflate(inflater, container, false);
         binding.infoBoxLayout.body.setText(getResources().getString(R.string.now_you_can_manage_given_to_you_companies_queues));
-        String companyId = getArguments().getString(COMPANY_ID);
+        companyId = getArguments().getString(COMPANY_ID);
         return binding.getRoot();
     }
 
@@ -38,17 +43,23 @@ public class SuccessfullyBecomeEmployeeFragment extends Fragment {
     }
 
     private void initSeeDetailsButton() {
-        binding.buttonSeeDetails.setOnClickListener(v -> {
-            requireActivity().finish();
-        });
+        binding.buttonSeeDetails.setOnClickListener(v -> finishActivity());
     }
 
     private void handleButtonBackPressed(){
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                finishActivity();
             }
         });
+    }
+
+    private void finishActivity() {
+        Intent intent = new Intent();
+        intent.putExtra(EMPLOYEE_ROLE, WORKER);
+        intent.putExtra(COMPANY_ID, companyId);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
     }
 }

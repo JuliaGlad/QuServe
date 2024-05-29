@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,18 +38,14 @@ public class JoinQueueFragment extends Fragment {
 
         binding = FragmentJoinQueueBinding.inflate(inflater, container, false);
         queueData = requireActivity().getIntent().getStringExtra(QUEUE_DATA);
-
+        viewModel.getQueueData(queueData);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (viewModel.checkUserID()) {
-            viewModel.signInAnonymously();
-        } else {
-            initUi();
-        }
+        initUi();
     }
 
     private void initOkButton() {

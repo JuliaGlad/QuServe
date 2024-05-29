@@ -5,9 +5,8 @@
     android:id="@+id/item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="20dp"
-    android:layout_marginEnd="20dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="10dp"
     android:background="@drawable/dialog_background"
     android:padding="16dp">
 
@@ -15,8 +14,9 @@
         android:id="@+id/dish_image"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:minHeight="140dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
+        app:layout_constraintBottom_toTopOf="@+id/ready_dish_widget"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/weight_count"
         app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners" />
@@ -24,13 +24,13 @@
     <TextView
         android:id="@+id/dish_name"
         style="@style/TextAppearance.Material3.BodyLarge.Medium.QuServe"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="3dp"
-        android:text="WOK-Noodles"
-        app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/weight_count" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/weight_count"
+        app:layout_constraintTop_toBottomOf="@+id/weight_count"
+        tools:text="WOK-Noodles" />
 
     <TextView
         android:id="@+id/weight_count"
@@ -38,41 +38,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="100g"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="100g" />
 
-    <TextView
-        android:id="@+id/price"
-        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/price"
-        app:layout_constraintBottom_toBottomOf="@+id/button_accept"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button_accept" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        app:layout_constraintStart_toStartOf="@+id/weight_count"
+        app:layout_constraintTop_toBottomOf="@+id/number_dish_title"
         app:spanCount="2" />
 
     <ImageView
         android:id="@+id/add_item_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view_toppings"
-        app:layout_constraintStart_toEndOf="@+id/dish_image"
+        app:layout_constraintStart_toStartOf="@+id/weight_count"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"
         app:srcCompat="@drawable/ic_add" />
 
@@ -82,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"
@@ -103,52 +91,44 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_marginBottom="12dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/ready_dish_widget"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/remove_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings"
         app:spanCount="6" />
 
-    <TextView
-        android:id="@+id/price_value"
-        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/ready_dish_widget"
+        layout="@layout/layout_ready_dish_widget"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:text="444"
-        app:layout_constraintBottom_toBottomOf="@+id/price"
-        app:layout_constraintStart_toEndOf="@+id/price"
-        app:layout_constraintTop_toTopOf="@+id/price" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_accept"
-        style="@style/ThemeOverlay.Material3.Button.Tonal.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:foreground="?attr/selectableItemBackground"
-        android:text="@string/done"
-        app:layout_constraintEnd_toEndOf="@+id/recycler_view_to_remove"
-        app:layout_constraintTop_toBottomOf="@+id/number_title" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/number_title"
-        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Bold.QuServe"
+        android:id="@+id/number_dish_title"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/number_of_dish"
-        app:layout_constraintStart_toStartOf="@+id/remove_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
+        app:layout_constraintStart_toStartOf="@+id/dish_name"
+        app:layout_constraintTop_toBottomOf="@+id/dish_name" />
 
     <TextView
-        android:id="@+id/dish_number"
-        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Bold.QuServe"
+        android:id="@+id/number_dish"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@+id/number_title"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove"
-        tools:text="1" />
+        app:layout_constraintStart_toEndOf="@+id/number_dish_title"
+        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        tools:text="2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

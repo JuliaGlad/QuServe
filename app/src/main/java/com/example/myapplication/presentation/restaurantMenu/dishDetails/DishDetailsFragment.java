@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -117,11 +118,21 @@ public class DishDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setRequiredChoiceAdapter();
         setToppingAdapter();
+        handleBackButtonPressed();
         setupObserves();
         initSaveButton();
         initAddRequiredChoiceButton();
         initRemoveIngredients();
         initChangePhoto();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
     }
 
     private void initAddRequiredChoiceButton() {
@@ -213,7 +224,7 @@ public class DishDetailsFragment extends Fragment {
                 intent.putExtra(DISH_WEIGHT_OR_COUNT, weight);
                 intent.putExtra(DISH_PRICE, price);
 
-                if (imageUri == Uri.EMPTY){
+                if (imageUri == Uri.EMPTY) {
                     imageUri = imagePrevious;
                 }
 
@@ -282,19 +293,18 @@ public class DishDetailsFragment extends Fragment {
         for (int i = 0; i < variants.size(); i++) {
             int index = i;
             String choice = variants.get(i);
-            choiceItemModels.add(new RequiredChoiceItemModel(index, choice, false, () -> {
-                for (int j = 0; j < requiredChoiceItems.size(); j++) {
-                    if (requiredChoiceItems.get(j) instanceof RequiredChoiceItemModel) {
-                        RequiredChoiceItemModel model = (RequiredChoiceItemModel) requiredChoiceItems.get(j).content();
-                        if (model.isChosen()) {
-                            model.setChosen(false);
-                            requiredChoiceAdapter.notifyItemChanged(j);
-                        }
+            boolean isChosen = index == 0;
+            choiceItemModels.add(new RequiredChoiceItemModel(index, choice, isChosen, () -> {
+                for (int j = 0; j < choiceItemModels.size(); j++) {
+                    RequiredChoiceItemModel model = choiceItemModels.get(j);
+                    if (model.isChosen()) {
+                        model.setChosen(false);
+                        adapter.notifyItemChanged(j);
                     }
                 }
-                CategoryItemModel model = (CategoryItemModel) requiredChoiceItems.get(index).content();
+                RequiredChoiceItemModel model = choiceItemModels.get(index);
                 model.setChosen(true);
-                requiredChoiceAdapter.notifyItemChanged(index);
+                adapter.notifyItemChanged(index);
             }));
         }
 
@@ -428,7 +438,7 @@ public class DishDetailsFragment extends Fragment {
         requiredChoiceAdapter.submitList(requiredChoiceItems);
     }
 
-    public void openAddRequiredChoiceActivity(String categoryId, String dishId){
+    public void openAddRequiredChoiceActivity(String categoryId, String dishId) {
         Intent intent = new Intent(requireActivity(), AddRequiredChoiceActivity.class);
         intent.putExtra(PAGE_KEY, PAGE_1);
         intent.putExtra(CATEGORY_ID, categoryId);

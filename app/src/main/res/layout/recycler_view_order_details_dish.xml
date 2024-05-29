@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
     android:layout_marginEnd="20dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp"
     android:background="@drawable/dialog_background"
     android:padding="16dp">
 
@@ -16,9 +16,9 @@
         android:layout_width="140dp"
         android:layout_height="140dp"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_to_remove"
+        app:layout_constraintBottom_toTopOf="@+id/price"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/weight_count"
+        app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners" />
 
     <TextView
@@ -48,31 +48,29 @@
         style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/price"
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number_title" />
+        tools:text="444" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dish_image"
-        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        app:layout_constraintTop_toBottomOf="@+id/number_dish_title"
         app:spanCount="2" />
 
     <ImageView
         android:id="@+id/add_item_icon"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/recycler_view_toppings"
-        app:layout_constraintStart_toEndOf="@+id/dish_image"
+        app:layout_constraintStart_toStartOf="@+id/weight_count"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"
         app:srcCompat="@drawable/ic_add" />
 
@@ -82,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/add_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"
@@ -103,41 +101,53 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/remove_item_icon"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view_toppings"
         app:spanCount="6" />
 
     <TextView
-        android:id="@+id/price_value"
+        android:id="@+id/number_dish_title"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/number_of_dish"
+        app:layout_constraintStart_toStartOf="@+id/remove_item_icon"
+        app:layout_constraintTop_toBottomOf="@+id/dish_name" />
+
+    <TextView
+        android:id="@+id/number"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/number_dish_title"
+        app:layout_constraintStart_toEndOf="@+id/number_dish_title"
+        app:layout_constraintTop_toTopOf="@+id/number_dish_title"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/rubles"
         style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/price"
         app:layout_constraintStart_toEndOf="@+id/price"
-        app:layout_constraintTop_toTopOf="@+id/price"
-        tools:text="444" />
+        android:text="@string/rubles" />
 
     <TextView
-        android:id="@+id/number_title"
-        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Bold.QuServe"
+        android:id="@+id/sht"
+        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Medium.QuServe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/number_of_dish"
-        app:layout_constraintStart_toStartOf="@+id/remove_item_icon"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
-
-    <TextView
-        android:id="@+id/dish_number"
-        style="@style/TextAppearance.Material3.BodySmall.ExtraSmall.Bold.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@+id/number_title"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove"
-        tools:text="1" />
+        android:layout_marginStart="2dp"
+        android:text="@string/count"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintStart_toEndOf="@+id/number"
+        app:layout_constraintTop_toTopOf="@+id/number" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

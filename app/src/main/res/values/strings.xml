@@ -408,7 +408,7 @@
     <string name="about_us_text_1">QuServe - сервис, который решает проблему неудобного обслуживания в популярных общественных местах.</string>
     <string name="abour_us_text_2">1 . Умная очередь для физических лиц и компаний. Приложение позволяте людям не стоять в живой очереди, а также на основе опыта предыдущих людей рассчитвает примерное время ожидания.</string>
     <string name="about_us_text_3">2. Умное обслуживание ресторанов и кафе. Приложение упрощает процесс ожидание и делает его более удобным и надежным, как для посетителей, так и для сотрудников ресторана.</string>
-    <string name="for_who_is_your_account">For who is your account?</string>
+    <string name="for_who_is_your_account">For who your account is?</string>
     <string name="you_don_t_have_any_employees_yet">You don`t have any employees yet!</string>
     <string name="you_don_t_have_any_tables_yet">You don`t have any tables yet</string>
     <string name="you_don_t_have_any_queues_yet">You don`t have any queues yet!</string>
@@ -429,4 +429,6 @@
     <string name="wait_until_anybody_creates_an_order_and_then_come_back">Wait until anybody creates an order and then come back!</string>
     <string name="you_don_t_have_any_dishes_in_this_category_yet">You don`t have any dishes in this category yet!</string>
     <string name="manages_nassigned_queues">Manages \nassigned queues</string>
+    <string name="rubles" translatable="false">₽</string>
+    <string name="count"> </string>
 </resources>

@@ -7,15 +7,23 @@ public class RequireChoiceOrderModel {
     int id;
     String name;
     boolean isDefault;
-    String chosen;
+    boolean isChosen;
     ButtonItemListener listener;
 
-    public RequireChoiceOrderModel(int id, String name, boolean isDefault, String chosen, ButtonItemListener  listener) {
+    public RequireChoiceOrderModel(int id, String name, boolean isDefault, boolean isChosen, ButtonItemListener  listener) {
         this.id = id;
         this.name = name;
         this.isDefault = isDefault;
-        this.chosen = chosen;
+        this.isChosen = isChosen;
         this.listener = listener;
+    }
+
+    public void setChosen(boolean chosen) {
+        isChosen = chosen;
+    }
+
+    public boolean isChosen() {
+        return isChosen;
     }
 
     public boolean compareTo(RequireChoiceOrderModel other){

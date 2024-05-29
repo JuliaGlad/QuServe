@@ -16,7 +16,7 @@
         android:id="@+id/layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?colorSurfaceContainer"
+        android:background="@color/colorDisabled"
         android:paddingStart="50dp"
         android:paddingTop="16dp"
         android:paddingEnd="50dp"
@@ -27,7 +27,7 @@
             style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorTextHint"
+            android:textColor="@color/colorTextDisabled"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="First" />

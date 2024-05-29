@@ -77,12 +77,13 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull HomeBasicUserActionModel homeBasicUserActionModel) {
-                        if (!homeBasicUserActionModel.isCompanyOwner() && homeBasicUserActionModel.isParticipateInQueue().equals(NOT_PARTICIPATE_IN_QUEUE) && homeBasicUserActionModel.isOwnQueue().equals(NOT_QUEUE_OWNER)) {
+                        if (!homeBasicUserActionModel.isCompanyOwner() && homeBasicUserActionModel.isParticipateInQueue().equals(NOT_PARTICIPATE_IN_QUEUE) && homeBasicUserActionModel.isOwnQueue().equals(NOT_QUEUE_OWNER) && homeBasicUserActionModel.isRestaurantVisitor().equals(NOT_RESTAURANT_VISITOR)) {
                             _state.postValue(new HomeBasicUserState.Success(null));
                         } else {
                             isCompanyOwner = homeBasicUserActionModel.isCompanyOwner();
                             isQueueParticipant = homeBasicUserActionModel.isParticipateInQueue();
                             isRestaurantVisitor = homeBasicUserActionModel.isRestaurantVisitor();
+                            Log.i("Restik visitor viewmodel", isRestaurantVisitor);
                             isQueueOwner = homeBasicUserActionModel.isOwnQueue();
                             getCompanies();
                         }
@@ -129,6 +130,7 @@ public class HomeBasisUserViewModel extends ViewModel {
     }
 
     public void getRestaurantByVisitorPath() {
+        Log.d("Get restaurantVisitor", isRestaurantVisitor);
         if (!isRestaurantVisitor.equals(NOT_RESTAURANT_VISITOR)) {
             ProfileDI.getActiveRestaurantOrderUseCase.invoke()
                     .flatMap(path -> RestaurantOrderDI.getOrderModelByPathUseCase.invoke(path))
@@ -141,6 +143,7 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onSuccess(@NonNull OrderModel orderModel) {
+                            Log.d("RestaurantSuccess", "success" + " " + orderModel.getRestaurantName());
                             restaurantVisitor = new QueueBasicUserHomeModel(
                                     isRestaurantVisitor,
                                     orderModel.getRestaurantName()
@@ -150,7 +153,6 @@ public class HomeBasisUserViewModel extends ViewModel {
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            Log.d("Error get restik", e.getMessage() + " " + isRestaurantVisitor);
                             _state.postValue(new HomeBasicUserState.Error());
                         }
                     });
@@ -176,7 +178,7 @@ public class HomeBasisUserViewModel extends ViewModel {
                                     isQueueParticipant,
                                     queueModel.getName()
                             );
-                            _state.postValue(new HomeBasicUserState.Success(new HomeBasicUserModel(companies, participantQueue, ownerQueue)));
+                            _state.postValue(new HomeBasicUserState.Success(new HomeBasicUserModel(companies, restaurantVisitor, participantQueue, ownerQueue)));
                         }
 
                         @Override
@@ -185,7 +187,7 @@ public class HomeBasisUserViewModel extends ViewModel {
                         }
                     });
         } else {
-            _state.postValue(new HomeBasicUserState.Success(new HomeBasicUserModel(companies, participantQueue, ownerQueue)));
+            _state.postValue(new HomeBasicUserState.Success(new HomeBasicUserModel(companies, restaurantVisitor, participantQueue, ownerQueue)));
         }
     }
 

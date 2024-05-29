@@ -1,6 +1,9 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
 import android.app.Activity;
@@ -12,12 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.example.myapplication.databinding.FragmentOrderCartBinding;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
@@ -38,6 +44,7 @@ public class OrderCartFragment extends Fragment {
     private FragmentOrderCartBinding binding;
     private final List<CartDishItemModel> items = new ArrayList<>();
     private final CartDishItemAdapter cartDishItemAdapter = new CartDishItemAdapter();
+    private ActivityResultLauncher<Intent> launcherCreated;
     private String restaurantId, path;
 
     @Override
@@ -47,6 +54,19 @@ public class OrderCartFragment extends Fragment {
         restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         path = requireActivity().getIntent().getStringExtra(TABLE_PATH);
         viewModel.getCartItems(restaurantId);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcherCreated = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intent = new Intent();
+                        intent.putExtra(IS_DONE, true);
+                        requireActivity().setResult(RESULT_OK);
+                        requireActivity().finish();
+                    }
+                });
     }
 
     @Override
@@ -127,7 +147,7 @@ public class OrderCartFragment extends Fragment {
 
         viewModel.isOrdered.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                ((OrderCartActivity) requireActivity()).openCreatedActivity();
+                ((OrderCartActivity) requireActivity()).openCreatedActivity(launcherCreated);
             }
         });
     }
@@ -148,9 +168,6 @@ public class OrderCartFragment extends Fragment {
     private void getDishData(ImageTaskNameModel currentUri, CartDishModel current, List<CartDishItemModel> items, int i) {
         String price = current.getPrice();
         int dishPrice = Integer.parseInt(price);
-        for (VariantCartModel cartModel : current.getToppings()) {
-            dishPrice += Integer.parseInt(cartModel.getPrice());
-        }
         String dishId = current.getDishId();
         viewModel.increasePrice(dishPrice * Integer.parseInt(current.getAmount()));
         addToCartItems(currentUri, current, items, i, dishId, dishPrice);
@@ -177,22 +194,46 @@ public class OrderCartFragment extends Fragment {
                     if (Integer.parseInt(amountNew) == 0) {
                         viewModel.removeItemFromCart(dishId);
                         viewModel.decreasePrice(dishPrice);
-                        for (int j = 0; j < items.size(); j++) {
-                            if (items.get(j).getDishId().equals(current.getDishId())) {
-                                items.remove(j);
-                                cartDishItemAdapter.notifyItemRemoved(j);
-                                if (cartDishItemAdapter.getCurrentList().isEmpty()) {
-                                    binding.emptyCartLayout.getRoot().setVisibility(View.VISIBLE);
-                                }
-                                break;
-                            }
-                        }
+                        removeFromCart(current, items, dishId);
                     } else {
                         viewModel.decrementAmount(current);
                         viewModel.decreasePrice(dishPrice);
                     }
                 }
         ));
+    }
+
+    private void removeFromCart(CartDishModel current, List<CartDishItemModel> items, String dishId) {
+        int toRemoveHash = current.getToRemove().hashCode();
+        int requireChoiceHash = current.getRequiredChoices().hashCode();
+
+        List<VariantCartModel> toppings = current.getToppings();
+        List<String> toppingsNames = new ArrayList<>();
+        for (VariantCartModel currentTopping : toppings) {
+            toppingsNames.add(currentTopping.getName());
+        }
+        int toppingsHash = toppingsNames.hashCode();
+
+        for (int j = 0; j < items.size(); j++) {
+            CartDishItemModel dto = items.get(j);
+            List<String> currentNames = new ArrayList<>();
+            for (VariantCartModel currentTopping : dto.getTopping()) {
+                currentNames.add(currentTopping.getName());
+            }
+            int hashTopping = currentNames.hashCode();
+            int hashRequire = dto.getRequiredChoices().hashCode();
+            int hashRemove = dto.getToRemove().hashCode();
+
+            if (dto.getDishId().equals(dishId) && requireChoiceHash == hashRequire && toRemoveHash == hashRemove && toppingsHash == hashTopping) {
+                items.remove(j);
+                cartDishItemAdapter.notifyItemRemoved(j);
+                if (cartDishItemAdapter.getCurrentList().isEmpty()){
+                    binding.emptyCartLayout.getRoot().setVisibility(View.VISIBLE);
+                    initOpenMenuButton();
+                }
+                break;
+            }
+        }
     }
 
     private void initOrderButton(List<CartDishItemModel> items) {

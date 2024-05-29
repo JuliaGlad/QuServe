@@ -49,7 +49,6 @@ import myapplication.android.ui.recycler.ui.items.items.optionImageButton.Option
 
 public class BasicUserServiceFragment extends Fragment {
 
-    private BasicUserViewModel viewModel;
     private FragmentBasicUserServiceBinding binding;
     private ActivityResultLauncher<ScanOptions> restaurantLauncher;
     private ActivityResultLauncher<Intent> employeeLauncher;
@@ -143,7 +142,7 @@ public class BasicUserServiceFragment extends Fragment {
                 new OptionImageButtonModel(4, R.drawable.become_employee_background, getResources().getString(R.string.become_employee), () -> {
                     if (requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, ANONYMOUS).equals(ANONYMOUS)) {
                         NeedAccountDialogFragment dialogFragment = new NeedAccountDialogFragment();
-                        dialogFragment.show(getActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
                     } else {
                         Intent intent = new Intent(requireActivity(), BecomeEmployeeOptionsActivity.class);
                         employeeLauncher.launch(intent);

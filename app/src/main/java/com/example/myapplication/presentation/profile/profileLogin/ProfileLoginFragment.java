@@ -29,9 +29,6 @@ import com.example.myapplication.presentation.profile.loggedProfile.basicUser.Ba
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
-/*
- * @author j.gladkikh
- */
 public class ProfileLoginFragment extends Fragment {
 
     private FragmentProfileBinding binding;

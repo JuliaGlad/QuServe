@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders;
 
+import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ public class AvailableCookOrdersActivity extends AppCompatActivity {
     public void openOrderDetailsActivity(String path){
         Intent intent = new Intent(this, OrderDetailsActivity.class);
         intent.putExtra(PATH, path);
+        intent.putExtra(STATE, COOK);
         startActivity(intent);
     }
 }

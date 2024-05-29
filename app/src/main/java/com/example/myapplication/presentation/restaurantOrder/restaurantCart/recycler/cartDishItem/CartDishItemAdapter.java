@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart.recycler.cartDishItem;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -47,11 +49,10 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
 
         void bind(CartDishItemModel models) {
             String firstDishPrice = models.price;
-            int totalFirstPrice = Integer.parseInt(models.price) * Integer.parseInt(models.amount);
             binding.dishName.setText(models.name);
             binding.weightCount.setText(models.weight);
-            binding.itemsCount.setText(models.amount);
-            binding.price.setText(String.valueOf(totalFirstPrice).concat("₽"));
+            binding.layoutAddWidget.itemsCount.setText(models.amount);
+            binding.layoutAddWidget.price.setText(String.valueOf(Integer.parseInt(models.price) * Integer.parseInt(models.amount)).concat("₽"));
 
             if (models.task != null){
                 models.task.addOnCompleteListener(task -> {
@@ -67,20 +68,20 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
             initToRemoveRecycler(models.toRemove);
             initToppingsRecycler(models.topping);
 
-            binding.buttonAdd.setOnClickListener(v -> {
+            binding.layoutAddWidget.buttonAdd.setOnClickListener(v -> {
+                int currentTotal = Integer.parseInt(firstDishPrice) * Integer.parseInt(models.amount);
+                models.price = String.valueOf(currentTotal + Integer.parseInt(firstDishPrice));
                 models.amount = String.valueOf(Integer.parseInt(models.amount) + 1);
-                String newPrice = String.valueOf(totalFirstPrice + Integer.parseInt(firstDishPrice));
-                models.price = newPrice;
-                binding.price.setText(models.price.concat("₽"));
-                binding.itemsCount.setText(models.amount);
+                binding.layoutAddWidget.price.setText(models.price.concat("₽"));
+                binding.layoutAddWidget.itemsCount.setText(models.amount);
                 models.addListener.onClick();
             });
-            binding.buttonRemove.setOnClickListener(v -> {
+            binding.layoutAddWidget.buttonRemove.setOnClickListener(v -> {
+                int currentTotal = Integer.parseInt(firstDishPrice) * Integer.parseInt(models.amount);
+                models.price = String.valueOf(currentTotal - Integer.parseInt(firstDishPrice));
                 models.amount = String.valueOf(Integer.parseInt(models.amount) - 1);
-                String newPrice = String.valueOf(Integer.parseInt(models.price) - Integer.parseInt(firstDishPrice));
-                models.price = newPrice;
-                binding.price.setText(models.price.concat("₽"));
-                binding.itemsCount.setText(models.amount);
+                binding.layoutAddWidget.price.setText(models.price.concat("₽"));
+                binding.layoutAddWidget.itemsCount.setText(models.amount);
                 models.removeListener.onClick(models.amount);
             });
         }
@@ -89,14 +90,18 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
             TextItemAdapter removeAdapter = new TextItemAdapter();
             List<TextItemModel> listRemoveModels  = new ArrayList<>();
 
-            for (int i = 0; i < toRemove.size(); i++) {
-                listRemoveModels.add(new TextItemModel(
-                        i,
-                        toRemove.get(i),
-                        () -> {
+            if (!toRemove.isEmpty()) {
+                for (int i = 0; i < toRemove.size(); i++) {
+                    listRemoveModels.add(new TextItemModel(
+                            i,
+                            toRemove.get(i),
+                            () -> {
 
-                        }
-                ));
+                            }
+                    ));
+                }
+            } else {
+                binding.removeItemIcon.setVisibility(View.GONE);
             }
 
             binding.recyclerViewToRemove.setAdapter(removeAdapter);
@@ -107,14 +112,18 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
             TextItemAdapter toppingsAdapter = new TextItemAdapter();
             List<TextItemModel> toppings = new ArrayList<>();
 
-            for (int i = 0; i < topping.size(); i++) {
-                toppings.add(new TextItemModel(
-                        i,
-                        topping.get(i).getName(),
-                        () -> {
+            if (!topping.isEmpty()) {
+                for (int i = 0; i < topping.size(); i++) {
+                    toppings.add(new TextItemModel(
+                            i,
+                            topping.get(i).getName(),
+                            () -> {
 
-                        }
-                ));
+                            }
+                    ));
+                }
+            } else {
+                binding.addItemIcon.setVisibility(View.GONE);
             }
 
             binding.recyclerViewToppings.setAdapter(toppingsAdapter);

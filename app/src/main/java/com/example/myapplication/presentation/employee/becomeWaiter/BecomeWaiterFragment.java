@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.employee.becomeWaiter;
 
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
+import static com.example.myapplication.presentation.utils.Utils.WAITER_DATA;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,7 +38,7 @@ public class BecomeWaiterFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeWaiterViewModel.class);
-        waiterPath = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        waiterPath = requireActivity().getIntent().getStringExtra(WAITER_DATA);
         viewModel.getRestaurantName(waiterPath);
     }
 

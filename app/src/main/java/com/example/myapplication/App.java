@@ -1,11 +1,7 @@
-package com.example.myapplication.app;
-
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+package com.example.myapplication;
 
 import android.app.Application;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.myapplication.data.db.LocalDatabase;

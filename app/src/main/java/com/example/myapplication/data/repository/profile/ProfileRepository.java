@@ -32,16 +32,12 @@ import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
+ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
- import androidx.core.content.ContextCompat;
 
- import com.example.myapplication.app.App;
+ import com.example.myapplication.App;
 import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.dto.user.AnonymousUserDto;
 import com.example.myapplication.data.dto.user.HistoryQueueDto;
@@ -71,9 +67,12 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
-
     public boolean isAnonymous(){
-        return service.auth.getCurrentUser().isAnonymous();
+        boolean isAnonymous = false;
+        if (service.auth.getCurrentUser() != null){
+            isAnonymous = service.auth.getCurrentUser().isAnonymous();
+        }
+        return isAnonymous;
     }
 
     public Single<AnonymousUserDto> getAnonymousUser() {
@@ -184,15 +183,21 @@ public class ProfileRepository {
 
     public Completable signInAnonymously() {
         return Completable.create(emitter -> {
-            service.auth.signInAnonymously().addOnCompleteListener(task -> {
-                String userId = task.getResult().getUser().getUid();
-                AnonymousUserProvider.insertUser(new AnonymousUserDto(
-                        userId,
-                        NOT_PARTICIPATE_IN_QUEUE,
-                        NOT_RESTAURANT_VISITOR
-                ));
+            if (service.auth.getCurrentUser() == null && AnonymousUserProvider.getUser() == null) {
+                service.auth.signInAnonymously().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String userId = task.getResult().getUser().getUid();
+                        AnonymousUserProvider.insertUser(new AnonymousUserDto(
+                                userId,
+                                NOT_PARTICIPATE_IN_QUEUE,
+                                NOT_RESTAURANT_VISITOR
+                        ));
+                    }
+                    emitter.onComplete();
+                });
+            } else {
                 emitter.onComplete();
-            });
+            }
         });
     }
 
@@ -449,12 +454,13 @@ public class ProfileRepository {
 
     public Completable addActiveOrder(String path) {
         return Completable.create(emitter -> {
-            if (service.auth.getCurrentUser().isAnonymous()) {
+            if (!service.auth.getCurrentUser().isAnonymous()) {
                 service.fireStore
                         .collection(USER_LIST)
                         .document(service.auth.getCurrentUser().getUid())
                         .update(IS_RESTAURANT_VISITOR, path).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
+                                UserDatabaseProvider.updateRestaurantVisitor(path);
                                 emitter.onComplete();
                             } else {
                                 emitter.onError(new Throwable(task.getException()));

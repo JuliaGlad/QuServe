@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.employee.becomeCook.success;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -49,16 +50,25 @@ public class SuccessfullyBecomeCookFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                finishActivity();
             }
         });
     }
 
     private void initSeeDetails() {
         binding.buttonSeeDetails.setOnClickListener(v -> {
-            requireActivity().finish();
+           finishActivity();
         });
     }
+
+    private void finishActivity() {
+        Intent intent = new Intent();
+        intent.putExtra(EMPLOYEE_ROLE, COOK);
+        intent.putExtra(COMPANY_ID, companyId);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
+    }
+
 
     private void initInfoBox() {
         binding.infoBoxLayout.body.setText(getString(R.string.now_you_can_view_active_orders_and_easily_monitor_the_preparation_of_dishes));

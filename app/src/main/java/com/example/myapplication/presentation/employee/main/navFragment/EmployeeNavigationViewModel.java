@@ -75,6 +75,7 @@ public class EmployeeNavigationViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull Boolean aBoolean) {
+                        Log.d("Employee", aBoolean + "");
                         _isEmployee.postValue(aBoolean);
                     }
 

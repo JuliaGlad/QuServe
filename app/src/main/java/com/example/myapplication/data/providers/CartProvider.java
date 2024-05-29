@@ -1,8 +1,6 @@
 package com.example.myapplication.data.providers;
 
-import android.util.Log;
-
-import com.example.myapplication.app.App;
+import com.example.myapplication.App;
 import com.example.myapplication.data.db.dao.CartDao;
 import com.example.myapplication.data.db.entity.CartEntity;
 import com.example.myapplication.data.dto.restaurant.CartDishDto;
@@ -116,19 +114,29 @@ public class CartProvider {
         CartEntity entity = cartDao.getCart();
         List<CartDishDto> cartDtos = entity.dtos;
 
-        int toppingsHash = dishDto.getToppings().hashCode();
         int toRemoveHash = dishDto.getToRemove().hashCode();
         int requireChoiceHash = dishDto.getRequiredChoices().hashCode();
         String dishId = dishDto.getDishId();
 
+        List<VariantCartModel> toppings = dishDto.getToppings();
+        List<String> toppingsNames = new ArrayList<>();
+        for (VariantCartModel currentTopping : toppings) {
+            toppingsNames.add(currentTopping.getName());
+        }
+        int toppingsHash = toppingsNames.hashCode();
+
         for (CartDishDto dto : cartDtos) {
-            if (dto.getDishId().equals(dishId) && requireChoiceHash == dto.getRequiredChoices().hashCode()
-                    && toRemoveHash == dto.getToRemove().hashCode() && toppingsHash == dto.getToppings().hashCode()) {
+            List<String> currentNames = new ArrayList<>();
+            for (VariantCartModel current : dto.getToppings()) {
+                currentNames.add(current.getName());
+            }
+            int hashTopping = currentNames.hashCode();
+            int hashRequire = dto.getRequiredChoices().hashCode();
+            int hashRemove = dto.getToRemove().hashCode();
+
+            if (dto.getDishId().equals(dishId) && requireChoiceHash == hashRequire && toRemoveHash == hashRemove && toppingsHash == hashTopping) {
                 int amount = Integer.parseInt(dto.getAmount()) - 1;
                 dto.setAmount(String.valueOf(amount));
-                if (amount == 0){
-                    cartDtos.remove(dto);
-                }
                 cartDao.update(entity);
                 break;
             }

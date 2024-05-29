@@ -2,6 +2,8 @@ package com.example.myapplication.presentation.common.orderDetails;
 
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -27,11 +29,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderDetailsViewModel extends ViewModel {
     private String orderId, totalPrice;
+
     private final MutableLiveData<OrderDetailsState> _state = new MutableLiveData<>(new OrderDetailsState.Loading());
     LiveData<OrderDetailsState> state = _state;
 
     public void getOrder(String path, String type) {
-
         List<OrderDetailsDishModel> dishes = new ArrayList<>();
         List<OrderDetailsDishUseCaseModel> models = new ArrayList<>();
 

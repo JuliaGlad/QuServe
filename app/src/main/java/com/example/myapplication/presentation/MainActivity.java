@@ -9,10 +9,12 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -94,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void openOrderDetailsActivity(String path){
         Intent intent = new Intent(this, OrderDetailsActivity.class);
+        Log.d("Path", path);
         intent.putExtra(PATH, path);
+        intent.putExtra(STATE, VISITOR);
         startActivity(intent);
     }
 

@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.example.myapplication.presentation.dialogFragments.ingredientsToRemov
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.requiredChoice.RequiredChoiceAdapter;
+import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.requiredChoice.RequiredChoiceItemModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.topping.ToppingDelegate;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
@@ -88,7 +90,14 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
         cartLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        requireActivity().finish();
+                        if (result.getData() != null){
+                            Log.i("Data from dish details", "got");
+                            Intent intent = new Intent();
+                            intent.putExtra(IS_DONE, true);
+                            requireActivity().setResult(RESULT_OK, intent);
+                        }else {
+                            requireActivity().finish();
+                        }
                     }
                 });
     }
@@ -227,6 +236,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     private void initRequiredChoiceRecycler(List<RequiredChoiceOrderDishDetailsModel> models) {
         if (models != null && !models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
+                int indexI = i;
                 RequiredChoiceOrderDishDetailsModel current = models.get(i);
                 RequiredChoiceOrderAdapter adapter = new RequiredChoiceOrderAdapter();
 
@@ -234,18 +244,29 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
 
                 for (int j = 0; j < current.getVariantsName().size(); j++) {
                     String choice = current.getVariantsName().get(j);
-
+                    int index = j;
                     boolean isDefault = false;
+                    boolean isChosen = false;
                     if (j == 0) {
-                        chosenRequireChoices[j] = choice;
+                        chosenRequireChoices[indexI] = choice;
+                        isChosen = true;
                         isDefault = true;
                     }
-                    int index = i;
-                    choiceItemModels.add(new RequireChoiceOrderModel(i, choice, isDefault, chosenRequireChoices[i], () -> {
-                        chosenRequireChoices[index] = choice;
+
+                    choiceItemModels.add(new RequireChoiceOrderModel(i, choice, isDefault, isChosen, () -> {
+                        for (int k = 0; k < choiceItemModels.size(); k++) {
+                            RequireChoiceOrderModel model = choiceItemModels.get(k);
+                            if (model.isChosen()) {
+                                model.setChosen(false);
+                                adapter.notifyItemChanged(k);
+                            }
+                        }
+                        chosenRequireChoices[indexI] = choice;
+                        RequireChoiceOrderModel model = choiceItemModels.get(index);
+                        model.setChosen(true);
+                        adapter.notifyItemChanged(index);
                     }));
                 }
-
                 requiredChoiceItems.add(new RequiredChoiceOrderHeaderDelegateItem(new RequiredChoiceOrderHeaderModel(choiceItemModels.size(), current.getName())));
                 requiredChoiceItems.add(new HorizontalRecyclerDelegateItem(new HorizontalRecyclerModel(i + 1, choiceItemModels, adapter)));
             }

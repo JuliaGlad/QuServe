@@ -64,13 +64,11 @@ public class StartWorkFragment extends Fragment {
             if (name instanceof StartWorkState.Success){
                 restaurantName = ((StartWorkState.Success)name).data;
                 binding.restaurantName.setText(restaurantName);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
             } else if (name instanceof StartWorkState.Loading){
-
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (name instanceof StartWorkState.Error){
                 binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
-                binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-                    viewModel.getRestaurantName(restaurantId);
-                });
             }
         });
 
@@ -81,7 +79,7 @@ public class StartWorkFragment extends Fragment {
                 bundle.putString(COMPANY_ID, restaurantId);
                 bundle.putString(RESTAURANT_NAME, restaurantName);
 
-                getActivity().getSupportFragmentManager()
+                requireActivity().getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                         .commit();

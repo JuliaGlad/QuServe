@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,10 +98,9 @@ public class MainWaiterFragment extends Fragment {
     }
 
     private void setupObserves() {
-
         viewModel.haveOrders.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null){
-                if (aBoolean) {
+                if (!aBoolean) {
                     StopWaiterWorkDialogFragment dialogFragment = new StopWaiterWorkDialogFragment(restaurantId, locationId);
                     dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_WAITER_WORK_DIALOG");
                     dialogFragment.onDialogDismissedListener(bundle -> {
@@ -126,7 +126,7 @@ public class MainWaiterFragment extends Fragment {
                 MainWaiterStateModel model = ((MainWaiterState.Success) state).data;
                 binding.restaurantName.setText(model.getRestaurantName());
                 initRecycler(model.getDishes());
-
+                binding.progressBar.getRoot().setVisibility(View.GONE);
             } else if (state instanceof MainWaiterState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof MainWaiterState.Error) {
@@ -138,6 +138,9 @@ public class MainWaiterFragment extends Fragment {
         viewModel.added.observe(getViewLifecycleOwner(), mainWaiterStateModel -> {
             if (mainWaiterStateModel != null) {
                 int index = items.size();
+                if (items.isEmpty()){
+                    binding.constraintLayout.setVisibility(View.GONE);
+                }
                 addWaiterItem(items, index, mainWaiterStateModel);
                 adapter.notifyItemInserted(index);
             }
@@ -152,12 +155,15 @@ public class MainWaiterFragment extends Fragment {
     }
 
     private void initRecycler(List<WaiterReadyDishesModel> models) {
-        for (int i = 0; i < models.size(); i++) {
-            WaiterReadyDishesModel current = models.get(i);
-            addWaiterItem(items, i, current);
+        if (!models.isEmpty()) {
+            for (int i = 0; i < models.size(); i++) {
+                WaiterReadyDishesModel current = models.get(i);
+                addWaiterItem(items, i, current);
+            }
+            adapter.submitList(items);
+        } else {
+            binding.constraintLayout.setVisibility(View.VISIBLE);
         }
-        adapter.submitList(items);
-        binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
     private void addWaiterItem(List<WaiterItemModel> items, int index, WaiterReadyDishesModel mainWaiterStateModel) {

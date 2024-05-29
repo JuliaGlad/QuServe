@@ -22,6 +22,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER_QR_CODE;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.common.EmployeeDto;
 import com.example.myapplication.data.dto.restaurant.EmployeeRestaurantDto;

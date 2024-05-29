@@ -46,8 +46,8 @@ public class RequiredChoiceAdapter extends ListAdapter<RequiredChoiceItemModel, 
                 binding.layout.setBackgroundColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorPrimaryContainer, itemView.getContext().getTheme()));
                 binding.variantName.setTextColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorPrimary, itemView.getContext().getTheme()));
             } else {
-                binding.layout.setBackgroundColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorSurfaceContainer, itemView.getContext().getTheme()));
-                binding.variantName.setTextColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorTextHint, itemView.getContext().getTheme()));
+                binding.layout.setBackgroundColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorDisabled, itemView.getContext().getTheme()));
+                binding.variantName.setTextColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorTextDisabled, itemView.getContext().getTheme()));
             }
         }
     }

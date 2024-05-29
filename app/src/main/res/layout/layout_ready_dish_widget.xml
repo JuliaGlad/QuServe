@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/price"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="666" />
+
+    <TextView
+        android:id="@+id/rubles"
+        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="@string/rubles"
+        app:layout_constraintBottom_toBottomOf="@+id/price"
+        app:layout_constraintStart_toEndOf="@+id/price" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button_accept"
+        style="@style/ThemeOverlay.Material3.Button.Tonal.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:text="@string/done"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_to_remove" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

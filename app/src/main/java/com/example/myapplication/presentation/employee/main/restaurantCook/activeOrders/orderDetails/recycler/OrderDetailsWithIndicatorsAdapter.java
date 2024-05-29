@@ -2,6 +2,7 @@ package com.example.myapplication.presentation.employee.main.restaurantCook.acti
 
 import android.net.Uri;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -47,8 +48,8 @@ public class OrderDetailsWithIndicatorsAdapter extends ListAdapter<OrderDetailsW
         void bind(OrderDetailsWithIndicatorsItemModel model){
             binding.dishName.setText(model.name);
             binding.weightCount.setText(model.weight);
-            binding.dishNumber.setText(model.amount);
-            binding.price.setText(model.totalPrice);
+            binding.numberDish.setText(model.amount);
+            binding.readyDishWidget.price.setText(model.totalPrice);
             if (model.task != null) {
                 model.task.addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -60,7 +61,7 @@ public class OrderDetailsWithIndicatorsAdapter extends ListAdapter<OrderDetailsW
                 });
             }
 
-            binding.buttonAccept.setOnClickListener(v -> {
+            binding.readyDishWidget.buttonAccept.setOnClickListener(v -> {
                 model.listener.onClick();
             });
 
@@ -72,36 +73,43 @@ public class OrderDetailsWithIndicatorsAdapter extends ListAdapter<OrderDetailsW
         private void initToRemoveRecycler(List<String> toRemove) {
             TextItemAdapter removeAdapter = new TextItemAdapter();
             List<TextItemModel> listRemoveModels = new ArrayList<>();
+            if (!toRemove.isEmpty()) {
+                for (int i = 0; i < toRemove.size(); i++) {
+                    listRemoveModels.add(new TextItemModel(
+                            i,
+                            toRemove.get(i),
+                            () -> {
 
-            for (int i = 0; i < toRemove.size(); i++) {
-                listRemoveModels.add(new TextItemModel(
-                        i,
-                        toRemove.get(i),
-                        () -> {
+                            }
+                    ));
+                }
 
-                        }
-                ));
+                binding.recyclerViewToRemove.setAdapter(removeAdapter);
+                removeAdapter.submitList(listRemoveModels);
+            } else {
+                binding.removeItemIcon.setVisibility(View.GONE);
             }
-
-            binding.recyclerViewToRemove.setAdapter(removeAdapter);
-            removeAdapter.submitList(listRemoveModels);
         }
 
         private void initToppingsRecycler(List<String> topping) {
             TextItemAdapter toppingsAdapter = new TextItemAdapter();
             List<TextItemModel> toppings = new ArrayList<>();
 
-            for (int i = 0; i < topping.size(); i++) {
-                toppings.add(new TextItemModel(
-                        i,
-                        topping.get(i),
-                        () -> {
+            if (!topping.isEmpty()) {
+                for (int i = 0; i < topping.size(); i++) {
+                    toppings.add(new TextItemModel(
+                            i,
+                            topping.get(i),
+                            () -> {
 
-                        }
-                ));
+                            }
+                    ));
+                }
+                binding.recyclerViewToppings.setAdapter(toppingsAdapter);
+                toppingsAdapter.submitList(toppings);
+            } else {
+                binding.addItemIcon.setVisibility(View.GONE);
             }
-            binding.recyclerViewToppings.setAdapter(toppingsAdapter);
-            toppingsAdapter.submitList(toppings);
         }
 
         private void initRequiredChoiceRecycler(List<String> requiredChoices) {

@@ -40,6 +40,7 @@ public class DishOrderItemAdapter extends ListAdapter<DishOrderModel, RecyclerVi
         void bind(DishOrderModel model){
             binding.loader.setVisibility(View.VISIBLE);
             binding.dishName.setText(model.getName());
+            binding.weightCount.setText(model.getWeight());
             binding.price.setText(model.getPrice().concat("₽"));
 
             if (model.getTask() != null){

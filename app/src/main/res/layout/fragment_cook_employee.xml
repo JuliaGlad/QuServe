@@ -37,10 +37,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="5dp"
         android:fontFamily="@font/bold_roboto"
-        android:text="Restaurant Name"
         android:textColor="?colorSurface"
         app:layout_constraintBottom_toTopOf="@+id/subTitle"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Restaurant Name" />
 
     <include
         android:id="@+id/button_your_orders"
@@ -65,5 +65,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_your_orders" />
+
+    <include
+        android:id="@+id/loading_layout"
+        layout="@layout/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewRequiredChoiceItemBinding;
 
 public class RequiredChoiceOrderAdapter extends ListAdapter<RequireChoiceOrderModel, RecyclerView.ViewHolder> {
@@ -39,6 +41,15 @@ public class RequiredChoiceOrderAdapter extends ListAdapter<RequireChoiceOrderMo
             binding.item.setOnClickListener(v -> {
                 model.listener.onClick();
             });
+
+            if (model.isChosen){
+                binding.layout.setBackgroundColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorPrimaryContainer, itemView.getContext().getTheme()));
+                binding.variantName.setTextColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorPrimary, itemView.getContext().getTheme()));
+            } else {
+                binding.layout.setBackgroundColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorDisabled, itemView.getContext().getTheme()));
+                binding.variantName.setTextColor(ResourcesCompat.getColor(itemView.getResources(), R.color.colorTextDisabled, itemView.getContext().getTheme()));
+            }
+
         }
     }
 }

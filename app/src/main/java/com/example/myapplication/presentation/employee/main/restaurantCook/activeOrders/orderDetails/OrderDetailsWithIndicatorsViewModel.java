@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -91,8 +93,8 @@ public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
                 });
     }
 
-    public void addToReadyDishes(int index, String orderDishId, String tableNumber, String dishName, String orderPath){
-        RestaurantOrderDI.addToReadyDishesUseCase.invoke(orderDishId, tableNumber, dishName, orderPath)
+    public void addToReadyDishes(int index, String orderDishId, String tableNumber, String dishName, String count, String orderPath){
+        RestaurantOrderDI.addToReadyDishesUseCase.invoke(orderDishId, tableNumber, dishName, count, orderPath)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<Integer>() {
                     @Override

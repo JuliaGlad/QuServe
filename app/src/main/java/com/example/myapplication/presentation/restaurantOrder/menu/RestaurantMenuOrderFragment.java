@@ -1,7 +1,11 @@
 package com.example.myapplication.presentation.restaurantOrder.menu;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,6 +28,7 @@ import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.R
 import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderItemAdapter;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderModel;
+import com.example.myapplication.presentation.restaurantOrder.menu.state.RestaurantMenuOrderState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +46,30 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private final MainAdapter horizontalAdapter = new MainAdapter();
     private final DishOrderItemAdapter gridAdapter = new DishOrderItemAdapter();
     private final List<DelegateItem> categories = new ArrayList<>();
-    private String restaurantId, categoryId, tablePath;
+    private ActivityResultLauncher<Intent> launcher;
+    private String categoryId, tablePath, restaurantId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantMenuOrderViewModel.class);
-        tablePath = getActivity().getIntent().getStringExtra(RESTAURANT_DATA);
-        restaurantId = tablePath.substring(15, 35);
+        tablePath = requireActivity().getIntent().getStringExtra(RESTAURANT_DATA);
+        restaurantId = viewModel.getRestaurantId(tablePath);
         viewModel.getMenuCategories(restaurantId);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        if (result.getData() != null) {
+                            Log.i("Data from menu order", "got");
+                            requireActivity().setResult(RESULT_OK);
+                            requireActivity().finish();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -69,7 +91,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
     private void initButtonCart() {
         binding.buttonCart.setOnClickListener(v -> {
-            ((RestaurantOrderMenuActivity)requireActivity()).openCartActivity(restaurantId, tablePath);
+            ((RestaurantOrderMenuActivity) requireActivity()).openCartActivity(restaurantId, tablePath, launcher);
         });
     }
 
@@ -90,8 +112,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof RestaurantMenuState.Success) {
-                List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
+            if (state instanceof RestaurantMenuOrderState.Success) {
+                List<DishMenuModel> models = ((RestaurantMenuOrderState.Success) state).data;
                 if (!categories.isEmpty()) {
                     if (!models.isEmpty()) {
                         initDishRecycler(models);
@@ -101,11 +123,11 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 } else {
                     binding.constraintLayoutEmptyCategories.setVisibility(View.VISIBLE);
                 }
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
-                binding.errorLayout.getRoot().setVisibility(View.GONE);
-            } else if (state instanceof RestaurantMenuState.Loading) {
-                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-            } else if (state instanceof RestaurantMenuState.Error) {
+            } else if (state instanceof RestaurantMenuOrderState.Loading) {
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
+            } else if (state instanceof RestaurantMenuOrderState.Error) {
                 setErrorLayout();
             }
         });
@@ -149,8 +171,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         null,
                         current.getTask(),
                         () -> {
-                            ((RestaurantOrderMenuActivity)requireActivity())
-                                    .openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId());
+                            ((RestaurantOrderMenuActivity) requireActivity())
+                                    .openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId(), launcher);
                         }
                 ));
             }
@@ -163,22 +185,40 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private void initCategoriesRecycler(List<CategoryMenuModel> models) {
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
+                int index = i;
                 CategoryMenuModel current = models.get(i);
                 boolean isDefault = false;
-                if (i == 0) {
+                boolean isChosen = false;
+                if (index == 0) {
                     isDefault = true;
+                    isChosen = true;
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();
                 }
+
                 categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                        i,
+                        index,
                         current.getName(),
                         current.getTask(),
                         Uri.EMPTY,
                         0,
                         isDefault,
-                        false,
+                        isChosen,
                         () -> {
+                            for (int j = 0; j < categories.size(); j++) {
+                                if (categories.get(j) instanceof CategoryItemDelegateItem) {
+                                    CategoryItemModel model = (CategoryItemModel) categories.get(j).content();
+                                    if (model.isChosen) {
+                                        model.setChosen(false);
+                                        horizontalAdapter.notifyItemChanged(j);
+                                    }
+                                }
+                            }
+
+                            CategoryItemModel model = (CategoryItemModel) categories.get(index).content();
+                            model.setChosen(true);
+                            horizontalAdapter.notifyItemChanged(index);
+
                             viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), false);
                             categoryId = current.getCategoryId();
                         })));

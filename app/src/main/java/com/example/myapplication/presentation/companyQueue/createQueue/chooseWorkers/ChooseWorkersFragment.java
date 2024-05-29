@@ -177,7 +177,7 @@ public class ChooseWorkersFragment extends Fragment {
                     binding.recyclerView.setAdapter(adapter);
                     adapter.submitList(workerItems);
                 } else {
-                    binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    initEmptyLayout();
                 }
 
                 binding.progressLayout.getRoot().setVisibility(View.GONE);
@@ -188,6 +188,15 @@ public class ChooseWorkersFragment extends Fragment {
             } else if (state instanceof ChooseWorkersState.Error) {
                 setErrorLayout();
             }
+        });
+    }
+
+    private void initEmptyLayout() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_any_employees_yet));
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_any_new_employees_will_join_your_company));
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
+            requireActivity().finish();
         });
     }
 

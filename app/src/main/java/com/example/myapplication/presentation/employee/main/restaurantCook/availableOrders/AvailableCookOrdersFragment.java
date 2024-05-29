@@ -71,11 +71,11 @@ public class AvailableCookOrdersFragment extends Fragment {
                 if (!models.isEmpty()) {
                     initRecycler(models);
                 } else {
-                    binding.progressLayout.getRoot().setVisibility(View.GONE);
                     initEmptyOrders();
                 }
+                binding.progressLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof AvailableCookOrdersState.Loading) {
-
+                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof AvailableCookOrdersState.Error) {
                 setErrorLayout();
             }
@@ -84,10 +84,8 @@ public class AvailableCookOrdersFragment extends Fragment {
         viewModel.isTaken.observe(getViewLifecycleOwner(), index -> {
             if (index != null){
                 int i = index.intValue();
-                List<AvailableOrdersModel> newItems = new ArrayList<>(items);
-                newItems.remove(i);
-                adapter.submitList(newItems);
-                items = newItems;
+                items.remove(i);
+                adapter.notifyItemRemoved(i);
             }
         });
     }
@@ -113,9 +111,14 @@ public class AvailableCookOrdersFragment extends Fragment {
             AvailableOrdersStateModel current = models.get(i);
             String orderId = current.getOrderId();
             int index = i;
-            items.add(new AvailableOrdersModel(index, current.getTableNumber(), current.getDishesCount(),
+            items.add(new AvailableOrdersModel(index, orderId, current.getTableNumber(), current.getDishesCount(),
                     () -> {
-                        viewModel.takeOrder(index, restaurantId, locationId, orderId);
+                        for (int j = 0; j < items.size(); j++) {
+                            AvailableOrdersModel currentItem = items.get(j);
+                            if (currentItem.getOrderId().equals(orderId)){
+                                viewModel.takeOrder(j, restaurantId, locationId, orderId);
+                            }
+                        }
                     },
                     () -> {
                         ((AvailableCookOrdersActivity)requireActivity()).openOrderDetailsActivity(current.getOrderPath());

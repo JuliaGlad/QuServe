@@ -1,6 +1,6 @@
 package com.example.myapplication.data.providers;
 
-import com.example.myapplication.app.App;
+import com.example.myapplication.App;
 import com.example.myapplication.data.db.dao.AnonymousUserDao;
 import com.example.myapplication.data.db.entity.AnonymousUserEntity;
 import com.example.myapplication.data.dto.user.AnonymousUserDto;

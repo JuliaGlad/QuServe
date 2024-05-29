@@ -83,6 +83,7 @@ public class OrderCartViewModel extends ViewModel {
 
     public void createOrder(String restaurantId, String totalPrice, String path, List<OrderDishesModel> models) {
         String orderId = generateOrderId();
+
         RestaurantOrderDI.addToActiveOrdersUseCase.invoke(restaurantId, path, orderId, totalPrice, models)
                 .flatMapCompletable(pathOrder -> ProfileDI.addActiveRestaurantOrderUseCase.invoke(pathOrder))
                 .concatWith(RestaurantOrderDI.addToTableListOrdersUseCase.invoke(path, orderId))

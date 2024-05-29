@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class AddToReadyDishesUseCase {
-    public Single<Integer> invoke(String orderDishId, String tableNumber, String dishName, String orderPath){
-        return RestaurantOrderDI.restaurantOrderRepository.addToReadyDishes(orderDishId, tableNumber, dishName, orderPath);
+    public Single<Integer> invoke(String orderDishId, String tableNumber, String dishName, String count, String orderPath){
+        return RestaurantOrderDI.restaurantOrderRepository.addToReadyDishes(orderDishId, tableNumber, dishName, count, orderPath);
     }
 }

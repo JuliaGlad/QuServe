@@ -39,7 +39,7 @@ public class OrderCreatedFragment extends Fragment {
     }
 
     private void handleBackButtonPressed() {
-        getActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 navigateBack();

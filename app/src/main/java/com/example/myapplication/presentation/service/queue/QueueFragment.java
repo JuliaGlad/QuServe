@@ -38,16 +38,15 @@ public class QueueFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(QueueViewModel.class);
         initJoinQueueLauncher();
+        viewModel.signInAnonymously();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentQueueBinding.inflate(inflater, container, false);
-        viewModel = new ViewModelProvider(this).get(QueueViewModel.class);
-        viewModel.getUserData();
-
         return binding.getRoot();
     }
 
@@ -67,6 +66,13 @@ public class QueueFragment extends Fragment {
     }
 
     private void setupObserves() {
+
+        viewModel.isSignIn.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                viewModel.getUserData();
+            }
+        });
+
         viewModel.isParticipateInQueue.observe(getViewLifecycleOwner(), isParticipant -> {
             if (isParticipant != null){
             isParticipateInQueue = isParticipant;

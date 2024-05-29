@@ -11,12 +11,16 @@ import com.example.myapplication.domain.model.profile.UserActionsDataModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class QueueViewModel extends ViewModel {
+
+    private final MutableLiveData<Boolean> _isSignIn = new MutableLiveData<>(false);
+    LiveData<Boolean> isSignIn = _isSignIn;
 
     private final MutableLiveData<String> _queueIdOwner = new MutableLiveData<>(null);
     LiveData<String> queueIdOwner = _queueIdOwner;
@@ -26,6 +30,27 @@ public class QueueViewModel extends ViewModel {
 
     private final MutableLiveData<String> _isParticipateInQueue = new MutableLiveData<>(null);
     LiveData<String> isParticipateInQueue = _isParticipateInQueue;
+
+    public void signInAnonymously(){
+        QueueDI.signInAnonymouslyUseCase.invoke()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _isSignIn.postValue(true);
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
 
     public void getUserData() {
         ProfileDI.getUserActionsDataUseCase.invoke()

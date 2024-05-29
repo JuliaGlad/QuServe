@@ -12,12 +12,10 @@ import com.example.myapplication.databinding.ActivityOrderDetailsBinding;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
-    private ActivityOrderDetailsBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityOrderDetailsBinding.inflate(getLayoutInflater());
+        com.example.myapplication.databinding.ActivityOrderDetailsBinding binding = ActivityOrderDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);

@@ -33,6 +33,11 @@ public class OrderDetailsWithIndicatorsItemModel {
         this.toRemove = toRemove;
     }
 
+
+    public int getId() {
+        return id;
+    }
+
     public boolean compareTo(OrderDetailsWithIndicatorsItemModel other){
         return this.hashCode() == other.hashCode();
     }

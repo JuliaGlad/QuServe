@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.home.basicUser;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -62,6 +66,7 @@ public class HomeBasisUserFragment extends Fragment {
     private HomeBasisUserViewModel viewModel;
     private FragmentHomeBasisUserBinding binding;
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
+    private ActivityResultLauncher<Intent> openMenuLauncher;
     private final MainAdapter adapter = new MainAdapter();
 
     @Override
@@ -70,6 +75,19 @@ public class HomeBasisUserFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(HomeBasisUserViewModel.class);
         initJoinQueueLauncher();
         initRestaurantOrderLauncher();
+        initOpenMenuLauncher();
+    }
+
+    private void initOpenMenuLauncher() {
+        openMenuLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+
+                        }
+                    }
+                });
     }
 
     private void initRestaurantOrderLauncher() {
@@ -77,7 +95,7 @@ public class HomeBasisUserFragment extends Fragment {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), RestaurantOrderMenuActivity.class);
                 intent.putExtra(RESTAURANT_DATA, result.getContents());
-                requireActivity().startActivity(intent);
+                openMenuLauncher.launch(intent);
             }
         });
     }
@@ -125,7 +143,7 @@ public class HomeBasisUserFragment extends Fragment {
             if (state instanceof HomeBasicUserState.Success) {
                 HomeBasicUserModel model = ((HomeBasicUserState.Success) state).data;
                 if (model != null) {
-                    initUserRecycler(model.getModels(), model.getParticipateQueue(), model.getOwnQueue());
+                    initUserRecycler(model.getModels(), model.getParticipateQueue(), model.getOwnQueue(), model.getRestaurantVisitor());
                 } else {
                     initUserNoActionsRecycler();
                 }
@@ -148,9 +166,10 @@ public class HomeBasisUserFragment extends Fragment {
         });
     }
 
-    private void initUserRecycler(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
+    private void initUserRecycler(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own, QueueBasicUserHomeModel restaurantVisitor) {
         List<DelegateItem> delegates = new ArrayList<>();
-        List<HomeActionButtonDelegateItem> actions = getActionDelegates(companies, participate, own);
+        List<HomeActionButtonDelegateItem> actions = getActionDelegates(companies, participate, own, restaurantVisitor);
+
         delegates.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.join_queue, R.string.create_queue, R.drawable.qr_code, R.drawable.ic_add_queue,
                 () -> {
                     if (participate == null) {
@@ -178,7 +197,7 @@ public class HomeBasisUserFragment extends Fragment {
         binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
-    private List<HomeActionButtonDelegateItem> getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own) {
+    private List<HomeActionButtonDelegateItem> getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own, QueueBasicUserHomeModel restaurantVisitor) {
         List<HomeActionButtonDelegateItem> delegates = new ArrayList<>();
 
         if (companies != null && !companies.isEmpty()) {
@@ -202,6 +221,12 @@ public class HomeBasisUserFragment extends Fragment {
         if (own != null) {
             delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, own.getName(), R.string.queue_owner, OWNER, () -> {
                 ((MainActivity) requireActivity()).openQueueDetailsActivity();
+            })));
+        }
+
+        if (restaurantVisitor != null){
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(4, restaurantVisitor.getName(), R.string.restaurant_visitor, PARTICIPANT, () -> {
+                ((MainActivity) requireActivity()).openOrderDetailsActivity(restaurantVisitor.getId());
             })));
         }
 

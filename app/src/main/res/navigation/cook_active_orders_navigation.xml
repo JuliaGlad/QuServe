@@ -3,7 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cook_active_orders_navigation.xml"
-    app:startDestination="@id/cookOrderIsFinishedFragment">
+    app:startDestination="@id/cookActiveOrdersFragment">
+
+    <fragment
+        android:id="@+id/cookActiveOrdersFragment"
+        android:name="com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.CookActiveOrdersFragment"
+        android:label="CookActiveOrdersFragment" >
+        <action
+            android:id="@+id/action_cookActiveOrdersFragment_to_orderDetailsWithIndicatorsFragment"
+            app:destination="@id/orderDetailsWithIndicatorsFragment" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/orderDetailsWithIndicatorsFragment"

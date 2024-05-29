@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
+import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.domain.model.restaurant.menu.CategoryModel;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
@@ -31,6 +32,10 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
 
     private final MutableLiveData<RestaurantMenuOrderState> _state = new MutableLiveData<>(new RestaurantMenuOrderState.Loading());
     LiveData<RestaurantMenuOrderState> state = _state;
+
+    public String getRestaurantId(String tablePath){
+        return RestaurantOrderDI.getRestaurantIdByTablePathUseCase.invoke(tablePath);
+    }
 
     public void getMenuCategories(String restaurantId) {
         List<CategoryModel> models = new ArrayList<>();
@@ -108,7 +113,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
                                 }
                             }
                         }
-                        if (isDefault){
+                        if (isDefault) {
                             _state.postValue(new RestaurantMenuOrderState.Success(menuModels));
                         } else {
                             _newCategory.postValue(menuModels);

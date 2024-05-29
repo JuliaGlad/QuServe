@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,8 @@ import java.util.List;
 public class OrderDetailsWithIndicatorsFragment extends Fragment {
 
     private OrderDetailsWithIndicatorsViewModel viewModel;
-    private String path, tableNumber, restaurantId;
+    private String path;
+    private String tableNumber;
     List<OrderDetailsWithIndicatorsItemModel> items = new ArrayList<>();
     private FragmentDishDetailsWithIndicatorsBinding binding;
     private final OrderDetailsWithIndicatorsAdapter adapter = new OrderDetailsWithIndicatorsAdapter();
@@ -54,14 +56,19 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> requireActivity().finish());
     }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof OrderDetailsWithIndicatorsState.Success){
                 OrderDetailsWithIndicatorsStateModel model = ((OrderDetailsWithIndicatorsState.Success) state).data;
-                restaurantId = model.getRestaurantId();
                 binding.totalPrice.setText(model.getTotalPrice());
+                binding.number.setText(tableNumber);
                 initRecycler(model.getModels());
 
             } else if (state instanceof OrderDetailsWithIndicatorsState.Loading){
@@ -96,10 +103,8 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
     }
 
     private void removeItemFromList(int index) {
-        List<OrderDetailsWithIndicatorsItemModel> newItems = new ArrayList<>(items);
-        newItems.remove(index);
-        adapter.submitList(newItems);
-        items = newItems;
+        items.remove(index);
+        adapter.notifyItemRemoved(index);
     }
 
     private void initRecycler(List<OrderDetailsWithIndicatorsModel> dishes) {
@@ -118,7 +123,15 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
                     current.getTopping(),
                     current.getToRemove(),
                     () -> {
-                        viewModel.addToReadyDishes(index, current.getDocumentDishId(), tableNumber, dishName, path);
+                        int position = 0;
+                        for (int j = 0; j < items.size(); j++) {
+                            OrderDetailsWithIndicatorsItemModel currentModel = items.get(j);
+                            if (index == currentModel.getId()){
+                                position = j;
+                            }
+                        }
+
+                        viewModel.addToReadyDishes(position, current.getDocumentDishId(), tableNumber, dishName, current.getAmount(), path);
                     }
             ));
         }

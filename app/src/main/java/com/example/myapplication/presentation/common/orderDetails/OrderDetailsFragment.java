@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +88,7 @@ public class OrderDetailsFragment extends Fragment {
 
     private void showFinishOrderDialog() {
         FinishRestaurantOrderDialogFragment dialogFragment = new FinishRestaurantOrderDialogFragment(path);
-        dialogFragment.show(getActivity().getSupportFragmentManager(), "FINISH_RESTAURANT_ORDER_DIALOG");
+        dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_RESTAURANT_ORDER_DIALOG");
         dialogFragment.onDialogDismissedListener(bundle -> {
             requireActivity().finish();
         });
@@ -107,12 +108,13 @@ public class OrderDetailsFragment extends Fragment {
                 initRecycler(model.getModels());
 
             } else if (state instanceof OrderDetailsState.Loading) {
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof OrderDetailsState.Error) {
                 setErrorLayout();
 
             } else if (state instanceof OrderDetailsState.OrderIsFinished) {
-                navigateToFinishOrder();
+              navigateToFinishOrder();
             }
         });
     }
@@ -147,6 +149,7 @@ public class OrderDetailsFragment extends Fragment {
         }
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(items);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 }

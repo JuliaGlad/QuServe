@@ -13,6 +13,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
+import android.util.Log;
+
 import com.example.myapplication.data.dto.company.ActiveEmployeeQueueDto;
 import com.example.myapplication.data.dto.restaurant.RestaurantEmployeeDto;
 import com.example.myapplication.data.dto.user.UserEmployeeRoleDto;
@@ -37,7 +39,9 @@ public class ProfileEmployeeRepository {
 
             userDoc.collection(COMPANY_EMPLOYEE).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+                    Log.d("Task employee", task.getResult().size() + "");
                     boolean size = !task.getResult().isEmpty();
+                    Log.d("Task employee", size + "");
                     if (size) {
                         emitter.onSuccess(!task.getResult().isEmpty());
                     }

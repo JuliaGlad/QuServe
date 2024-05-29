@@ -1,6 +1,8 @@
 package com.example.myapplication.data.providers;
 
-import com.example.myapplication.app.App;
+import android.util.Log;
+
+import com.example.myapplication.App;
 import com.example.myapplication.data.db.entity.UserEntity;
 import com.example.myapplication.data.dto.user.UserDto;
 
@@ -87,6 +89,16 @@ public class UserDatabaseProvider {
         if (!entities.isEmpty()) {
             UserEntity entity = entities.get(0);
             entity.participateInQueue = path;
+            App.getInstance().getDatabase().userDao().update(entity);
+        }
+    }
+
+    public static void updateRestaurantVisitor(String path){
+        List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
+        if (!entities.isEmpty()) {
+            UserEntity entity = entities.get(0);
+            entity.restaurantVisitor = path;
+            Log.d("Path", path);
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }

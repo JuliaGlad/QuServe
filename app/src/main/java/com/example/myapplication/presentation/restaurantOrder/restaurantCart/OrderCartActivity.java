@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -16,8 +17,8 @@ public class OrderCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_cart);
     }
 
-    public void openCreatedActivity(){
+    public void openCreatedActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, OrderCreatedActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 }

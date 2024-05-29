@@ -51,14 +51,22 @@ public class SuccessfullyBecomeWaiterFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                finishActivity();
             }
         });
     }
 
+    private void finishActivity() {
+        Intent intent = new Intent();
+        intent.putExtra(EMPLOYEE_ROLE, WAITER);
+        intent.putExtra(COMPANY_ID, companyId);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
+    }
+
     private void initSeeDetails() {
         binding.buttonSeeDetails.setOnClickListener(v -> {
-            requireActivity().finish();
+            finishActivity();
         });
     }
 
