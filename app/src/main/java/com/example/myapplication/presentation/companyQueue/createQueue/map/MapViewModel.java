@@ -63,7 +63,7 @@ public class MapViewModel extends ViewModel {
                     LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
 
                     googleMap.addMarker(new MarkerOptions().position(latLng));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
                 }catch (NullPointerException e){
                     Toast.makeText(fragment.requireContext(), "No place found" + e.getMessage(), Toast.LENGTH_LONG).show();;
                 }

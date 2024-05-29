@@ -25,9 +25,12 @@ import com.example.myapplication.R;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
+import com.example.myapplication.databinding.DialogHaveAnonymousActionsBinding;
 import com.example.myapplication.databinding.FragmentCreateAccountBinding;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verification.VerificationDialogFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.snackbar.Snackbar;
 
 public class CreateAccountFragment extends Fragment {
 
@@ -74,6 +77,9 @@ public class CreateAccountFragment extends Fragment {
 
         binding.buttonSignUp.setOnClickListener(v -> {
 
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSignUp.setEnabled(false);
+
             userName = binding.editLayoutName.getText().toString();
             email = binding.editLayoutEmail.getText().toString().trim();
             password = binding.editLayoutPassword.getText().toString().trim();
@@ -88,20 +94,35 @@ public class CreateAccountFragment extends Fragment {
                 viewModel.sendPasswordError(getResources().getString(R.string.password_is_required));
             }
 
-            if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
+            if (viewModel.checkAnonymousActions()) {
+                if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
+                    viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
+                } else {
+                    binding.loader.setVisibility(View.VISIBLE);
+                    binding.buttonSignUp.setEnabled(false);
+                }
+            } else {
                 binding.loader.setVisibility(View.VISIBLE);
                 binding.buttonSignUp.setEnabled(false);
-                viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
+                HaveAnonymousActionsDialogFragment dialogFragment = new HaveAnonymousActionsDialogFragment();
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ANONYMOUS_ACTIONS_DIALOG");
             }
         });
     }
 
     private void setupObserves() {
         viewModel.created.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                binding.loader.setVisibility(View.GONE);
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_createAccount_to_chooseFragment);
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    binding.loader.setVisibility(View.GONE);
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_createAccount_to_chooseFragment);
+
+                } else {
+                    binding.buttonSignUp.setEnabled(true);
+                    binding.loader.setVisibility(View.GONE);
+                    Snackbar.make(requireView(), getString(R.string.account_with_this_email_is_already_exist), Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 

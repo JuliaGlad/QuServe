@@ -60,6 +60,9 @@ public class RestaurantLocationRepository {
         Map<String, Object> locationMap = new HashMap<>();
         locationMap.put(LOCATION_CITY, city);
         locationMap.put(LOCATION, location);
+        locationMap.put(WAITERS, "0");
+        locationMap.put(COOKS, "0");
+        locationMap.put(ACTIVE_ORDERS, "0");
 
         return Single.create(emitter -> {
             docRef.set(locationMap).addOnCompleteListener(task -> {

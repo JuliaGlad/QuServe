@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +147,7 @@ public class CreateCompanyAccountFragment extends Fragment {
 
                 String state;
                 if (service.equals(stringsServicesArray[0])) {
-                    state = COMPANY_QUEUE;
+                    state = COMPANY;
                 } else {
                     state = RESTAURANT;
                 }
@@ -155,6 +156,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 bundle.putString(COMPANY_NAME, name);
                 bundle.putString(COMPANY_SERVICE, state);
                 bundle.putString(COMPANY_ID, companyId);
+                Log.e("Data", name + state + companyId);
 
                 viewModel.setArgumentsNull();
                 binding.loader.setVisibility(View.GONE);

@@ -11,8 +11,8 @@
     app:strokeColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="110dp"
-        android:layout_height="120dp"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
         android:background="?colorSurfaceContainerLow"
         android:foreground="?attr/selectableItemBackground"
         android:padding="10dp">
@@ -21,6 +21,7 @@
             android:id="@+id/food_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

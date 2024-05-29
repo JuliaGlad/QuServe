@@ -138,67 +138,68 @@ public class CreateCompanyQueueFragment extends Fragment {
     }
 
     public void onPageInit(String page, String[] array) {
-
-        switch (page) {
-            case PAGE_1:
-                itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.enter_name, 24)));
-                itemList.add(new EditTextDelegateItem(new EditTextModel(3, R.string.name, queueName, InputType.TYPE_CLASS_TEXT, true, stringName -> {
-                    queueName = stringName;
-                })));
-                break;
-
-            case PAGE_2:
-                binding.companyProgressBar.setProgress(25, true);
-                itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)));
-                itemList.add(new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
-                    for (int i = 0; i < array.length; i++) {
-                        if (array[i].equals(stringTime)) {
-                            queueTime = stringsTimeArray[i];
-                        }
-                    }
-                })));
-                break;
-
-            case PAGE_3:
-                binding.companyProgressBar.setProgress(50, true);
-                if (getArguments().getString(QUEUE_LOCATION_KEY) != null) {
-                    queueLocation = getArguments().getString(QUEUE_LOCATION_KEY);
-                    city = getArguments().getString(CITY_KEY);
-                }
-                itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
-                itemList.add(new LocationDelegateItem(new LocationModel(2, queueLocation, () -> {
-                    if (checkSelfMapPermission()) {
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(STATE, COMPANY);
-
-                        NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_createCompanyQueueFragment_to_mapFragment, bundle);
-                    }
-                })));
-                break;
-            case PAGE_4:
-                binding.companyProgressBar.setProgress(75, true);
-                if (itemList.isEmpty()) {
-                    if (getArguments().getString(WORKERS_LIST) != null) {
-                        String workers = getArguments().getString(WORKERS_LIST);
-                        employeeModels = new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
-                        }.getType());
-                    }
-
-                    itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_workers, 24)));
-                    addWorkers();
-                    itemList.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(3, () -> {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(COMPANY_ID, companyId);
-                        bundle.putString(WORKERS_LIST, new Gson().toJson(employeeModels));
-                        NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_createCompanyQueueFragment_to_chooseWorkersFragment, bundle);
+        if (itemList.isEmpty()) {
+            switch (page) {
+                case PAGE_1:
+                    itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.enter_name, 24)));
+                    itemList.add(new EditTextDelegateItem(new EditTextModel(3, R.string.name, queueName, InputType.TYPE_CLASS_TEXT, true, stringName -> {
+                        queueName = stringName;
                     })));
-                }
-                break;
+                    break;
+
+                case PAGE_2:
+                    binding.companyProgressBar.setProgress(25, true);
+                    itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)));
+                    itemList.add(new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
+                        for (int i = 0; i < array.length; i++) {
+                            if (array[i].equals(stringTime)) {
+                                queueTime = stringsTimeArray[i];
+                            }
+                        }
+                    })));
+                    break;
+
+                case PAGE_3:
+                    binding.companyProgressBar.setProgress(50, true);
+                    if (getArguments().getString(QUEUE_LOCATION_KEY) != null) {
+                        queueLocation = getArguments().getString(QUEUE_LOCATION_KEY);
+                        city = getArguments().getString(CITY_KEY);
+                    }
+                    itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
+                    itemList.add(new LocationDelegateItem(new LocationModel(2, queueLocation, () -> {
+                        if (checkSelfMapPermission()) {
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(STATE, COMPANY);
+
+                            NavHostFragment.findNavController(this)
+                                    .navigate(R.id.action_createCompanyQueueFragment_to_mapFragment, bundle);
+                        }
+                    })));
+                    break;
+                case PAGE_4:
+                    binding.companyProgressBar.setProgress(75, true);
+                    if (itemList.isEmpty()) {
+                        if (getArguments().getString(WORKERS_LIST) != null) {
+                            String workers = getArguments().getString(WORKERS_LIST);
+                            employeeModels = new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
+                            }.getType());
+                        }
+
+                        itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.add_workers, 24)));
+                        addWorkers();
+                        itemList.add(new FloatingActionButtonDelegateItem(new FloatingActionButtonModel(3, () -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(COMPANY_ID, companyId);
+                            bundle.putString(WORKERS_LIST, new Gson().toJson(employeeModels));
+                            NavHostFragment.findNavController(this)
+                                    .navigate(R.id.action_createCompanyQueueFragment_to_chooseWorkersFragment, bundle);
+                        })));
+                    }
+                    break;
+            }
+            mainAdapter.submitList(itemList);
         }
-        mainAdapter.submitList(itemList);
     }
 
     private void addWorkers() {

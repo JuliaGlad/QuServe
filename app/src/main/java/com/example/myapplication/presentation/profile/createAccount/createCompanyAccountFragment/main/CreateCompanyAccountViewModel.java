@@ -50,7 +50,6 @@ public class CreateCompanyAccountViewModel extends ViewModel {
     }
 
     private void createDocument(String name, String email, String phone, String companyService) {
-
         if (companyService.equals(stringsServicesArray[0])) {
             companyID = generateID(COMPANY);
             CompanyQueueUserDI.createCompanyDocumentUseCase.invoke(companyID, name, email, phone, companyService)

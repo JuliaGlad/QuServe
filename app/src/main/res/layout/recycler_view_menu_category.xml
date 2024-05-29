@@ -39,7 +39,7 @@
             android:minLines="3"
             android:paddingBottom="8dp"
             android:text="@string/add_category"
-            android:textAlignment="viewStart"
+            android:textAlignment="center"
             android:textColor="@color/colorTextHint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

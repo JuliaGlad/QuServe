@@ -1,5 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="looks_like_you_have_active_actions">Looks like you have active actions</string>
+    <string name="you_have_to_wait_until_they_finished_before_log_in_or_creating_account">You have to wait until they finished before log in or creating account!</string>
     <string name="you_are_next">Get ready! You are next!</string>
+    <string name="wrong_credentials">Wrong credentials</string>
+    <string name="wrong_email">Wrong email</string>
+    <string name="select_time">Select time</string>
+    <string name="account_with_this_email_is_already_exist">Account with this email is already exist!</string>
     <string name="no_estimated_time_yet">No estimated time yet!</string>
     <string name="restaurant_title">Restaurant</string>
     <string name="you_have_to_add_at_least_1_dish_to_create_order">You have to add at least 1 dish to create order</string>
@@ -163,6 +169,7 @@
     <string name="for_yourself">For yourself</string>
     <string name="for_company">For company</string>
     <string name="company_name">Company name</string>
+    <string name="estimated_time_waiting">~Время ожидания:</string>
     <string name="enter_company_name">Enter company name</string>
     <string name="add_company_logo">Add company logo</string>
     <string name="add_constituent_document">Add constituent document</string>

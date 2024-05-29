@@ -9,8 +9,6 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +17,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -37,7 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapViewModel viewModel;
     private FragmentMapBinding binding;
     private String location, city, state;
-
+    private BottomSheetBehavior bottomSheetBehavior;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +49,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentMapBinding.inflate(inflater, container, false);
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
         return binding.getRoot();
     }
 
@@ -70,7 +70,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         initMapSearchBar();
         initFloatingLocationButton();
         initChooseBottomSheetButton();
-        //TODO initCancelBottomSheetButton(){}
+        initCancelBottomSheetButton();
+    }
+
+    private void initCancelBottomSheetButton() {
+        binding.cancelButton.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
     }
 
 
@@ -133,7 +139,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void initBottomSheetBehaviour() {
-        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setPeekHeight(70);
     }
@@ -142,6 +147,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         viewModel.addressLine.observe(getViewLifecycleOwner(), string -> {
             location = string;
             binding.addressLine.setText(string);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
 
         viewModel.cityName.observe(getViewLifecycleOwner(), string -> {

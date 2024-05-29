@@ -1,5 +1,8 @@
 package com.example.myapplication.presentation.profile.profileLogin;
 
+import static com.example.myapplication.presentation.utils.Utils.SIGNED_IN;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -18,8 +21,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  */
 public class ProfileLoginViewModel extends ViewModel {
 
-    private final MutableLiveData<Boolean> _signedIn = new MutableLiveData<>(false);
-    LiveData<Boolean> signedIn = _signedIn;
+    private final MutableLiveData<String> _signedIn = new MutableLiveData<>(null);
+    LiveData<String> signedIn = _signedIn;
 
     private final MutableLiveData<String> _emailError = new MutableLiveData<>(null);
     LiveData<String> emailError = _emailError;
@@ -27,6 +30,9 @@ public class ProfileLoginViewModel extends ViewModel {
     private final MutableLiveData<String> _passwordError = new MutableLiveData<>(null);
     LiveData<String> passwordError = _passwordError;
 
+    public boolean checkAnonymousActionsUseCase(){
+        return ProfileDI.checkAnonymousActionsUseCase.invoke();
+    }
 
     public void signIn(String email, String password) {
         if (!email.isEmpty() && !password.isEmpty()) {
@@ -40,12 +46,12 @@ public class ProfileLoginViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
-                            _signedIn.postValue(true);
+                            _signedIn.postValue(SIGNED_IN);
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            Log.e("Exception", e.getMessage());
+                            _signedIn.postValue(e.getMessage());
                         }
                     });
         }

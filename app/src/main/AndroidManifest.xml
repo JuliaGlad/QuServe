@@ -27,129 +27,171 @@
         tools:targetApi="31">
         <activity
             android:name=".presentation.employee.becomeWaiter.BecomeWaiterActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.becomeCook.BecomeCookActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.main.restaurantCook.activeOrders.orderDetails.OrderDetailsWithIndicatorsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.addLocation.AddLocationActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.main.restaurantCook.activeOrders.CookActiveOrdersActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.common.orderDetails.OrderDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.home.stories.StoriesActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantOrder.restaurantCart.orderCreated.OrderCreatedActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantOrder.dishDetails.RestaurantOrderDishDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantOrder.restaurantCart.OrderCartActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantOrder.menu.RestaurantOrderMenuActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.dishDetails.addTopping.AddToppingsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.dishDetails.addRequiredChoice.AddRequiredChoiceActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.dishDetails.DishDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.addDish.AddDishActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.RestaurantMenuActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantMenu.AddCategory.AddMenuCategoryActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.locationDetails.tableList.tableDetails.RestaurantTableDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.locationDetails.tableList.TableListActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.restaurantLocation.LocationsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.main.queueAdminFragment.workerManager.WorkerManagerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.service.queue.QueueActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.companyQueue.queueManager.QueueManagerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.companyUser.settingsCompany.SettingsCompanyActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.companyUser.editCompany.EditCompanyActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.basicUser.userSettings.BasicSettingsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.companyQueue.createQueue.map.MapActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.companyQueue.createQueue.CreateCompanyQueueActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.employee.becomeEmployee.BecomeEmployeeActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.common.waitingInQueue.WaitingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.basicQueue.queueDetails.QueueDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.common.JoinQueueFragment.JoinQueueActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.basicQueue.createQueue.CreateQueueActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -165,6 +207,7 @@
         <activity
             android:name=".presentation.MainActivity"
             android:configChanges="uiMode"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:label="QuServe">
             <intent-filter>

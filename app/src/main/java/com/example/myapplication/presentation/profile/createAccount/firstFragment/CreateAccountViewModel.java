@@ -18,7 +18,7 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _verified = new MutableLiveData<>(false);
     LiveData<Boolean> verified = _verified;
 
-    private final MutableLiveData<Boolean> _created = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> _created = new MutableLiveData<>(null);
     LiveData<Boolean> created = _created;
 
     private final MutableLiveData<String> _emailError = new MutableLiveData<>(null);
@@ -28,6 +28,10 @@ public class CreateAccountViewModel extends ViewModel {
     private final MutableLiveData<String> _nameError = new MutableLiveData<>(null);
 
     String vEmail, vPassword;
+
+    public boolean checkAnonymousActions(){
+        return ProfileDI.checkAnonymousActionsUseCase.invoke();
+    }
 
     public void createUserWithEmailAndPassword(String email, String password, String userName, Uri uri) {
         ProfileDI.createAccountUseCase.invoke(email, password, userName)
@@ -47,7 +51,7 @@ public class CreateAccountViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        _created.postValue(false);
                     }
                 });
     }

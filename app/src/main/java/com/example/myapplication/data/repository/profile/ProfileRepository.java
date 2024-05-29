@@ -48,7 +48,8 @@ import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.firestore.CollectionReference;
+ import com.google.firebase.auth.FirebaseAuthException;
+ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -67,6 +68,12 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
+
+    public void CheckAnonymousUserActionsUseCase(){
+        AnonymousUserDto anonymous = AnonymousUserProvider.getUser();
+
+    }
+
     public boolean isAnonymous(){
         boolean isAnonymous = false;
         if (service.auth.getCurrentUser() != null){
@@ -275,10 +282,22 @@ public class ProfileRepository {
         });
     }
 
-    public void logout() {
-        service.auth.signOut();
-        CompanyUserProvider.deleteAll();
-        UserDatabaseProvider.deleteUser();
+    public Completable logout() {
+        return Completable.create(emitter -> {
+            service.auth.signOut();
+            CompanyUserProvider.deleteAll();
+            UserDatabaseProvider.deleteUser();
+            service.auth.signInAnonymously().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    AnonymousUserProvider.insertUser(new AnonymousUserDto(
+                            service.auth.getCurrentUser().getUid(),
+                            NOT_PARTICIPATE_IN_QUEUE,
+                            NOT_RESTAURANT_VISITOR
+                    ));
+                    emitter.onComplete();
+                }
+            });
+        });
     }
 
     public Single<Boolean> sendResetPasswordEmail(String email) {
@@ -327,10 +346,11 @@ public class ProfileRepository {
 
                             emitter.onComplete();
                         } else {
-                            Log.d("Error create acc", task.getException().getMessage());
                             emitter.onError(new Throwable(task.getException()));
                         }
                     });
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
                 }
             });
         });
@@ -361,8 +381,9 @@ public class ProfileRepository {
                         AnonymousUserProvider.deleteUser();
                     }
                     emitter.onComplete();
-                } else
+                } else {
                     emitter.onError(new Throwable(task.getException()));
+                }
             });
         });
     }

@@ -20,7 +20,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/location_name"
-            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
+            style="@style/TextAppearance.Material3.BodyLarge.Medium.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"

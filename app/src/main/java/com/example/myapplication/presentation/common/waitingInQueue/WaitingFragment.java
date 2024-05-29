@@ -147,7 +147,7 @@ public class WaitingFragment extends Fragment {
         }
 
         buildList(new DelegateItem[]{
-                new WaitingItemDelegateItem(new WaitingItemModel(2, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), estimatedTime, R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(2, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), estimatedTime.concat(getString(R.string.minutes)), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
                 new WaitingItemDelegateItem(new WaitingItemModel(3, path, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
                 new WaitingItemDelegateItem(new WaitingItemModel(4, path, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))

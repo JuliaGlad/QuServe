@@ -25,6 +25,8 @@ import com.example.myapplication.presentation.common.waitingInQueue.WaitingActiv
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.List;
+
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
@@ -145,8 +147,17 @@ public class NotificationForegroundService extends Service {
 
                     @Override
                     public void onSuccess(@NonNull QueueModel queueModel) {
+                        int before = 0;
+                        List<String> participants = queueModel.getParticipants();
+                        for (int i = 0; i < participants.size(); i++) {
+                            if (checkParticipantsIndex(participants, i)) {
+                                before = i + 1;
+                                break;
+                            }
+                        }
+
                         name = queueModel.getName();
-                        time = queueModel.getMidTime();
+                        time = String.valueOf(Integer.parseInt(queueModel.getMidTime()) * before);
                         setupNotification();
 
                     }
@@ -158,6 +169,10 @@ public class NotificationForegroundService extends Service {
                 });
     }
 
+    public boolean checkParticipantsIndex(List<String> participants, int index) {
+        return QueueDI.checkParticipantIndexUseCase.invoke(participants, index);
+    }
+
     private void setupNotification() {
 
         Intent intent = new Intent(this, WaitingActivity.class);
@@ -165,7 +180,7 @@ public class NotificationForegroundService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentText("Estimated time waiting:" + " " + time)
+                .setContentText(getString(R.string.estimated_waiting_time) + " " + time)
                 .setContentTitle(name)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setContentIntent(pendingIntent)

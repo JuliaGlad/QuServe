@@ -5,6 +5,7 @@ public class AnonymousUserDto {
     private final String participateInQueue;
     private final String restaurantVisitor;
 
+
     public AnonymousUserDto(String userId, String participateInQueue, String restaurantVisitor) {
         this.userId = userId;
         this.participateInQueue = participateInQueue;

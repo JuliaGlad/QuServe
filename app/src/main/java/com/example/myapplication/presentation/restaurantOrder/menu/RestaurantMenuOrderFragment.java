@@ -1,14 +1,11 @@
 package com.example.myapplication.presentation.restaurantOrder.menu;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantMenuOrderBinding;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
-import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
-import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderItemAdapter;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.state.RestaurantMenuOrderState;
@@ -47,6 +41,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private final DishOrderItemAdapter gridAdapter = new DishOrderItemAdapter();
     private final List<DelegateItem> categories = new ArrayList<>();
     private ActivityResultLauncher<Intent> launcher;
+    private List<DishOrderModel> dishes = new ArrayList<>();
     private String categoryId, tablePath, restaurantId;
 
     @Override
@@ -64,7 +59,6 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         if (result.getData() != null) {
-                            Log.i("Data from menu order", "got");
                             requireActivity().setResult(RESULT_OK);
                             requireActivity().finish();
                         }
@@ -144,6 +138,9 @@ public class RestaurantMenuOrderFragment extends Fragment {
                     binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
                     initDishRecycler(dishMenuModels);
                 } else {
+                    int size = dishes.size();
+                    dishes.clear();
+                    gridAdapter.notifyItemRangeRemoved(0, size);
                     binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
                 }
             }
@@ -159,11 +156,10 @@ public class RestaurantMenuOrderFragment extends Fragment {
     }
 
     private void initDishRecycler(List<DishMenuModel> models) {
-        List<DishOrderModel> items = new ArrayList<>();
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
-                items.add(new DishOrderModel(
+                dishes.add(new DishOrderModel(
                         i,
                         current.getName(),
                         current.getWeight(),
@@ -176,9 +172,9 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         }
                 ));
             }
-            gridAdapter.submitList(items);
+            gridAdapter.submitList(dishes);
         } else {
-            gridAdapter.submitList(items);
+            gridAdapter.submitList(dishes);
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.profile.profileLogin;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.Utils.SIGNED_IN;
 import static com.example.myapplication.presentation.utils.Utils.STATE;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,8 +26,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentProfileBinding;
 import com.example.myapplication.presentation.dialogFragments.checkEmail.CheckEmailDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.resetPassword.ResetPasswordDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
@@ -66,10 +70,10 @@ public class ProfileLoginFragment extends Fragment {
 
             ResetPasswordDialogFragment dialogFragment = new ResetPasswordDialogFragment();
 
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "RESET_PASSWORD_DIALOG");
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "RESET_PASSWORD_DIALOG");
             DialogDismissedListener listener = (dialog) -> {
                 CheckEmailDialogFragment checkDialogFragment = new CheckEmailDialogFragment();
-                checkDialogFragment.show(getActivity().getSupportFragmentManager(), "CHECK_EMAIL_DIALOG");
+                checkDialogFragment.show(requireActivity().getSupportFragmentManager(), "CHECK_EMAIL_DIALOG");
             };
             dialogFragment.onDismissListener(listener);
 
@@ -78,31 +82,49 @@ public class ProfileLoginFragment extends Fragment {
 
     private void initLoginButton() {
         binding.buttonSignIn.setOnClickListener(v -> {
-            String email = binding.editLayoutEmail.getText().toString().trim();
-            String password = binding.editLayoutPassword.getText().toString().trim();
-            if (email.isEmpty()) {
-                viewModel.sendEmailError(getResources().getString(R.string.email_is_required));
+            if (viewModel.checkAnonymousActionsUseCase()) {
+                binding.buttonSignIn.setEnabled(false);
+                binding.loader.setVisibility(View.VISIBLE);
+                String email = binding.editLayoutEmail.getText().toString().trim();
+                String password = binding.editLayoutPassword.getText().toString().trim();
+                if (email.isEmpty()) {
+                    viewModel.sendEmailError(getResources().getString(R.string.email_is_required));
+                }
+                if (password.isEmpty()) {
+                    viewModel.sendPasswordError(getResources().getString(R.string.password_is_required));
+                }
+                viewModel.signIn(email, password);
+            } else {
+                binding.buttonSignIn.setEnabled(true);
+                binding.loader.setVisibility(View.GONE);
+                HaveAnonymousActionsDialogFragment dialogFragment = new HaveAnonymousActionsDialogFragment();
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ACTIONS_DIALOG");
             }
-            if (password.isEmpty()) {
-                viewModel.sendPasswordError(getResources().getString(R.string.password_is_required));
-            }
-            viewModel.signIn(email, password);
         });
     }
 
     private void setupObservers() {
 
-        viewModel.signedIn.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+        viewModel.signedIn.observe(getViewLifecycleOwner(), result -> {
+            if (result != null) {
+                if (result.equals(SIGNED_IN)) {
+                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.logged_container, BasicUserFragment.class, null)
+                            .commit();
 
-                fragmentManager.beginTransaction()
-                        .replace(R.id.logged_container, BasicUserFragment.class, null)
-                        .commit();
+                    binding.buttonSignIn.setEnabled(true);
+                    binding.loader.setVisibility(View.GONE);
+                } else {
+                    binding.buttonSignIn.setEnabled(true);
+                    binding.loader.setVisibility(View.GONE);
+
+                    Snackbar.make(requireView(), getText(R.string.wrong_credentials), Snackbar.LENGTH_LONG).show();
+                }
             }
         });
 

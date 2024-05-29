@@ -121,7 +121,7 @@ public class CreateQueueFragment extends Fragment {
                 binding.companyProgressBar.setProgress(50, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)),
-                        new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
+                        new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.select_item, stringTime -> {
                             for (int i = 0; i < array.length; i++) {
                                 if (array[i].equals(stringTime)) {
                                     queueTime = stringsTimeArray[i];

@@ -174,7 +174,7 @@ public class AnonymousUserFragment extends Fragment {
     }
 
     private void initRecycler() {
-        items.add(new SquareButtonDelegateItem(new SquareButtonModel(2, R.string.join_queue, R.string.order, R.drawable.qr_code, R.drawable.ic_create_restaurant_order,
+        items.add(new SquareButtonDelegateItem(new SquareButtonModel(2, R.string.join_queue, R.string.order_in_restaurant, R.drawable.qr_code, R.drawable.ic_create_restaurant_order,
                 () -> {
                     setScanOptions(joinQueueLauncher);
                 },

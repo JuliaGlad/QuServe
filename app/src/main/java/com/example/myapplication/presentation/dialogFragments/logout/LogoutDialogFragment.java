@@ -29,12 +29,12 @@ public class LogoutDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(this).get(LogoutDialogViewModel.class);
         DialogLogoutLayoutBinding binding = DialogLogoutLayoutBinding.inflate(getLayoutInflater());
 
+        setupObserves();
+
         binding.buttonLogout.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonLogout.setEnabled(false);
             viewModel.logout();
-            isLogout = true;
-            dismiss();
         });
 
         binding.buttonCancel.setOnClickListener(v -> {
@@ -42,6 +42,15 @@ public class LogoutDialogFragment extends DialogFragment {
         });
 
         return builder.setView(binding.getRoot()).create();
+    }
+
+    private void setupObserves() {
+        viewModel.isSignedIn.observe(this, aBoolean -> {
+            if (aBoolean){
+                isLogout = true;
+                dismiss();
+            }
+        });
     }
 
     public void onDismissListener(DialogDismissedListener listener) {
