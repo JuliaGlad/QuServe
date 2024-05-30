@@ -3,6 +3,8 @@ package com.example.myapplication.di.restaurant;
 import com.example.myapplication.data.repository.restaurant.RestaurantMenuRepository;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddDishUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteCategoryUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.DeleteDishUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetCategoriesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetDishesMenuOwnerModelsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishByIdUseCase;
@@ -38,6 +40,8 @@ public class RestaurantMenuDI {
     public static RestaurantMenuRepository.RequiredChoice requiredChoice = new RestaurantMenuRepository.RequiredChoice();
     public static RestaurantMenuRepository.IngredientsToRemove toRemove = new RestaurantMenuRepository.IngredientsToRemove();
 
+    public static DeleteCategoryUseCase deleteCategoryUseCase = new DeleteCategoryUseCase();
+    public static DeleteDishUseCase deleteDishUseCase = new DeleteDishUseCase();
     public static GetCategoriesImagesUseCase getCategoriesImagesUseCase = new GetCategoriesImagesUseCase();
     public static GetDishesImagesUseCase getDishesImagesUseCase = new GetDishesImagesUseCase();
     public static GetCategoriesUseCase getCategoriesUseCase = new GetCategoriesUseCase();

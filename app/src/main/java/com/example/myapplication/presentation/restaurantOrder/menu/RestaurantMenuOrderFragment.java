@@ -223,12 +223,15 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
                 categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
                         index,
+                        current.getCategoryId(),
                         current.getName(),
                         current.getTask(),
                         Uri.EMPTY,
                         0,
                         isDefault,
                         isChosen,
+                        false,
+                        null,
                         () -> {
                             for (int j = 0; j < categories.size(); j++) {
                                 if (categories.get(j) instanceof CategoryItemDelegateItem) {

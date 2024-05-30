@@ -85,6 +85,7 @@
     <string name="update">Update</string>
     <string name="failed">Failed!</string>
     <string name="this_field_is_required">This field is required</string>
+    <string name="this_price_should_be_less">The price should be less than one million</string>
     <string name="update_successful">Update successful!</string>
     <string name="new_email">New email</string>
     <string name="verify_your_email_before_update">Verify your email before update</string>
@@ -442,4 +443,6 @@
     <string name="you_have_to_wait_until_this_order_is_finished">You have to wait until this order is finished!</string>
     <string name="this_table_is_reserved">This table is reserved!</string>
     <string name="you_will_have_to_wait_until_this_order_is_finished_or_choose_another_table">You will have to wait until this order is finished or choose another table</string>
+    <string name="delete_dish">Delete dish</string>
+    <string name="delete_category">Delete category</string>
 </resources>

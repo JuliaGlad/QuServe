@@ -63,6 +63,8 @@ public class Utils {
     public static final String EMAIL = "Email";
     public static final String PASSWORD = "Password";
     public static final String STATE = "State";
+    public static final String DELETED = "Deleted";
+    public static final String UPDATED = "Updated";
     public static final String EMPLOYEE_EMAIL = "EmployeeEmail";
     public static final String WORKER = "Worker";
     public static final String ADMIN = "Admin";

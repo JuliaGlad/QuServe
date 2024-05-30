@@ -1,7 +1,5 @@
 package myapplication.android.ui.recycler.ui.items.items.categoryItem;
 
-import androidx.annotation.NonNull;
-
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 
 public class CategoryItemDelegateItem implements DelegateItem<CategoryItemModel> {
@@ -28,7 +26,7 @@ public class CategoryItemDelegateItem implements DelegateItem<CategoryItemModel>
 
     @Override
     public boolean compareToOther(DelegateItem other) {
-        return ((CategoryItemModel)other.content()).equals(value);
+        return other.content().equals(value);
     }
 
 }

@@ -237,8 +237,12 @@ public class AddDishFragment extends Fragment {
                 break;
             case PAGE_4:
                 if (price != null) {
-                    NavHostFragment.findNavController(this)
-                            .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_5, categoryId));
+                    if (Integer.parseInt(price) <= 1000000) {
+                        NavHostFragment.findNavController(this)
+                                .navigate(AddDishFragmentDirections.actionAddDishFragmentSelf(PAGE_5, categoryId));
+                    } else {
+                        Snackbar.make(requireView(), getString(R.string.this_price_should_be_less), Snackbar.LENGTH_LONG).show();
+                    }
                 } else {
                     Snackbar.make(requireView(), getString(R.string.this_field_is_required), Snackbar.LENGTH_LONG).show();
                 }

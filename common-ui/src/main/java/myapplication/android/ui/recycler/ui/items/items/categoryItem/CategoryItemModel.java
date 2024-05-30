@@ -8,26 +8,41 @@ import java.util.Objects;
 
 import myapplication.android.ui.listeners.ButtonBooleanItemListener;
 import myapplication.android.ui.listeners.ButtonItemListener;
+import myapplication.android.ui.listeners.ButtonObjectListener;
 
 public class CategoryItemModel {
     public int id;
+    public final String categoryId;
     public final String name;
     public final Task<Uri> task;
     public final Uri uri;
     public final int drawable;
     public final boolean isDefault;
     public boolean isChosen;
+    public boolean isEditable;
+    public final ButtonObjectListener listenerDelete;
     public final ButtonItemListener listener;
 
-    public CategoryItemModel(int id, String name, Task<Uri> task, Uri uri, int drawable, boolean isDefault, boolean isChosen, ButtonItemListener listener) {
+    public CategoryItemModel(int id, String categoryId, String name, Task<Uri> task, Uri uri, int drawable, boolean isDefault, boolean isChosen, boolean isEditable, ButtonObjectListener listenerDelete, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
         this.uri = uri;
+        this.categoryId = categoryId;
         this.drawable = drawable;
         this.task = task;
+        this.isEditable = isEditable;
         this.isDefault = isDefault;
         this.listener = listener;
+        this.listenerDelete = listenerDelete;
         this.isChosen = isChosen;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public boolean isEditable() {
+        return isEditable;
     }
 
     public boolean compareTo(CategoryItemModel other) {

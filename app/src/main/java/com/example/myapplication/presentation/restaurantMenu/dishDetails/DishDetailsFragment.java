@@ -3,9 +3,12 @@ package com.example.myapplication.presentation.restaurantMenu.dishDetails;
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.Utils.DELETED;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.Utils.POSITION;
+import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.Utils.UPDATED;
 import static com.example.myapplication.presentation.utils.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
@@ -26,6 +29,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
@@ -120,10 +124,24 @@ public class DishDetailsFragment extends Fragment {
         setToppingAdapter();
         handleBackButtonPressed();
         setupObserves();
+        initDeleteDishMenu();
         initSaveButton();
         initAddRequiredChoiceButton();
         initRemoveIngredients();
         initChangePhoto();
+    }
+
+    private void initDeleteDishMenu() {
+        binding.buttonMenuDelete.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.delete_dish_details_menu, popupMenu.getMenu());
+            popupMenu.show();
+
+            popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
+                viewModel.deleteDish(restaurantId, categoryId, dishId);
+                return true;
+            });
+        });
     }
 
     private void handleBackButtonPressed() {
@@ -215,9 +233,31 @@ public class DishDetailsFragment extends Fragment {
                 setErrorLayout();
             }
         });
+
+        viewModel.isDeleted.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                Intent intent = new Intent();
+                intent.putExtra(STATE, DELETED);
+                intent.putExtra(POSITION, position);
+                intent.putExtra(DISH_ID, dishId);
+                intent.putExtra(DISH_NAME, name);
+                intent.putExtra(DISH_WEIGHT_OR_COUNT, weight);
+                intent.putExtra(DISH_PRICE, price);
+
+                if (imageUri == Uri.EMPTY) {
+                    imageUri = imagePrevious;
+                }
+
+                intent.putExtra(URI, String.valueOf(imageUri));
+                requireActivity().setResult(RESULT_OK, intent);
+                requireActivity().finish();
+            }
+        });
+
         viewModel.isUpdated.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
                 Intent intent = new Intent();
+                intent.putExtra(STATE, UPDATED);
                 intent.putExtra(POSITION, position);
                 intent.putExtra(DISH_ID, dishId);
                 intent.putExtra(DISH_NAME, name);

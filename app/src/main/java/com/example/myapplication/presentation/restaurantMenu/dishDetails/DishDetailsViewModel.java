@@ -29,6 +29,9 @@ public class DishDetailsViewModel extends ViewModel {
     private final MutableLiveData<DishDetailsState> _state = new MutableLiveData<>(new DishDetailsState.Loading());
     LiveData<DishDetailsState> state = _state;
 
+    private final MutableLiveData<Boolean> _isDeleted = new MutableLiveData<>(false);
+    LiveData<Boolean> isDeleted = _isDeleted;
+
     private final MutableLiveData<Boolean> _isUpdated = new MutableLiveData<>(false);
     LiveData<Boolean> isUpdated = _isUpdated;
 
@@ -115,6 +118,27 @@ public class DishDetailsViewModel extends ViewModel {
                     @Override
                     public void onComplete() {
                         _isUpdated.postValue(true);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
+    public void deleteDish(String restaurantId, String categoryId, String dishId) {
+        RestaurantMenuDI.deleteDishUseCase.invoke(restaurantId, categoryId, dishId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _isDeleted.postValue(true);
                     }
 
                     @Override

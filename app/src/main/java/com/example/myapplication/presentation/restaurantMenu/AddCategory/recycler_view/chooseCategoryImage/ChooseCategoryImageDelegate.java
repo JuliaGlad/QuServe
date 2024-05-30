@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.restaurantMenu.AddCategory.recycl
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -58,7 +59,7 @@ public class ChooseCategoryImageDelegate implements AdapterDelegate {
             adapter.addDelegate(new CategoryOwnImageDelegate());
 
             binding.recyclerView.setAdapter(adapter);
-
+            binding.chosenImage.buttonMenuDelete.setVisibility(View.GONE);
             binding.chosenImage.foodTitle.setText(model.name);
 
             if (!model.uri.equals(Uri.EMPTY)){

@@ -35,6 +35,9 @@ public class RestaurantMenuViewModel extends ViewModel {
     private final MutableLiveData<List<CategoryMenuModel>> _categories = new MutableLiveData<>(null);
     LiveData<List<CategoryMenuModel>> categories = _categories;
 
+    private final MutableLiveData<Integer> _categoryDeleted = new MutableLiveData<>(null);
+    LiveData<Integer> categoryDeleted = _categoryDeleted;
+
     private final MutableLiveData<RestaurantMenuState> _state = new MutableLiveData<>(new RestaurantMenuState.Loading());
     LiveData<RestaurantMenuState> state = _state;
 
@@ -158,5 +161,26 @@ public class RestaurantMenuViewModel extends ViewModel {
 
     public void setSuccess() {
         _state.postValue(new RestaurantMenuState.Success(Collections.emptyList()));
+    }
+
+    public void deleteCategory(int position, String restaurantId, String categoryId) {
+        RestaurantMenuDI.deleteCategoryUseCase.invoke(restaurantId, categoryId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _categoryDeleted.postValue(position);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("Error delete category", e.getMessage());
+                    }
+                });
     }
 }

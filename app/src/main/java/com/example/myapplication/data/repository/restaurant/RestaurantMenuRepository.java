@@ -45,6 +45,38 @@ import io.reactivex.rxjava3.core.Single;
 
 public class RestaurantMenuRepository {
 
+    public Completable deleteCategory(String restaurantId, String categoryId) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
+    public Completable deleteDish(String restaurantId, String categoryId, String dishId) {
+        return Completable.create(emitter -> {
+            service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_MENU)
+                    .document(categoryId)
+                    .collection(DISHES)
+                    .document(dishId)
+                    .delete().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+        });
+    }
+
     public Completable updateDishData(String restaurantId, String categoryId, String dishId, String name, String ingredients, String price, String weightOrCount) {
         return Completable.create(emitter -> {
             service.fireStore
@@ -411,7 +443,7 @@ public class RestaurantMenuRepository {
                         .child(TOPPINGS + "/")
                         .child(name + JPG)
                         .delete().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 emitter.onComplete();
                             } else {
                                 emitter.onError(new Throwable(task.getException()));
@@ -661,7 +693,7 @@ public class RestaurantMenuRepository {
         }
     }
 
-    public static class IngredientsToRemove{
+    public static class IngredientsToRemove {
 
         public Completable addIngredientToRemove(String restaurantId, String categoryId, String dishId, String variant) {
             return Completable.create(emitter -> {
