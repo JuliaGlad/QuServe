@@ -48,7 +48,7 @@ public class LocationsFragment extends Fragment {
     private FragmentLocationsBinding binding;
     private String restaurantId;
     private final List<RestaurantLocationModel> items = new ArrayList<>();
-    private ActivityResultLauncher<Intent> addLocationLauncher;
+    private ActivityResultLauncher<Intent> addLocationLauncher, locationLauncher;
     private final RestaurantLocationAdapter adapter = new RestaurantLocationAdapter();
 
     @Override
@@ -59,6 +59,27 @@ public class LocationsFragment extends Fragment {
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
         initLauncher();
+        initLocationLauncher();
+    }
+
+    private void initLocationLauncher() {
+        locationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String locationId = result.getData().getStringExtra(LOCATION_ID);
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i).getLocationId().equals(locationId)){
+                                items.remove(i);
+                                adapter.notifyItemRemoved(i);
+                                break;
+                            }
+                        }
+                        if (items.isEmpty()){
+                            NavHostFragment.findNavController(this)
+                                    .navigate(R.id.action_locationsFragment_to_noLocationsYetFragment);
+                        }
+                    }
+                });
     }
 
     private void initLauncher() {
@@ -78,7 +99,7 @@ public class LocationsFragment extends Fragment {
                                 "0",
                                 "0",
                                 () -> {
-                                    ((LocationsActivity)requireActivity()).openLocationDetailsActivity(locationId);
+                                    ((LocationsActivity)requireActivity()).openLocationDetailsActivity(locationId, locationLauncher);
                                 }
                         ));
                         adapter.notifyItemInserted(items.size() - 1);
@@ -161,7 +182,7 @@ public class LocationsFragment extends Fragment {
                     current.getCity(),
                     current.getWaitersCount(),
                     current.getCooksCount(),
-                    () -> ((LocationsActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId())
+                    () -> ((LocationsActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId(), locationLauncher)
             ));
         }
         binding.recyclerView.setAdapter(adapter);

@@ -102,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openLocationDetailsActivity(String locationId){
+    public void openLocationDetailsActivity(String locationId, ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, RestaurantLocationDetailsActivity.class);
         intent.putExtra(LOCATION_ID, locationId);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openAddLocationsActivity(ActivityResultLauncher<Intent> launcher){

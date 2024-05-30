@@ -1,12 +1,19 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails;
 
+import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +30,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import myapplication.android.ui.recycler.ui.items.items.optionImageButton.OptionImageButtonAdapter;
 import myapplication.android.ui.recycler.ui.items.items.optionImageButton.OptionImageButtonModel;
 
 public class RestaurantLocationDetailsFragment extends Fragment {
 
-    private String locationId;
+    private String locationId, restaurantId;
     private RestaurantLocationDetailsViewModel viewModel;
     private FragmentRestaurantLocationDetailsBinding binding;
     private final OptionImageButtonAdapter adapter = new OptionImageButtonAdapter();
@@ -38,6 +47,7 @@ public class RestaurantLocationDetailsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(RestaurantLocationDetailsViewModel.class);
         locationId = requireActivity().getIntent().getStringExtra(LOCATION_ID);
+        restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
     }
 
     @Override
@@ -53,6 +63,20 @@ public class RestaurantLocationDetailsFragment extends Fragment {
         setupObserves();
         initRecycler();
         initBackButton();
+        initMenu();
+    }
+
+    private void initMenu() {
+        binding.menu.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.delete_location_menu, popupMenu.getMenu());
+            popupMenu.show();
+
+            popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
+                viewModel.deleteLocation(restaurantId, locationId);
+                return true;
+            });
+        });
     }
 
     private void initBackButton() {
@@ -87,6 +111,16 @@ public class RestaurantLocationDetailsFragment extends Fragment {
                 openWaiterQrCodeDialog(uri);
             }
         });
+
+        viewModel.isDeleted.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean){
+                Intent intent = new Intent();
+                intent.putExtra(LOCATION_ID, locationId);
+                requireActivity().setResult(Activity.RESULT_OK, intent);
+                requireActivity().finish();
+            }
+        });
+
     }
 
     private void openWaiterQrCodeDialog(Uri uri){

@@ -21,10 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantLocationRepository {
+
+    public Completable deleteLocation(String restaurantId, String locationId){
+        return Completable.create(emitter -> {
+            DocumentReference docRef = service.fireStore
+                    .collection(RESTAURANT_LIST)
+                    .document(restaurantId)
+                    .collection(RESTAURANT_LOCATION)
+                    .document(locationId);
+
+            docRef.delete().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    emitter.onComplete();
+                }
+            });
+        });
+    }
 
     public Single<List<LocationDto>> getRestaurantLocations(String restaurantId) {
         return Single.create(emitter -> {

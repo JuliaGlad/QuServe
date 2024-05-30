@@ -445,4 +445,5 @@
     <string name="you_will_have_to_wait_until_this_order_is_finished_or_choose_another_table">You will have to wait until this order is finished or choose another table</string>
     <string name="delete_dish">Delete dish</string>
     <string name="delete_category">Delete category</string>
+    <string name="delete_location">Delete location</string>
 </resources>

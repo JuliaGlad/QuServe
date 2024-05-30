@@ -56,8 +56,8 @@ public class RestaurantHomeFragment extends Fragment {
     private RestaurantHomeViewModel viewModel;
     private FragmentRestaurantHomeBinding binding;
     private String restaurantId;
-    private ActivityResultLauncher<Intent> addLocationLauncher;
-    private List<DelegateItem> recyclerItems = new ArrayList<>();
+    private ActivityResultLauncher<Intent> addLocationLauncher, locationLauncher;
+    private final List<DelegateItem> recyclerItems = new ArrayList<>();
     private List<DelegateItem> emptyRecyclerItems = new ArrayList<>();
     private final MainAdapter adapter = new MainAdapter();
 
@@ -69,6 +69,34 @@ public class RestaurantHomeFragment extends Fragment {
         restaurantId = sharedPref.getString(COMPANY_ID, null);
         viewModel.getRestaurantLocations(restaurantId);
         initLauncher();
+        initLocationLauncher();
+    }
+
+    private void initLocationLauncher() {
+        locationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String locationId = result.getData().getStringExtra(LOCATION_ID);
+                        for (int i = 0; i < recyclerItems.size(); i++) {
+                            if (recyclerItems.get(i) instanceof HomeRestaurantLocationDelegateItem) {
+                                HomeRestaurantLocationModel model = (HomeRestaurantLocationModel)recyclerItems.get(i).content();
+                                Log.d("LocationId" + i, model.getLocationId());
+                                if (model.getLocationId().equals(locationId)) {
+                                    Log.d("Index recycler", i + "");
+                                    recyclerItems.remove(i);
+                                    adapter.notifyItemRemoved(i);
+                                    break;
+                                }
+                            }
+                        }
+                        if (recyclerItems.size() == 1){
+                            recyclerItems.remove(0);
+                            adapter.notifyItemRemoved(0);
+                            initEmptyActionRecycler(false);
+                        }
+
+                    }
+                });
     }
 
     private void initLauncher() {
@@ -93,10 +121,11 @@ public class RestaurantHomeFragment extends Fragment {
 
                         recyclerItems.add(new HomeRestaurantLocationDelegateItem(new HomeRestaurantLocationModel(
                                 recyclerItems.size(),
+                                locationId,
                                 location,
                                 "0",
                                 () -> {
-                                    ((MainActivity)requireActivity()).openLocationDetailsActivity(locationId);
+                                    ((MainActivity)requireActivity()).openLocationDetailsActivity(locationId, locationLauncher);
                                 }
                         )));
                         adapter.notifyItemInserted(recyclerItems.size() - 1);
@@ -150,7 +179,7 @@ public class RestaurantHomeFragment extends Fragment {
 
     private void initRecycler(List<RestaurantHomeLocationModel> models) {
         if (models.isEmpty()) {
-            initEmptyActionRecycler();
+            initEmptyActionRecycler(true);
         } else {
             recyclerItems.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.add_location, R.string.open_menu, R.drawable.ic_add_location, R.drawable.ic_menu_book,
                     () -> {
@@ -172,27 +201,33 @@ public class RestaurantHomeFragment extends Fragment {
             RestaurantHomeLocationModel current = models.get(i);
             delegates.add(new HomeRestaurantLocationDelegateItem(new HomeRestaurantLocationModel(
                     i,
+                    current.getLocationId(),
                     current.getLocation(),
                     current.getActiveOrders(),
-                    () -> ((MainActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId())
+                    () -> ((MainActivity)requireActivity()).openLocationDetailsActivity(current.getLocationId(), locationLauncher)
             )));
         }
         return delegates;
     }
 
-    private void initEmptyActionRecycler() {
+    private void initEmptyActionRecycler(boolean isDefault) {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.here_you_will_see_all_your_available_actions)),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.add_location), getString(R.string.create_new_restaurant_location_add_tables_and_employees_and_take_orders), R.drawable.ic_add_location,
                         () -> ((MainActivity) requireActivity()).openAddLocationsActivity(addLocationLauncher))),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.open_menu), getString(R.string.open_and_edit_restaurant_menu_so_your_visitors_can_use_it), R.drawable.ic_menu_book,
                         () -> ((MainActivity) requireActivity()).openRestaurantMenuActivity()))
-        });
+        }, isDefault);
     }
 
-    private void buildList(DelegateItem[] items) {
+    private void buildList(DelegateItem[] items, boolean isDefault) {
         emptyRecyclerItems = Arrays.asList(items);
-        adapter.submitList(emptyRecyclerItems);
+        if (isDefault) {
+            adapter.submitList(emptyRecyclerItems);
+        } else {
+            adapter.submitList(emptyRecyclerItems);
+            adapter.onCurrentListChanged(recyclerItems, emptyRecyclerItems);
+        }
         binding.progressBar.getRoot().setVisibility(View.GONE);
     }
 
