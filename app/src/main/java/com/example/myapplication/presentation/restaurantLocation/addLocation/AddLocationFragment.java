@@ -72,8 +72,15 @@ public class AddLocationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         setAdapter();
+        initBackButton();
         initRecycler();
         initAddButton();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
     }
 
     private void setAdapter() {

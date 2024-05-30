@@ -68,6 +68,11 @@ public class TableListFragment extends Fragment {
         setupObserves();
         setAdapter();
         initAddButton();
+        initBackButton();
+    }
+
+    private void initBackButton() {
+        requireActivity().finish();
     }
 
     private void initAddButton() {
