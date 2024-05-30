@@ -129,7 +129,22 @@ public class CompanyQueueRepository {
 
                 userDoc.set(userRole);
             }
-            emitter.onComplete();
+            DocumentReference docRef =
+                    service.fireStore
+                            .collection(COMPANY_LIST)
+                            .document(companyId)
+                            .collection(EMPLOYEES)
+                            .document(employeeId);
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    int currentCount = Integer.parseInt(task.getResult().getString(ACTIVE_QUEUES_COUNT));
+                    docRef.update(ACTIVE_QUEUES_COUNT, String.valueOf(currentCount + queues.size())).addOnCompleteListener(taskUpdate -> {
+                        if (taskUpdate.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+                }
+            });
         });
     }
 
@@ -176,7 +191,7 @@ public class CompanyQueueRepository {
                 setActiveQueueToEmployee(companyId, queueId, queueName, location, current);
             }
             docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     int previous = Integer.parseInt(task.getResult().getString(WORKERS_COUNT));
                     increaseWorkersCount(emitter, docRef, previous, employee.size());
                 }
@@ -313,7 +328,7 @@ public class CompanyQueueRepository {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             updateInProgressUseCase(queueId, companyId, name, passed).addOnCompleteListener(taskUpdate -> {
-                                if (taskUpdate.isSuccessful()){
+                                if (taskUpdate.isSuccessful()) {
                                     emitter.onComplete();
                                 } else {
                                     emitter.onError(new Throwable(taskUpdate.getException()));

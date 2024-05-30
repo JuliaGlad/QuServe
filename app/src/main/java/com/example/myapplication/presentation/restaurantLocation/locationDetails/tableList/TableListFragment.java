@@ -128,7 +128,7 @@ public class TableListFragment extends Fragment {
 
     private void initRecycler(List<TableModel> tables) {
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(0, R.string.manage_your_restaurant_s_tables_and_view_active_orders)));
-
+        tables.sort(Comparator.comparingInt(o -> Integer.parseInt(o.getNumber())));
         if (!tables.isEmpty()) {
             for (int i = 0; i < tables.size(); i++) {
                 String id = tables.get(i).getTableId();
@@ -142,6 +142,8 @@ public class TableListFragment extends Fragment {
         } else {
             lastTableNumber = 0;
         }
+
+
         adapter.submitList(delegates);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);

@@ -80,7 +80,6 @@ public class CompanyQueueDetailsFragment extends Fragment {
         initMenuButton();
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
