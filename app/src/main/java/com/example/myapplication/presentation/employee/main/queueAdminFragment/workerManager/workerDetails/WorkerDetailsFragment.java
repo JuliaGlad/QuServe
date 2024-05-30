@@ -66,6 +66,14 @@ public class WorkerDetailsFragment extends Fragment {
             employeeId = getArguments().getString(COMPANY_EMPLOYEE);
             companyId = getArguments().getString(COMPANY_ID);
             viewModel.getEmployeeData(companyId, employeeId);
+
+            try {
+                String workers = getArguments().getString(QUEUE_LIST);
+                models.addAll(Objects.requireNonNull(new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
+                }.getType())));
+            } catch (NullPointerException e) {
+                Log.e("NullPointerArguments", "no queues");
+            }
         }
     }
 
@@ -79,9 +87,10 @@ public class WorkerDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("On view created", "created");
         setAdapter();
         setupObserves();
-      //  initAddQueueButton();
+        initAddQueueButton();
         initBackButton();
         handleBackButtonPressed();
     }
@@ -90,47 +99,37 @@ public class WorkerDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                NavHostFragment.findNavController(WorkerDetailsFragment.this).popBackStack();
+                NavHostFragment.findNavController(WorkerDetailsFragment.this)
+                        .navigate(R.id.action_workerDetailsFragment_to_workerManagerFragment);
             }
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        try {
-            String workers = getArguments().getString(QUEUE_LIST);
-            models.addAll(Objects.requireNonNull(new Gson().fromJson(workers, new TypeToken<List<EmployeeModel>>() {
-            }.getType())));
-        } catch (NullPointerException e) {
-            Log.e("NullPointerArguments", "no queues");
-        }
-    }
-
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
+            NavHostFragment.findNavController(WorkerDetailsFragment.this)
+                    .navigate(R.id.action_workerDetailsFragment_to_workerManagerFragment);
         });
     }
-//
-//    private void initAddQueueButton() {
-//        binding.buttonAdd.setOnClickListener(v -> {
-//            Bundle bundle = new Bundle();
-//
-//            ArrayList<String> ids = new ArrayList<>();
-//            for (int i = 0; i < models.size(); i++) {
-//                ids.add(models.get(i).getId());
-//            }
-//
-//            bundle.putString(COMPANY_ID, companyId);
-//            bundle.putStringArrayList(QUEUE_ID, ids);
-//            bundle.putString(COMPANY_EMPLOYEE, employeeId);
-//            bundle.putString(EMPLOYEE_NAME, name);
-//
-//            NavHostFragment.findNavController(this)
-//                    .navigate(R.id.action_workerDetailsFragment_to_addQueueFragment, bundle);
-//        });
-//    }
+
+    private void initAddQueueButton() {
+        binding.buttonAdd.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+
+            ArrayList<String> ids = new ArrayList<>();
+            for (int i = 0; i < models.size(); i++) {
+                ids.add(models.get(i).getId());
+            }
+
+            bundle.putString(COMPANY_ID, companyId);
+            bundle.putStringArrayList(QUEUE_ID, ids);
+            bundle.putString(COMPANY_EMPLOYEE, employeeId);
+            bundle.putString(EMPLOYEE_NAME, name);
+
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_workerDetailsFragment_to_addQueueFragment, bundle);
+        });
+    }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {

@@ -89,9 +89,7 @@ public class QueueWorkerFragment extends Fragment {
                     i,
                     current.getName(),
                     current.getLocation(),
-                    () -> {
-                        ((MainActivity)requireActivity()).openQueueWorkerDetailsActivity(current.getId(), companyId);
-                    }
+                    () -> ((MainActivity)requireActivity()).openQueueWorkerDetailsActivity(current.getId(), companyId)
             ));
         }
         submitList(list);

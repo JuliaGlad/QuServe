@@ -11,7 +11,6 @@ import io.reactivex.rxjava3.core.Single;
 
 public class GetActiveQueuesByEmployeeIdUseCase {
     public Single<List<ActiveQueueEmployeeModel>> invoke(String companyId, String employeeId) {
-        List<ActiveQueueEmployeeModel> models = new ArrayList<>();
         return ProfileEmployeeDI.companyEmployee.getActiveQueuesByEmployeeId(companyId, employeeId).map(dtos ->
                 dtos.stream().map(dto -> new ActiveQueueEmployeeModel(
                         dto.getQueueId(),

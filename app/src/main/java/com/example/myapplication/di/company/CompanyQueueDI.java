@@ -12,6 +12,7 @@ import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteCompan
 import com.example.myapplication.domain.usecase.companyQueue.queues.DeleteEmployeeFromAllQueuesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompaniesQueuesUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueFinishTimeModelUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueInProgressUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueMidTmeModelUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetCompanyQueueParticipantsListUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.GetQueueByIdUseCase;
@@ -24,6 +25,7 @@ import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateCompan
 import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateQueueDataUseCase;
 
 public class CompanyQueueDI {
+    public static GetCompanyQueueInProgressUseCase getCompanyQueueInProgressUseCase = new GetCompanyQueueInProgressUseCase();
     public static ContinueCompanyQueueUseCase continueCompanyQueueUseCase = new ContinueCompanyQueueUseCase();
     public static PauseCompanyQueueUseCase pauseCompanyQueueUseCase = new PauseCompanyQueueUseCase();
     public static UpdateCompanyQueueMidTimeUseCase updateCompanyQueueMidTimeUseCase = new UpdateCompanyQueueMidTimeUseCase();

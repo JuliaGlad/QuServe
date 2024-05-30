@@ -7,6 +7,7 @@ import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,12 +54,14 @@ public class WorkerQueueDetailsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(WorkerQueueDetailsViewModel.class);
         queueId = requireActivity().getIntent().getStringExtra(QUEUE_ID);
         companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        viewModel.getCompanyQueueById(companyId, queueId);
+        Log.d("Data queue", "QueueId:" + " " + queueId + "  " + "CompanyId:" + " " + companyId );
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        viewModel.getCompanyQueueById(companyId, queueId);
+
         binding = FragmentWorkerQueueDetailsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -115,16 +118,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
     }
 
     private void initMenuButton() {
-        binding.buttonMenu.setOnClickListener(v -> {
-            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
-            popupMenu.getMenuInflater().inflate(R.menu.queue_details_menu, popupMenu.getMenu());
-            popupMenu.show();
-
-            popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
-                showFinishQueueDialog();
-                return false;
-            });
-        });
+        binding.buttonMenu.setVisibility(View.GONE);
     }
 
     private void initBackButton() {

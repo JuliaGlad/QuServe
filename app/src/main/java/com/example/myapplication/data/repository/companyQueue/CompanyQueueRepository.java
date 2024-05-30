@@ -30,6 +30,8 @@ import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_COUNT;
 import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
 
+import android.util.Log;
+
 import com.example.myapplication.data.dto.company.CompanyQueueDto;
 import com.example.myapplication.data.dto.company.WorkerDto;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
@@ -117,6 +119,8 @@ public class CompanyQueueRepository {
                                 .collection(USER_LIST)
                                 .document(employeeId)
                                 .collection(COMPANY_EMPLOYEE)
+                                .document(companyId)
+                                .collection(ACTIVE_QUEUES_LIST)
                                 .document(current.getId());
 
                 Map<String, Object> userRole = new HashMap<>();
@@ -229,7 +233,10 @@ public class CompanyQueueRepository {
 
     public Single<List<CompanyQueueDto>> getCompaniesQueues(String companyId) {
         return Single.create(emitter -> {
-            service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId)
+            service.fireStore
+                    .collection(QUEUE_LIST)
+                    .document(COMPANIES_QUEUES)
+                    .collection(companyId)
                     .get().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> documents = task.getResult().getDocuments();

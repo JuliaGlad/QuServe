@@ -45,7 +45,7 @@ public class AddQueueItemAdapter extends ListAdapter<AddQueueItemModel, Recycler
 
             if (model.workers != null && Integer.parseInt(model.workers) > 3 ){
                 model.workers = String.valueOf(Integer.parseInt(model.workers) - 3);
-                binding.workersCount.setText("+" + model.workers);
+                binding.workersCount.setText("+".concat(model.workers));
             } else {
                 binding.workersCount.setText(model.workers);
             }
@@ -56,7 +56,7 @@ public class AddQueueItemAdapter extends ListAdapter<AddQueueItemModel, Recycler
             binding.queueItem.setOnClickListener(v -> {
                 if (model.state.equals(NOT_CHOSEN)){
                     binding.queueItem.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
-                    model.chosen.add(new ActiveQueueModel(
+                    model.addListener.onClick(new ActiveQueueModel(
                             model.queueId,
                             model.queueName,
                             model.location
@@ -66,7 +66,7 @@ public class AddQueueItemAdapter extends ListAdapter<AddQueueItemModel, Recycler
                     binding.queueItem.setStrokeColor(Color.TRANSPARENT);
                     for (int i = 0; i < model.chosen.size(); i++) {
                         if (model.chosen.get(i).getId().equals(model.queueId)){
-                            model.chosen.remove(i);
+                            model.removeListener.onClick(i);
                             break;
                         }
                     }

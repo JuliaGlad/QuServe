@@ -37,6 +37,7 @@ import android.util.Log;
 import com.example.myapplication.data.dto.company.CompanyDto;
 import com.example.myapplication.data.dto.common.EmployeeDto;
 import com.example.myapplication.data.dto.common.ImageDto;
+import com.example.myapplication.data.dto.company.CompanyQueueDto;
 import com.example.myapplication.data.dto.user.UserDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;

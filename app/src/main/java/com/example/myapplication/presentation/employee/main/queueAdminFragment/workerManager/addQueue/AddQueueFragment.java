@@ -74,7 +74,7 @@ public class AddQueueFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                NavHostFragment.findNavController(AddQueueFragment.this).popBackStack();
+                navigateBack();
             }
         });
     }
@@ -88,9 +88,16 @@ public class AddQueueFragment extends Fragment {
     }
 
     private void initButtonBack() {
-        binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
-        });
+        binding.buttonBack.setOnClickListener(v -> navigateBack());
+    }
+
+    private void navigateBack() {
+        Bundle bundle = new Bundle();
+        bundle.putString(COMPANY_ID, companyId);
+        bundle.putString(EMPLOYEE_NAME, employeeName);
+        bundle.putString(COMPANY_EMPLOYEE, employeeId);
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_addQueueFragment_to_workerDetailsFragment, bundle);
     }
 
     private void setupObserves() {
@@ -143,7 +150,11 @@ public class AddQueueFragment extends Fragment {
                     current.getLocation(),
                     current.getCity(),
                     NOT_CHOSEN,
-                    chosen
+                    chosen,
+                    queue -> {
+                        chosen.add((ActiveQueueModel) queue);
+                    },
+                    chosen::remove
             ));
         }
         binding.recyclerView.setAdapter(adapter);

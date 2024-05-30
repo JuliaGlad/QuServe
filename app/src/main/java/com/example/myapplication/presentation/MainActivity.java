@@ -151,11 +151,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openBecomeEmployeeOptionsActivity(){
-        Intent intent = new Intent(this, BecomeEmployeeOptionsActivity.class);
-        startActivity(intent);
-    }
-
     public void openWorkerManagerActivity(String companyId){
         Intent intent = new Intent(this, WorkerManagerActivity.class);
         intent.putExtra(COMPANY_ID, companyId);

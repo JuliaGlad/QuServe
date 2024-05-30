@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -30,17 +31,16 @@ public class WorkerQueueDetailsViewModel extends ViewModel {
     LiveData<WorkerQueueDetailsState> state = _state;
 
     public void getCompanyQueueById(String companyId, String queueId) {
-        Single.zip(CompanyQueueDI.getQueueByIdUseCase.invoke(companyId, queueId), QueueDI.getQrCodeImageUseCase.invoke(queueId), QueueDI.getQueueInProgressModelUseCase.invoke(), new Function3<CompanyQueueNameModel, ImageModel, QueueInProgressModel, WorkerQueueDetailsModel>() {
-                    @Override
-                    public WorkerQueueDetailsModel apply(CompanyQueueNameModel companyQueueNameModel, ImageModel imageModel, QueueInProgressModel queueInProgressModel) throws Throwable {
-                        boolean isPaused = queueInProgressModel.getInProgress().contains("Paused");
-                        return new WorkerQueueDetailsModel(
-                                companyQueueNameModel.getName(),
-                                imageModel.getImageUri(),
-                                isPaused
-                        );
-                    }
-                })
+        Single.zip(CompanyQueueDI.getQueueByIdUseCase.invoke(companyId, queueId),
+                        QueueDI.getQrCodeImageUseCase.invoke(queueId),
+                        CompanyQueueDI.getCompanyQueueInProgressUseCase.invoke(companyId, queueId), (companyQueueNameModel, imageModel, queueInProgressModel) -> {
+                            boolean isPaused = queueInProgressModel.getInProgress().contains("Paused");
+                            return new WorkerQueueDetailsModel(
+                                    companyQueueNameModel.getName(),
+                                    imageModel.getImageUri(),
+                                    isPaused
+                            );
+                        })
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<WorkerQueueDetailsModel>() {
                     @Override
@@ -55,6 +55,7 @@ public class WorkerQueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        Log.e("Error", e.getMessage());
                         _state.postValue(new WorkerQueueDetailsState.Error());
                     }
                 });
