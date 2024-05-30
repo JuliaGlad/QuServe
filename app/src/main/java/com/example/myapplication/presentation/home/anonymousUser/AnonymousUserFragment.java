@@ -22,6 +22,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAnonymousUserBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.dialogFragments.alreadyHaveOrder.AlreadyHaveOrderDialogFragment;
 import com.example.myapplication.presentation.home.anonymousUser.models.AnonymousUserActionsHomeModel;
 import com.example.myapplication.presentation.home.anonymousUser.state.AnonymousUserState;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegate;
@@ -168,7 +169,12 @@ public class AnonymousUserFragment extends Fragment {
                 })));
         items.add(new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.order_in_restaurant), getString(R.string.scan_table_s_qr_code_open_restaurant_menu_and_create_order), R.drawable.ic_create_restaurant_order,
                 () -> {
-                    setScanOptions(restaurantOrderLauncher);
+                    if (restaurantPath.equals(NOT_RESTAURANT_VISITOR)) {
+                        setScanOptions(restaurantOrderLauncher);
+                    } else {
+                        AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
+                    }
                 })));
         adapter.submitList(items);
     }
@@ -179,7 +185,12 @@ public class AnonymousUserFragment extends Fragment {
                     setScanOptions(joinQueueLauncher);
                 },
                 () -> {
-                    setScanOptions(restaurantOrderLauncher);
+                    if (restaurantPath.equals(NOT_RESTAURANT_VISITOR)) {
+                        setScanOptions(restaurantOrderLauncher);
+                    } else {
+                        AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();
+                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
+                    }
                 })));
         items.addAll(actions);
         adapter.submitList(items);

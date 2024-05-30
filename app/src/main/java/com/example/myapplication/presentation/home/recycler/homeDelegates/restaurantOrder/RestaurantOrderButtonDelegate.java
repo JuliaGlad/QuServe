@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder;
 
+import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -41,17 +43,10 @@ public class RestaurantOrderButtonDelegate implements AdapterDelegate {
 
         void bind(RestaurantOrderButtonModel model){
             binding.item.setOnClickListener(v -> {
-                setScanOptions(model.launcher);
+                model.listener.onClick();
             });
         }
 
-        private void setScanOptions(ActivityResultLauncher<ScanOptions> launcher) {
-            ScanOptions scanOptions = new ScanOptions();
-            scanOptions.setPrompt("Scan Qr-Code");
-            scanOptions.setBeepEnabled(true);
-            scanOptions.setCaptureActivity(ScanCode.class);
-            scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
-            launcher.launch(scanOptions);
-        }
+
     }
 }

@@ -138,11 +138,17 @@ public class MainWaiterFragment extends Fragment {
         viewModel.added.observe(getViewLifecycleOwner(), mainWaiterStateModel -> {
             if (mainWaiterStateModel != null) {
                 int index = items.size();
+                boolean isDefault = false;
                 if (items.isEmpty()){
                     binding.constraintLayout.setVisibility(View.GONE);
+                    isDefault = true;
                 }
                 addWaiterItem(items, index, mainWaiterStateModel);
-                adapter.notifyItemInserted(index);
+                if (!isDefault) {
+                    adapter.notifyItemInserted(index);
+                } else {
+                    adapter.submitList(items);
+                }
             }
         });
 

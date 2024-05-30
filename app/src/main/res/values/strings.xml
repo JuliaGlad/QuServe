@@ -50,7 +50,7 @@
     <string name="done">Done</string>
     <string name="failed_to_verify_email">Failed to verify email!</string>
     <string name="email_is_not_verified_please_try_again">Email is not verified. Please, try again.</string>
-    <string name="ok" translatable="false">Ok</string>
+    <string name="ok" translatable="false">Oк</string>
     <string name="welcome">Welcome back!</string>
     <string name="skip">SKIP</string>
     <string name="create_account_to_get_all_features">Create account to get all features</string>
@@ -438,4 +438,8 @@
     <string name="manages_nassigned_queues">Manages \nassigned queues</string>
     <string name="rubles" translatable="false">₽</string>
     <string name="count"> </string>
+    <string name="you_already_have_order">You already have order!</string>
+    <string name="you_have_to_wait_until_this_order_is_finished">You have to wait until this order is finished!</string>
+    <string name="this_table_is_reserved">This table is reserved!</string>
+    <string name="you_will_have_to_wait_until_this_order_is_finished_or_choose_another_table">You will have to wait until this order is finished or choose another table</string>
 </resources>

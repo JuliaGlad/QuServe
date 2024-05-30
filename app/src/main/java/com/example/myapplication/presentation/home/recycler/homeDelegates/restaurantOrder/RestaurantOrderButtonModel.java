@@ -8,10 +8,10 @@ import myapplication.android.ui.listeners.ButtonItemListener;
 
 public class RestaurantOrderButtonModel {
     int id;
-    ActivityResultLauncher<ScanOptions> launcher;
+    ButtonItemListener listener;
 
-    public RestaurantOrderButtonModel(int id, ActivityResultLauncher<ScanOptions> launcher) {
+    public RestaurantOrderButtonModel(int id, ButtonItemListener listener) {
         this.id = id;
-        this.launcher = launcher;
+        this.listener = listener;
     }
 }

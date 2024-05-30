@@ -86,7 +86,7 @@ public class PausedQueueFragment extends Fragment {
         binding.indicator.setMax(PROGRESS);
         binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
-        initStopButton();
+        //initStopButton();
         startCountDown();
     }
 
@@ -117,17 +117,17 @@ public class PausedQueueFragment extends Fragment {
         });
     }
 
-    private void initStopButton() {
-        binding.buttonStopPause.setOnClickListener(v -> {
-            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
-            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
-            dialogFragment.onDismissListener(bundle -> {
-                isStopped = true;
-                NavHostFragment.findNavController(PausedQueueFragment.this)
-                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
-            });
-        });
-    }
+//    private void initStopButton() {
+//        binding.buttonStopPause.setOnClickListener(v -> {
+//            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
+//            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+//            dialogFragment.onDismissListener(bundle -> {
+//                isStopped = true;
+//                NavHostFragment.findNavController(PausedQueueFragment.this)
+//                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
+//            });
+//        });
+//    }
 
     private void startCountDown() {
         new CountDownTimer(timeMillis, 1000) {

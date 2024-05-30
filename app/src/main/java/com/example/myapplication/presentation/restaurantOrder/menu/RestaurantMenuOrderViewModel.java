@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantTableDI;
 import com.example.myapplication.domain.model.restaurant.menu.CategoryModel;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
@@ -23,6 +24,9 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class RestaurantMenuOrderViewModel extends ViewModel {
+
+    private final MutableLiveData<Boolean> _isChecked = new MutableLiveData<>(null);
+    LiveData<Boolean> isChecked = _isChecked;
 
     private final MutableLiveData<List<DishMenuModel>> _newCategory = new MutableLiveData<>(null);
     LiveData<List<DishMenuModel>> newCategory = _newCategory;
@@ -123,6 +127,27 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
                     @Override
                     public void onError(@NonNull Throwable e) {
                         _state.postValue(new RestaurantMenuOrderState.Error());
+                    }
+                });
+    }
+
+    public void checkTableOrder(String tablePath) {
+        RestaurantTableDI.checkTableOrderUseCase.invoke(tablePath)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Boolean aBoolean) {
+                        _isChecked.postValue(aBoolean);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
                     }
                 });
     }

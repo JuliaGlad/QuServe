@@ -1,80 +1,89 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment">
 
-    <ImageView
-        android:id="@+id/cook_wall_paper"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="-24dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cook_background" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/subTitle"
-        style="@style/TextAppearance.Material3.TitleSmall.Medium.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/roboto_medium"
-        android:text="@string/cooker"
-        android:textColor="?colorSurfaceContainerHigh"
-        app:layout_constraintBottom_toBottomOf="@+id/cook_wall_paper"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/cook_wall_paper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-24dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/cook_background" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="@font/bold_roboto"
-        android:textColor="?colorSurface"
-        app:layout_constraintBottom_toTopOf="@+id/subTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Restaurant Name" />
+        <TextView
+            android:id="@+id/subTitle"
+            style="@style/TextAppearance.Material3.TitleSmall.Medium.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@string/cooker"
+            android:textColor="?colorSurfaceContainerHigh"
+            app:layout_constraintBottom_toBottomOf="@+id/cook_wall_paper"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <include
-        android:id="@+id/button_your_orders"
-        layout="@layout/button_with_description_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cook_wall_paper" />
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/bold_roboto"
+            android:textColor="?colorSurface"
+            app:layout_constraintBottom_toTopOf="@+id/subTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Restaurant Name" />
 
-    <include
-        android:id="@+id/button_available_orders"
-        layout="@layout/button_with_description_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_your_orders" />
+        <include
+            android:id="@+id/button_your_orders"
+            layout="@layout/button_with_description_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cook_wall_paper" />
 
-    <include
-        android:id="@+id/loading_layout"
-        layout="@layout/loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/button_available_orders"
+            layout="@layout/button_with_description_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_your_orders" />
+
+        <include
+            android:id="@+id/loading_layout"
+            layout="@layout/loading_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

@@ -2,6 +2,7 @@ package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.Utils.JPG;
+import static com.example.myapplication.presentation.utils.Utils.NO_ORDER;
 import static com.example.myapplication.presentation.utils.Utils.PDF;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
@@ -27,6 +28,21 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 
 public class RestaurantTablesRepository {
+
+    public Single<Boolean> checkTableOrder(String tablePath){
+        return Single.create(emitter -> {
+           service.fireStore.document(tablePath)
+                   .get().addOnCompleteListener(task -> {
+                       if (task.isSuccessful()){
+                            boolean isOrdered =false;
+                            if (!task.getResult().getString(ORDER_ID).equals(NO_ORDER)){
+                                isOrdered = true;
+                            }
+                            emitter.onSuccess(isOrdered);
+                       }
+                   });
+        });
+    }
 
     public Single<TableDto> getSingleTableById(String restaurantId, String locationId, String tableId) {
         return Single.create(emitter -> {
@@ -66,6 +82,7 @@ public class RestaurantTablesRepository {
 
         HashMap<String, Object> table = new HashMap<>();
         table.put(TABLE_NUMBER, tableNumber);
+        table.put(ORDER_ID, NO_ORDER);
 
         return Single.create(emitter -> {
             docRef.set(table).addOnCompleteListener(task -> {
@@ -98,7 +115,6 @@ public class RestaurantTablesRepository {
                                         current.getString(ORDER_ID)
                                 ));
                             }
-                            Log.i("On success", String.valueOf(tables.size()));
                             emitter.onSuccess(tables);
                         } else {
                             emitter.onError(new Throwable(task.getException()));

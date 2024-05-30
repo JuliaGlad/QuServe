@@ -74,7 +74,7 @@ public class PauseWorkerQueueFragment extends Fragment {
         binding.indicator.setMax(PROGRESS);
         binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
-        initStopButton();
+       // initStopButton();
         startCountDown();
     }
 
@@ -123,15 +123,15 @@ public class PauseWorkerQueueFragment extends Fragment {
         binding.timer.setText(timeLeft);
     }
 
-    private void initStopButton() {
-        binding.buttonStopPause.setOnClickListener(v -> {
-            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
-            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
-            dialogFragment.onDismissListener(bundle -> {
-                NavHostFragment.findNavController(this).popBackStack();
-            });
-        });
-    }
+//    private void initStopButton() {
+//        binding.buttonStopPause.setOnClickListener(v -> {
+//            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
+//            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+//            dialogFragment.onDismissListener(bundle -> {
+//                NavHostFragment.findNavController(this).popBackStack();
+//            });
+//        });
+//    }
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {

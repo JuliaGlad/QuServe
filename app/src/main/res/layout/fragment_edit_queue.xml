@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".presentation.companyQueue.queueDetails.editQueue.EditQueueFragment">
 
-
     <ImageButton
         android:id="@+id/imageButton_back"
         android:layout_width="wrap_content"

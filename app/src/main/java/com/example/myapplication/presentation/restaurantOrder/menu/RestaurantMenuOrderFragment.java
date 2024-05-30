@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.databinding.FragmentRestaurantMenuOrderBinding;
+import com.example.myapplication.presentation.dialogFragments.tableAlreadyHaveOrder.TableAlreadyHaveOrderDialogFragment;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderItemAdapter;
@@ -41,7 +43,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private final DishOrderItemAdapter gridAdapter = new DishOrderItemAdapter();
     private final List<DelegateItem> categories = new ArrayList<>();
     private ActivityResultLauncher<Intent> launcher;
-    private List<DishOrderModel> dishes = new ArrayList<>();
+    private final List<DishOrderModel> dishes = new ArrayList<>();
     private String categoryId, tablePath, restaurantId;
 
     @Override
@@ -50,7 +52,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(RestaurantMenuOrderViewModel.class);
         tablePath = requireActivity().getIntent().getStringExtra(RESTAURANT_DATA);
         restaurantId = viewModel.getRestaurantId(tablePath);
-        viewModel.getMenuCategories(restaurantId);
+        viewModel.checkTableOrder(tablePath);
+
         initLauncher();
     }
 
@@ -105,12 +108,27 @@ public class RestaurantMenuOrderFragment extends Fragment {
     }
 
     private void setupObserves() {
+
+        viewModel.isChecked.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (!aBoolean){
+                    viewModel.getMenuCategories(restaurantId);
+                } else {
+                    TableAlreadyHaveOrderDialogFragment dialogFragment = new TableAlreadyHaveOrderDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "TABLE_ALREADY_HAVE_ORDER");
+                    dialogFragment.onDismissListener(bundle -> {
+                        requireActivity().finish();
+                    });
+                }
+            }
+        });
+
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof RestaurantMenuOrderState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuOrderState.Success) state).data;
                 if (!categories.isEmpty()) {
                     if (!models.isEmpty()) {
-                        initDishRecycler(models);
+                        initDishRecycler(models, true);
                     } else {
                         binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
                     }
@@ -136,7 +154,11 @@ public class RestaurantMenuOrderFragment extends Fragment {
             if (dishMenuModels != null) {
                 if (!dishMenuModels.isEmpty()) {
                     binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
-                    initDishRecycler(dishMenuModels);
+                    boolean isDefault = false;
+                    if (dishes.isEmpty()){
+                        isDefault = true;
+                    }
+                    initDishRecycler(dishMenuModels, isDefault);
                 } else {
                     int size = dishes.size();
                     dishes.clear();
@@ -155,7 +177,10 @@ public class RestaurantMenuOrderFragment extends Fragment {
         });
     }
 
-    private void initDishRecycler(List<DishMenuModel> models) {
+    private void initDishRecycler(List<DishMenuModel> models, boolean isDefault) {
+        int size = dishes.size();
+        dishes.clear();
+        gridAdapter.notifyItemRangeRemoved(0, size);
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
@@ -172,7 +197,11 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         }
                 ));
             }
-            gridAdapter.submitList(dishes);
+            if (!isDefault) {
+                gridAdapter.notifyItemRangeInserted(0, models.size());
+            } else {
+                gridAdapter.submitList(dishes);
+            }
         } else {
             gridAdapter.submitList(dishes);
         }

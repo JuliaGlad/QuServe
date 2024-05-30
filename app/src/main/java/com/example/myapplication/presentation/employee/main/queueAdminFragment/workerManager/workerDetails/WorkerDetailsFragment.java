@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -80,8 +81,18 @@ public class WorkerDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setAdapter();
         setupObserves();
-        initAddQueueButton();
+      //  initAddQueueButton();
         initBackButton();
+        handleBackButtonPressed();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(WorkerDetailsFragment.this).popBackStack();
+            }
+        });
     }
 
     @Override
@@ -98,29 +109,28 @@ public class WorkerDetailsFragment extends Fragment {
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_workerDetailsFragment_to_workerManagerFragment);
+            NavHostFragment.findNavController(this).popBackStack();
         });
     }
-
-    private void initAddQueueButton() {
-        binding.buttonAdd.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-
-            ArrayList<String> ids = new ArrayList<>();
-            for (int i = 0; i < models.size(); i++) {
-                ids.add(models.get(i).getId());
-            }
-
-            bundle.putString(COMPANY_ID, companyId);
-            bundle.putStringArrayList(QUEUE_ID, ids);
-            bundle.putString(COMPANY_EMPLOYEE, employeeId);
-            bundle.putString(EMPLOYEE_NAME, name);
-
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_workerDetailsFragment_to_addQueueFragment, bundle);
-        });
-    }
+//
+//    private void initAddQueueButton() {
+//        binding.buttonAdd.setOnClickListener(v -> {
+//            Bundle bundle = new Bundle();
+//
+//            ArrayList<String> ids = new ArrayList<>();
+//            for (int i = 0; i < models.size(); i++) {
+//                ids.add(models.get(i).getId());
+//            }
+//
+//            bundle.putString(COMPANY_ID, companyId);
+//            bundle.putStringArrayList(QUEUE_ID, ids);
+//            bundle.putString(COMPANY_EMPLOYEE, employeeId);
+//            bundle.putString(EMPLOYEE_NAME, name);
+//
+//            NavHostFragment.findNavController(this)
+//                    .navigate(R.id.action_workerDetailsFragment_to_addQueueFragment, bundle);
+//        });
+//    }
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {

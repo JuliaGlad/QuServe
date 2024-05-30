@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.home.basicUser;
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
@@ -23,9 +24,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
+import com.example.myapplication.databinding.DialogYouAlreadyHaveOrderBinding;
 import com.example.myapplication.databinding.FragmentHomeBasisUserBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
+import com.example.myapplication.presentation.dialogFragments.alreadyHaveOrder.AlreadyHaveOrderDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue.AlreadyOwnQueueDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.alreadyParticipateInQueue.AlreadyParticipateInQueueDialogFragment;
 import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicUserModel;
@@ -52,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import myapplication.android.ui.listeners.ButtonItemListener;
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegate;
@@ -166,6 +170,15 @@ public class HomeBasisUserFragment extends Fragment {
         });
     }
 
+    private void setScanOptions(ActivityResultLauncher<ScanOptions> launcher) {
+        ScanOptions scanOptions = new ScanOptions();
+        scanOptions.setPrompt("Scan Qr-Code");
+        scanOptions.setBeepEnabled(true);
+        scanOptions.setCaptureActivity(ScanCode.class);
+        scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
+        launcher.launch(scanOptions);
+    }
+
     private void initUserRecycler(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own, QueueBasicUserHomeModel restaurantVisitor) {
         List<DelegateItem> delegates = new ArrayList<>();
         List<HomeActionButtonDelegateItem> actions = getActionDelegates(companies, participate, own, restaurantVisitor);
@@ -185,7 +198,14 @@ public class HomeBasisUserFragment extends Fragment {
                         viewModel.getQueueData();
                     }
                 })));
-        delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, restaurantOrderLauncher)));
+        delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, () -> {
+            if (restaurantVisitor.getName().equals(NOT_RESTAURANT_VISITOR)){
+                setScanOptions(restaurantOrderLauncher);
+            } else {
+                AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
+            }
+        })));
         delegates.addAll(actions);
 
         adapter.addDelegate(new SquareButtonDelegate());

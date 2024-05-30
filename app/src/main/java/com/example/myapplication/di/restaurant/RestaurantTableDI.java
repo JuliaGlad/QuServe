@@ -2,6 +2,7 @@ package com.example.myapplication.di.restaurant;
 
 import com.example.myapplication.data.repository.restaurant.RestaurantTablesRepository;
 import com.example.myapplication.domain.usecase.restaurant.tables.AddRestaurantTablesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.tables.CheckTableOrderUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.DeleteTableUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.GetRestaurantTablesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.GetSingleTableByIdUseCase;
@@ -17,6 +18,7 @@ public class RestaurantTableDI {
     public static RestaurantTablesRepository restaurantTablesRepository = new RestaurantTablesRepository();
     public static RestaurantTablesRepository.TableImages tableImages = new RestaurantTablesRepository.TableImages();
 
+    public static CheckTableOrderUseCase checkTableOrderUseCase = new CheckTableOrderUseCase();
     public static AddRestaurantTablesUseCase addRestaurantTablesUseCase = new AddRestaurantTablesUseCase();
     public static UploadTableQrCodeJpgUseCase uploadTableQrCodeJpgUseCase = new UploadTableQrCodeJpgUseCase();
     public static UploadTableQrCodePdfUseCase uploadTableQrCodePdfUseCase = new UploadTableQrCodePdfUseCase();

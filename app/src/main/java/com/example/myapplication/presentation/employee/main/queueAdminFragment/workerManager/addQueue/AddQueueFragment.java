@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -65,7 +66,17 @@ public class AddQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initButtonBack();
+        handleBackButtonPressed();
         initButtonOk();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                NavHostFragment.findNavController(AddQueueFragment.this).popBackStack();
+            }
+        });
     }
 
     private void initButtonOk() {
@@ -78,8 +89,7 @@ public class AddQueueFragment extends Fragment {
 
     private void initButtonBack() {
         binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_addQueueFragment_to_workerDetailsFragment);
+            NavHostFragment.findNavController(this).popBackStack();
         });
     }
 

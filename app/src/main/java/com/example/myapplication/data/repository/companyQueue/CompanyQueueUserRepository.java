@@ -308,6 +308,7 @@ public class CompanyQueueUserRepository {
 
             employee.put(EMPLOYEE_NAME, name);
             employee.put(EMPLOYEE_ROLE, WORKER);
+            employee.put(ACTIVE_QUEUES_COUNT, "0");
 
             employeeRef.set(employee).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

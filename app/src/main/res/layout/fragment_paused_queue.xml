@@ -1,79 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".presentation.basicQueue.queueDetails.pausedQueueFragment.PausedQueueFragment">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/your_queue_has_been_paused"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/indicator"
-        style="@style/Widget.Material3.CircularProgressIndicator"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:indeterminate="false"
-        android:background="@drawable/progress_bar_circular_background"
-        android:progressDrawable="@drawable/progressbar_style_progress_drawable"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
-    <TextView
-        android:id="@+id/timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bold_roboto"
-        android:text="00:00"
-        android:textSize="34sp"
-        android:textColor="?colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/indicator"
-        app:layout_constraintEnd_toEndOf="@+id/indicator"
-        app:layout_constraintStart_toStartOf="@+id/indicator"
-        app:layout_constraintTop_toTopOf="@+id/indicator" />
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/your_queue_has_been_paused"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_stop_pause"
-        style="@style/Widget.Material3.Button.QuServe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/stop"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ProgressBar
+            android:id="@+id/indicator"
+            style="@style/Widget.Material3.CircularProgressIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/progress_bar_circular_background"
+            android:indeterminate="false"
+            android:progressDrawable="@drawable/progressbar_style_progress_drawable"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_arrow_back"
-        android:background="@color/transparent"
-        app:tint="?colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title" />
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bold_roboto"
+            android:text="00:00"
+            android:textColor="?colorPrimary"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator"
+            app:layout_constraintEnd_toEndOf="@+id/indicator"
+            app:layout_constraintStart_toStartOf="@+id/indicator"
+            app:layout_constraintTop_toTopOf="@+id/indicator" />
 
-    <include
-        layout="@layout/info_box_layout"
-        android:id="@+id/layout_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/indicator" />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/button_stop_pause"-->
+<!--            style="@style/Widget.Material3.Button.QuServe"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:text="@string/stop"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent" />-->
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintBottom_toBottomOf="@+id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/title"
+            app:tint="?colorPrimary" />
+
+        <include
+            android:id="@+id/layout_box"
+            layout="@layout/info_box_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/indicator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

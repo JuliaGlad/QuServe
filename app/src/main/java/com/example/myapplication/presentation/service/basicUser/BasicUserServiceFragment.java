@@ -25,10 +25,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicUserServiceBinding;
 import com.example.myapplication.presentation.MainActivity;
+import com.example.myapplication.presentation.dialogFragments.alreadyHaveOrder.AlreadyHaveOrderDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
@@ -49,6 +51,7 @@ import myapplication.android.ui.recycler.ui.items.items.optionImageButton.Option
 
 public class BasicUserServiceFragment extends Fragment {
 
+    private BasicUserServiceViewModel viewModel;
     private FragmentBasicUserServiceBinding binding;
     private ActivityResultLauncher<ScanOptions> restaurantLauncher;
     private ActivityResultLauncher<Intent> employeeLauncher;
@@ -58,6 +61,7 @@ public class BasicUserServiceFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(BasicUserServiceViewModel.class);
         initRestaurantLauncher();
         initEmployeeLauncher();
     }
@@ -69,7 +73,7 @@ public class BasicUserServiceFragment extends Fragment {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
 
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                         String role = data.getStringExtra(EMPLOYEE_ROLE);
                         String companyId = data.getStringExtra(COMPANY_ID);
 
@@ -118,10 +122,22 @@ public class BasicUserServiceFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupObserves();
         initRecycler();
     }
 
-
+    private void setupObserves() {
+        viewModel.isVisitor.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (aBoolean){
+                    AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
+                } else {
+                    setScanOptions();
+                }
+            }
+        });
+    }
 
     private void initRestaurantLauncher() {
         restaurantLauncher = registerForActivityResult(new ScanContract(), result -> {
@@ -138,7 +154,9 @@ public class BasicUserServiceFragment extends Fragment {
                 new OptionImageButtonModel(1, R.drawable.queue_action_background, getResources().getString(R.string.queue), () -> {
                     ((MainActivity) requireActivity()).openQueueActivity();
                 }),
-                new OptionImageButtonModel(2, R.drawable.restaurant_action_background, getResources().getString(R.string.restaurant), this::setScanOptions),
+                new OptionImageButtonModel(2, R.drawable.restaurant_action_background, getResources().getString(R.string.restaurant), () -> {
+                    viewModel.getActions();
+                }),
                 new OptionImageButtonModel(4, R.drawable.become_employee_background, getResources().getString(R.string.become_employee), () -> {
                     if (requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(APP_STATE, ANONYMOUS).equals(ANONYMOUS)) {
                         NeedAccountDialogFragment dialogFragment = new NeedAccountDialogFragment();

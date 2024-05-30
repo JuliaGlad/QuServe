@@ -430,4 +430,8 @@
     <string name="you_don_t_have_any_dishes_in_this_category_yet">У вас пока что нет блюд в этой категории!</string>
     <string name="manages_nassigned_queues">Продвигает назначенные очереди и обслуживает посетителей</string>
     <string name="count">шт</string>
+    <string name="you_already_have_order">У вас уже есть заказ!</string>
+    <string name="you_have_to_wait_until_this_order_is_finished">Вам нужно дождаться завершения этого заказа!</string>
+    <string name="this_table_is_reserved">Этот столик уже занят!</string>
+    <string name="you_will_have_to_wait_until_this_order_is_finished_or_choose_another_table">Вам нужно дождаться завершения уже имеющегося заказа, либо выбрать другой столик</string>
 </resources>

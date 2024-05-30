@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -176,6 +177,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 initRequiredChoiceRecycler(requireChoices);
                 initOrderButton(name, weight);
                 initRemove(toRemove);
+                initInfoButton(model.getEstimatedTime());
                 binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof RestaurantOrderDishDetailsState.Loading) {
@@ -189,6 +191,16 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 binding.buttonOrder.setText(getString(R.string.add).concat(" " + "+" + totalPrice + "₽"));
             });
 
+        });
+    }
+
+    private void initInfoButton(String time) {
+        binding.buttonInfo.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(requireContext(), v);
+            popupMenu.getMenuInflater().inflate(R.menu.dish_details_menu, popupMenu.getMenu());
+            popupMenu.show();
+
+            popupMenu.getMenu().getItem(0).setTitle(time);
         });
     }
 
