@@ -21,6 +21,19 @@
         app:layout_constraintTop_toTopOf="@+id/weight_count"
         app:shapeAppearance="@style/Widget.MaterialComponents.ShapeableImageView.RoundCorners" />
 
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/dish_image"
+        app:layout_constraintEnd_toEndOf="@+id/dish_image"
+        app:layout_constraintStart_toStartOf="@+id/dish_image"
+        app:layout_constraintTop_toTopOf="@+id/dish_image"
+        android:visibility="gone"
+        app:mk_color="?colorPrimary"
+        app:mk_type="FishSpinner" />
+
     <TextView
         android:id="@+id/dish_name"
         style="@style/TextAppearance.Material3.BodyLarge.Medium.QuServe"

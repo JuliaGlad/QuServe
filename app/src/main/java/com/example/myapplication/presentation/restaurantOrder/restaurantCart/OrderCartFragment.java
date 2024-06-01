@@ -61,7 +61,7 @@ public class OrderCartFragment extends Fragment {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent intent = new Intent();
                         intent.putExtra(IS_DONE, true);
-                        requireActivity().setResult(RESULT_OK);
+                        requireActivity().setResult(RESULT_OK, intent);
                         requireActivity().finish();
                     }
                 });

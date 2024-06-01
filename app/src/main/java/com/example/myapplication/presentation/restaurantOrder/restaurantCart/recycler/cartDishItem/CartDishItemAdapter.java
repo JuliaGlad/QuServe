@@ -48,6 +48,7 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
         }
 
         void bind(CartDishItemModel models) {
+            binding.loader.setVisibility(View.VISIBLE);
             String firstDishPrice = models.price;
             binding.dishName.setText(models.name);
             binding.weightCount.setText(models.weight);
@@ -60,6 +61,7 @@ public class CartDishItemAdapter extends ListAdapter<CartDishItemModel, Recycler
                         Glide.with(itemView.getContext())
                                 .load(task.getResult())
                                 .into(binding.dishImage);
+                        binding.loader.setVisibility(View.GONE);
                     }
                 });
             }

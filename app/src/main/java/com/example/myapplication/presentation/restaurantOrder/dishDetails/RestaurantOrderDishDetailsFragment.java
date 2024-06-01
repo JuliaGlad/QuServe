@@ -86,10 +86,10 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         if (result.getData() != null){
-                            Log.d("Is done", "exist");
                             Intent intent = new Intent();
                             intent.putExtra(IS_DONE, true);
                             requireActivity().setResult(RESULT_OK, intent);
+                            requireActivity().finish();
                         }else {
                             requireActivity().finish();
                         }
