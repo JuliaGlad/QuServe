@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.databinding.FragmentRestaurantMenuOrderBinding;
 import com.example.myapplication.presentation.dialogFragments.tableAlreadyHaveOrder.TableAlreadyHaveOrderDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderItemAdapter;
@@ -53,7 +54,15 @@ public class RestaurantMenuOrderFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(RestaurantMenuOrderViewModel.class);
         tablePath = requireActivity().getIntent().getStringExtra(RESTAURANT_DATA);
         restaurantId = viewModel.getRestaurantId(tablePath);
-        viewModel.checkTableOrder(tablePath);
+        if (restaurantId != null) {
+            viewModel.checkTableOrder(tablePath);
+        } else {
+            WrongQrCodeDialogFragment dialogFragment = new WrongQrCodeDialogFragment();
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "WRONG_QR_CODE_FRAGMENT");
+            dialogFragment.onDialogDismissedListener(bundle -> {
+                requireActivity().finish();
+            });
+        }
         initLauncher();
     }
 

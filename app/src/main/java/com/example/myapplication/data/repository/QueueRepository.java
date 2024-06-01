@@ -101,26 +101,30 @@ public class QueueRepository {
     }
 
     public Single<QueueDto> getQueueByParticipantPath(String path) {
-        DocumentReference docRef = service.fireStore.document(path);
         return Single.create(emitter -> {
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    emitter.onSuccess(new QueueDto(
-                            (List<Object>) document.get(QUEUE_PARTICIPANTS_LIST),
-                            document.getId(),
-                            document.getString(QUEUE_NAME_KEY),
-                            document.getString(QUEUE_LIFE_TIME_KEY),
-                            document.getString(QUEUE_AUTHOR_KEY),
-                            document.getString(QUEUE_IN_PROGRESS),
-                            document.getString(PEOPLE_PASSED),
-                            document.getString(PEOPLE_PASSED_15),
-                            document.getString(MID_TIME_WAITING))
-                    );
-                }else {
-                    emitter.onError(new Throwable(task.getException()));
-                }
-            });
+            try {
+                DocumentReference docRef = service.fireStore.document(path);
+                docRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        emitter.onSuccess(new QueueDto(
+                                (List<Object>) document.get(QUEUE_PARTICIPANTS_LIST),
+                                document.getId(),
+                                document.getString(QUEUE_NAME_KEY),
+                                document.getString(QUEUE_LIFE_TIME_KEY),
+                                document.getString(QUEUE_AUTHOR_KEY),
+                                document.getString(QUEUE_IN_PROGRESS),
+                                document.getString(PEOPLE_PASSED),
+                                document.getString(PEOPLE_PASSED_15),
+                                document.getString(MID_TIME_WAITING))
+                        );
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
+                    }
+                });
+            } catch (IllegalArgumentException e){
+                emitter.onError(new Throwable(e.getMessage()));
+            }
         });
     }
 

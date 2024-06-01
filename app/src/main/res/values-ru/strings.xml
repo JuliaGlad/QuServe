@@ -440,4 +440,6 @@
     <string name="delete_dish">Удалить блюдо</string>
     <string name="delete_category">Удалить категорию</string>
     <string name="delete_location">Удалить локацию</string>
+    <string name="wrong_qr_code">Неправильный QR-код!</string>
+    <string name="looks_like_you_have_scanned_wrong_qr_code_please_try_again_with_the_different_one">Похоже вы отсканировали неверный QR-код! Пожалуйста, попробуйте снова с другим QR-кодом</string>
 </resources>

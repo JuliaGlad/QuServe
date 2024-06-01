@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.COOK_DATA;
@@ -7,9 +8,11 @@ import static com.example.myapplication.presentation.utils.constants.Utils.EMPLO
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.WAITER_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.WRONG_CODE;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeEmployeeOptionsBinding;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.employee.becomeCook.BecomeCookActivity;
 import com.example.myapplication.presentation.employee.becomeEmployee.BecomeEmployeeActivity;
 import com.example.myapplication.presentation.employee.becomeWaiter.BecomeWaiterActivity;

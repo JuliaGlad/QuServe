@@ -1,13 +1,11 @@
 package com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
+import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.model.JoinQueueModel;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.state.JoinQueueState;
 
@@ -41,8 +39,11 @@ public class JoinQueueViewModel extends ViewModel {
 
                     @Override
                     public void onSuccess(@NonNull JoinQueueModel joinQueueModel) {
-                        Log.i("Queue data got", joinQueueModel.getName());
-                        _state.postValue(new JoinQueueState.Success(joinQueueModel));
+                        if (joinQueueModel.getName() != null) {
+                            _state.postValue(new JoinQueueState.Success(joinQueueModel));
+                        } else {
+                            _state.postValue(new JoinQueueState.Error());
+                        }
                     }
 
                     @Override

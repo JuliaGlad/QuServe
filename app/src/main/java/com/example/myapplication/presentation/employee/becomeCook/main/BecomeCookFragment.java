@@ -1,9 +1,13 @@
 package com.example.myapplication.presentation.employee.becomeCook.main;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.COOK_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.WRONG_CODE;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeCookBinding;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.employee.becomeCook.state.BecomeCookState;
 import com.example.myapplication.presentation.employee.becomeCook.state.BecomeCookStateModel;
 
@@ -30,10 +35,14 @@ public class BecomeCookFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeCookViewModel.class);
-        try {
-            path = requireActivity().getIntent().getStringExtra(COOK_DATA);
-        } catch (NullPointerException e){
-            requireActivity().finish();
+        path = requireActivity().getIntent().getStringExtra(COOK_DATA);
+        assert path != null;
+        if (!path.endsWith(COOKS)){
+            WrongQrCodeDialogFragment dialogFragment = new WrongQrCodeDialogFragment();
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "WRONG_QR_CODE");
+            dialogFragment.onDialogDismissedListener(bundle -> {
+                requireActivity().finish();
+            });
         }
         viewModel.getData(path);
     }

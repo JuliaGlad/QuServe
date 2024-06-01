@@ -1,10 +1,12 @@
 package com.example.myapplication.presentation.employee.becomeWaiter;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITERS;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.WAITER_DATA;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeWaiterBinding;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.employee.becomeWaiter.state.BecomeWaiterModel;
 import com.example.myapplication.presentation.employee.becomeWaiter.state.BecomeWaiterState;
 
@@ -33,6 +36,14 @@ public class BecomeWaiterFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeWaiterViewModel.class);
         waiterPath = requireActivity().getIntent().getStringExtra(WAITER_DATA);
+        assert waiterPath != null;
+        if (!waiterPath.endsWith(WAITERS)){
+            WrongQrCodeDialogFragment dialogFragment = new WrongQrCodeDialogFragment();
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "WRONG_QR_CODE");
+            dialogFragment.onDialogDismissedListener(bundle -> {
+                requireActivity().finish();
+            });
+        }
         viewModel.getRestaurantName(waiterPath);
     }
 
@@ -83,8 +94,6 @@ public class BecomeWaiterFragment extends Fragment {
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else if (state instanceof BecomeWaiterState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
-            } else if (state instanceof BecomeWaiterState.Error) {
-                setErrorLayout();
             }
         });
 

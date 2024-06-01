@@ -17,6 +17,7 @@ import com.example.myapplication.databinding.FragmentJoinQueueBinding;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.model.JoinQueueModel;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.state.JoinQueueState;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 
 public class JoinQueueFragment extends Fragment {
 
@@ -53,7 +54,6 @@ public class JoinQueueFragment extends Fragment {
     }
 
     private void initUi(){
-        viewModel.getQueueData(queueData);
         setupObserves();
         initOkButton();
         initNoButton();
@@ -84,7 +84,11 @@ public class JoinQueueFragment extends Fragment {
             } else if (state instanceof JoinQueueState.Loading){
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof JoinQueueState.Error){
-                setErrorLayout();
+                WrongQrCodeDialogFragment dialogFragment = new WrongQrCodeDialogFragment();
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "WRONG_QR_CODE");
+                dialogFragment.onDialogDismissedListener(bundle -> {
+                    requireActivity().finish();
+                });
             }
         });
 
@@ -101,12 +105,5 @@ public class JoinQueueFragment extends Fragment {
             }
         });
 
-    }
-
-    private void setErrorLayout() {
-        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getQueueData(queueData);
-        });
     }
 }

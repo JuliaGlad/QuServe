@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.employee.becomeEmployee;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_DATA;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeEmployeeBinding;
+import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 
 public class BecomeEmployeeFragment extends Fragment {
 
@@ -30,13 +32,7 @@ public class BecomeEmployeeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         viewModel = new ViewModelProvider(this).get(BecomeEmployeeViewModel.class);
         binding = FragmentBecomeEmployeeBinding.inflate(inflater, container, false);
-
-        try {
-            companyId = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
-        }catch (NullPointerException e){
-            requireActivity().finish();
-        }
-
+        companyId = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
         if (companyId != null) {
             binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
             viewModel.getCompany(companyId);
@@ -48,6 +44,7 @@ public class BecomeEmployeeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
         setupObserves();
         initNoButton();
         initYesButton();
@@ -89,16 +86,12 @@ public class BecomeEmployeeFragment extends Fragment {
                 binding.progressLayout.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
             } else {
-                binding.progressLayout.getRoot().setVisibility(View.GONE);
-                setErrorLayout();
+                WrongQrCodeDialogFragment dialogFragment = new WrongQrCodeDialogFragment();
+                dialogFragment.show(requireActivity().getSupportFragmentManager(), "WRONG_QR_CODE");
+                dialogFragment.onDialogDismissedListener(bundle -> {
+                    requireActivity().finish();
+                });
             }
-        });
-    }
-
-    private void setErrorLayout() {
-        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getCompany(companyId);
         });
     }
 }
