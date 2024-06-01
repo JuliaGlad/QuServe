@@ -1,23 +1,19 @@
 package com.example.myapplication.presentation.dialogFragments.pauseQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_HOURS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_MINUTES;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_SECONDS;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.NumberPicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.DialogNumberPickerBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 

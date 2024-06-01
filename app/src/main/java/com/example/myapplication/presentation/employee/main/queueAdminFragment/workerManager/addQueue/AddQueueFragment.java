@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMPLOYEE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.utils.workers;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.content.Context;
 

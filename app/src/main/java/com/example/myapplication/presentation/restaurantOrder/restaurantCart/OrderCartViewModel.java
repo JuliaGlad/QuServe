@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantTableDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
@@ -81,10 +82,10 @@ public class OrderCartViewModel extends ViewModel {
         }
     }
 
-    public void createOrder(String restaurantId, String totalPrice, String path, List<OrderDishesModel> models) {
+    public void createOrder(String restaurantId, String tableId, String totalPrice, String path, List<OrderDishesModel> models) {
         String orderId = generateOrderId();
 
-        RestaurantOrderDI.addToActiveOrdersUseCase.invoke(restaurantId, path, orderId, totalPrice, models)
+        RestaurantOrderDI.addToActiveOrdersUseCase.invoke(restaurantId, tableId, path, orderId, totalPrice, models)
                 .flatMapCompletable(pathOrder -> ProfileDI.addActiveRestaurantOrderUseCase.invoke(pathOrder))
                 .concatWith(RestaurantOrderDI.addToTableListOrdersUseCase.invoke(path, orderId))
                 .subscribeOn(Schedulers.io())
@@ -122,5 +123,9 @@ public class OrderCartViewModel extends ViewModel {
 
     public void decrementAmount(CartDishModel model) {
         RestaurantOrderDI.decrementDishAmountUseCase.invoke(model);
+    }
+
+    public String getTableId(String path) {
+        return RestaurantTableDI.getTableIdByPathUseCase.invoke(path);
     }
 }

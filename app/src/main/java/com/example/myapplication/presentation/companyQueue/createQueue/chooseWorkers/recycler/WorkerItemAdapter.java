@@ -1,13 +1,10 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers.recycler;
 
-import static com.example.myapplication.presentation.utils.Utils.CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;

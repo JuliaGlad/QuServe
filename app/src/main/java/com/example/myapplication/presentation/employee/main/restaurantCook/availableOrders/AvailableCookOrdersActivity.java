@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders;
 
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 

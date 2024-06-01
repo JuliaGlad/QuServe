@@ -1,11 +1,10 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.INGREDIENT_TO_REMOVE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
@@ -25,14 +24,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantOrderDishDetailsBinding;
 import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOrder.IngredientsToRemoveOrderDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.ingredientsToRemoveOwner.IngredientsToRemoveDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileFragment;
-import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.requiredChoice.RequiredChoiceAdapter;
-import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.requiredChoice.RequiredChoiceItemModel;
 import com.example.myapplication.presentation.restaurantMenu.dishDetails.recyclers.topping.ToppingDelegate;
 import com.example.myapplication.presentation.restaurantMenu.model.VariantsModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
@@ -92,7 +86,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         if (result.getData() != null){
-                            Log.i("Data from dish details", "got");
+                            Log.d("Is done", "exist");
                             Intent intent = new Intent();
                             intent.putExtra(IS_DONE, true);
                             requireActivity().setResult(RESULT_OK, intent);

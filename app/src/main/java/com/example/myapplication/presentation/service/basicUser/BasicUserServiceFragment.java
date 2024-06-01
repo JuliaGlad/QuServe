@@ -1,13 +1,13 @@
 package com.example.myapplication.presentation.service.basicUser;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
@@ -54,7 +54,6 @@ public class BasicUserServiceFragment extends Fragment {
     private BasicUserServiceViewModel viewModel;
     private FragmentBasicUserServiceBinding binding;
     private ActivityResultLauncher<ScanOptions> restaurantLauncher;
-    private ActivityResultLauncher<Intent> employeeLauncher;
     private final List<OptionImageButtonModel> list = new ArrayList<>();
     private final OptionImageButtonAdapter adapter = new OptionImageButtonAdapter();
 
@@ -63,53 +62,6 @@ public class BasicUserServiceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BasicUserServiceViewModel.class);
         initRestaurantLauncher();
-        initEmployeeLauncher();
-    }
-
-    private void initEmployeeLauncher() {
-
-        employeeLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-
-                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                        String role = data.getStringExtra(EMPLOYEE_ROLE);
-                        String companyId = data.getStringExtra(COMPANY_ID);
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(COMPANY_ID, companyId);
-
-                        assert role != null;
-                        switch (role) {
-                            case WORKER:
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.nav_host_fragment_activity_main, QueueWorkerFragment.class, bundle)
-                                        .commit();
-                                break;
-                            case ADMIN:
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.nav_host_fragment_activity_main, QueueAdminFragment.class, bundle)
-                                        .commit();
-                                break;
-                            case COOK:
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.nav_host_fragment_activity_main, CookEmployeeFragment.class, bundle)
-                                        .commit();
-                                break;
-                            case WAITER:
-                                fragmentManager
-                                        .beginTransaction()
-                                        .replace(R.id.nav_host_fragment_activity_main, MainWaiterFragment.class, bundle)
-                                        .commit();
-                                break;
-                        }
-
-                    }
-                });
     }
 
     @Override
@@ -163,7 +115,7 @@ public class BasicUserServiceFragment extends Fragment {
                         dialogFragment.show(requireActivity().getSupportFragmentManager(), "NEED_ACCOUNT_DIALOG");
                     } else {
                         Intent intent = new Intent(requireActivity(), BecomeEmployeeOptionsActivity.class);
-                        employeeLauncher.launch(intent);
+                        requireActivity().startActivity(intent);
                     }
                 })
         });

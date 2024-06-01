@@ -1,15 +1,15 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.main;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.app.Activity;

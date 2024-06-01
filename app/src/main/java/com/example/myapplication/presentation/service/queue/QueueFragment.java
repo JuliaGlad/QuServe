@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.service.queue;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.queueManager;
 
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

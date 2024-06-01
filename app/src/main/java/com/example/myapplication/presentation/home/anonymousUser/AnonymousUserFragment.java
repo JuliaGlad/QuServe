@@ -1,9 +1,11 @@
 package com.example.myapplication.presentation.home.anonymousUser;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
-import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPANT;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import android.content.Intent;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -56,6 +59,7 @@ public class AnonymousUserFragment extends Fragment {
     private String restaurantPath;
     private final MainAdapter adapter = new MainAdapter();
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
+    private ActivityResultLauncher<Intent> orderDetailsLauncher;
     private final List<DelegateItem> items = new ArrayList<>();
     private final List<DelegateItem> actions = new ArrayList<>();
 
@@ -66,6 +70,7 @@ public class AnonymousUserFragment extends Fragment {
         viewModel.getActions();
         initJoinQueueLauncher();
         initRestaurantOrderLauncher();
+        initOrderDetailsLauncher();
     }
 
     @Override
@@ -99,6 +104,29 @@ public class AnonymousUserFragment extends Fragment {
                 requireActivity().startActivity(intent);
             }
         });
+    }
+
+    private void initOrderDetailsLauncher() {
+        orderDetailsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        for (int i = 0; i < items.size(); i++) {
+                            if (items.get(i) instanceof  HomeActionButtonDelegateItem){
+                                HomeActionButtonModel model = ((HomeActionButtonDelegateItem)items.get(i)).content();
+                                if (model.getType().equals(VISITOR)){
+                                    items.remove(i);
+                                    adapter.notifyItemRemoved(i);
+                                    if (items.size() == 2){
+                                        items.clear();
+                                        adapter.notifyItemRangeRemoved(0, 2);
+                                        initNoActionsRecycler(false);
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     private void initRestaurantOrderLauncher() {
@@ -138,14 +166,14 @@ public class AnonymousUserFragment extends Fragment {
                 if (!name.equals(NOT_RESTAURANT_VISITOR)) {
                     actions.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(1, name, R.string.restaurant_visitor, PARTICIPANT,
                             () -> {
-                                ((MainActivity) requireActivity()).openOrderDetailsActivity(restaurantPath);
+                                ((MainActivity) requireActivity()).openOrderDetailsActivity(restaurantPath, orderDetailsLauncher);
                             })));
                 }
 
                 if (!actions.isEmpty()) {
                     initRecycler();
                 } else {
-                    initNoActionsRecycler();
+                    initNoActionsRecycler(true);
                 }
                 binding.progressBar.getRoot().setVisibility(View.GONE);
                 binding.errorLayout.errorLayout.setVisibility(View.GONE);
@@ -161,7 +189,7 @@ public class AnonymousUserFragment extends Fragment {
         });
     }
 
-    private void initNoActionsRecycler() {
+    private void initNoActionsRecycler(boolean isDefault) {
         items.add(new AdviseBoxDelegateItem(new AdviseBoxModel(0, R.string.here_you_will_see_all_your_available_actions)));
         items.add(new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(1, getString(R.string.join_queue), getString(R.string.scan_queue_s_qr_code_and_join_it), R.drawable.qr_code,
                 () -> {
@@ -176,7 +204,12 @@ public class AnonymousUserFragment extends Fragment {
                         dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
                     }
                 })));
-        adapter.submitList(items);
+
+        if (!isDefault){
+            adapter.notifyItemRangeInserted(0, 3);
+        } else {
+            adapter.submitList(items);
+        }
     }
 
     private void initRecycler() {

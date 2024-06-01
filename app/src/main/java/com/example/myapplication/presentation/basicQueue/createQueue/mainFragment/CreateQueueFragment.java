@@ -3,14 +3,14 @@ package com.example.myapplication.presentation.basicQueue.createQueue.mainFragme
 import static android.os.Build.VERSION.SDK_INT;
 import static com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments.queueName;
 import static com.example.myapplication.presentation.basicQueue.createQueue.arguments.Arguments.queueTime;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.FINE_PERMISSION_CODE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_2;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.stringsTimeArray;
 
 import android.Manifest;
 import android.content.Intent;

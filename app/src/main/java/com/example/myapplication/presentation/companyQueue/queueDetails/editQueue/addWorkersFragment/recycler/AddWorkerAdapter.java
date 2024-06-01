@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler;
 
-import static com.example.myapplication.presentation.utils.Utils.CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import android.graphics.Color;
 import android.net.Uri;

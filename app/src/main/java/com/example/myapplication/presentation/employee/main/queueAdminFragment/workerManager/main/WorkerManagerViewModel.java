@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.main;
 
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

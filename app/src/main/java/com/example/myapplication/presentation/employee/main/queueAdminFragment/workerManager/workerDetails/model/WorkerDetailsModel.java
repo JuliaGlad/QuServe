@@ -1,8 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.model;
 
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
-
-import android.net.Uri;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 

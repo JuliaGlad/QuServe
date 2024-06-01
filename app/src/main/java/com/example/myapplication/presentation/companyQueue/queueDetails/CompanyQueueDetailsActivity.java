@@ -1,16 +1,11 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityCompanyQueueDetailsBinding;

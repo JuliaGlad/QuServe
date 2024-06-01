@@ -3,6 +3,7 @@ package com.example.myapplication.di.restaurant;
 import com.example.myapplication.data.repository.restaurant.RestaurantMenuRepository;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddDishUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.AddMenuCategoryWithDrawableUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteCategoryUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.DeleteDishUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.GetCategoriesUseCase;
@@ -10,6 +11,7 @@ import com.example.myapplication.domain.usecase.restaurant.menu.GetDishesMenuOwn
 import com.example.myapplication.domain.usecase.restaurant.menu.GetSingleDishByIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.UpdateDishDataUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.GetCategoriesImagesUseCase;
+import com.example.myapplication.domain.usecase.restaurant.menu.images.GetCategoryImageDrawableUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.GetDishesImagesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.GetSingleDishImageUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.UploadCategoryUriImageUseCase;
@@ -40,6 +42,8 @@ public class RestaurantMenuDI {
     public static RestaurantMenuRepository.RequiredChoice requiredChoice = new RestaurantMenuRepository.RequiredChoice();
     public static RestaurantMenuRepository.IngredientsToRemove toRemove = new RestaurantMenuRepository.IngredientsToRemove();
 
+    public static GetCategoryImageDrawableUseCase getCategoryImageDrawableUseCase = new GetCategoryImageDrawableUseCase();
+    public static AddMenuCategoryWithDrawableUseCase addMenuCategoryWithDrawableUseCase = new AddMenuCategoryWithDrawableUseCase();
     public static DeleteCategoryUseCase deleteCategoryUseCase = new DeleteCategoryUseCase();
     public static DeleteDishUseCase deleteDishUseCase = new DeleteDishUseCase();
     public static GetCategoriesImagesUseCase getCategoriesImagesUseCase = new GetCategoriesImagesUseCase();

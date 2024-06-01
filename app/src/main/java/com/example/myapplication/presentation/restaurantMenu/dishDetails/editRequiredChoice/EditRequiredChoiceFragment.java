@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.restaurantMenu.dishDetails.editRequiredChoice;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;

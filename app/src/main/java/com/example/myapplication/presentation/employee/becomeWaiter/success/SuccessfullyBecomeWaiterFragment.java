@@ -1,8 +1,7 @@
 package com.example.myapplication.presentation.employee.becomeWaiter.success;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
 import android.app.Activity;

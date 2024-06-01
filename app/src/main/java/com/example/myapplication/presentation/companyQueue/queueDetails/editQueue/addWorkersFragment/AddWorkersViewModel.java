@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.app.Activity;
@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantLocationDetailsBinding;
@@ -30,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import myapplication.android.ui.recycler.ui.items.items.optionImageButton.OptionImageButtonAdapter;
 import myapplication.android.ui.recycler.ui.items.items.optionImageButton.OptionImageButtonModel;
 

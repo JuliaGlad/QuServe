@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import android.content.Context;
 import android.os.Bundle;

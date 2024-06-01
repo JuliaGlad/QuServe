@@ -1,13 +1,10 @@
 package com.example.myapplication.presentation.profile.loggedProfile.main;
 
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.NAVIGATION;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.content.Context;

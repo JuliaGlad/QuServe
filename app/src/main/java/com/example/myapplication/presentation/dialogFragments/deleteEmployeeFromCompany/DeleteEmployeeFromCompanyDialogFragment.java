@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.dialogFragments.deleteEmployeeFromCompany;
 
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

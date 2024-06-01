@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.restaurantLocation.locations;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
@@ -28,11 +28,6 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentLocationsBinding;
-import com.example.myapplication.presentation.MainActivity;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationDelegateItem;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.homeRestaurantLocationButton.HomeRestaurantLocationModel;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
-import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
 import com.example.myapplication.presentation.restaurantLocation.locations.model.LocationsModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationAdapter;

@@ -1,7 +1,7 @@
 package com.example.myapplication.domain.usecase.profile.anonymous;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 
 import com.example.myapplication.data.dto.user.AnonymousUserDto;
 import com.example.myapplication.data.providers.AnonymousUserProvider;

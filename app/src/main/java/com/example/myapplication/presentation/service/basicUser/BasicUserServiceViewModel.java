@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.service.basicUser;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,10 +1,8 @@
 package com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.databinding.FragmentJoinQueueBinding;
 import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueueActivity;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.model.JoinQueueModel;

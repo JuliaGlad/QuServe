@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart.orderCreated;
 
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+
 import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -64,7 +66,7 @@ public class OrderCreatedFragment extends Fragment {
     }
 
     private void navigateBack() {
-        getActivity().setResult(Activity.RESULT_OK);
+        requireActivity().setResult(Activity.RESULT_OK);
         requireActivity().finish();
     }
 }

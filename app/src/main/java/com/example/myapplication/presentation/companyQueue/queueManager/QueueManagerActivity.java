@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.queueManager;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
 

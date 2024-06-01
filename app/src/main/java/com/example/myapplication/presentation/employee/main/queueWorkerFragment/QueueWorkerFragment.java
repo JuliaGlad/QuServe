@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueWorkerFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 
 import androidx.lifecycle.ViewModelProvider;
 

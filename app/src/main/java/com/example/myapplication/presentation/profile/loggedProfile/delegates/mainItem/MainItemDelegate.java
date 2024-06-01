@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.profile.loggedProfile.delegates.mainItem;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMAIL;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMAIL;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;

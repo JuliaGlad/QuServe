@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.utils.backToWorkNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_ID;
-import static com.example.myapplication.presentation.utils.Utils.YOUR_TURN_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.YOUR_TURN_CHANNEL_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.YOUR_TURN_CHANNEL_NAME;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

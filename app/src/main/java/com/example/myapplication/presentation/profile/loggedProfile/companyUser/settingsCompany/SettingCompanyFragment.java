@@ -1,11 +1,10 @@
 package com.example.myapplication.presentation.profile.loggedProfile.companyUser.settingsCompany;
 
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.app.Activity;
@@ -29,7 +28,6 @@ import com.example.myapplication.presentation.dialogFragments.aboutUs.AboutUsDia
 import com.example.myapplication.presentation.dialogFragments.deleteCompany.DeleteCompanyDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.deleteRestaurant.DeleteRestaurantDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.help.HelpDialogFragment;
-import com.example.myapplication.presentation.profile.loggedProfile.companyUser.Arguments;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.model.CompanyUserModel;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.state.CompanyUserState;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegate;
@@ -41,8 +39,6 @@ import com.example.myapplication.presentation.profile.loggedProfile.delegates.se
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.userItemDelegate.SettingsUserItemDelegate;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.userItemDelegate.SettingsUserItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.userItemDelegate.SettingsUserItemModel;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;

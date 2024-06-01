@@ -1,14 +1,13 @@
 package com.example.myapplication.presentation.dialogFragments.changeRole;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

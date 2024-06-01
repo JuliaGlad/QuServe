@@ -12,7 +12,7 @@ public class GetCategoriesUseCase {
     public Single<List<CategoryModel>> invoke(String restaurantId) {
         return RestaurantMenuDI.restaurantMenuRepository.getCategories(restaurantId).map(categoryDtos ->
                 categoryDtos.stream()
-                        .map(categoryDto -> new CategoryModel(categoryDto.getCategoryId(), categoryDto.getName()))
+                        .map(categoryDto -> new CategoryModel(categoryDto.getCategoryId(), categoryDto.getDefaultImage(), categoryDto.getName()))
                         .collect(Collectors.toList()));
     }
 }

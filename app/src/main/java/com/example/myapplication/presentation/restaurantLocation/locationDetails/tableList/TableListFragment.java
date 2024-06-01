@@ -1,14 +1,12 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +70,9 @@ public class TableListFragment extends Fragment {
     }
 
     private void initBackButton() {
-        requireActivity().finish();
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void initAddButton() {
@@ -117,6 +117,9 @@ public class TableListFragment extends Fragment {
 
                 lastTableNumber += 1;
                 int position = delegates.size();
+                if (position == 0) {
+                    delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(0, R.string.manage_your_restaurant_s_tables_and_view_active_orders)));
+                }
                 delegates.add(new TableListDelegateItem(new TableListModel(position, String.valueOf(lastTableNumber), () -> {
                     ((TableListActivity) requireActivity()).openRestaurantTableDetailsActivity(tableId, locationId);
                     requireActivity().finish();

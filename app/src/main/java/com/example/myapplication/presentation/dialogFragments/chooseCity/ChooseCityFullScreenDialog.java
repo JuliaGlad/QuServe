@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.dialogFragments.chooseCity;
 
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
 
 import android.app.Dialog;
 import android.os.Bundle;

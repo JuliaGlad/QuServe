@@ -1,16 +1,15 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_PHONE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
-import static com.example.myapplication.presentation.utils.Utils.PROFILE_UPDATED_AT;
-import static com.example.myapplication.presentation.utils.Utils.URI;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_PHONE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_UPDATED_AT;
+import static com.example.myapplication.presentation.utils.constants.Utils.URI;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMAIL;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOGO;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_OWNER;

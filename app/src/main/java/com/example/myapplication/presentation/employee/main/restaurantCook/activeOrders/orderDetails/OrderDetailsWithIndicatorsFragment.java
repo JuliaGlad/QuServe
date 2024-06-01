@@ -1,14 +1,19 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,6 +28,8 @@ import com.example.myapplication.presentation.employee.main.restaurantCook.activ
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.state.OrderDetailsWithIndicatorsModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.state.OrderDetailsWithIndicatorsState;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.state.OrderDetailsWithIndicatorsStateModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +37,10 @@ import java.util.List;
 public class OrderDetailsWithIndicatorsFragment extends Fragment {
 
     private OrderDetailsWithIndicatorsViewModel viewModel;
-    private String path;
-    private String tableNumber;
+    private String path, tableNumber, tableId;
     List<OrderDetailsWithIndicatorsItemModel> items = new ArrayList<>();
     private FragmentDishDetailsWithIndicatorsBinding binding;
+    private ActivityResultLauncher<Intent> launcher;
     private final OrderDetailsWithIndicatorsAdapter adapter = new OrderDetailsWithIndicatorsAdapter();
 
     @Override
@@ -43,6 +50,17 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
         path = requireActivity().getIntent().getStringExtra(PATH);
         tableNumber = requireActivity().getIntent().getStringExtra(TABLE_NUMBER);
         viewModel.getOrder(path);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        requireActivity().setResult(RESULT_OK);
+                        requireActivity().finish();
+                    }
+                });
     }
 
     @Override
@@ -67,6 +85,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof OrderDetailsWithIndicatorsState.Success){
                 OrderDetailsWithIndicatorsStateModel model = ((OrderDetailsWithIndicatorsState.Success) state).data;
+                tableId = model.getTableId();
                 binding.totalPrice.setText(model.getTotalPrice());
                 binding.number.setText(tableNumber);
                 initRecycler(model.getModels());
@@ -76,8 +95,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
             } else if (state instanceof OrderDetailsState.Error){
                 setErrorLayout();
             } else if (state instanceof OrderDetailsWithIndicatorsState.OrderIsFinished){
-                NavHostFragment.findNavController(this)
-                        .navigate(R.id.action_orderDetailsWithIndicatorsFragment_to_cookOrderIsFinishedFragment);
+                ((OrderDetailsWithIndicatorsActivity)requireActivity()).launchCookOrderIsFinished(launcher);
             }
         });
 
@@ -89,7 +107,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
 
         viewModel.isFinished.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                viewModel.finishOrder(path);
+                viewModel.finishOrder(path, tableId, true);
             }
         });
     }

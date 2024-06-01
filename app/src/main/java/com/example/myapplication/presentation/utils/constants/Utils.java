@@ -1,6 +1,9 @@
-package com.example.myapplication.presentation.utils;
+package com.example.myapplication.presentation.utils.constants;
 
 public class Utils {
+    public static final String DEFAULT_DRAWABLES = "defaultDrawables/";
+    public static final String IMAGE = "Image";
+    public static final String EMPTY = "Empty";
     public static final String NO_ORDER = "No order";
     public static final String SIGNED_IN = "SignedIn";
     public static final String IS_DEFAULT = "IsDefault";
@@ -91,6 +94,7 @@ public class Utils {
     public static final int FINE_PERMISSION_CODE = 1;
     public static final String JPG = ".jpg";
     public static final String PDF = ".pdf";
+    public static final String PNG = ".png";
     public static final String QR_CODES = "qr-codes/";
     public static final String QUEUE_LIST = "QueueList";
     public static final String PROFILE_IMAGES = "profileImages/";

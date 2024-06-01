@@ -1,18 +1,15 @@
 package com.example.myapplication.presentation.dialogFragments.alreadyOwnQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
-import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
-import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 

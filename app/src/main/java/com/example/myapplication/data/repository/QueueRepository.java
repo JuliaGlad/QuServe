@@ -1,30 +1,29 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.DATE_LEFT;
-import static com.example.myapplication.presentation.utils.Utils.HISTORY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.HOURS_DIVIDER;
-import static com.example.myapplication.presentation.utils.Utils.JPG;
-import static com.example.myapplication.presentation.utils.Utils.MID_TIME_WAITING;
-import static com.example.myapplication.presentation.utils.Utils.MINUTES_DIVIDER;
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED;
-import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED;
-import static com.example.myapplication.presentation.utils.Utils.PEOPLE_PASSED_15;
-import static com.example.myapplication.presentation.utils.Utils.QR_CODES;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_AUTHOR_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_IN_PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIFE_TIME_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_PARTICIPANTS_LIST;
-import static com.example.myapplication.presentation.utils.Utils.SECONDS_DIVIDER;
-import static com.example.myapplication.presentation.utils.Utils.TIME;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.DATE_LEFT;
+import static com.example.myapplication.presentation.utils.constants.Utils.HISTORY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.HOURS_DIVIDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.JPG;
+import static com.example.myapplication.presentation.utils.constants.Utils.MID_TIME_WAITING;
+import static com.example.myapplication.presentation.utils.constants.Utils.MINUTES_DIVIDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED;
+import static com.example.myapplication.presentation.utils.constants.Utils.PEOPLE_PASSED;
+import static com.example.myapplication.presentation.utils.constants.Utils.PEOPLE_PASSED_15;
+import static com.example.myapplication.presentation.utils.constants.Utils.QR_CODES;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_AUTHOR_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_IN_PROGRESS;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIFE_TIME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_PARTICIPANTS_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.SECONDS_DIVIDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -37,7 +36,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,13 +1,12 @@
 package com.example.myapplication.presentation.common.finishedQueueCreation;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.stringsTimeArray;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.stringsTimeArray;
 
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,10 +26,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentFinishedQueueCreationBinding;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;

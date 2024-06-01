@@ -1,10 +1,8 @@
 package com.example.myapplication.presentation.employee.becomeCook.main;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COOK_DATA;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COOK_DATA;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeCookBinding;
 import com.example.myapplication.presentation.employee.becomeCook.state.BecomeCookState;
@@ -36,7 +30,11 @@ public class BecomeCookFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(BecomeCookViewModel.class);
-        path = requireActivity().getIntent().getStringExtra(COOK_DATA);
+        try {
+            path = requireActivity().getIntent().getStringExtra(COOK_DATA);
+        } catch (NullPointerException e){
+            requireActivity().finish();
+        }
         viewModel.getData(path);
     }
 

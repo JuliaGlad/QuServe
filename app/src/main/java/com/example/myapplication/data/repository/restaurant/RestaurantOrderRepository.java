@@ -1,8 +1,11 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.NO_ORDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
@@ -34,15 +37,17 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.example.myapplication.data.dto.restaurant.ActiveOrderDishDto;
 import com.example.myapplication.data.dto.restaurant.DishShortInfoDto;
 import com.example.myapplication.data.dto.restaurant.OrderDto;
 import com.example.myapplication.data.dto.restaurant.OrderShortDto;
 import com.example.myapplication.data.dto.restaurant.OrderTableDetailsDto;
 import com.example.myapplication.data.dto.restaurant.ReadyDishDto;
+import com.example.myapplication.data.dto.user.AnonymousUserDto;
+import com.example.myapplication.data.dto.user.UserDto;
+import com.example.myapplication.data.providers.AnonymousUserProvider;
 import com.example.myapplication.data.providers.CartProvider;
+import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
 import com.google.android.gms.tasks.Task;
@@ -140,17 +145,22 @@ public class RestaurantOrderRepository {
         });
     }
 
-    public Completable finishOrder(String orderPath) {
+
+    public Completable finishOrder(String orderPath, String tableId, boolean isCook) {
         return Completable.create(emitter -> {
             String orderId = service.fireStore.document(orderPath).getId();
-
+            DocumentReference tableDoc = service.fireStore.document(orderPath).getParent().getParent().collection(TABLE_LIST).document(tableId);
             service.fireStore.document(orderPath).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     String waiterId = task.getResult().getString(WAITER);
                     CollectionReference collRef = service.fireStore.document(orderPath).getParent().getParent().collection(WAITERS);
                     removeOrderFromWaiter(collRef, waiterId, orderId).addOnCompleteListener(taskRemove -> {
                         if (taskRemove.isSuccessful()) {
-                            deleteOrderDocumentByPath(orderPath, emitter);
+                            deleteOrderFromTable(tableDoc).addOnCompleteListener(taskUpdate -> {
+                                if (taskUpdate.isSuccessful()) {
+                                    deleteOrderDocumentByPath(orderPath, emitter, isCook);
+                                }
+                            });
                         } else {
                             emitter.onError(new Throwable(taskRemove.getException()));
                         }
@@ -160,6 +170,10 @@ public class RestaurantOrderRepository {
                 }
             });
         });
+    }
+
+    private Task<Void> deleteOrderFromTable(DocumentReference tableDoc) {
+        return tableDoc.update(ORDER_ID, NO_ORDER);
     }
 
     public Single<Integer> addToReadyDishes(String orderDishId, String tableNumber, String dishName, String count, String orderPath) {
@@ -278,16 +292,25 @@ public class RestaurantOrderRepository {
         });
     }
 
-    private void deleteOrderDocumentByPath(String orderPath, CompletableEmitter emitter) {
-        DocumentReference locationRef =
-                service.fireStore.document(orderPath).getParent().getParent();
+    private void deleteOrderDocumentByPath(String orderPath, CompletableEmitter emitter, boolean isCook) {
+        DocumentReference locationRef = service.fireStore.document(orderPath).getParent().getParent();
+        assert locationRef != null;
         locationRef.get().addOnCompleteListener(taskGet -> {
-            if (taskGet.isSuccessful()){
+            if (taskGet.isSuccessful()) {
                 int currentCount = Integer.parseInt(taskGet.getResult().getString(ACTIVE_ORDERS));
-                locationRef.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
-                    if (taskUpdate.isSuccessful()){
+                locationRef.update(ACTIVE_ORDERS, String.valueOf(currentCount - 1)).addOnCompleteListener(taskUpdate -> {
+                    if (taskUpdate.isSuccessful()) {
                         service.fireStore.document(orderPath).delete().addOnCompleteListener(taskDocument -> {
                             if (taskDocument.isSuccessful()) {
+                                if (!isCook) {
+                                    UserDto localUser = UserDatabaseProvider.getUser();
+                                    AnonymousUserDto localAnonymous = AnonymousUserProvider.getUser();
+                                    if (localUser != null) {
+                                        UserDatabaseProvider.updateRestaurantVisitor(NOT_RESTAURANT_VISITOR);
+                                    } else if (localAnonymous != null) {
+                                        AnonymousUserProvider.updateRestaurantVisitor(NOT_RESTAURANT_VISITOR);
+                                    }
+                                }
                                 emitter.onComplete();
                             } else {
                                 emitter.onError(new Throwable(taskDocument.getException()));
@@ -324,6 +347,7 @@ public class RestaurantOrderRepository {
 
                 emitter.onSuccess(new OrderDto(
                         snapshot.getId(),
+                        snapshot.getString(TABLE_ID),
                         path,
                         snapshot.getString(TABLE_NUMBER),
                         restaurantId,
@@ -372,7 +396,7 @@ public class RestaurantOrderRepository {
         });
     }
 
-    public Single<String> addToActiveOrders(String restaurantId, String path, String orderId, String totalPrice, List<OrderDishesModel> models) {
+    public Single<String> addToActiveOrders(String restaurantId, String tableId, String path, String orderId, String totalPrice, List<OrderDishesModel> models) {
         return Single.create(emitter -> {
 
             DocumentReference pathDoc = service.fireStore.document(path);
@@ -406,12 +430,12 @@ public class RestaurantOrderRepository {
                         .document(locationId)
                         .collection(WAITERS);
 
-                setOrder(restaurantId, orderId, totalPrice, models, emitter, locationId, collRefLocationWaiters, tableNumber, docRef, collRef, locationDoc, orderPath);
+                setOrder(restaurantId, orderId, tableId, totalPrice, models, emitter, locationId, collRefLocationWaiters, tableNumber, docRef, collRef, locationDoc, orderPath);
             });
         });
     }
 
-    private void setOrder(String restaurantId, String orderId, String totalPrice, List<OrderDishesModel> models, SingleEmitter<String> emitter, String locationId, CollectionReference collRefLocationWaiters, String tableNumber, DocumentReference docRef, CollectionReference collRef, DocumentReference locationDoc, String orderPath) {
+    private void setOrder(String restaurantId, String orderId, String tableId, String totalPrice, List<OrderDishesModel> models, SingleEmitter<String> emitter, String locationId, CollectionReference collRefLocationWaiters, String tableNumber, DocumentReference docRef, CollectionReference collRef, DocumentReference locationDoc, String orderPath) {
         final String[] minId = {null};
         CollectionReference collRefWaiter = service.fireStore
                 .collection(RESTAURANT_LIST)
@@ -430,6 +454,7 @@ public class RestaurantOrderRepository {
                     if (taskAdding.isSuccessful()) {
                         HashMap<String, Object> order = new HashMap<>();
                         order.put(TABLE_NUMBER, tableNumber);
+                        order.put(TABLE_ID, tableId);
                         order.put(VISITOR, service.auth.getCurrentUser().getUid());
                         order.put(TOTAL_PRICE, totalPrice);
                         order.put(IS_TAKEN, NOT_TAKEN);
@@ -452,7 +477,7 @@ public class RestaurantOrderRepository {
                     if (taskGet.isSuccessful()) {
                         int currentCount = Integer.parseInt(taskGet.getResult().getString(ACTIVE_ORDERS));
                         docRef.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
-                            if (taskUpdate.isSuccessful()){
+                            if (taskUpdate.isSuccessful()) {
                                 emitter.onSuccess(orderPath);
                             } else {
                                 emitter.onError(new Throwable(taskUpdate.getException()));
@@ -507,7 +532,6 @@ public class RestaurantOrderRepository {
     }
 
     private Task<Void> addOrderToWaiterDocument(CollectionReference collRef, String waiterId, String orderId) {
-        Log.d("Waiter doc", collRef.getPath());
         return collRef.document(waiterId).update(ACTIVE_ORDERS_COUNT, FieldValue.arrayUnion(orderId));
     }
 

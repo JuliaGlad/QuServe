@@ -1,15 +1,13 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
-import com.example.myapplication.data.dto.restaurant.CartDishDto;
 import com.example.myapplication.databinding.FragmentOrderCartBinding;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.presentation.restaurantOrder.CartDishModel;
@@ -45,7 +42,7 @@ public class OrderCartFragment extends Fragment {
     private final List<CartDishItemModel> items = new ArrayList<>();
     private final CartDishItemAdapter cartDishItemAdapter = new CartDishItemAdapter();
     private ActivityResultLauncher<Intent> launcherCreated;
-    private String restaurantId, path;
+    private String restaurantId, path, tableId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +50,7 @@ public class OrderCartFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(OrderCartViewModel.class);
         restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         path = requireActivity().getIntent().getStringExtra(TABLE_PATH);
+        tableId = viewModel.getTableId(path);
         viewModel.getCartItems(restaurantId);
         initLauncher();
     }
@@ -238,6 +236,8 @@ public class OrderCartFragment extends Fragment {
 
     private void initOrderButton(List<CartDishItemModel> items) {
         binding.buttonOrder.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonOrder.setEnabled(false);
             if (!items.isEmpty()) {
                 List<OrderDishesModel> models = new ArrayList<>();
                 for (CartDishItemModel current : items) {
@@ -253,7 +253,7 @@ public class OrderCartFragment extends Fragment {
                             current.getRequiredChoices()
                     ));
                 }
-                viewModel.createOrder(restaurantId, String.valueOf(viewModel.price.getValue()), path, models);
+                viewModel.createOrder(restaurantId, tableId, String.valueOf(viewModel.price.getValue()), path, models);
             } else {
                 Snackbar.make(requireView(), getString(R.string.you_have_to_add_at_least_1_dish_to_create_order), Snackbar.LENGTH_LONG).show();
             }

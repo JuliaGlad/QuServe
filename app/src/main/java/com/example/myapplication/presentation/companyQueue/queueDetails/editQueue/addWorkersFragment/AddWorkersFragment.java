@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_LIST;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

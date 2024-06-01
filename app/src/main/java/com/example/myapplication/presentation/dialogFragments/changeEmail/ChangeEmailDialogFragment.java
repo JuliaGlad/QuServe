@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.dialogFragments.changeEmail;
 
-import static com.example.myapplication.presentation.utils.Utils.EMAIL;
-import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMAIL;
+import static com.example.myapplication.presentation.utils.constants.Utils.PASSWORD;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 
 import com.example.myapplication.R;

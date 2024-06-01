@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.profile;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
 
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.domain.model.profile.UserActionsDataModel;

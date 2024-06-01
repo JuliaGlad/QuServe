@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,6 @@ import com.example.myapplication.presentation.companyQueue.queueDetails.workerDe
 import com.example.myapplication.presentation.dialogFragments.finishQueue.FinishQueueDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.pauseQueue.PauseQueueDialogFragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.editQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,12 +1,9 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_DETAILS;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +11,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

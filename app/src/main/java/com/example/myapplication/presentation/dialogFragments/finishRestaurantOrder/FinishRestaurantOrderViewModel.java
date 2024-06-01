@@ -18,8 +18,8 @@ public class FinishRestaurantOrderViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isFinished = new MutableLiveData<>();
     LiveData<Boolean> isFinished = _isFinished;
 
-    public void finishOrder(String orderPath) {
-        RestaurantOrderDI.finishOrderByPathUseCase.invoke(orderPath)
+    public void finishOrder(String orderPath, String tableId, boolean isCook) {
+        RestaurantOrderDI.finishOrderByPathUseCase.invoke(orderPath, tableId, isCook)
                 .concatWith(ProfileDI.removeRestaurantUserOrderUseCase.invoke())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

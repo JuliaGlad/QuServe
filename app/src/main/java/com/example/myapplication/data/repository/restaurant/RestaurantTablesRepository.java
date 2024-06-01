@@ -1,9 +1,9 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.JPG;
-import static com.example.myapplication.presentation.utils.Utils.NO_ORDER;
-import static com.example.myapplication.presentation.utils.Utils.PDF;
+import static com.example.myapplication.presentation.utils.constants.Utils.JPG;
+import static com.example.myapplication.presentation.utils.constants.Utils.NO_ORDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.PDF;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
@@ -12,7 +12,6 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_QR_CODES;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.myapplication.data.dto.restaurant.TableDto;
 import com.google.firebase.firestore.DocumentReference;

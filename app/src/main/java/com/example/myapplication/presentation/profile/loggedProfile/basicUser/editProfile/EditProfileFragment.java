@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.EMAIL;
-import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMAIL;
+import static com.example.myapplication.presentation.utils.constants.Utils.PASSWORD;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;

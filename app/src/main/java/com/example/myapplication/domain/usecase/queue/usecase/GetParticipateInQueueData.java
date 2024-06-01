@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.queue.usecase;
 
-import static com.example.myapplication.presentation.utils.Utils.PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPATE_IN_QUEUE;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 

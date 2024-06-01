@@ -13,6 +13,7 @@ public class GetOrderWithNotTakenDishesUseCase {
         return RestaurantOrderDI.restaurantOrderRepository.getOrderByPath(path).map(orderDto ->
                 new OrderDetailsModel(
                         orderDto.getOrderId(),
+                        orderDto.getTableId(),
                         orderDto.getRestaurantId(),
                         orderDto.getRestaurantName(),
                         orderDto.getTableNumber(),

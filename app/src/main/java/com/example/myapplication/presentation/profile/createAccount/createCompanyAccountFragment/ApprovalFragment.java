@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_SERVICE;
 
 import android.app.Activity;
 import android.content.Intent;

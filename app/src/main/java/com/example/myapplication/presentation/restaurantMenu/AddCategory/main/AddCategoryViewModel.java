@@ -24,12 +24,32 @@ public class AddCategoryViewModel extends ViewModel {
     public void initCategoryData(String restaurantId) {
         String categoryId = generateId();
         if (ArgumentsCategory.chosenImage instanceof String) {
-
-
-
+            initDataWithStringDrawable((String)ArgumentsCategory.chosenImage, restaurantId, categoryId);
         } else if (ArgumentsCategory.chosenImage instanceof Uri) {
             initDataWithUri((Uri) ArgumentsCategory.chosenImage, restaurantId, categoryId);
         }
+    }
+
+    private void initDataWithStringDrawable(String chosenImage, String restaurantId, String categoryId) {
+        RestaurantMenuDI.addMenuCategoryWithDrawableUseCase.invoke(restaurantId, categoryId, ArgumentsCategory.name, chosenImage)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        _onComplete.postValue(new CategoryAddedModel(categoryId, chosenImage, null, ArgumentsCategory.name));
+                        setArgumentsNull();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
     private void initDataWithUri(Uri uri, String restaurantId, String categoryId) {
@@ -44,7 +64,7 @@ public class AddCategoryViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _onComplete.postValue(new CategoryAddedModel(categoryId, uri, ArgumentsCategory.name));
+                        _onComplete.postValue(new CategoryAddedModel(categoryId, null, uri, ArgumentsCategory.name));
                         setArgumentsNull();
                     }
 

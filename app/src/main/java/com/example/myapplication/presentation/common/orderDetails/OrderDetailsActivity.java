@@ -1,14 +1,17 @@
 package com.example.myapplication.presentation.common.orderDetails;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.ActivityOrderDetailsBinding;
+import com.example.myapplication.presentation.common.orderDetails.orderIsFinished.OrderFinishedActivity;
 
 public class OrderDetailsActivity extends AppCompatActivity {
 
@@ -28,5 +31,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController);
             NavigationUI.setupWithNavController(binding.toolbar, navController);
         }
+    }
+
+    public void launchIsFinishedActivity(ActivityResultLauncher<Intent> launcher){
+        Intent intent = new Intent(this, OrderFinishedActivity.class);
+        launcher.launch(intent);
     }
 }

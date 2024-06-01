@@ -1,27 +1,21 @@
 package com.example.myapplication.presentation.home.stories;
 
-import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
-import static com.example.myapplication.presentation.utils.Utils.DRAWABLES;
+import static com.example.myapplication.presentation.utils.constants.Utils.BACKGROUND_IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Utils.DRAWABLES;
 
-import android.animation.Animator;
 import android.annotation.SuppressLint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQuServeFeaturesBinding;
 
 import jp.shts.android.storiesprogressview.StoriesProgressView;

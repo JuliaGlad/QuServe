@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.privacySettings;
 
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.EMAIL;
-import static com.example.myapplication.presentation.utils.Utils.PASSWORD;
+import static com.example.myapplication.presentation.utils.constants.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMAIL;
+import static com.example.myapplication.presentation.utils.constants.Utils.PASSWORD;
 
 import android.content.Context;
 import android.content.SharedPreferences;

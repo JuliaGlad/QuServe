@@ -1,15 +1,12 @@
 package com.example.myapplication.presentation.employee.main.notEmployeeYetFragment;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.ANONYMOUS;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ANONYMOUS;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 
@@ -28,7 +25,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentNotEmployeeYetBinding;
-import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.needAccountDialog.NeedAccountDialogFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
 import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;

@@ -12,6 +12,7 @@ import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
+import com.example.myapplication.presentation.restaurantMenu.model.CategoryImageNameModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.state.RestaurantMenuOrderState;
 
 import java.util.ArrayList;
@@ -45,11 +46,11 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
         List<CategoryModel> models = new ArrayList<>();
         RestaurantMenuDI.getCategoriesUseCase.invoke(restaurantId)
                 .flatMap(categoryModels -> {
-                    List<String> categoryNames = new ArrayList<>();
+                    List<CategoryImageNameModel> categoryNames = new ArrayList<>();
                     if (!categoryModels.isEmpty()) {
                         for (CategoryModel current : categoryModels) {
                             models.add(current);
-                            categoryNames.add(current.getName());
+                            categoryNames.add(new CategoryImageNameModel(current.getName(), current.getDefaultImage()));
                         }
                     }
                     return RestaurantMenuDI.getCategoriesImagesUseCase.invoke(restaurantId, categoryNames);

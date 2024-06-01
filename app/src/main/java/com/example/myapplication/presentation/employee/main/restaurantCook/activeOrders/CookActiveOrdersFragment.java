@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import androidx.lifecycle.ViewModelProvider;

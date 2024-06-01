@@ -1,17 +1,14 @@
 package com.example.myapplication.presentation.employee.main.differentRolesFragment.delegate;
 
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.RecyclerViewActionButtonHomeLayoutBinding;
-
-import org.checkerframework.checker.units.qual.C;
 
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;

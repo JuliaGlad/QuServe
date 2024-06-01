@@ -16,4 +16,8 @@ public class HomeActionButtonModel {
         this.listener = listener;
         this.role = role;
     }
+
+    public String getType() {
+        return type;
+    }
 }

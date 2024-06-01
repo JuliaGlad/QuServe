@@ -1,17 +1,12 @@
 package com.example.myapplication.presentation.home.recycler.homeDelegates.restaurantOrder;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
-
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.myapplication.databinding.RecyclerViewRestaurantOrderButtonBinding;
-import com.example.myapplication.presentation.service.ScanCode;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
 import myapplication.android.ui.recycler.delegate.DelegateItem;

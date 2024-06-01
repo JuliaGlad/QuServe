@@ -1,7 +1,5 @@
 package com.example.myapplication.presentation.dialogFragments.deleteRequiredChoice;
 
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -14,10 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.DialogDeleteCheckBinding;
-import com.example.myapplication.presentation.dialogFragments.deleteEmployeeFromCompany.DeleteEmployeeFromCompanyViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
-import org.checkerframework.checker.units.qual.A;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 

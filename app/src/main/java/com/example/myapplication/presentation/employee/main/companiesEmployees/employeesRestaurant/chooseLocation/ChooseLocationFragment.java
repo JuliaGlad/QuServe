@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +13,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +23,8 @@ import com.example.myapplication.databinding.FragmentChooseLocationBinding;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation.state.ChooseLocationState;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation.state.ChooseLocationStateModel;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.main.EmployeesRestaurantFragment;
-import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler.RestaurantEmployeeItemAdapter;
-import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
-import com.example.myapplication.presentation.restaurantLocation.locations.model.LocationsModel;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationAdapter;
 import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationModel;
-import com.example.myapplication.presentation.restaurantLocation.locations.state.LocationsState;
-import com.example.myapplication.presentation.restaurantLocation.noLocationsYet.NoLocationsYetFragment;
 
 import java.util.ArrayList;
 import java.util.List;

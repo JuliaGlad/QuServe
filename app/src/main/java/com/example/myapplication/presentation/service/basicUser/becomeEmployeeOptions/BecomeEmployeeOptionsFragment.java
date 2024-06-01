@@ -1,11 +1,12 @@
 package com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COOK_DATA;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WAITER_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COOK_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WAITER_DATA;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBecomeEmployeeOptionsBinding;
 import com.example.myapplication.presentation.employee.becomeCook.BecomeCookActivity;
 import com.example.myapplication.presentation.employee.becomeEmployee.BecomeEmployeeActivity;
-import com.example.myapplication.presentation.employee.becomeEmployee.BecomeEmployeeFragment;
 import com.example.myapplication.presentation.employee.becomeWaiter.BecomeWaiterActivity;
 import com.example.myapplication.presentation.service.basicUser.recyclerView.ButtonWithDescriptionAdapter;
 import com.example.myapplication.presentation.service.basicUser.recyclerView.ButtonWithDescriptionModel;

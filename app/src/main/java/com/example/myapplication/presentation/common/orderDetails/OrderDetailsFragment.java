@@ -1,12 +1,16 @@
 package com.example.myapplication.presentation.common.orderDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,7 @@ import com.example.myapplication.presentation.common.orderDetails.state.OrderDet
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsState;
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsStateModel;
 import com.example.myapplication.presentation.dialogFragments.finishRestaurantOrder.FinishRestaurantOrderDialogFragment;
+import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +41,8 @@ public class OrderDetailsFragment extends Fragment {
 
     private OrderDetailsViewModel viewModel;
     private FragmentOrderDetailsBinding binding;
-    private String state, path;
+    private String state, path, tableId;
+    private ActivityResultLauncher<Intent> launcher;
     private final OrderDetailsAdapter adapter = new OrderDetailsAdapter();
 
     @Override
@@ -46,6 +52,17 @@ public class OrderDetailsFragment extends Fragment {
         path = requireActivity().getIntent().getStringExtra(PATH);
         state = requireActivity().getIntent().getStringExtra(STATE);
         viewModel.getOrder(path, state);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        requireActivity().setResult(RESULT_OK);
+                        requireActivity().finish();
+                    }
+                });
     }
 
     @Override
@@ -87,11 +104,8 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private void showFinishOrderDialog() {
-        FinishRestaurantOrderDialogFragment dialogFragment = new FinishRestaurantOrderDialogFragment(path);
+        FinishRestaurantOrderDialogFragment dialogFragment = new FinishRestaurantOrderDialogFragment(path, tableId);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_RESTAURANT_ORDER_DIALOG");
-        dialogFragment.onDialogDismissedListener(bundle -> {
-            requireActivity().finish();
-        });
     }
 
     private void initButtonBack() {
@@ -104,6 +118,7 @@ public class OrderDetailsFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof OrderDetailsState.Success) {
                 OrderDetailsStateModel model = ((OrderDetailsState.Success) state).data;
+                tableId = model.getTableId();
                 binding.totalPrice.setText(model.getTotalPrice());
                 initRecycler(model.getModels());
 
@@ -127,8 +142,10 @@ public class OrderDetailsFragment extends Fragment {
     }
 
     private void navigateToFinishOrder() {
+        Bundle bundle = new Bundle();
+        bundle.putString(STATE, state);
         NavHostFragment.findNavController(this)
-                .navigate(R.id.action_orderDetailsFragment_to_orderIsFinishedFragment);
+                .navigate(R.id.action_orderDetailsFragment_to_orderIsFinishedFragment, bundle);
     }
 
     private void initRecycler(List<OrderDetailsDishModel> dishes) {

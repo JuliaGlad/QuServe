@@ -1,13 +1,13 @@
 package com.example.myapplication.data.repository;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.COMPANIES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_LOGO;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_SERVICE;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANIES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_LOGO;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOGO;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_PATH;

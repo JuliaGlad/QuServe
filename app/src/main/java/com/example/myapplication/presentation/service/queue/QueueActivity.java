@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.service.queue;
 
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.employee.main.differentRolesFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 
 import androidx.fragment.app.FragmentManager;

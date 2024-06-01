@@ -1,12 +1,12 @@
 package com.example.myapplication.presentation;
 
-import static com.example.myapplication.presentation.utils.Utils.BACKGROUND_IMAGE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.DRAWABLES;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.BACKGROUND_IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.DRAWABLES;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
@@ -47,7 +47,6 @@ import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetai
 import com.example.myapplication.presentation.restaurantLocation.addLocation.AddLocationActivity;
 import com.example.myapplication.presentation.restaurantLocation.locationDetails.RestaurantLocationDetailsActivity;
 import com.example.myapplication.presentation.restaurantMenu.RestaurantMenuActivity;
-import com.example.myapplication.presentation.service.basicUser.becomeEmployeeOptions.BecomeEmployeeOptionsActivity;
 import com.example.myapplication.presentation.service.queue.QueueActivity;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
 import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
@@ -94,12 +93,11 @@ public class MainActivity extends AppCompatActivity {
         recreate();
     }
 
-    public void openOrderDetailsActivity(String path){
+    public void openOrderDetailsActivity(String path, ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, OrderDetailsActivity.class);
-        Log.d("Path", path);
         intent.putExtra(PATH, path);
         intent.putExtra(STATE, VISITOR);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openLocationDetailsActivity(String locationId, ActivityResultLauncher<Intent> launcher){

@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem;
 
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 
 import android.net.Uri;
 import android.view.LayoutInflater;

@@ -45,6 +45,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private ActivityResultLauncher<Intent> launcher;
     private final List<DishOrderModel> dishes = new ArrayList<>();
     private String categoryId, tablePath, restaurantId;
+    private boolean isDefault = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +54,6 @@ public class RestaurantMenuOrderFragment extends Fragment {
         tablePath = requireActivity().getIntent().getStringExtra(RESTAURANT_DATA);
         restaurantId = viewModel.getRestaurantId(tablePath);
         viewModel.checkTableOrder(tablePath);
-
         initLauncher();
     }
 
@@ -128,7 +128,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 List<DishMenuModel> models = ((RestaurantMenuOrderState.Success) state).data;
                 if (!categories.isEmpty()) {
                     if (!models.isEmpty()) {
-                        initDishRecycler(models, true);
+                        initDishRecycler(models);
                     } else {
                         binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
                     }
@@ -154,11 +154,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
             if (dishMenuModels != null) {
                 if (!dishMenuModels.isEmpty()) {
                     binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
-                    boolean isDefault = false;
-                    if (dishes.isEmpty()){
-                        isDefault = true;
-                    }
-                    initDishRecycler(dishMenuModels, isDefault);
+                    initDishRecycler(dishMenuModels);
                 } else {
                     int size = dishes.size();
                     dishes.clear();
@@ -177,7 +173,7 @@ public class RestaurantMenuOrderFragment extends Fragment {
         });
     }
 
-    private void initDishRecycler(List<DishMenuModel> models, boolean isDefault) {
+    private void initDishRecycler(List<DishMenuModel> models) {
         int size = dishes.size();
         dishes.clear();
         gridAdapter.notifyItemRangeRemoved(0, size);
@@ -201,9 +197,11 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 gridAdapter.notifyItemRangeInserted(0, models.size());
             } else {
                 gridAdapter.submitList(dishes);
+                isDefault = false;
             }
         } else {
             gridAdapter.submitList(dishes);
+            isDefault = false;
         }
     }
 

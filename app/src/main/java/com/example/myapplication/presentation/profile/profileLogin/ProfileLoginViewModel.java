@@ -1,9 +1,6 @@
 package com.example.myapplication.presentation.profile.profileLogin;
 
-import static com.example.myapplication.presentation.utils.Utils.SIGNED_IN;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
-
-import android.util.Log;
+import static com.example.myapplication.presentation.utils.constants.Utils.SIGNED_IN;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

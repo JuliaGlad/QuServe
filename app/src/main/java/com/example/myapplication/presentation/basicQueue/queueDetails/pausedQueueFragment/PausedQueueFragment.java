@@ -1,13 +1,13 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
-import static com.example.myapplication.presentation.utils.Utils.IS_DEFAULT;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_HOURS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_MINUTES;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_SECONDS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROGRESS;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -30,7 +30,6 @@ import androidx.work.WorkManager;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPausedQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
-import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 

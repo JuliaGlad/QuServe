@@ -1,11 +1,10 @@
 package com.example.myapplication.presentation.employee.becomeEmployee;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_DATA;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,11 @@ public class BecomeEmployeeFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(BecomeEmployeeViewModel.class);
         binding = FragmentBecomeEmployeeBinding.inflate(inflater, container, false);
 
-        companyId = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        try {
+            companyId = requireActivity().getIntent().getStringExtra(EMPLOYEE_DATA);
+        }catch (NullPointerException e){
+            requireActivity().finish();
+        }
 
         if (companyId != null) {
             binding.progressLayout.getRoot().setVisibility(View.VISIBLE);

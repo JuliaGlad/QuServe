@@ -1,9 +1,7 @@
 package com.example.myapplication.presentation.home.anonymousUser;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
-
-import android.util.Log;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

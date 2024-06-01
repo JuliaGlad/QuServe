@@ -1,11 +1,10 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEES;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.JPG;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.Utils.USER_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEES;
+import static com.example.myapplication.presentation.utils.constants.Utils.JPG;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOKS;
@@ -13,7 +12,6 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK_QR_CODE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_WORKING;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
@@ -22,11 +20,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER_QR_CODE;
 
 import android.net.Uri;
-import android.util.Log;
 
-import com.example.myapplication.data.dto.common.EmployeeDto;
 import com.example.myapplication.data.dto.restaurant.EmployeeRestaurantDto;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -36,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableEmitter;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleEmitter;
 

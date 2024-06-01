@@ -1,13 +1,13 @@
 package com.example.myapplication.presentation.utils.countdownTimer;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
-import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROGRESS;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_LEFT;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_MILLIS;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -26,7 +26,6 @@ import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.example.myapplication.di.DI;
 import com.example.myapplication.R;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;

@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -11,14 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAvailableCookOrdersBinding;
-import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.recycler.AvailableOrdersAdapter;
 import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.recycler.AvailableOrdersModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.state.AvailableCookOrdersState;

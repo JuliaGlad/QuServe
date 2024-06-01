@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.recycler;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
 
 import android.net.Uri;
 import android.view.LayoutInflater;

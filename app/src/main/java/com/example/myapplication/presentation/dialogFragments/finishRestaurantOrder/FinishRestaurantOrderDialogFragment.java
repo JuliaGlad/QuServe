@@ -18,7 +18,7 @@ import myapplication.android.ui.listeners.DialogDismissedListener;
 public class FinishRestaurantOrderDialogFragment extends DialogFragment {
 
     private FinishRestaurantOrderViewModel viewModel;
-    private final String orderPath;
+    private final String orderPath, tableId;
     private boolean isFinished = false;
     private DialogDismissedListener listener;
 
@@ -26,8 +26,9 @@ public class FinishRestaurantOrderDialogFragment extends DialogFragment {
         this.listener = listener;
     }
 
-    public FinishRestaurantOrderDialogFragment(String orderPath) {
+    public FinishRestaurantOrderDialogFragment(String orderPath, String tableId) {
         this.orderPath = orderPath;
+        this.tableId = tableId;
     }
 
     @NonNull
@@ -45,7 +46,7 @@ public class FinishRestaurantOrderDialogFragment extends DialogFragment {
         binding.buttonFinish.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonFinish.setEnabled(false);
-            viewModel.finishOrder(orderPath);
+            viewModel.finishOrder(orderPath, tableId, false);
         });
 
         return builder.setView(binding.getRoot()).create();
@@ -55,6 +56,7 @@ public class FinishRestaurantOrderDialogFragment extends DialogFragment {
         viewModel.isFinished.observe(this, aBoolean -> {
             if (aBoolean){
                 isFinished = true;
+                dismiss();
             }
         });
     }

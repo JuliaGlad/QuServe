@@ -26,7 +26,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
 
-    private String orderId, totalPrice, restaurantId;
+    private String orderId, totalPrice, restaurantId, tableId;
 
     private final MutableLiveData<OrderDetailsWithIndicatorsState> _state = new MutableLiveData<>(new OrderDetailsWithIndicatorsState.Loading());
     LiveData<OrderDetailsWithIndicatorsState> state = _state;
@@ -45,6 +45,7 @@ public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
                 .flatMap(orderDetailsModel -> {
                     models.addAll(orderDetailsModel.getModels());
                     orderId = orderDetailsModel.getOrderId();
+                    tableId = orderDetailsModel.getTableId();
                     totalPrice = orderDetailsModel.getTotalPrice();
                     restaurantId = orderDetailsModel.getRestaurantId();
                     List<String> ids = orderDetailsModel.getModels()
@@ -80,6 +81,7 @@ public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
                         }
                         _state.postValue(new OrderDetailsWithIndicatorsState.Success(new OrderDetailsWithIndicatorsStateModel(
                                 orderId,
+                                tableId,
                                 restaurantId,
                                 totalPrice,
                                 dishes
@@ -119,8 +121,8 @@ public class OrderDetailsWithIndicatorsViewModel extends ViewModel {
                 });
     }
 
-    public void finishOrder(String orderPath) {
-        RestaurantOrderDI.finishOrderByPathUseCase.invoke(orderPath)
+    public void finishOrder(String orderPath, String tableId, boolean isCook) {
+        RestaurantOrderDI.finishOrderByPathUseCase.invoke(orderPath, tableId, isCook)
                 .concatWith(ProfileDI.removeRestaurantUserOrderUseCase.invoke())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {

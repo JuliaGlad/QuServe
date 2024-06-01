@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.home.basicUser;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.NOT_QUEUE_OWNER;
-import static com.example.myapplication.presentation.utils.Utils.NOT_RESTAURANT_VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 
 import android.util.Log;
 

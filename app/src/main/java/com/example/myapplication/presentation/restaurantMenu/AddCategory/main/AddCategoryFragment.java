@@ -1,13 +1,14 @@
 package com.example.myapplication.presentation.restaurantMenu.AddCategory.main;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_2;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.URI;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_2;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.URI;
 
 import android.content.Context;
 import android.content.Intent;
@@ -244,7 +245,11 @@ public class AddCategoryFragment extends Fragment {
                 binding.loader.setVisibility(View.GONE);
                 Intent intent = new Intent();
                 intent.putExtra(COMPANY_ID, category.getId());
-                intent.putExtra(URI, String.valueOf(category.getUri()));
+                if (category.getUri() != null) {
+                    intent.putExtra(URI, String.valueOf(category.getUri()));
+                } else {
+                    intent.putExtra(IMAGE, category.getImage());
+                }
                 intent.putExtra(COMPANY_NAME, category.getName());
                 requireActivity().setResult(RESULT_OK, intent);
                 requireActivity().finish();

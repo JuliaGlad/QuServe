@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.participantsList;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +29,6 @@ import myapplication.android.ui.recycler.delegate.MainAdapter;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegate;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListModel;
-import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsDelegate;
-import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.statisticsDelegate.StatisticsModel;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegate;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.stringTextView.StringTextViewModel;
 
 public class CompanyQueueParticipantsListFragment extends Fragment {
 

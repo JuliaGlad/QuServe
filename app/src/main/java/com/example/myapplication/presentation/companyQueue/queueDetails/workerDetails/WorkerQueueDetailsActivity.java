@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
-import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROGRESS_MAX;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_LEFT;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_MILLIS;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.R;
-import com.example.myapplication.databinding.ActivityCompanyQueueDetailsBinding;
 import com.example.myapplication.databinding.ActivityWorkerQueueDetailsBinding;
 import com.example.myapplication.presentation.utils.backToWorkNotification.NotificationGoBackToWork;
 import com.example.myapplication.presentation.utils.countdownTimer.TimerService;

@@ -1,6 +1,5 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_ID;
 

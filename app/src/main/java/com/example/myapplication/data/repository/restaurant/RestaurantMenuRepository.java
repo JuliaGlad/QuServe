@@ -1,7 +1,10 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.JPG;
+import static com.example.myapplication.presentation.utils.constants.Utils.DEFAULT_DRAWABLES;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPTY;
+import static com.example.myapplication.presentation.utils.constants.Utils.IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Utils.JPG;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CHOICE_VARIANT;
@@ -18,8 +21,10 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_MENUS_PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPINGS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TOPPING_PRICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PNG;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.myapplication.data.dto.restaurant.CategoryDto;
 import com.example.myapplication.data.dto.restaurant.DishDto;
@@ -28,6 +33,7 @@ import com.example.myapplication.data.dto.common.ImageTaskNameDto;
 import com.example.myapplication.data.dto.restaurant.RequiredChoiceDto;
 import com.example.myapplication.data.dto.restaurant.ToppingDto;
 import com.example.myapplication.domain.model.restaurant.menu.DishMenuOwnerModel;
+import com.example.myapplication.presentation.restaurantMenu.model.CategoryImageNameModel;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -175,12 +181,11 @@ public class RestaurantMenuRepository {
                             for (DocumentSnapshot current : snapshots) {
                                 categoryDtos.add(new CategoryDto(
                                         current.getId(),
+                                        current.getString(IMAGE),
                                         current.getString(CATEGORY_NAME)
                                 ));
                             }
-
                             emitter.onSuccess(categoryDtos);
-
                         } else {
                             emitter.onSuccess(Collections.emptyList());
                         }
@@ -236,6 +241,33 @@ public class RestaurantMenuRepository {
 
         HashMap<String, String> category = new HashMap<>();
         category.put(CATEGORY_NAME, categoryName);
+        category.put(IMAGE, EMPTY);
+
+        return Completable.create(emitter -> {
+            menu.set(category).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    menu.get().addOnCompleteListener(taskGet -> {
+                        if (taskGet.isSuccessful()) {
+                            emitter.onComplete();
+                        }
+                    });
+                } else {
+                    emitter.onError(new Throwable(task.getException()));
+                }
+            });
+        });
+    }
+
+    public Completable addMenuCategoryWithDrawable(String restaurantId, String categoryId, String categoryName, String image) {
+        DocumentReference menu = service.fireStore
+                .collection(RESTAURANT_LIST)
+                .document(restaurantId)
+                .collection(RESTAURANT_MENU)
+                .document(categoryId);
+
+        HashMap<String, String> category = new HashMap<>();
+        category.put(CATEGORY_NAME, categoryName);
+        category.put(IMAGE, image);
 
         return Completable.create(emitter -> {
             menu.set(category).addOnCompleteListener(task -> {
@@ -253,6 +285,19 @@ public class RestaurantMenuRepository {
     }
 
     public static class MenuImages {
+
+        public Single<Uri> getImageDrawableByName(String name){
+            return Single.create(emitter -> {
+               service.storageReference
+                       .child(DEFAULT_DRAWABLES)
+                       .child(name + PNG)
+                       .getDownloadUrl().addOnCompleteListener(task -> {
+                           if (task.isSuccessful()){
+                               emitter.onSuccess(task.getResult());
+                           }
+                       });
+            });
+        }
 
         public Completable uploadUriCategoryImage(Uri uri, String restaurantId, String categoryName) {
             return Completable.create(emitter -> {
@@ -311,15 +356,22 @@ public class RestaurantMenuRepository {
             });
         }
 
-        public Single<List<ImageTaskNameDto>> getCategoriesImages(String restaurantId, List<String> categoriesNames) {
+        public Single<List<ImageTaskNameDto>> getCategoriesImages(String restaurantId, List<CategoryImageNameModel> categoriesNames) {
             List<ImageTaskNameDto> tasks = new ArrayList<>();
             return Single.create(emitter -> {
-                for (String category : categoriesNames) {
-                    StorageReference reference = service.storageReference
-                            .child(RESTAURANT_MENUS_PATH)
-                            .child(restaurantId + "/")
-                            .child(category + JPG);
-                    tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), category));
+                for (CategoryImageNameModel category : categoriesNames) {
+                    StorageReference reference;
+                    if (category.getDefaultImage().equals(EMPTY)) {
+                        reference = service.storageReference
+                                .child(RESTAURANT_MENUS_PATH)
+                                .child(restaurantId + "/")
+                                .child(category.getName() + JPG);
+                    } else {
+                        reference = service.storageReference
+                                .child(DEFAULT_DRAWABLES)
+                                .child(category.getDefaultImage() + PNG);
+                    }
+                    tasks.add(new ImageTaskNameDto(reference.getDownloadUrl(), category.getName()));
                 }
                 emitter.onSuccess(tasks);
             });

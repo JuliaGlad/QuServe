@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.dialogFragments.leaveQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

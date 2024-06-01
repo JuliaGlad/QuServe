@@ -1,5 +1,9 @@
 package com.example.myapplication.presentation.restaurantMenu;
 
+import static com.example.myapplication.presentation.utils.constants.Utils.URI;
+
+import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -15,6 +19,7 @@ import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.state.RestaurantMenuState;
+import com.example.myapplication.presentation.restaurantMenu.model.CategoryImageNameModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +36,9 @@ public class RestaurantMenuViewModel extends ViewModel {
 
     private final MutableLiveData<List<DishMenuModel>> _newCategory = new MutableLiveData<>(null);
     LiveData<List<DishMenuModel>> newCategory = _newCategory;
+
+    private final MutableLiveData<Bundle> _addedUri = new MutableLiveData<>(null);
+    LiveData<Bundle> addedUri = _addedUri;
 
     private final MutableLiveData<List<CategoryMenuModel>> _categories = new MutableLiveData<>(null);
     LiveData<List<CategoryMenuModel>> categories = _categories;
@@ -73,13 +81,14 @@ public class RestaurantMenuViewModel extends ViewModel {
         List<CategoryModel> models = new ArrayList<>();
         RestaurantMenuDI.getCategoriesUseCase.invoke(restaurantId)
                 .flatMap(categoryModels -> {
-                    List<String> categoryNames = new ArrayList<>();
+                    List<CategoryImageNameModel> categoryNames = new ArrayList<>();
                     if (!categoryModels.isEmpty()) {
                         for (CategoryModel current : categoryModels) {
                             models.add(current);
-                            categoryNames.add(current.getName());
+                            categoryNames.add(new CategoryImageNameModel(current.getName(), current.getDefaultImage()));
                         }
                     }
+                    Log.d("Category", categoryNames.get(0).getName() + " " + categoryNames.get(0).getDefaultImage());
                     return RestaurantMenuDI.getCategoriesImagesUseCase.invoke(restaurantId, categoryNames);
                 })
                 .subscribeOn(Schedulers.io())
@@ -182,5 +191,32 @@ public class RestaurantMenuViewModel extends ViewModel {
                         Log.e("Error delete category", e.getMessage());
                     }
                 });
+    }
+
+    public void getImageDrawable(Bundle bundle, String image, Uri uri) {
+        if (image != null){
+            RestaurantMenuDI.getCategoryImageDrawableUseCase.invoke(image)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new SingleObserver<Uri>() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onSuccess(@NonNull Uri uri) {
+                            bundle.putString(URI, String.valueOf(uri));
+                            _addedUri.postValue(bundle);
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+                        }
+                    });
+        } else {
+            bundle.putString(URI, String.valueOf(uri));
+            _addedUri.postValue(bundle);
+        }
     }
 }

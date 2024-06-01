@@ -1,9 +1,8 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList.tableDetails.orderDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 
 import androidx.lifecycle.ViewModelProvider;

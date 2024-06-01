@@ -1,9 +1,6 @@
 package com.example.myapplication.presentation.restaurantLocation.noLocationsYet;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +19,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentNoLocationsYetBinding;
 import com.example.myapplication.presentation.restaurantLocation.LocationsActivity;
-import com.example.myapplication.presentation.restaurantLocation.locations.recycler.RestaurantLocationModel;
 
 public class NoLocationsYetFragment extends Fragment {
 

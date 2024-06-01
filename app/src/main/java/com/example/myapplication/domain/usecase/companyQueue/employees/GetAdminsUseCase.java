@@ -1,6 +1,6 @@
 package com.example.myapplication.domain.usecase.companyQueue.employees;
 
-import static com.example.myapplication.presentation.utils.Utils.ADMIN;
+import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
 
 import com.example.myapplication.di.DI;
 import com.example.myapplication.domain.model.company.EmployeeMainModel;

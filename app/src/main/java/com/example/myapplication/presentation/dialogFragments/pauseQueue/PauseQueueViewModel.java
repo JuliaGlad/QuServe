@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.dialogFragments.pauseQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

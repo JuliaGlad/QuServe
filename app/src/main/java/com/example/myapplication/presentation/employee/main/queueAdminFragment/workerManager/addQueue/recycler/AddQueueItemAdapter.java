@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.recycler;
 
-import static com.example.myapplication.presentation.utils.Utils.CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;

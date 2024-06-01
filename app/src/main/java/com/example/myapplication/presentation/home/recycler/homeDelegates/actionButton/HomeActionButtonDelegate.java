@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton;
 
-import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPANT;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ public class HomeActionButtonDelegate implements AdapterDelegate {
             binding.title.setText(model.title);
             binding.roleSubtext.setText(model.role);
 
-            if (model.type.equals(PARTICIPANT)){
+            if (model.type.equals(PARTICIPANT) || model.type.equals(VISITOR)){
                 binding.icon.setVisibility(View.GONE);
             }
 

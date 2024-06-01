@@ -1,11 +1,11 @@
 package com.example.myapplication.presentation.restaurantLocation.addLocation;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.FINE_PERMISSION_CODE;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 

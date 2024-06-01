@@ -1,10 +1,9 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS_MAX;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.TIME_LEFT;
-import static com.example.myapplication.presentation.utils.Utils.TIME_MILLIS;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_LEFT;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME_MILLIS;
 
 import android.content.Intent;
 import android.os.Bundle;

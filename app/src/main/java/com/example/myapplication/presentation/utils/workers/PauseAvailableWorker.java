@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.utils.workers;
 
-import static com.example.myapplication.presentation.utils.Utils.PAUSE_AVAILABLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSE_AVAILABLE;
 
 import android.content.Context;
 

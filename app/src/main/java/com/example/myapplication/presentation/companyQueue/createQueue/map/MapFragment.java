@@ -1,12 +1,12 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.map;
 
 
-import static com.example.myapplication.presentation.utils.Utils.CITY_KEY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_3;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_3;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION;
 
 import android.os.Bundle;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;

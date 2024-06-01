@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.restaurantOrder.menu;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;

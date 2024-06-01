@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.common.waitingInQueue.recycler.items.waitingDelegateItem;
 
-import static com.example.myapplication.presentation.utils.Utils.EDIT_PEOPLE_BEFORE_YOU;
+import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_PEOPLE_BEFORE_YOU;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

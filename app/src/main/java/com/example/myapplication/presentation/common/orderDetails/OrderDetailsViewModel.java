@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantTableDI;
 import com.example.myapplication.domain.model.restaurant.menu.ImageTaskNameModel;
 import com.example.myapplication.domain.model.restaurant.order.OrderDetailsDishUseCaseModel;
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsDishModel;
@@ -28,7 +29,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class OrderDetailsViewModel extends ViewModel {
-    private String orderId, totalPrice;
+    private String orderId, totalPrice, tableId;
 
     private final MutableLiveData<OrderDetailsState> _state = new MutableLiveData<>(new OrderDetailsState.Loading());
     LiveData<OrderDetailsState> state = _state;
@@ -40,6 +41,7 @@ public class OrderDetailsViewModel extends ViewModel {
         RestaurantOrderDI.getOrderByPathUseCase.invoke(path)
                 .flatMap(orderDetailsModel -> {
                     models.addAll(orderDetailsModel.getModels());
+                    tableId = orderDetailsModel.getTableId();
                     orderId = orderDetailsModel.getOrderId();
                     totalPrice = orderDetailsModel.getTotalPrice();
                     List<String> ids = orderDetailsModel.getModels()
@@ -78,6 +80,7 @@ public class OrderDetailsViewModel extends ViewModel {
 
                         _state.postValue(new OrderDetailsState.Success(new OrderDetailsStateModel(
                                 orderId,
+                                tableId,
                                 totalPrice,
                                 dishes
                         )));

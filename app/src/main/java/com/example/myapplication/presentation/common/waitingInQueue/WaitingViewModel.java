@@ -1,8 +1,6 @@
 package com.example.myapplication.presentation.common.waitingInQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
-
-import android.util.Log;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 
 import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;

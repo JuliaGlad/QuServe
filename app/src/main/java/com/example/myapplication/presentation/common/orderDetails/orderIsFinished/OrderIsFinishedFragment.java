@@ -1,5 +1,10 @@
 package com.example.myapplication.presentation.common.orderDetails.orderIsFinished;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -47,6 +52,7 @@ public class OrderIsFinishedFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
+                requireActivity().setResult(Activity.RESULT_OK);
                 requireActivity().finish();
             }
         });
@@ -55,12 +61,14 @@ public class OrderIsFinishedFragment extends Fragment {
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         });
     }
 
     private void initOkButton() {
         binding.buttonOk.setOnClickListener(v -> {
+            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         });
     }

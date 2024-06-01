@@ -1,13 +1,13 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.pauseQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.CURRENT_TIMER_TIME;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_HOURS;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_MINUTES;
-import static com.example.myapplication.presentation.utils.Utils.PAUSED_SECONDS;
-import static com.example.myapplication.presentation.utils.Utils.PROGRESS;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_HOURS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_MINUTES;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_SECONDS;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROGRESS;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -17,24 +17,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPauseQueueBinding;
-import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
-import com.example.myapplication.presentation.basicQueue.queueDetails.pausedQueueFragment.PausedQueueFragment;
-import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQueueDetailsActivity;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
-import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 

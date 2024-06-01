@@ -4,8 +4,8 @@ import static com.example.myapplication.presentation.profile.createAccount.creat
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.name;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.phoneNumber;
 import static com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.main.arguments.service;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.Utils.stringsServicesArray;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.stringsServicesArray;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 
 import android.graphics.Bitmap;

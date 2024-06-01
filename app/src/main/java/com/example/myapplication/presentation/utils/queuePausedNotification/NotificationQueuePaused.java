@@ -1,8 +1,8 @@
 package com.example.myapplication.presentation.utils.queuePausedNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
-import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

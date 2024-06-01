@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.common.waitingInQueue;
 
-import static com.example.myapplication.presentation.utils.Utils.EDIT_ESTIMATED_TIME;
-import static com.example.myapplication.presentation.utils.Utils.EDIT_PEOPLE_BEFORE_YOU;
+import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_ESTIMATED_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_PEOPLE_BEFORE_YOU;
 
 import android.app.ActivityManager;
 import android.content.Context;

@@ -4,14 +4,16 @@ import java.util.List;
 
 public class OrderDetailsModel {
     private final String orderId;
+    private final String tableId;
     private final String restaurantId;
     private final String name;
     private final String tableNumber;
     private final String totalPrice;
     private final List<OrderDetailsDishUseCaseModel> models;
 
-    public OrderDetailsModel(String orderId, String restaurantId, String name, String tableNumber, String totalPrice, List<OrderDetailsDishUseCaseModel> models) {
+    public OrderDetailsModel(String orderId, String tableId, String restaurantId, String name, String tableNumber, String totalPrice, List<OrderDetailsDishUseCaseModel> models) {
         this.orderId = orderId;
+        this.tableId = tableId;
         this.restaurantId = restaurantId;
         this.name = name;
         this.tableNumber = tableNumber;
@@ -19,6 +21,9 @@ public class OrderDetailsModel {
         this.models = models;
     }
 
+    public String getTableId() {
+        return tableId;
+    }
 
     public String getName() {
         return name;

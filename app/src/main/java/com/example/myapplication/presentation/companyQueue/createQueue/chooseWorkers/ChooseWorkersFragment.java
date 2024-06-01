@@ -1,12 +1,12 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.chooseWorkers;
 
-import static com.example.myapplication.presentation.utils.Utils.CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.NOT_CHOSEN;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_4;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
-import static com.example.myapplication.presentation.utils.Utils.WORKERS_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_4;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_LIST;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.SearchView;

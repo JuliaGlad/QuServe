@@ -1,10 +1,10 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_NAME;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMPLOYEE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIST;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +30,7 @@ import com.example.myapplication.presentation.employee.main.queueAdminFragment.w
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.delegates.queue.WorkerManagerQueueDelegate;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.delegates.queue.WorkerManagerQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.workerDetails.state.WorkerDetailsState;
+import com.example.myapplication.presentation.utils.constants.Utils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -43,10 +44,6 @@ import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDeleg
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxModel;
 import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegate;
-import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewDrawableModel;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewDelegateItem;
-import myapplication.android.ui.recycler.ui.items.items.imageView.ImageViewModel;
 
 public class WorkerDetailsFragment extends Fragment {
 
@@ -156,7 +153,7 @@ public class WorkerDetailsFragment extends Fragment {
 
     private void initRecycler(List<ActiveQueueModel> models, String employeeId, String employeeName) {
         List<DelegateItem> delegates = new ArrayList<>();
-        delegates.add(new WorkerDetailsHeaderDelegateItem(new WorkerDetailsHeaderModel(1, employeeId, employeeName, com.example.myapplication.presentation.utils.Utils.WORKER)));
+        delegates.add(new WorkerDetailsHeaderDelegateItem(new WorkerDetailsHeaderModel(1, employeeId, employeeName, Utils.WORKER)));
         delegates.add(new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.worker_details_advise_box_text)));
         delegates.addAll(addActiveQueuesDelegates(models));
         mainAdapter.submitList(delegates);

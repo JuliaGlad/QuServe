@@ -1,13 +1,13 @@
 package com.example.myapplication.data.repository.profile;
 
 import static com.example.myapplication.di.DI.service;
-import static com.example.myapplication.presentation.utils.Utils.ACTIVE_QUEUES_LIST;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_EMPLOYEE;
-import static com.example.myapplication.presentation.utils.Utils.EMPLOYEE_ROLE;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_LOCATION_KEY;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_NAME_KEY;
-import static com.example.myapplication.presentation.utils.Utils.USER_LIST;
-import static com.example.myapplication.presentation.utils.Utils.WORKER;
+import static com.example.myapplication.presentation.utils.constants.Utils.ACTIVE_QUEUES_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMPLOYEE;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;

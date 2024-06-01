@@ -1,7 +1,7 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.main;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
@@ -15,17 +15,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.databinding.FragmentEmployeesRestaurantBinding;
 import com.example.myapplication.presentation.dialogFragments.deleteRestaurantEmployee.DeleteRestaurantEmployeeDialogFragment;
-import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.LinearLayoutManagerWrapper;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler.RestaurantEmployeeItemAdapter;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler.RestaurantEmployeeItemModel;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.model.EmployeeModel;

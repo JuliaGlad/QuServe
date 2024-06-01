@@ -1,15 +1,16 @@
 package com.example.myapplication.presentation.restaurantMenu;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.myapplication.presentation.utils.Utils.APP_PREFERENCES;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.Utils.COMPANY_NAME;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_1;
-import static com.example.myapplication.presentation.utils.Utils.PAGE_KEY;
-import static com.example.myapplication.presentation.utils.Utils.POSITION;
-import static com.example.myapplication.presentation.utils.Utils.STATE;
-import static com.example.myapplication.presentation.utils.Utils.UPDATED;
-import static com.example.myapplication.presentation.utils.Utils.URI;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.IMAGE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
+import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.POSITION;
+import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.UPDATED;
+import static com.example.myapplication.presentation.utils.constants.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_NAME;
@@ -69,6 +70,7 @@ public class RestaurantMenuFragment extends Fragment {
     private final List<DelegateItem> categories = new ArrayList<>();
     List<DelegateItem> dishes = new ArrayList<>();
     private String restaurantId, categoryId;
+    private boolean isDefaultDishes = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +82,26 @@ public class RestaurantMenuFragment extends Fragment {
         initCategoryLauncher();
         initDishLauncher();
         initUpdateLauncher();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        binding = FragmentRestaurantMenuBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupObserves();
+        if (viewModel.checkUserID()) {
+            viewModel.signInAnonymously();
+        } else {
+            initUi();
+        }
+        initBackButton();
+        initSearchView();
     }
 
     private void initUpdateLauncher() {
@@ -146,7 +168,13 @@ public class RestaurantMenuFragment extends Fragment {
 
                         String categoryId = result.getData().getStringExtra(COMPANY_ID);
                         String name = result.getData().getStringExtra(COMPANY_NAME);
-                        Uri uri = Uri.parse(result.getData().getStringExtra(URI));
+                        String image = null;
+                        Uri uri = Uri.EMPTY;
+                        try {
+                            uri = Uri.parse(result.getData().getStringExtra(URI));
+                        } catch (NullPointerException e){
+                            image = result.getData().getStringExtra(IMAGE);
+                        }
                         int position = categories.size() - 1;
 
                         categories.remove(position);
@@ -158,31 +186,12 @@ public class RestaurantMenuFragment extends Fragment {
                         this.categoryId = categoryId;
                         binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
 
-                        categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                                position, categoryId, name, null, uri, 0, false, false, true,
-                                view -> {
-                                    PopupMenu popupMenu = new PopupMenu(requireContext(), (View) view);
-                                    popupMenu.getMenuInflater().inflate(R.menu.delete_category_menu, popupMenu.getMenu());
-                                    popupMenu.show();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(COMPANY_NAME, name);
+                        bundle.putInt(POSITION, position);
+                        bundle.putString(COMPANY_ID, categoryId);
 
-                                    popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
-                                        int positionCurrent = 0;
-                                        for (int j = 0; j < categories.size(); j++) {
-                                            if (categories.get(j) instanceof CategoryItemDelegateItem){
-                                                CategoryItemModel currentModel = ((CategoryItemDelegateItem) categories.get(j)).content();
-                                                if (currentModel.getCategoryId().equals(categoryId)){
-                                                    positionCurrent = j;
-                                                }
-                                            }
-                                        }
-                                        viewModel.deleteCategory(positionCurrent, restaurantId, categoryId);
-                                        return true;
-                                    });
-                                },
-                                () -> changeCategory(categoryId)
-                        )));
-                        horizontalAdapter.notifyItemInserted(position);
-                        categories.add(new AddToppingDelegateItem(new AddToppingModel(categories.size(), this::launchAddCategory)));
+                        viewModel.getImageDrawable(bundle, image, uri);
                     }
                 });
     }
@@ -211,26 +220,6 @@ public class RestaurantMenuFragment extends Fragment {
         gridAdapter.notifyItemRangeRemoved(0, size);
         this.categoryId = categoryId;
         viewModel.getCategoryDishes(restaurantId, categoryId, false);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        binding = FragmentRestaurantMenuBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupObserves();
-        if (viewModel.checkUserID()) {
-            viewModel.signInAnonymously();
-        } else {
-            initUi();
-        }
-        initBackButton();
-        initSearchView();
     }
 
     private void initSearchView() {
@@ -276,7 +265,7 @@ public class RestaurantMenuFragment extends Fragment {
             if (state instanceof RestaurantMenuState.Success) {
                 List<DishMenuModel> models = ((RestaurantMenuState.Success) state).data;
                 if (!models.isEmpty()) {
-                    initDishRecycler(models, true);
+                    initDishRecycler(models);
                 } else if (categories.size() > 1) {
                     binding.progressBar.getRoot().setVisibility(View.GONE);
                     binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
@@ -285,6 +274,39 @@ public class RestaurantMenuFragment extends Fragment {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
             } else if (state instanceof RestaurantMenuState.Error) {
                 setErrorLayout();
+            }
+        });
+
+        viewModel.addedUri.observe(getViewLifecycleOwner(), bundle -> {
+            if (bundle != null){
+                int position = bundle.getInt(POSITION);
+                String name = bundle.getString(COMPANY_NAME);
+                Uri uri = Uri.parse(bundle.getString(URI));
+                categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
+                        position, categoryId, name, null,  uri, 0, false, false, true,
+                        view -> {
+                            PopupMenu popupMenu = new PopupMenu(requireContext(), (View) view);
+                            popupMenu.getMenuInflater().inflate(R.menu.delete_category_menu, popupMenu.getMenu());
+                            popupMenu.show();
+
+                            popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
+                                int positionCurrent = 0;
+                                for (int j = 0; j < categories.size(); j++) {
+                                    if (categories.get(j) instanceof CategoryItemDelegateItem){
+                                        CategoryItemModel currentModel = ((CategoryItemDelegateItem) categories.get(j)).content();
+                                        if (currentModel.getCategoryId().equals(categoryId)){
+                                            positionCurrent = j;
+                                        }
+                                    }
+                                }
+                                viewModel.deleteCategory(positionCurrent, restaurantId, categoryId);
+                                return true;
+                            });
+                        },
+                        () -> changeCategory(categoryId)
+                )));
+                horizontalAdapter.notifyItemInserted(position);
+                categories.add(new AddToppingDelegateItem(new AddToppingModel(categories.size(), this::launchAddCategory)));
             }
         });
 
@@ -322,7 +344,7 @@ public class RestaurantMenuFragment extends Fragment {
             if (dishMenuModels != null) {
                 if (!dishMenuModels.isEmpty()) {
                     binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
-                    initDishRecycler(dishMenuModels, false);
+                    initDishRecycler(dishMenuModels);
                 } else {
                     binding.constraintLayoutEmptyDishes.setVisibility(View.VISIBLE);
                 }
@@ -335,7 +357,7 @@ public class RestaurantMenuFragment extends Fragment {
         binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getMenuCategories(restaurantId));
     }
 
-    private void initDishRecycler(List<DishMenuModel> models, boolean isDefault) {
+    private void initDishRecycler(List<DishMenuModel> models) {
         if (!models.isEmpty()) {
             for (int i = 0; i < models.size(); i++) {
                 DishMenuModel current = models.get(i);
@@ -351,7 +373,7 @@ public class RestaurantMenuFragment extends Fragment {
                         () -> updateDish(current.getDishId())
                 )));
             }
-            if (!isDefault) {
+            if (!isDefaultDishes) {
                 if (!dishes.isEmpty()) {
                     if (dishes.size() > 1) {
                         gridAdapter.notifyItemRangeInserted(0, dishes.size() - 1);
@@ -360,12 +382,15 @@ public class RestaurantMenuFragment extends Fragment {
                     }
                 }
             } else {
+                binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
                 gridAdapter.submitList(dishes);
+                isDefaultDishes = false;
             }
 
         } else {
             final List<DelegateItem> items = new ArrayList<>();
             gridAdapter.submitList(items);
+            isDefaultDishes = false;
         }
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
@@ -431,10 +456,13 @@ public class RestaurantMenuFragment extends Fragment {
                             horizontalAdapter.notifyItemChanged(position);
 
                             int size = dishes.size();
-                            dishes.clear();
+                            if (size != 0) {
+                                dishes.clear();
+                            }
                             gridAdapter.notifyItemRangeRemoved(0, size);
                             categoryId = current.getCategoryId();
-                            viewModel.getCategoryDishes(restaurantId, categoryId, false);
+
+                            viewModel.getCategoryDishes(restaurantId, categoryId, isDefaultDishes);
                         })));
             }
         } else {

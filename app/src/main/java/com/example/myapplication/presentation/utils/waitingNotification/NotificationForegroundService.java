@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.utils.waitingNotification;
 
-import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_ID;
-import static com.example.myapplication.presentation.utils.Utils.NOTIFICATION_CHANNEL_NAME;
-import static com.example.myapplication.presentation.utils.Utils.NOT_PARTICIPATE_IN_QUEUE;
-import static com.example.myapplication.presentation.utils.Utils.PARTICIPANT_QUEUE_PATH;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPANT_QUEUE_PATH;
 
 import android.app.Notification;
 import android.app.NotificationChannel;

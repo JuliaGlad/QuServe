@@ -1,6 +1,6 @@
 package com.example.myapplication.presentation.companyQueue.createQueue.map;
 
-import static com.example.myapplication.presentation.utils.Utils.FINE_PERMISSION_CODE;
+import static com.example.myapplication.presentation.utils.constants.Utils.FINE_PERMISSION_CODE;
 
 import android.Manifest;
 import android.app.Activity;
@@ -77,9 +77,13 @@ public class MapViewModel extends ViewModel {
         }
 
     public void setLastLocationMarker() {
-        LatLng lastLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(lastLocation));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 10));
+        try {
+            LatLng lastLocation = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            googleMap.addMarker(new MarkerOptions().position(lastLocation));
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation, 10));
+        } catch (NullPointerException e){
+            Log.e("NullPointerException", e.getMessage());
+        }
     }
 
     public void checkSelfPermission(Fragment fragment, Activity activity) {

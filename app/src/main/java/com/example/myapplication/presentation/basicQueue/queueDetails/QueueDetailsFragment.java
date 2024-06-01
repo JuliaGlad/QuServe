@@ -1,9 +1,9 @@
 package com.example.myapplication.presentation.basicQueue.queueDetails;
 
-import static com.example.myapplication.presentation.utils.Utils.APP_STATE;
-import static com.example.myapplication.presentation.utils.Utils.BASIC;
-import static com.example.myapplication.presentation.utils.Utils.IS_DEFAULT;
-import static com.example.myapplication.presentation.utils.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
+import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.content.Intent;
 import android.net.Uri;
