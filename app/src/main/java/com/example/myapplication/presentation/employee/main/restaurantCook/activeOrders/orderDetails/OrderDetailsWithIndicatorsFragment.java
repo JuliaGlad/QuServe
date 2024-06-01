@@ -56,8 +56,11 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
     private void initLauncher() {
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        requireActivity().setResult(RESULT_OK);
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent intent = new Intent();
+                        String tableNumber = result.getData().getStringExtra(TABLE_NUMBER);
+                        intent.putExtra(TABLE_NUMBER, tableNumber);
+                        requireActivity().setResult(RESULT_OK, intent);
                         requireActivity().finish();
                     }
                 });
@@ -95,7 +98,7 @@ public class OrderDetailsWithIndicatorsFragment extends Fragment {
             } else if (state instanceof OrderDetailsState.Error){
                 setErrorLayout();
             } else if (state instanceof OrderDetailsWithIndicatorsState.OrderIsFinished){
-                ((OrderDetailsWithIndicatorsActivity)requireActivity()).launchCookOrderIsFinished(launcher);
+                ((OrderDetailsWithIndicatorsActivity)requireActivity()).launchCookOrderIsFinished(launcher, tableNumber);
             }
         });
 

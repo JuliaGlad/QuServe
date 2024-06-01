@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.employee.main.restaurantCook.acti
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -38,10 +39,10 @@ public class CookActiveOrdersActivity extends AppCompatActivity {
 
     }
 
-    public void openOrderDetailsActivity(String path, String tableNumber){
+    public void openOrderDetailsActivity(String path, String tableNumber, ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, OrderDetailsWithIndicatorsActivity.class);
         intent.putExtra(PATH, path);
         intent.putExtra(TABLE_NUMBER, tableNumber);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 }

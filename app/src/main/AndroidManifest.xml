@@ -231,6 +231,7 @@
         <service android:name=".presentation.utils.queuePausedNotification.NotificationQueuePaused" />
         <service android:name=".presentation.utils.backToWorkNotification.NotificationGoBackToWork" />
         <service android:name=".presentation.utils.waitingNotification.NotificationForegroundService" />
+        <service android:name=".presentation.utils.restaurantOrderNotification.NotificationRestaurantForegroundService" />
         <service android:name=".presentation.utils.countdownTimer.TimerService" />
 
         <receiver
@@ -240,6 +241,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".presentation.utils.restaurantOrderNotification.NotificationRestaurantBroadcastReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

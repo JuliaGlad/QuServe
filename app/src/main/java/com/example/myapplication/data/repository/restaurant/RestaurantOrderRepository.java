@@ -145,6 +145,19 @@ public class RestaurantOrderRepository {
         });
     }
 
+    public Observable<DocumentSnapshot> addTableSnapshot(String tablePath) {
+        return Observable.create(emitter -> {
+            service.fireStore
+                    .document(tablePath)
+                    .addSnapshotListener((value, error) -> {
+                        if (value != null) {
+                            emitter.onNext(value);
+                        } else {
+                            emitter.onError(new Throwable("Value is null"));
+                        }
+                    });
+        });
+    }
 
     public Completable finishOrder(String orderPath, String tableId, boolean isCook) {
         return Completable.create(emitter -> {
@@ -476,7 +489,7 @@ public class RestaurantOrderRepository {
                 locationDoc.get().addOnCompleteListener(taskGet -> {
                     if (taskGet.isSuccessful()) {
                         int currentCount = Integer.parseInt(taskGet.getResult().getString(ACTIVE_ORDERS));
-                        docRef.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
+                        locationDoc.update(ACTIVE_ORDERS, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
                             if (taskUpdate.isSuccessful()) {
                                 emitter.onSuccess(orderPath);
                             } else {

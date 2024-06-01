@@ -13,6 +13,7 @@ import com.example.myapplication.domain.usecase.profile.CreateAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.DeleteAccountUseCase;
 import com.example.myapplication.domain.usecase.profile.GetActiveRestaurantOrderUseCase;
 import com.example.myapplication.domain.usecase.profile.RemoveRestaurantUserOrderUseCase;
+import com.example.myapplication.domain.usecase.profile.UpdateRestaurantVisitorUseCase;
 import com.example.myapplication.domain.usecase.profile.anonymous.CheckAnonymousActionsUseCase;
 import com.example.myapplication.domain.usecase.profile.anonymous.GetAnonymousUserUseCase;
 import com.example.myapplication.domain.usecase.profile.employee.restaurant.DeleteRestaurantEmployeeRoleUseCase;
@@ -43,6 +44,7 @@ public class ProfileDI {
     public static ProfileRepository profileRepository = new ProfileRepository();
     public static ProfileRepository.ProfileImages profileImages = new ProfileRepository.ProfileImages();
 
+    public static UpdateRestaurantVisitorUseCase updateRestaurantVisitorUseCase = new UpdateRestaurantVisitorUseCase();
     public static CheckAnonymousActionsUseCase checkAnonymousActionsUseCase = new CheckAnonymousActionsUseCase();
     public static DeleteRestaurantEmployeeRoleUseCase deleteRestaurantEmployeeRoleUseCase = new DeleteRestaurantEmployeeRoleUseCase();
     public static GetAnonymousUserUseCase getAnonymousUserUseCase = new GetAnonymousUserUseCase();

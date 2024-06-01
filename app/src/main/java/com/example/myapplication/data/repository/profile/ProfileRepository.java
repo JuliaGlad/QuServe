@@ -528,6 +528,28 @@ public class ProfileRepository {
         }
     }
 
+    public Completable updateRestaurantVisitor(String path) {
+        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+        if (!service.auth.getCurrentUser().isAnonymous()) {
+            return Completable.create(emitter -> {
+                docRef.update(IS_RESTAURANT_VISITOR, path).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        UserDatabaseProvider.updateRestaurantVisitor(path);
+                        emitter.onComplete();
+                    } else {
+                        emitter.onError(new Throwable(task.getException()));
+                    }
+                });
+            });
+        } else {
+            return Completable.create(emitter -> {
+                AnonymousUserProvider.updateParticipateInQueue(path);
+                emitter.onComplete();
+            });
+
+        }
+    }
+
     private void getUserDocumentForDelete(DocumentReference docRef, String userId, CompletableEmitter emitter) {
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

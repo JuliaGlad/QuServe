@@ -1,10 +1,16 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders;
 
+import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +27,8 @@ import com.example.myapplication.presentation.employee.main.restaurantCook.activ
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.recycler.ActiveOrdersItemModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.state.CookActiveOrderStateModel;
 import com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.state.CookActiveOrdersState;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +38,8 @@ public class CookActiveOrdersFragment extends Fragment {
     private CookActiveOrdersViewModel viewModel;
     private FragmentCookActiveOrdersBinding binding;
     private String restaurantId, locationId;
+    private ActivityResultLauncher<Intent> launcher;
+    private final List<ActiveOrdersItemModel> itemModels = new ArrayList<>();
     private final ActiveOrdersAdapter adapter = new ActiveOrdersAdapter();
 
     @Override
@@ -39,6 +49,26 @@ public class CookActiveOrdersFragment extends Fragment {
         restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         locationId = requireActivity().getIntent().getStringExtra(LOCATION_ID);
         viewModel.getOrders(restaurantId, locationId);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                       String tableNumber = result.getData().getStringExtra(TABLE_NUMBER);
+                        for (int i = 0; i < itemModels.size(); i++) {
+                            if (Integer.parseInt(itemModels.get(i).getTableNumber()) == Integer.parseInt(tableNumber)){
+                                itemModels.remove(i);
+                                adapter.notifyItemRemoved(i);
+                                if (itemModels.isEmpty()){
+                                    initEmptyLayout();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                });
     }
 
     @Override
@@ -97,13 +127,12 @@ public class CookActiveOrdersFragment extends Fragment {
     }
 
     private void initRecycler(List<CookActiveOrderStateModel> models) {
-        List<ActiveOrdersItemModel> itemModels = new ArrayList<>();
         for (int i = 0; i < models.size(); i++) {
             CookActiveOrderStateModel current = models.get(i);
             String tableNumber = current.getTableNumber();
             itemModels.add(new ActiveOrdersItemModel(i, tableNumber, current.getDishesCount(),
                     () -> {
-                        ((CookActiveOrdersActivity)requireActivity()).openOrderDetailsActivity(current.getPath(), tableNumber);
+                        ((CookActiveOrdersActivity)requireActivity()).openOrderDetailsActivity(current.getPath(), tableNumber, launcher);
                     }));
         }
         buildList(itemModels);

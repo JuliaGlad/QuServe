@@ -19,6 +19,10 @@ public class ActiveOrdersItemModel {
         this.listener = listener;
     }
 
+    public String getTableNumber() {
+        return tableNumber;
+    }
+
     public boolean compareTo(ActiveOrdersItemModel other){
         return this.hashCode() == other.hashCode();
     }

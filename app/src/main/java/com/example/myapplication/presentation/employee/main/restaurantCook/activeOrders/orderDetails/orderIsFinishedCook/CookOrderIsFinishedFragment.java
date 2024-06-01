@@ -1,5 +1,9 @@
 package com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.orderIsFinishedCook;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_NUMBER;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -17,9 +21,16 @@ import com.example.myapplication.databinding.FragmentCookOrderIsFinishedBinding;
 public class CookOrderIsFinishedFragment extends Fragment {
 
     private FragmentCookOrderIsFinishedBinding binding;
+    private String tableNumber;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tableNumber = requireActivity().getIntent().getStringExtra(TABLE_NUMBER);
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCookOrderIsFinishedBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -38,14 +49,21 @@ public class CookOrderIsFinishedFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                finish();
             }
         });
     }
 
+    private void finish() {
+        Intent intent = new Intent();
+        intent.putExtra(TABLE_NUMBER, tableNumber);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
+    }
+
     private void initButtonBack() {
         binding.buttonBack.setOnClickListener(v -> {
-            requireActivity().finish();
+            finish();
         });
     }
 
@@ -55,7 +73,7 @@ public class CookOrderIsFinishedFragment extends Fragment {
 
     private void initOkayButton() {
         binding.buttonOk.setOnClickListener(v -> {
-            requireActivity().finish();
+            finish();
         });
     }
 }

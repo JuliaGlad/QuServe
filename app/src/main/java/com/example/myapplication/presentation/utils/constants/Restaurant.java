@@ -12,7 +12,6 @@ public class Restaurant {
     public static final String RESTAURANT_EMPLOYEE = "RestaurantEmployee";
     public static final String IS_RESTAURANT_VISITOR = "RestaurantVisitor";
     public static final String PATH = "Path";
-    public static final String NO_ORDER = "NoOrder";
     public static final String TABLE_PATH = "TablePath";
     public static final String ORDER_ID = "OrderId";
     public static final String COUNT = "Count";

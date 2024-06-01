@@ -21,13 +21,17 @@ import com.example.myapplication.domain.usecase.restaurant.order.GetReadyDishesT
 import com.example.myapplication.domain.usecase.restaurant.order.GetRestaurantIdByTablePathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.IncrementDishAmountUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.OnDishServedUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.OnOrderFinishedUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.RemoveFromCartUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.TakeOrderByCookUseCase;
+import com.example.myapplication.domain.usecase.restaurant.tables.AddTableSnapshotUseCase;
 
 public class RestaurantOrderDI {
 
     public static RestaurantOrderRepository restaurantOrderRepository = new RestaurantOrderRepository();
 
+    public static OnOrderFinishedUseCase onOrderFinishedUseCase = new OnOrderFinishedUseCase();
+    public static AddTableSnapshotUseCase addTableSnapshotUseCase = new AddTableSnapshotUseCase();
     public static GetRestaurantIdByTablePathUseCase getRestaurantIdByTablePathUseCase = new GetRestaurantIdByTablePathUseCase();
     public static GetOrderByIdsUseCase getOrderByIdsUseCase = new GetOrderByIdsUseCase();
     public static OnDishServedUseCase onDishServedUseCase = new OnDishServedUseCase();

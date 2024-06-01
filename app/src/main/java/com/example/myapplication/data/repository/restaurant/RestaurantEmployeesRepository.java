@@ -81,7 +81,7 @@ public class RestaurantEmployeesRepository {
             locationRef.get().addOnCompleteListener(taskGet -> {
                 if (taskGet.isSuccessful()) {
                     int currentCount = Integer.parseInt(taskGet.getResult().getString(key));
-                    locationRef.update(key, String.valueOf(currentCount + 1)).addOnCompleteListener(taskUpdate -> {
+                    locationRef.update(key, String.valueOf(currentCount - 1)).addOnCompleteListener(taskUpdate -> {
                         if (taskUpdate.isSuccessful()) {
                             locationRef
                                     .collection(document)

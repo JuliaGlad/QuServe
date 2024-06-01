@@ -145,7 +145,7 @@ public class OrderCartFragment extends Fragment {
 
         viewModel.isOrdered.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                ((OrderCartActivity) requireActivity()).openCreatedActivity(launcherCreated);
+                ((OrderCartActivity) requireActivity()).openCreatedActivity(launcherCreated, path);
             }
         });
     }
