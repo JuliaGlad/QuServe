@@ -217,7 +217,7 @@ public class HomeBasisUserFragment extends Fragment {
                     }
                 })));
         delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, () -> {
-            if (restaurantVisitor.getName().equals(NOT_RESTAURANT_VISITOR)) {
+            if (restaurantVisitor == null || restaurantVisitor.getName().equals(NOT_RESTAURANT_VISITOR)) {
                 setScanOptions(restaurantOrderLauncher);
             } else {
                 AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();

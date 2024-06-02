@@ -88,7 +88,6 @@ public class RestaurantMenuViewModel extends ViewModel {
                             categoryNames.add(new CategoryImageNameModel(current.getName(), current.getDefaultImage()));
                         }
                     }
-                    Log.d("Category", categoryNames.get(0).getName() + " " + categoryNames.get(0).getDefaultImage());
                     return RestaurantMenuDI.getCategoriesImagesUseCase.invoke(restaurantId, categoryNames);
                 })
                 .subscribeOn(Schedulers.io())

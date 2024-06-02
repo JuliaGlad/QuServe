@@ -15,7 +15,9 @@ public class GetEmployeeRolesUseCase {
                         .map(userEmployeeRoleDto -> new UserEmployeeModel(
                                 userEmployeeRoleDto.getRole(),
                                 userEmployeeRoleDto.getCompanyId(),
-                                null)
+                                null,
+                                userEmployeeRoleDto.getCompanyName()
+                                )
                         ).collect(Collectors.toList()));
     }
 }

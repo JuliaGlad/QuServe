@@ -91,13 +91,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/transparent"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/button_ok"
         app:layout_constraintEnd_toEndOf="@id/button_ok"
         app:layout_constraintStart_toStartOf="@id/button_ok"
         app:layout_constraintTop_toTopOf="@+id/button_ok"
-        app:mk_color="?colorOnPrimary"
+        app:mk_color="?colorPrimary"
         app:mk_type="FishSpinner" />
 
     <include

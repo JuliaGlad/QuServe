@@ -34,8 +34,8 @@ public class MainWaiterFragment extends Fragment {
 
     private MainWaiterViewModel viewModel;
     private FragmentMainWaiterBinding binding;
-    private WaiterItemAdapter adapter = new WaiterItemAdapter();
-    private List<WaiterItemModel> items = new ArrayList<>();
+    private final WaiterItemAdapter adapter = new WaiterItemAdapter();
+    private final List<WaiterItemModel> items = new ArrayList<>();
     private String restaurantId, locationId;
 
     @Override

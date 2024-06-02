@@ -148,10 +148,11 @@ public class RestaurantMenuFragment extends Fragment {
                                 () -> updateDish(dishId)
                         )));
 
-                        if (dishes.size() == 1) {
+                        if (isDefaultDishes) {
                             binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
                             gridAdapter.submitList(dishes);
                         } else {
+                            binding.constraintLayoutEmptyDishes.setVisibility(View.GONE);
                             gridAdapter.notifyItemInserted(position);
                         }
                     }
@@ -315,15 +316,17 @@ public class RestaurantMenuFragment extends Fragment {
                 categories.remove(position.intValue());
                 horizontalAdapter.notifyItemRemoved(position);
                 if (!categories.isEmpty()){
-                    CategoryItemModel model = (CategoryItemModel) categories.get(position).content();
-                    model.setChosen(true);
-                    horizontalAdapter.notifyItemChanged(position);
+                    if (categories.get(0) instanceof CategoryItemDelegateItem) {
+                        CategoryItemModel model = (CategoryItemModel) categories.get(0).content();
+                        model.setChosen(true);
+                        horizontalAdapter.notifyItemChanged(position);
 
-                    int size = dishes.size();
-                    dishes.clear();
-                    gridAdapter.notifyItemRangeRemoved(0, size);
-                    categoryId = model.getCategoryId();
-                    viewModel.getCategoryDishes(restaurantId, categoryId, false);
+                        int size = dishes.size();
+                        dishes.clear();
+                        gridAdapter.notifyItemRangeRemoved(0, size);
+                        categoryId = model.getCategoryId();
+                        viewModel.getCategoryDishes(restaurantId, categoryId, false);
+                    }
                 }
             }
         });

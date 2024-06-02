@@ -322,7 +322,6 @@ public class CompanyQueueRepository {
         });
     }
 
-
     public Observable<Integer> addParticipantsSizeDocumentSnapshot(String companyId, String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId);
         return Observable.create(emitter -> {

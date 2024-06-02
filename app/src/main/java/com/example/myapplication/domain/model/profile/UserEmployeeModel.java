@@ -4,11 +4,17 @@ public class UserEmployeeModel {
     private final String role;
     private final String companyId;
     private final String locationId;
+    private final String companyName;
 
-    public UserEmployeeModel(String role, String companyId, String locationId) {
+    public UserEmployeeModel(String role, String companyId, String locationId, String companyName) {
         this.role = role;
         this.locationId = locationId;
         this.companyId = companyId;
+        this.companyName = companyName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
     }
 
     public String getLocationId() {

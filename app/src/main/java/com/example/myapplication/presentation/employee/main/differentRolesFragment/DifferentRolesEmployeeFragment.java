@@ -1,7 +1,10 @@
 package com.example.myapplication.presentation.employee.main.differentRolesFragment;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.WAITER;
 import static com.example.myapplication.presentation.utils.constants.Utils.ADMIN;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE;
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
@@ -30,6 +33,7 @@ import com.example.myapplication.presentation.employee.main.differentRolesFragme
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.QueueAdminFragment;
 import com.example.myapplication.presentation.employee.main.queueWorkerFragment.QueueWorkerFragment;
 import com.example.myapplication.presentation.employee.main.restaurantCook.CookEmployeeFragment;
+import com.example.myapplication.presentation.employee.main.restaurantWaiter.main.MainWaiterFragment;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -45,7 +49,6 @@ import myapplication.android.ui.recycler.ui.items.items.imageDrawable.ImageViewD
 
 public class DifferentRolesEmployeeFragment extends Fragment {
 
-    private DifferentRolesEmployeeViewModel viewModel;
     private FragmentDifferentRolesEmployeeBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
     private List<EmployeeRoleModel> roleModels = new ArrayList<>();
@@ -54,9 +57,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(DifferentRolesEmployeeViewModel.class);
         getRoles();
-        viewModel.getEmployeeCompanyRoles(roleModels);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setAdapter();
-        setupObserves();
+        initRecycler();
     }
 
     private void setAdapter() {
@@ -81,7 +82,7 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         binding.recyclerView.setAdapter(mainAdapter);
     }
 
-    private void initRecycler(List<DifferentRoleModel> roleModels) {
+    private void initRecycler() {
         final List<DelegateItem> delegates = new ArrayList<>();
         delegates.add(new ImageViewDrawableDelegateItem(new ImageViewDrawableModel(1, R.drawable.work_together_employee_wall_paper)));
         delegates.addAll(addDelegates(roleModels));
@@ -90,20 +91,35 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }
 
-    private List<CompanyEmployeeDelegateItem> addDelegates(List<DifferentRoleModel> roleModels) {
+    private List<CompanyEmployeeDelegateItem> addDelegates(List<EmployeeRoleModel> roleModels) {
         List<CompanyEmployeeDelegateItem> delegates = new ArrayList<>();
         for (int i = 0; i < roleModels.size(); i++) {
-            DifferentRoleModel current = roleModels.get(i);
+            EmployeeRoleModel current = roleModels.get(i);
+            String finalRole = current.getRole();
             String role = current.getRole();
+            switch (role){
+                case WAITER:
+                    role = getString(R.string.waiter);
+                    break;
+                case COOK:
+                    role = getString(R.string.cooker);
+                    break;
+                case WORKER:
+                    role = getString(R.string.worker);
+                    break;
+                case ADMIN:
+                    role = getString(R.string.admin);
+                    break;
+            }
             String companyId = current.getCompanyId();
             delegates.add(new CompanyEmployeeDelegateItem(new CompanyEmployeeModel(i + 2, companyId, current.getCompanyName(), role,
                     () -> {
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
                         Bundle bundle = new Bundle();
                         bundle.putString(COMPANY_ID, companyId);
 
-                        switch (role){
+                        switch (finalRole) {
                             case WORKER:
                                 fragmentManager
                                         .beginTransaction()
@@ -117,9 +133,16 @@ public class DifferentRolesEmployeeFragment extends Fragment {
                                         .commit();
                                 break;
                             case COOK:
+                                bundle.putString(LOCATION_ID, current.getLocationId());
                                 fragmentManager
                                         .beginTransaction()
                                         .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
+                                        .commit();
+                            case WAITER:
+                                bundle.putString(LOCATION_ID, current.getLocationId());
+                                fragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                                         .commit();
                         }
                     }
@@ -129,33 +152,11 @@ public class DifferentRolesEmployeeFragment extends Fragment {
         return delegates;
     }
 
-    private void setupObserves() {
-        viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof DifferentRoleState.Success) {
-                List<DifferentRoleModel> models = ((DifferentRoleState.Success) state).data;
-                initRecycler(models);
-            } else if (state instanceof DifferentRoleState.Loading) {
-                binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
-            } else if (state instanceof DifferentRoleState.Error) {
-                setErrorLayout();
-            }
-        });
-    }
-
-    private void setErrorLayout() {
-        binding.progressLayout.getRoot().setVisibility(View.GONE);
-        binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getEmployeeCompanyRoles(roleModels);
-        });
-    }
-
     private void getRoles() {
         assert getArguments() != null;
         String models = getArguments().getString(EMPLOYEE_ROLE);
         roleModels = new Gson().fromJson(models, new TypeToken<List<EmployeeRoleModel>>() {
         }.getType());
-        assert roleModels != null;
     }
 
 }

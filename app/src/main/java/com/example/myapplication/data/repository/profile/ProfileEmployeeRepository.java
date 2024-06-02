@@ -1,8 +1,12 @@
 package com.example.myapplication.data.repository.profile;
 
 import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMPLOYEE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LOCATION_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
@@ -39,24 +43,24 @@ public class ProfileEmployeeRepository {
 
             userDoc.collection(COMPANY_EMPLOYEE).get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    Log.d("Task employee", task.getResult().size() + "");
                     boolean size = !task.getResult().isEmpty();
-                    Log.d("Task employee", size + "");
                     if (size) {
                         emitter.onSuccess(!task.getResult().isEmpty());
+                    } else {
+                        userDoc.collection(RESTAURANT_EMPLOYEE).get().addOnCompleteListener(taskRestaurant -> {
+                            if (taskRestaurant.isSuccessful()) {
+                                emitter.onSuccess(!taskRestaurant.getResult().isEmpty());
+                            } else {
+                                emitter.onError(new Throwable(taskRestaurant.getException()));
+                            }
+                        });
                     }
                 } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
 
-            userDoc.collection(RESTAURANT_EMPLOYEE).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    emitter.onSuccess(!task.getResult().isEmpty());
-                } else {
-                    emitter.onError(new Throwable(task.getException()));
-                }
-            });
+
         });
     }
 
@@ -67,23 +71,32 @@ public class ProfileEmployeeRepository {
                 String locationId = service.fireStore.collection(waiterPath).getParent().getId();
                 String restaurantId = service.fireStore.collection(waiterPath).getParent().getParent().getParent().getId();
 
-                DocumentReference docRef = service.fireStore
-                        .collection(USER_LIST)
-                        .document(service.auth.getCurrentUser().getUid())
-                        .collection(RESTAURANT_EMPLOYEE)
-                        .document(restaurantId);
+                service.fireStore
+                        .collection(RESTAURANT_LIST)
+                        .document(restaurantId)
+                        .get().addOnCompleteListener(taskGet -> {
+                            if (taskGet.isSuccessful()) {
+                                String name = taskGet.getResult().getString(RESTAURANT_NAME);
+                                DocumentReference docRef = service.fireStore
+                                        .collection(USER_LIST)
+                                        .document(service.auth.getCurrentUser().getUid())
+                                        .collection(RESTAURANT_EMPLOYEE)
+                                        .document(restaurantId);
 
-                HashMap<String, String> employee = new HashMap<>();
-                employee.put(EMPLOYEE_ROLE, WAITER);
-                employee.put(LOCATION_ID, locationId);
+                                HashMap<String, String> employee = new HashMap<>();
+                                employee.put(EMPLOYEE_ROLE, WAITER);
+                                employee.put(LOCATION_ID, locationId);
+                                employee.put(COMPANY_NAME, name);
 
-                docRef.set(employee).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        emitter.onComplete();
-                    } else {
-                        emitter.onError(new Throwable(task.getException()));
-                    }
-                });
+                                docRef.set(employee).addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        emitter.onComplete();
+                                    } else {
+                                        emitter.onError(new Throwable(task.getException()));
+                                    }
+                                });
+                            }
+                        });
             });
         }
 
@@ -102,7 +115,8 @@ public class ProfileEmployeeRepository {
                                         dtos.add(new RestaurantEmployeeDto(
                                                 current.getId(),
                                                 current.getString(LOCATION_ID),
-                                                current.getString(EMPLOYEE_ROLE)
+                                                current.getString(EMPLOYEE_ROLE),
+                                                current.getString(COMPANY_NAME)
                                         ));
                                     }
                                     emitter.onSuccess(dtos);
@@ -120,23 +134,35 @@ public class ProfileEmployeeRepository {
             String restaurantId = service.fireStore.collection(path).getParent().getParent().getParent().getId();
             String locationId = service.fireStore.collection(path).getParent().getId();
             return Completable.create(emitter -> {
-                DocumentReference docRef = service.fireStore
-                        .collection(USER_LIST)
-                        .document(service.auth.getCurrentUser().getUid())
-                        .collection(RESTAURANT_EMPLOYEE)
-                        .document(restaurantId);
 
-                HashMap<String, String> employee = new HashMap<>();
-                employee.put(EMPLOYEE_ROLE, COOK);
-                employee.put(LOCATION_ID, locationId);
+                service.fireStore
+                        .collection(RESTAURANT_LIST)
+                        .document(restaurantId)
+                        .get().addOnCompleteListener(taskGet -> {
+                            if (taskGet.isSuccessful()){
+                                String name = taskGet.getResult().getString(COMPANY_NAME);
+                                DocumentReference docRef = service.fireStore
+                                        .collection(USER_LIST)
+                                        .document(service.auth.getCurrentUser().getUid())
+                                        .collection(RESTAURANT_EMPLOYEE)
+                                        .document(restaurantId);
 
-                docRef.set(employee).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        emitter.onComplete();
-                    } else {
-                        emitter.onError(new Throwable(task.getException()));
-                    }
-                });
+                                HashMap<String, String> employee = new HashMap<>();
+                                employee.put(EMPLOYEE_ROLE, COOK);
+                                employee.put(LOCATION_ID, locationId);
+                                employee.put(COMPANY_NAME, name);
+
+                                docRef.set(employee).addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        emitter.onComplete();
+                                    } else {
+                                        emitter.onError(new Throwable(task.getException()));
+                                    }
+                                });
+                            }
+                        });
+
+
             });
         }
 
@@ -212,7 +238,7 @@ public class ProfileEmployeeRepository {
                                     ));
                                 }
                                 emitter.onSuccess(dtos);
-                            }else {
+                            } else {
                                 emitter.onError(new Throwable(task.getException()));
                             }
                         });
@@ -220,23 +246,34 @@ public class ProfileEmployeeRepository {
         }
 
         public Completable addEmployeeRole(String companyId) {
-            DocumentReference docRef = service.fireStore
-                    .collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .collection(COMPANY_EMPLOYEE)
-                    .document(companyId);
-
-            Map<String, Object> employee = new HashMap<>();
-            employee.put(EMPLOYEE_ROLE, WORKER);
-
             return Completable.create(emitter -> {
-                docRef.set(employee).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        emitter.onComplete();
-                    }else {
-                        emitter.onError(new Throwable(task.getException()));
-                    }
-                });
+            service.fireStore
+                    .collection(COMPANY_LIST)
+                    .document(companyId)
+                    .get().addOnCompleteListener(taskGet -> {
+                       if (taskGet.isSuccessful()){
+
+                           String name = taskGet.getResult().getString(COMPANY_NAME);
+
+                           DocumentReference docRef = service.fireStore
+                                   .collection(USER_LIST)
+                                   .document(service.auth.getCurrentUser().getUid())
+                                   .collection(COMPANY_EMPLOYEE)
+                                   .document(companyId);
+
+                           Map<String, Object> employee = new HashMap<>();
+                           employee.put(EMPLOYEE_ROLE, WORKER);
+                           employee.put(COMPANY_NAME, name);
+
+                           docRef.set(employee).addOnCompleteListener(task -> {
+                               if (task.isSuccessful()) {
+                                   emitter.onComplete();
+                               } else {
+                                   emitter.onError(new Throwable(task.getException()));
+                               }
+                           });
+                       }
+                    });
             });
         }
 
@@ -255,14 +292,15 @@ public class ProfileEmployeeRepository {
                                         DocumentSnapshot current = documentSnapshots.get(i);
                                         dtos.add(new UserEmployeeRoleDto(
                                                 current.getString(EMPLOYEE_ROLE),
-                                                current.getId()
+                                                current.getId(),
+                                                current.getString(COMPANY_NAME)
                                         ));
                                     }
                                     emitter.onSuccess(dtos);
                                 } else {
                                     emitter.onSuccess(Collections.emptyList());
                                 }
-                            }else {
+                            } else {
                                 emitter.onSuccess(Collections.emptyList());
                             }
                         });

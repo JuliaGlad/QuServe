@@ -17,7 +17,8 @@ public class GetRestaurantEmployeeRolesUseCase {
                         .map(restaurantEmployeeDto -> new UserEmployeeModel(
                                 restaurantEmployeeDto.getRole(),
                                 restaurantEmployeeDto.getRestaurantId(),
-                                restaurantEmployeeDto.getLocationId()))
+                                restaurantEmployeeDto.getLocationId(),
+                                restaurantEmployeeDto.getRestaurantName()))
                         .collect(Collectors.toList()));
     }
 }

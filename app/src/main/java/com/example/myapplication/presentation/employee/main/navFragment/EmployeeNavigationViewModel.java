@@ -102,7 +102,8 @@ public class EmployeeNavigationViewModel extends ViewModel {
                                 models.add(new EmployeeRoleModel(
                                         user.getRole(),
                                         user.getCompanyId(),
-                                        user.getLocationId()
+                                        user.getLocationId(),
+                                        user.getCompanyName()
                                 ));
                             }
                             Log.d("Roles restaurant if more", "got");
@@ -138,7 +139,8 @@ public class EmployeeNavigationViewModel extends ViewModel {
                                 models.add(new EmployeeRoleModel(
                                         current.getRole(),
                                         current.getCompanyId(),
-                                        null
+                                        null,
+                                        current.getCompanyName()
                                 ));
                             }
                             Log.d("Roles company if more", "got");
