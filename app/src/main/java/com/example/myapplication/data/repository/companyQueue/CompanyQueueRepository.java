@@ -159,7 +159,6 @@ public class CompanyQueueRepository {
                         for (int i = 0; i < snapshots.size(); i++) {
                             DocumentSnapshot current = snapshots.get(i);
                             collRef.document(current.getId()).collection(WORKERS_LIST).document(adminId).delete();
-
                         }
                         emitter.onComplete();
                     } else {

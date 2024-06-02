@@ -282,9 +282,19 @@ public class RestaurantMenuFragment extends Fragment {
             if (bundle != null){
                 int position = bundle.getInt(POSITION);
                 String name = bundle.getString(COMPANY_NAME);
+                String categoryId = bundle.getString(COMPANY_ID);
                 Uri uri = Uri.parse(bundle.getString(URI));
+
+                for (int i = 0; i < categories.size(); i++) {
+                    if (categories.get(i) instanceof CategoryItemDelegateItem){
+                        CategoryItemModel current = ((CategoryItemDelegateItem) categories.get(i)).content();
+                        current.setChosen(false);
+                        horizontalAdapter.notifyItemChanged(i);
+                    }
+                }
+
                 categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                        position, categoryId, name, null,  uri, 0, false, false, true,
+                        position, categoryId, name, null,  uri, 0, false, true, true,
                         view -> {
                             PopupMenu popupMenu = new PopupMenu(requireContext(), (View) view);
                             popupMenu.getMenuInflater().inflate(R.menu.delete_category_menu, popupMenu.getMenu());
@@ -425,9 +435,8 @@ public class RestaurantMenuFragment extends Fragment {
                     viewModel.getCategoryDishes(restaurantId, current.getCategoryId(), true);
                     categoryId = current.getCategoryId();
                 }
-                int index = i;
                 categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                        index,
+                        i,
                         current.getCategoryId(),
                         current.getName(),
                         current.getTask(),
