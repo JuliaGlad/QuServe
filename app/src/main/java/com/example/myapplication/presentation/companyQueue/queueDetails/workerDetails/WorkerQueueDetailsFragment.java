@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -53,7 +54,6 @@ public class WorkerQueueDetailsFragment extends Fragment {
         queueId = requireActivity().getIntent().getStringExtra(QUEUE_ID);
         companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         viewModel.getCompanyQueueById(companyId, queueId);
-        Log.d("Data queue", "QueueId:" + " " + queueId + "  " + "CompanyId:" + " " + companyId );
     }
 
     @Override
@@ -71,6 +71,16 @@ public class WorkerQueueDetailsFragment extends Fragment {
         setupObserves();
         initBackButton();
         initMenuButton();
+        handleBackButtonPressed();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
     }
 
     private void setAdapter() {

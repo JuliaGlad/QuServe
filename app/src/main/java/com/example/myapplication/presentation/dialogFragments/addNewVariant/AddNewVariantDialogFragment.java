@@ -51,6 +51,7 @@ public class AddNewVariantDialogFragment extends DialogFragment {
             String newVariant = binding.editLayoutVariant.getText().toString();
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonAdd.setEnabled(false);
+            binding.buttonAdd.setText("");
             viewModel.addVariant(restaurantId, categoryId, dishId, choiceId, newVariant);
         });
 

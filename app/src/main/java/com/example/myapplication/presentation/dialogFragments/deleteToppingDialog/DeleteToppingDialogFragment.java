@@ -48,6 +48,7 @@ public class DeleteToppingDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteTopping(restaurantId, categoryId, dishId, name);
         });
 

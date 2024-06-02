@@ -45,6 +45,7 @@ public class DeleteRestaurantDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteRestaurant(restaurantId);
         });
 

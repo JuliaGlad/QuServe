@@ -48,6 +48,7 @@ public class StopWaiterWorkDialogFragment extends DialogFragment {
         binding.buttonStop.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonStop.setEnabled(false);
+            binding.buttonStop.setText("");
             viewModel.updateIsWorking(restaurantId, locationId);
         });
 

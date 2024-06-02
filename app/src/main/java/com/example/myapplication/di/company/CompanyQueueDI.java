@@ -4,6 +4,7 @@ import com.example.myapplication.domain.usecase.companyQueue.employees.AddListEm
 import com.example.myapplication.domain.usecase.companyQueue.employees.DeleteEmployeeFromQueueUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.GetAdminsUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.employees.RemoveAdminFromAllQueuesAsWorkerUseCase;
+import com.example.myapplication.domain.usecase.companyQueue.queues.AddCompanyQueueInProgressSnapshotUseCase;
 import com.example.myapplication.domain.usecase.companyQueue.queues.AddCompanyQueueParticipantsSizeSnapshot;
 import com.example.myapplication.domain.usecase.companyQueue.queues.AddEmployeeToListQueues;
 import com.example.myapplication.domain.usecase.companyQueue.queues.ContinueCompanyQueueUseCase;
@@ -25,6 +26,7 @@ import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateCompan
 import com.example.myapplication.domain.usecase.companyQueue.queues.UpdateQueueDataUseCase;
 
 public class CompanyQueueDI {
+    public static AddCompanyQueueInProgressSnapshotUseCase addCompanyQueueInProgressSnapshotUseCase = new AddCompanyQueueInProgressSnapshotUseCase();
     public static GetCompanyQueueInProgressUseCase getCompanyQueueInProgressUseCase = new GetCompanyQueueInProgressUseCase();
     public static ContinueCompanyQueueUseCase continueCompanyQueueUseCase = new ContinueCompanyQueueUseCase();
     public static PauseCompanyQueueUseCase pauseCompanyQueueUseCase = new PauseCompanyQueueUseCase();

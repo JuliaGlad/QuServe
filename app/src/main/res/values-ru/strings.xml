@@ -245,7 +245,7 @@
     <string name="try_again">Повторить</string>
     <string name="you_need_account">Вам необходим аккаунт!</string>
     <string name="hours">Часы</string>
-    <string name="minutes">минут(-ы)</string>
+    <string name="minutes">минуты</string>
     <string name="seconds">Секунды</string>
     <string name="pause">Приостановить</string>
     <string name="queue">Очередь</string>

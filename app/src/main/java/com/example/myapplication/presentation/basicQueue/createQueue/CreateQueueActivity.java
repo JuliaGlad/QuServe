@@ -16,12 +16,10 @@ import com.example.myapplication.presentation.companyQueue.queueDetails.CompanyQ
 
 public class CreateQueueActivity extends AppCompatActivity {
 
-    private ActivityCreateQueueBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCreateQueueBinding.inflate(getLayoutInflater());
+        com.example.myapplication.databinding.ActivityCreateQueueBinding binding = ActivityCreateQueueBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbarCreateQueue);

@@ -13,10 +13,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
@@ -29,6 +31,7 @@ import android.view.ViewGroup;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPauseQueueBinding;
 import com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails.WorkerQueueDetailsActivity;
+import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
@@ -68,15 +71,25 @@ public class PauseWorkerQueueFragment extends Fragment {
         binding.indicator.setMax(PROGRESS);
         binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
-       // initStopButton();
+        handleBackButtonPressed();
+        initStopButton();
         startCountDown();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (!checkForegroundServiceRunning()) {
-            ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, PROGRESS, COMPANY);
+            ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, companyId, PROGRESS, COMPANY);
         }
     }
 
@@ -117,15 +130,15 @@ public class PauseWorkerQueueFragment extends Fragment {
         binding.timer.setText(timeLeft);
     }
 
-//    private void initStopButton() {
-//        binding.buttonStopPause.setOnClickListener(v -> {
-//            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
-//            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
-//            dialogFragment.onDismissListener(bundle -> {
-//                NavHostFragment.findNavController(this).popBackStack();
-//            });
-//        });
-//    }
+    private void initStopButton() {
+        binding.buttonStopPause.setOnClickListener(v -> {
+            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+            dialogFragment.onDismissListener(bundle -> {
+                NavHostFragment.findNavController(this).popBackStack();
+            });
+        });
+    }
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {

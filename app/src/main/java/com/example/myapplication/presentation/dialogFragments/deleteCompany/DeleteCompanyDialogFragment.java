@@ -45,6 +45,7 @@ public class DeleteCompanyDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteCompany(companyId);
         });
 

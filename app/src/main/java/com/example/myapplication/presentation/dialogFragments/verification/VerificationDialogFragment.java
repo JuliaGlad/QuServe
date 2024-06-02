@@ -40,6 +40,7 @@ public class VerificationDialogFragment extends DialogFragment {
         binding.buttonDone.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDone.setEnabled(false);
+            binding.buttonDone.setText("");
             viewModel.isVerified();
         });
         binding.buttonCancel.setOnClickListener(v -> {

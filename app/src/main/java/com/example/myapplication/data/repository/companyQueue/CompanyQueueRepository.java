@@ -303,6 +303,26 @@ public class CompanyQueueRepository {
         });
     }
 
+    public Observable<String> addInProgressDocumentSnapshot(String companyId, String queueId) {
+        DocumentReference docRef = service.fireStore
+                .collection(QUEUE_LIST)
+                .document(COMPANIES_QUEUES)
+                .collection(companyId)
+                .document(queueId);
+
+        return Observable.create(emitter -> {
+            docRef.addSnapshotListener((value, error) -> {
+                if (value != null) {
+                    String inProgress = value.getString(QUEUE_IN_PROGRESS);
+                    emitter.onNext(inProgress);
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
+                }
+            });
+        });
+    }
+
+
     public Observable<Integer> addParticipantsSizeDocumentSnapshot(String companyId, String queueId) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueId);
         return Observable.create(emitter -> {

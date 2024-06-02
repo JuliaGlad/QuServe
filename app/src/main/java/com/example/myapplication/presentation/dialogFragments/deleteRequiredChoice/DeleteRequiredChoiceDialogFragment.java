@@ -44,6 +44,7 @@ public class DeleteRequiredChoiceDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteChoice(restaurantId, categoryId, dishId, choiceId);
         });
 

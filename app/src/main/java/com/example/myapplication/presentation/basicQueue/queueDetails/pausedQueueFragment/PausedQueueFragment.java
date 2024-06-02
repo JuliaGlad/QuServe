@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
@@ -30,6 +31,7 @@ import androidx.work.WorkManager;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentPausedQueueBinding;
 import com.example.myapplication.presentation.basicQueue.queueDetails.QueueDetailsActivity;
+import com.example.myapplication.presentation.dialogFragments.stopPause.StopPauseDialogFragment;
 import com.example.myapplication.presentation.utils.backToWorkNotification.HideNotificationWorker;
 import com.example.myapplication.presentation.utils.waitingNotification.NotificationForegroundService;
 
@@ -53,9 +55,7 @@ public class PausedQueueFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
         binding = FragmentPausedQueueBinding.inflate(inflater, container, false);
-
 
         if (getArguments() != null) {
             queueId = getArguments().getString(QUEUE_ID);
@@ -85,8 +85,18 @@ public class PausedQueueFragment extends Fragment {
         binding.indicator.setMax(PROGRESS);
         binding.indicator.setProgress(PROGRESS, true);
         initBackButton();
-        //initStopButton();
+        initStopButton();
+        handleBackButtonPressed();
         startCountDown();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                requireActivity().finish();
+            }
+        });
     }
 
     private void initBox() {
@@ -116,17 +126,17 @@ public class PausedQueueFragment extends Fragment {
         });
     }
 
-//    private void initStopButton() {
-//        binding.buttonStopPause.setOnClickListener(v -> {
-//            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
-//            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
-//            dialogFragment.onDismissListener(bundle -> {
-//                isStopped = true;
-//                NavHostFragment.findNavController(PausedQueueFragment.this)
-//                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
-//            });
-//        });
-//    }
+    private void initStopButton() {
+        binding.buttonStopPause.setOnClickListener(v -> {
+            StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, null, BASIC);
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
+            dialogFragment.onDismissListener(bundle -> {
+                isStopped = true;
+                NavHostFragment.findNavController(PausedQueueFragment.this)
+                        .navigate(R.id.action_pausedQueueFragment_to_detailsQueueFragment);
+            });
+        });
+    }
 
     private void startCountDown() {
         new CountDownTimer(timeMillis, 1000) {

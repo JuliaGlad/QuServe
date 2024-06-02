@@ -43,6 +43,7 @@ public class FinishQueueDialogFragment extends DialogFragment {
         binding.buttonFinish.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonFinish.setEnabled(false);
+            binding.buttonFinish.setText("");
             viewModel.finishQueue(queueId, type, companyId);
         });
 

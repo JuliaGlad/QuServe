@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.companyQueue.queueDetails.workerDetails;
 
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.PROGRESS_MAX;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
@@ -49,11 +50,12 @@ public class WorkerQueueDetailsActivity extends AppCompatActivity {
         startService(intent);
     }
 
-    public void startTimerForegroundService(long time, String timeLeft, String queueId, int progressMax, String type){
+    public void startTimerForegroundService(long time, String timeLeft, String queueId, String companyId, int progressMax, String type){
         Intent intent = new Intent(this, TimerService.class);
         intent.putExtra(TIME_MILLIS, time);
         intent.putExtra(PROGRESS_MAX, progressMax);
         intent.putExtra(QUEUE_ID, queueId);
+        intent.putExtra(COMPANY_ID, companyId);
         intent.putExtra(TIME_LEFT, timeLeft);
         intent.putExtra(STATE, type);
         startService(intent);

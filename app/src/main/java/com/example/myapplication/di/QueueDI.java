@@ -2,6 +2,7 @@ package com.example.myapplication.di;
 
 import com.example.myapplication.domain.usecase.profile.CheckUserIdUseCase;
 import com.example.myapplication.domain.usecase.profile.SignInAnonymouslyUseCase;
+import com.example.myapplication.domain.usecase.queue.usecase.AddInProgressDocumentSnapshotUseCase;
 import com.example.myapplication.domain.usecase.queue.usecase.AddPeopleBeforeYouSnapshot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddQueueSizeModelSnapShot;
 import com.example.myapplication.domain.usecase.queue.usecase.AddQueueToHistoryUseCase;
@@ -33,6 +34,7 @@ import com.example.myapplication.domain.usecase.queue.usecase.UploadFileToFireSt
 import com.example.myapplication.domain.usecase.queue.usecase.onParticipantServedUseCase;
 
 public class QueueDI {
+    public static AddInProgressDocumentSnapshotUseCase addInProgressDocumentSnapshotUseCase = new AddInProgressDocumentSnapshotUseCase();
     public static AddQueueToHistoryUseCase addQueueToHistoryUseCase = new AddQueueToHistoryUseCase();
     public static DeleteQrCodeUseCase deleteQrCodeUseCase = new DeleteQrCodeUseCase();
     public static GetQueueMidTimeModel getQueueMidTimeModel = new GetQueueMidTimeModel();

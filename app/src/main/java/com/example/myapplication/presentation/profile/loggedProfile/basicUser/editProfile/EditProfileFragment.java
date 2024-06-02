@@ -135,6 +135,9 @@ public class EditProfileFragment extends Fragment {
     private void initSaveDataButton() {
         binding.buttonSave.setOnClickListener(v -> {
 
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSave.setEnabled(false);
+
             name = binding.editLayoutName.getText().toString();
             phone = binding.editLayoutPhone.getText().toString();
             email = binding.editLayoutEmail.getText().toString();

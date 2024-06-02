@@ -44,7 +44,9 @@ public class ChangeEmailDialogFragment extends DialogFragment {
         binding.buttonCancel.setOnClickListener(v -> dismiss());
 
         binding.buttonSend.setOnClickListener(v -> {
-
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSend.setEnabled(false);
+            binding.buttonSend.setText("");
             initEditText();
 
             email = binding.editLayoutNewEmail.getText().toString();

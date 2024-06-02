@@ -35,6 +35,7 @@ public class UpdatePasswordDialogFragment extends DialogFragment {
 
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonSend.setEnabled(false);
+            binding.buttonSend.setText("");
 
             String oldPassword = binding.editLayoutOldPassword.getText().toString();
             String newPassword = binding.editLayoutNewPassword.getText().toString();

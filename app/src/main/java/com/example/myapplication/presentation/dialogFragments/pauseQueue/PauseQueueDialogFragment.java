@@ -57,6 +57,7 @@ public class PauseQueueDialogFragment extends DialogFragment {
 
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonPause.setEnabled(false);
+            binding.buttonPause.setText("");
 
             hours = binding.hoursPicker.getValue();
             minutes = binding.minutesPicker.getValue();

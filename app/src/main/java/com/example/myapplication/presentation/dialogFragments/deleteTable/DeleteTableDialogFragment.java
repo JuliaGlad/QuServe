@@ -49,6 +49,7 @@ public class DeleteTableDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteTable(restaurantId, locationId, tableId);
         });
 

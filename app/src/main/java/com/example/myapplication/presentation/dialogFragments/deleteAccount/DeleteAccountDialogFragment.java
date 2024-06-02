@@ -36,6 +36,7 @@ public class DeleteAccountDialogFragment extends DialogFragment {
             String password = binding.editLayoutPassword.getText().toString();
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteAccount(password);
         });
 

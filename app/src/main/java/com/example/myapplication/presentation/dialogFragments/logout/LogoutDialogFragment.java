@@ -34,6 +34,7 @@ public class LogoutDialogFragment extends DialogFragment {
         binding.buttonLogout.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonLogout.setEnabled(false);
+            binding.buttonLogout.setText("");
             viewModel.logout();
         });
 

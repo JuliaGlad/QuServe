@@ -41,6 +41,7 @@ public class ResetPasswordDialogFragment extends DialogFragment {
 
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonSend.setEnabled(false);
+            binding.buttonSend.setText("");
 
             initEditText();
 

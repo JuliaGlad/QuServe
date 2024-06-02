@@ -47,6 +47,7 @@ public class StopPauseDialogFragment extends DialogFragment {
         binding.buttonStop.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonStop.setEnabled(false);
+            binding.buttonStop.setText("");
             viewModel.continueQueue(queueId, companyId, type);
         });
 

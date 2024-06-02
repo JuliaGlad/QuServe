@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,9 @@ public class AlreadyOwnQueueDialogFragment extends DialogFragment {
         setupObserves();
 
         binding.buttonFinish.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonFinish.setEnabled(false);
+            binding.buttonFinish.setText("");
             viewModel.finishQueue(queueId);
         });
 

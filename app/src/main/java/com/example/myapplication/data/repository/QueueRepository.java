@@ -299,6 +299,21 @@ public class QueueRepository {
         });
     }
 
+    public Observable<String> addInProgressDocumentSnapshot(String queueId) {
+        DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
+        return Observable.create(emitter -> {
+            docRef.addSnapshotListener((value, error) -> {
+                int size = 0;
+                if (value != null) {
+                    String inProgress = value.getString(QUEUE_IN_PROGRESS);
+                    emitter.onNext(inProgress);
+                } else {
+                    emitter.onError(new Throwable("Value is null"));
+                }
+            });
+        });
+    }
+
     public Observable<Integer> addPeopleBeforeDocumentSnapshot(String path, int previousSize) {
         DocumentReference docRef = service.fireStore.document(path);
         return Observable.create(emitter -> {

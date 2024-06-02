@@ -49,17 +49,17 @@
             app:layout_constraintStart_toStartOf="@+id/indicator"
             app:layout_constraintTop_toTopOf="@+id/indicator" />
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:id="@+id/button_stop_pause"-->
-<!--            style="@style/Widget.Material3.Button.QuServe"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:text="@string/stop"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_stop_pause"
+            style="@style/Widget.Material3.Button.QuServe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/button_back"

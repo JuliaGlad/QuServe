@@ -46,6 +46,7 @@ public class FinishRestaurantOrderDialogFragment extends DialogFragment {
         binding.buttonFinish.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonFinish.setEnabled(false);
+            binding.buttonFinish.setText("");
             viewModel.finishOrder(orderPath, tableId, false);
         });
 

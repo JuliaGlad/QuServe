@@ -46,6 +46,7 @@ public class DeleteWorkerFromQueueDialogFragment extends DialogFragment {
         binding.buttonDelete.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonDelete.setEnabled(false);
+            binding.buttonDelete.setText("");
             viewModel.deleteFromQueue(companyId, queueId, employeeId);
         });
 
