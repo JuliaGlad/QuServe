@@ -1,14 +1,14 @@
-package com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton;
+package com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate;
 
 import myapplication.android.ui.listeners.ButtonItemListener;
 
-public class QueueActionButtonModel {
+public class HomeCompanyQueueModel {
     int id;
     String name;
     String peopleInQueue;
     ButtonItemListener listener;
 
-    public QueueActionButtonModel(int id, String name, String peopleInQueue, ButtonItemListener listener) {
+    public HomeCompanyQueueModel(int id, String name, String peopleInQueue, ButtonItemListener listener) {
         this.id = id;
         this.name = name;
         this.peopleInQueue = peopleInQueue;

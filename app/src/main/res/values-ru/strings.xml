@@ -260,7 +260,7 @@
     <string name="company_owner">Владелец компании</string>
     <string name="queue_owner">Владелец очереди</string>
     <string name="queue_participant">Участник очереди</string>
-    <string name="people_in_queue">Человек перед вами:</string>
+    <string name="people_in_queue">Людей в очереди:</string>
     <string name="add_new_employees_to_your_company">Добавть новго сотрудника в компанию</string>
     <string name="create_new_company_queue_so_people_can_join_it">Создайте новую очередь компании, чтобы другие могли присоединиться к ней</string>
     <string name="employee">Сотрудник</string>

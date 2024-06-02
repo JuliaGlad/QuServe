@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueManagerBinding;
@@ -23,7 +22,6 @@ import com.example.myapplication.presentation.companyQueue.queueManager.recycler
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.state.QueueManagerState;
 import com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog;
-import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.LinearLayoutManagerWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +146,6 @@ public class QueueManagerFragment extends Fragment {
             );
         }
         binding.recyclerView.setAdapter(adapter);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false));
         adapter.submitList(models);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.GONE);

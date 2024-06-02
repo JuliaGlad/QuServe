@@ -11,13 +11,13 @@
     android:background="@drawable/card_background"
     android:padding="16dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/employee_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/employee_name"
@@ -76,6 +76,7 @@
         app:layout_constraintStart_toStartOf="@+id/employee_photo"
         app:layout_constraintTop_toTopOf="@+id/employee_photo"
         app:mk_color="?colorPrimary"
-        app:mk_type="FishSpinner" /> /
+        app:mk_type="FishSpinner" />
+    /
 
 </androidx.constraintlayout.widget.ConstraintLayout>

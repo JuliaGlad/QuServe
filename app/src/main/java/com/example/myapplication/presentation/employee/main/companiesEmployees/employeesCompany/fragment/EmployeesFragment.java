@@ -17,8 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.databinding.FragmentEmployeesBinding;
 import com.example.myapplication.presentation.dialogFragments.changeRole.ChangeRoleDialogFragment;
@@ -27,7 +25,6 @@ import com.example.myapplication.presentation.dialogFragments.employeeQrCode.Emp
 import com.example.myapplication.presentation.employee.main.companiesEmployees.model.EmployeeModel;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.EmployeeItemAdapter;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.EmployeeItemModel;
-import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem.LinearLayoutManagerWrapper;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.state.EmployeeState;
 import com.google.android.material.tabs.TabLayout;
 
@@ -45,6 +42,7 @@ public class EmployeesFragment extends Fragment {
     private final List<EmployeeItemModel> basicList = new ArrayList<>();
     private final List<EmployeeItemModel> workerList = new ArrayList<>();
     private final List<EmployeeItemModel> adminList = new ArrayList<>();
+    private List<EmployeeItemModel> currentList = basicList;
     private final EmployeeItemAdapter employeeItemAdapter = new EmployeeItemAdapter();
 
     @Override
@@ -126,12 +124,18 @@ public class EmployeesFragment extends Fragment {
                 switch (tab.getPosition()) {
                     case 0:
                         employeeItemAdapter.submitList(basicList);
+                        employeeItemAdapter.onCurrentListChanged(currentList, basicList);
+                        currentList = basicList;
                         break;
                     case 1:
                         employeeItemAdapter.submitList(adminList);
+                        employeeItemAdapter.onCurrentListChanged(currentList, adminList);
+                        currentList = adminList;
                         break;
                     case 2:
                         employeeItemAdapter.submitList(workerList);
+                        employeeItemAdapter.onCurrentListChanged(currentList, workerList);
+                        currentList = workerList;
                         break;
                 }
             }
@@ -151,8 +155,6 @@ public class EmployeesFragment extends Fragment {
 
     private void initRecycler() {
         employeeItemAdapter.submitList(basicList);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManagerWrapper(requireContext(), LinearLayoutManager.VERTICAL, false);
-        binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setAdapter(employeeItemAdapter);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
@@ -199,7 +201,13 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < workerList.size(); i++) {
             if (Objects.equals(workerList.get(i).getEmployeeId(), id)) {
                 adminList.add(workerList.get(i));
+                if (currentList.equals(adminList)){
+                    employeeItemAdapter.notifyItemInserted(adminList.size() - 1);
+                }
                 workerList.remove(i);
+                if (currentList.equals(workerList)){
+                    employeeItemAdapter.notifyItemRemoved(i);
+                }
                 break;
             }
         }
@@ -209,7 +217,13 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < adminList.size(); i++) {
             if (adminList.get(i).getEmployeeId().equals(id)) {
                 workerList.add(adminList.get(i));
+                if (currentList.equals(workerList)){
+                    employeeItemAdapter.notifyItemInserted(workerList.size() - 1);
+                }
                 adminList.remove(i);
+                if (currentList.equals(adminList)){
+                    employeeItemAdapter.notifyItemRemoved(i);
+                }
                 break;
             }
         }

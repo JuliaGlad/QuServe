@@ -17,6 +17,11 @@
         <item name="cornerSize">20dp</item>
     </style>
 
+    <style name="Widget.MaterialComponents.ShapeableImageView.Round">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">100dp</item>
+    </style>
+
     <style name="TextAppearance.Material3.BodyLarge.Bold.QuServe" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorOnSurface</item>

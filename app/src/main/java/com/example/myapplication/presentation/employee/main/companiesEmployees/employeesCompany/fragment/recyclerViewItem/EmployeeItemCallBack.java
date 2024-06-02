@@ -11,6 +11,6 @@ public class EmployeeItemCallBack extends DiffUtil.ItemCallback<EmployeeItemMode
 
     @Override
     public boolean areContentsTheSame(@NonNull EmployeeItemModel oldItem, @NonNull EmployeeItemModel newItem) {
-        return oldItem.compareToOther(newItem);
+        return oldItem.equals(newItem);
     }
 }

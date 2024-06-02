@@ -99,7 +99,7 @@ public class WaitingFragment extends Fragment {
                 WaitingModel model = ((WaitingState.Success) state).data;
                 List<String> participantsList = model.getParticipants();
                 binding.queueName.setText(model.getName());
-                int peopleBeforeSize, midTime = 0;
+                int peopleBeforeSize = 0, midTime = 0;
                 for (int i = 0; i < participantsList.size(); i++) {
                     if (viewModel.checkParticipantsIndex(participantsList, i)) {
                         peopleBeforeSize = i + 1;
@@ -107,7 +107,7 @@ public class WaitingFragment extends Fragment {
                         break;
                     }
                 }
-                initRecycler(model.getPath(), model.getParticipants().size(), midTime);
+                initRecycler(model.getPath(), peopleBeforeSize, midTime);
             }
             else if (state instanceof WaitingState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);

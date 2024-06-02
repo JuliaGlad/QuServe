@@ -26,6 +26,9 @@ import myapplication.android.ui.recycler.ui.items.items.buttonWithDescription.Bu
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueActionButton.QueueActionButtonModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate.HomeCompanyQueueDelegate;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate.HomeCompanyQueueDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate.HomeCompanyQueueModel;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.squareButton.SquareButtonModel;
@@ -107,7 +110,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
         })));
         delegates.addAll(addQueues(models));
         adapter.addDelegate(new SquareButtonDelegate());
-        adapter.addDelegate(new QueueActionButtonDelegate());
+        adapter.addDelegate(new HomeCompanyQueueDelegate());
         binding.recyclerView.setAdapter(adapter);
         adapter.submitList(delegates);
         binding.progressBar.getRoot().setVisibility(View.GONE);
@@ -118,7 +121,7 @@ public class HomeQueueCompanyUserFragment extends Fragment {
         List<DelegateItem> delegates = new ArrayList<>();
         for (int i = 0; i < models.size(); i++) {
             QueueCompanyHomeModel current = models.get(i);
-            delegates.add(new QueueActionButtonDelegateItem(new QueueActionButtonModel(i + 1, current.getName(), String.valueOf(current.getParticipantsSize()), () -> {
+            delegates.add(new HomeCompanyQueueDelegateItem(new HomeCompanyQueueModel(i + 1, current.getName(), String.valueOf(current.getParticipantsSize()), () -> {
                 ((MainActivity)requireActivity()).openCompanyQueueDetailsActivity(companyId, current.getQueueId());
             })));
         }

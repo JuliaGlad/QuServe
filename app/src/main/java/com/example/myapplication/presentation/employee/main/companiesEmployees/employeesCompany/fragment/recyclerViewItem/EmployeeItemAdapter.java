@@ -52,7 +52,9 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
         }
 
         void bind(EmployeeItemModel model) {
-            binding.loader.setVisibility(View.VISIBLE);
+            if (!model.isChecked) {
+                binding.loader.setVisibility(View.VISIBLE);
+            }
             binding.employeeName.setText(model.getName());
             binding.role.setText(model.role);
 
@@ -72,6 +74,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
                                         .apply(RequestOptions.circleCropTransform())
                                         .into(binding.employeePhoto);
                                 binding.loader.setVisibility(View.GONE);
+                                model.isChecked = true;
                             } else {
                                 Glide.with(itemView.getContext())
                                         .load(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.avatar, itemView.getContext().getTheme()))

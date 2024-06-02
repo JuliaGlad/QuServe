@@ -116,10 +116,8 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
 
         viewModel.removeParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                List<DelegateItem> newItems = new ArrayList<>(itemsList);
-                newItems.remove(1);
-                mainAdapter.submitList(newItems);
-                itemsList = newItems;
+                itemsList.remove(0);
+                mainAdapter.notifyItemRemoved(0);
             }
         });
 
