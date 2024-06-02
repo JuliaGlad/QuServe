@@ -39,7 +39,7 @@ public class ManagerItemAdapter extends ListAdapter<ManagerItemModel, RecyclerVi
 
             if (model.workers != null && Integer.parseInt(model.workers) > 3 ){
                 model.workers = String.valueOf(Integer.parseInt(model.workers) - 3);
-                binding.workersCount.setText("+" + model.workers);
+                binding.workersCount.setText("+".concat(model.workers));
             } else {
                 binding.workersCount.setText(model.workers);
             }
