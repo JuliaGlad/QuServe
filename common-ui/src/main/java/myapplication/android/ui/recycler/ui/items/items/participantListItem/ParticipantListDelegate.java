@@ -25,7 +25,7 @@ public class ParticipantListDelegate implements AdapterDelegate {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private RecyclerViewParticipantItemBinding binding;
+        private final RecyclerViewParticipantItemBinding binding;
 
         public ViewHolder(RecyclerViewParticipantItemBinding _binding) {
             super(_binding.getRoot());
@@ -34,6 +34,7 @@ public class ParticipantListDelegate implements AdapterDelegate {
 
         void bind(ParticipantListModel model) {
             binding.participant.setText(model.text);
+            binding.participantNumber.setText(String.valueOf(model.number));
         }
     }
 }

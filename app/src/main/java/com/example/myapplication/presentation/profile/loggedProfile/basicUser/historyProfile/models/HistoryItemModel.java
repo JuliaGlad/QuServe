@@ -6,13 +6,19 @@ import java.util.List;
 
 public class HistoryItemModel {
     private final String date;
+    private final String service;
     private final String time;
     private final String name;
 
-    public HistoryItemModel (String date,String time, String name) {
+    public HistoryItemModel (String date, String service, String time, String name) {
         this.date = date;
         this.name = name;
+        this.service = service;
         this.time = time;
+    }
+
+    public String getService() {
+        return service;
     }
 
     public String getName() {

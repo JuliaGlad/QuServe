@@ -36,6 +36,42 @@ import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantEmployeesRepository {
 
+    public Single<Boolean> checkHaveWorkingEmployees(String tablePath) {
+        return Single.create(emitter -> {
+            DocumentReference locationRef = service.fireStore.document(tablePath).getParent().getParent();
+            locationRef.collection(WAITERS).get().addOnCompleteListener(taskWaiters -> {
+                if (taskWaiters.isSuccessful()) {
+                    List<DocumentSnapshot> documents = taskWaiters.getResult().getDocuments();
+                    if (!documents.isEmpty()) {
+                        boolean haveWorkingWaiter = false;
+                        for (int i = 0; i < documents.size(); i++) {
+                            if (Boolean.TRUE.equals(documents.get(i).getBoolean(IS_WORKING))) {
+                                haveWorkingWaiter = true;
+                                break;
+                            }
+                        }
+                        if (haveWorkingWaiter) {
+                            locationRef.collection(COOKS).get().addOnCompleteListener(tasKCooks -> {
+                                if (tasKCooks.isSuccessful()) {
+                                    if (!tasKCooks.getResult().getDocuments().isEmpty()) {
+                                        emitter.onSuccess(true);
+                                    } else {
+                                        emitter.onSuccess(false);
+                                    }
+                                }
+                            });
+                        } else {
+                            emitter.onSuccess(false);
+                        }
+
+                    } else {
+                        emitter.onSuccess(false);
+                    }
+                }
+            });
+        });
+    }
+
     public Single<Boolean> haveOrders(String restaurantId, String locationId) {
         return Single.create(emitter -> {
             service.fireStore

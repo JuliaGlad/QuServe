@@ -60,7 +60,6 @@ public class WaitingViewModel extends ViewModel {
                     @Override
                     public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
                         if (QueueDI.onContainParticipantUseCase.invoke(documentSnapshot)){
-                            addToHistory(documentSnapshot.getString(QUEUE_NAME_KEY));
                             _isAdded.postValue(true);
                         }
                     }
@@ -75,12 +74,6 @@ public class WaitingViewModel extends ViewModel {
 
                     }
                 });
-    }
-
-    public void addToHistory(String name){
-        String date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
-        String time = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
-        QueueDI.addQueueToHistoryUseCase.invoke(queueId, name, time, date);
     }
 
     public boolean checkParticipantsIndex(List<String> participants, int index) {

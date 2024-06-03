@@ -12,7 +12,9 @@ import static com.example.myapplication.presentation.utils.constants.Utils.PARTI
 import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED;
 import static com.example.myapplication.presentation.utils.constants.Utils.PEOPLE_PASSED;
 import static com.example.myapplication.presentation.utils.constants.Utils.PEOPLE_PASSED_15;
+import static com.example.myapplication.presentation.utils.constants.Utils.PLACE_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.QR_CODES;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_AUTHOR_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_IN_PROGRESS;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIFE_TIME_KEY;
@@ -20,6 +22,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_PARTICIPANTS_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.SECONDS_DIVIDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.SERVICE;
 import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 
@@ -52,13 +55,12 @@ public class QueueRepository {
                 .collection(USER_LIST)
                 .document(service.auth.getCurrentUser().getUid())
                 .collection(HISTORY_KEY)
-                .document(date)
-                .collection(QUEUE_LIST)
                 .document(queueId);
 
         HashMap<String, Object> hashMap = new HashMap<>();
 
-        hashMap.put(QUEUE_NAME_KEY, name);
+        hashMap.put(PLACE_NAME, name);
+        hashMap.put(SERVICE, QUEUE);
         hashMap.put(TIME, timeLeft);
         hashMap.put(DATE_LEFT, date);
 

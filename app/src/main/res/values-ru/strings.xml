@@ -245,6 +245,8 @@
     <string name="try_again">Повторить</string>
     <string name="you_need_account">Вам необходим аккаунт!</string>
     <string name="hours">Часы</string>
+    <string name="hours_description">час(-а)</string>
+    <string name="minutes_description">минут(-ы)</string>
     <string name="minutes">минуты</string>
     <string name="seconds">Секунды</string>
     <string name="pause">Приостановить</string>
@@ -442,4 +444,6 @@
     <string name="delete_location">Удалить локацию</string>
     <string name="wrong_qr_code">Неправильный QR-код!</string>
     <string name="looks_like_you_have_scanned_wrong_qr_code_please_try_again_with_the_different_one">Похоже вы отсканировали неверный QR-код! Пожалуйста, попробуйте снова с другим QR-кодом</string>
+    <string name="unable_to_take_order">Не можем принять заказ!</string>
+    <string name="this_restaurant_can_t_accept_your_order_right_now_please_wait_or_visit_another_location">Этот ресторан сейчас не может принять заказ! Пожалуйста, подождите, либо посетите другую локацию!</string>
 </resources>

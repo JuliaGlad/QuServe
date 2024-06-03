@@ -37,6 +37,7 @@ public class HistoryFragmentViewModel extends ViewModel{
                         for (int i = 0; i < historyModels.size(); i++) {
                             models.add(new HistoryItemModel(
                                     historyModels.get(i).getDate(),
+                                    historyModels.get(i).getService(),
                                     historyModels.get(i).getTime(),
                                     historyModels.get(i).getName()
                             ));

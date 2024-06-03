@@ -1,16 +1,20 @@
 package com.example.myapplication.domain.model.profile;
 
-import java.util.List;
-
 public class HistoryModel {
     private final String date;
+    private final String service;
     private final String time;
     private final String name;
 
-    public HistoryModel(String date,String time, String name) {
+    public HistoryModel(String date, String service, String time, String name) {
         this.date = date;
+        this.service = service;
         this.name = name;
         this.time = time;
+    }
+
+    public String getService() {
+        return service;
     }
 
     public String getName() {

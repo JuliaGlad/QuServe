@@ -18,13 +18,15 @@ import static com.example.myapplication.presentation.utils.constants.Utils.NOT_R
 import static com.example.myapplication.presentation.utils.constants.Utils.OWN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.PHONE_NUMBER_KEY;
-import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_IMAGES;
+ import static com.example.myapplication.presentation.utils.constants.Utils.PLACE_NAME;
+ import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_PARTICIPANTS_LIST;
-import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
+ import static com.example.myapplication.presentation.utils.constants.Utils.SERVICE;
+ import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
 import static com.example.myapplication.presentation.utils.constants.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
@@ -161,7 +163,8 @@ public class ProfileRepository {
                     for (int i = 0; i < documents.size(); i++) {
                         list.add(new HistoryQueueDto(
                                 documents.get(i).getString(DATE_LEFT),
-                                documents.get(i).getString(QUEUE_NAME_KEY),
+                                documents.get(i).getString(SERVICE),
+                                documents.get(i).getString(PLACE_NAME),
                                 documents.get(i).getString(TIME)
                         ));
                     }

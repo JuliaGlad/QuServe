@@ -1,11 +1,8 @@
 package com.example.myapplication.domain.usecase.profile;
 
-import com.example.myapplication.di.DI;
 import com.example.myapplication.di.profile.ProfileDI;
-import com.example.myapplication.di.profile.ProfileEmployeeDI;
 import com.example.myapplication.domain.model.profile.HistoryModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +15,7 @@ public class GetHistoryUseCase {
                 historyQueueDtos.stream()
                         .map(historyQueueDto -> new HistoryModel(
                                 historyQueueDto.getDate(),
+                                historyQueueDto.getService(),
                                 historyQueueDto.getTime(),
                                 historyQueueDto.getName()
                         )).collect(Collectors.toList()));

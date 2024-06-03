@@ -13,6 +13,7 @@ import com.example.myapplication.domain.usecase.restaurant.employee.GetCookQrCod
 import com.example.myapplication.domain.usecase.restaurant.employee.GetEmployeesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetWaiterQrCodeByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.GetWaiterQrCodeUseCase;
+import com.example.myapplication.domain.usecase.restaurant.employee.OnHaveWorkingEmployeesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.UploadCookQrCodeUseCase;
 import com.example.myapplication.domain.usecase.restaurant.employee.UploadWaiterQrCodeUseCase;
 
@@ -20,6 +21,7 @@ public class RestaurantEmployeeDI {
 
     public static RestaurantEmployeesRepository restaurantEmployeesRepository = new RestaurantEmployeesRepository();
 
+    public static OnHaveWorkingEmployeesUseCase onHaveWorkingEmployeesUseCase = new OnHaveWorkingEmployeesUseCase();
     public static CheckActiveEmployeeOrders checkActiveEmployeeOrders = new CheckActiveEmployeeOrders();
     public static DeleteEmployeeUseCase deleteEmployeeUseCase = new DeleteEmployeeUseCase();
     public static GetEmployeesUseCase getEmployeesUseCase = new GetEmployeesUseCase();

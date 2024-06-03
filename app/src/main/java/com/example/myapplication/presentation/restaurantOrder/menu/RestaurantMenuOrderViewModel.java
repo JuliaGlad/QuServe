@@ -1,9 +1,12 @@
 package com.example.myapplication.presentation.restaurantOrder.menu;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.di.restaurant.RestaurantEmployeeDI;
 import com.example.myapplication.di.restaurant.RestaurantMenuDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
 import com.example.myapplication.di.restaurant.RestaurantTableDI;
@@ -29,6 +32,9 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
     private final MutableLiveData<Boolean> _isChecked = new MutableLiveData<>(null);
     LiveData<Boolean> isChecked = _isChecked;
 
+    private final MutableLiveData<Boolean> _haveEmployees = new MutableLiveData<>(null);
+    LiveData<Boolean> haveEmployees = _haveEmployees;
+
     private final MutableLiveData<List<DishMenuModel>> _newCategory = new MutableLiveData<>(null);
     LiveData<List<DishMenuModel>> newCategory = _newCategory;
 
@@ -38,7 +44,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
     private final MutableLiveData<RestaurantMenuOrderState> _state = new MutableLiveData<>(new RestaurantMenuOrderState.Loading());
     LiveData<RestaurantMenuOrderState> state = _state;
 
-    public String getRestaurantId(String tablePath){
+    public String getRestaurantId(String tablePath) {
         return RestaurantOrderDI.getRestaurantIdByTablePathUseCase.invoke(tablePath);
     }
 
@@ -144,6 +150,27 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
                     @Override
                     public void onSuccess(@NonNull Boolean aBoolean) {
                         _isChecked.postValue(aBoolean);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e("Error", e.getMessage());
+                    }
+                });
+    }
+
+    public void checkEmployees(String tablePath) {
+        RestaurantEmployeeDI.onHaveWorkingEmployeesUseCase.invoke(tablePath)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<Boolean>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull Boolean aBoolean) {
+                        _haveEmployees.postValue(aBoolean);
                     }
 
                     @Override

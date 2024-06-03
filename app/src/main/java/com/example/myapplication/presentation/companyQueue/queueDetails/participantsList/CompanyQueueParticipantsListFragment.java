@@ -89,7 +89,7 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
 
     private void addParticipantListDelegateItems(int queueLength) {
         for (int i = 0; i < queueLength; i++) {
-            itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
+            itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant), i + 1)));
         }
     }
 
@@ -107,10 +107,9 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
     private void setupObserves() {
         viewModel.addParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean) {
-                List<DelegateItem> newItems = new ArrayList<>(itemsList);
-                newItems.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant))));
-                mainAdapter.submitList(newItems);
-                itemsList = newItems;
+                int position = itemsList.size();
+                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant), position + 1)));
+                mainAdapter.notifyItemInserted(itemsList.size());
             }
         });
 
@@ -118,6 +117,13 @@ public class CompanyQueueParticipantsListFragment extends Fragment {
             if (aBoolean) {
                 itemsList.remove(0);
                 mainAdapter.notifyItemRemoved(0);
+                for (int i = 0; i < itemsList.size(); i++) {
+                    if (itemsList.get(i) instanceof ParticipantListDelegateItem){
+                        ParticipantListModel currentModel = (ParticipantListModel) itemsList.get(i).content();
+                        currentModel.setNumber(i + 1);
+                        mainAdapter.notifyItemChanged(i);
+                    }
+                }
             }
         });
 

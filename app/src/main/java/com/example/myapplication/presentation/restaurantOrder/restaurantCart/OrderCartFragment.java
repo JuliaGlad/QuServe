@@ -143,9 +143,9 @@ public class OrderCartFragment extends Fragment {
             binding.totalPrice.setText(String.valueOf(price).concat("₽"));
         });
 
-        viewModel.isOrdered.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean) {
-                ((OrderCartActivity) requireActivity()).openCreatedActivity(launcherCreated, path);
+        viewModel.isOrdered.observe(getViewLifecycleOwner(), orderId -> {
+            if (orderId != null) {
+                ((OrderCartActivity) requireActivity()).openCreatedActivity(launcherCreated, path, orderId, restaurantId);
             }
         });
     }

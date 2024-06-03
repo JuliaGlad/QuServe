@@ -99,7 +99,7 @@ public class WaitingFragment extends Fragment {
                 WaitingModel model = ((WaitingState.Success) state).data;
                 List<String> participantsList = model.getParticipants();
                 binding.queueName.setText(model.getName());
-                int peopleBeforeSize = 0, midTime = 0;
+                int peopleBeforeSize = 0, midTime = 0, startMidTime = Integer.parseInt(model.getMidTime());
                 for (int i = 0; i < participantsList.size(); i++) {
                     if (viewModel.checkParticipantsIndex(participantsList, i)) {
                         peopleBeforeSize = i + 1;
@@ -107,7 +107,7 @@ public class WaitingFragment extends Fragment {
                         break;
                     }
                 }
-                initRecycler(model.getPath(), peopleBeforeSize, midTime);
+                initRecycler(model.getPath(), peopleBeforeSize, midTime, startMidTime);
             }
             else if (state instanceof WaitingState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
@@ -137,7 +137,7 @@ public class WaitingFragment extends Fragment {
         return false;
     }
 
-    private void initRecycler(String path, int peopleBeforeSize, int midTime) {
+    private void initRecycler(String path, int peopleBeforeSize, int midTime, int startMidTime) {
         String estimatedTime;
 
         if (midTime != 0){
@@ -147,9 +147,9 @@ public class WaitingFragment extends Fragment {
         }
 
         buildList(new DelegateItem[]{
-                new WaitingItemDelegateItem(new WaitingItemModel(2, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), estimatedTime.concat(getString(R.string.minutes)), R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
-                new WaitingItemDelegateItem(new WaitingItemModel(3, path, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
-                new WaitingItemDelegateItem(new WaitingItemModel(4, path, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
+                new WaitingItemDelegateItem(new WaitingItemModel(2, startMidTime, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), estimatedTime, R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
+                new WaitingItemDelegateItem(new WaitingItemModel(3, startMidTime, path, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),
+                new WaitingItemDelegateItem(new WaitingItemModel(4, startMidTime, path, peopleBeforeSize, requireContext().getString(R.string.useful_tips), requireContext().getString(R.string.tips_description), R.drawable.ic_sparkles_primary, false, null)),
                 new LeaveQueueDelegateItem(new LeaveQueueModel(4, this::showLeaveQueueDialog))
         });
 

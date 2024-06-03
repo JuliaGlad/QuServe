@@ -44,7 +44,7 @@ public class HistoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewModel.getHistoryData();
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
@@ -72,25 +72,28 @@ public class HistoryFragment extends Fragment {
                 }
 
                 for (int i = 0; i < dates.size(); i++) {
-                    delegates.add(new DateDelegateItem(new DateModel(i, dates.get(i))));
+                    String currentDate = dates.get(i);
+                    delegates.add(new DateDelegateItem(new DateModel(i, currentDate)));
                     for (int j = 0; j < model.size(); j++) {
-                        if (dates.get(i).equals(model.get(j).getDate())){
+                        if (currentDate.equals(model.get(j).getDate())){
                             delegates.add(new HistoryDelegateItem(new HistoryDelegateModel(
                                     j,
                                     model.get(j).getName(),
-                                    model.get(j).getTime()
+                                    model.get(j).getTime(),
+                                    model.get(j).getService()
                             )));
                         }
                     }
                 }
                 adapter.submitList(delegates);
-                binding.progressBar.setVisibility(View.GONE);
+                binding.errorLayout.getRoot().setVisibility(View.GONE);
+                binding.progressBar.getRoot().setVisibility(View.GONE);
 
             } else if (state instanceof HistoryState.Loading){
-                binding.progressBar.setVisibility(View.VISIBLE);
+                binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
             } else if (state instanceof HistoryState.Error){
-
+                binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
             }
         });
     }

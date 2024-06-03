@@ -1,10 +1,19 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.DATE_LEFT;
+import static com.example.myapplication.presentation.utils.constants.Utils.HISTORY_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Utils.NO_ORDER;
+import static com.example.myapplication.presentation.utils.constants.Utils.PLACE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIST;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ACTIVE_ORDERS_COUNT;
@@ -68,6 +77,31 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.core.SingleEmitter;
 
 public class RestaurantOrderRepository {
+
+    public Completable addOrderToHistory(String orderId, String name, String timeLeft, String date) {
+        DocumentReference docRef = service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid())
+                .collection(HISTORY_KEY)
+                .document(orderId);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        hashMap.put(PLACE_NAME, name);
+        hashMap.put(SERVICE, RESTAURANT);
+        hashMap.put(TIME, timeLeft);
+        hashMap.put(DATE_LEFT, date);
+
+        return Completable.create(emitter -> {
+            docRef.set(hashMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    emitter.onComplete();
+                }else {
+                    emitter.onError(new Throwable(task.getException()));
+                }
+            });
+        });
+    }
 
     public Completable dishServed(String restaurantId, String locationId, String readyDishDocId) {
         return Completable.create(emitter -> {

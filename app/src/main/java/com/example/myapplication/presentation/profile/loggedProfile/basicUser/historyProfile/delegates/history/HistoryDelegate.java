@@ -1,10 +1,15 @@
 package com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.delegates.history;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.RecyclerViewHistoryItemBinding;
 
 import myapplication.android.ui.recycler.delegate.AdapterDelegate;
@@ -39,6 +44,12 @@ public class HistoryDelegate implements AdapterDelegate {
         void bind(HistoryDelegateModel model){
             binding.queueName.setText(model.name);
             binding.time.setText(model.time);
+
+            if (model.service.equals(QUEUE)){
+                binding.icon.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.queue_round, itemView.getContext().getTheme()));
+            } else if (model.service.equals(RESTAURANT)){
+                binding.icon.setImageDrawable(ResourcesCompat.getDrawable(itemView.getResources(), R.drawable.restaurant_round_icon, itemView.getContext().getTheme()));
+            }
         }
     }
 }

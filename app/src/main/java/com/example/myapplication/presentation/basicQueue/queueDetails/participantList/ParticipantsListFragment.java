@@ -20,6 +20,8 @@ import java.util.List;
 
 import myapplication.android.ui.recycler.delegate.DelegateItem;
 import myapplication.android.ui.recycler.delegate.MainAdapter;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemDelegateItem;
+import myapplication.android.ui.recycler.ui.items.items.categoryItem.CategoryItemModel;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegate;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.participantListItem.ParticipantListModel;
@@ -93,7 +95,8 @@ public class ParticipantsListFragment extends Fragment {
 
         viewModel.addParticipant.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant))));
+                int number = itemsList.size() + 1;
+                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(itemsList.size() + 1, requireContext().getString(R.string.participant), number)));
                 mainAdapter.notifyItemInserted(itemsList.size() - 1);
             }
         });
@@ -102,6 +105,13 @@ public class ParticipantsListFragment extends Fragment {
             if (aBoolean){
                 itemsList.remove(0);
                 mainAdapter.notifyItemRemoved(0);
+                for (int i = 0; i < itemsList.size(); i++) {
+                    if (itemsList.get(i) instanceof ParticipantListDelegateItem){
+                        ParticipantListModel currentModel = (ParticipantListModel) itemsList.get(i).content();
+                        currentModel.setNumber(i + 1);
+                        mainAdapter.notifyItemChanged(i);
+                    }
+                }
             }
         });
 
@@ -118,7 +128,7 @@ public class ParticipantsListFragment extends Fragment {
     private void addParticipantListDelegateItems(int queueLength) {
         if (queueLength != 0) {
             for (int i = 0; i < queueLength; i++) {
-                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant))));
+                itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant), i + 1)));
             }
         }
     }

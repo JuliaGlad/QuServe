@@ -25,7 +25,10 @@ import com.example.myapplication.presentation.common.waitingInQueue.WaitingActiv
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -37,6 +40,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class NotificationForegroundService extends Service {
     private String name = null;
     private String time = null;
+    private String queueId = null;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -86,7 +90,13 @@ public class NotificationForegroundService extends Service {
     }
 
     private void updateParticipate() {
+        String month = new SimpleDateFormat("MMM", Locale.getDefault()).format(new Date());
+        String date = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
+        String dateFull = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+        String time = date.concat(" ").concat(month.concat(" ").concat(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date())));
+
         ProfileDI.updateParticipateInQueueUseCase.invoke(NOT_PARTICIPATE_IN_QUEUE)
+                .concatWith(QueueDI.addQueueToHistoryUseCase.invoke(queueId, name, time, dateFull))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
@@ -157,6 +167,7 @@ public class NotificationForegroundService extends Service {
                         }
 
                         name = queueModel.getName();
+                        queueId = queueModel.getId();
                         time = String.valueOf(Integer.parseInt(queueModel.getMidTime()) * before);
                         setupNotification();
 

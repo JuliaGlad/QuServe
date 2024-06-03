@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart.orderCreated;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 
@@ -24,12 +26,14 @@ import com.example.myapplication.databinding.FragmentOrderCreatedBinding;
 public class OrderCreatedFragment extends Fragment {
 
     private FragmentOrderCreatedBinding binding;
-    private String tablePath;
+    private String tablePath, orderId, restaurantId;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         tablePath = requireActivity().getIntent().getStringExtra(TABLE_PATH);
+        orderId = requireActivity().getIntent().getStringExtra(ORDER_ID);
+        restaurantId = requireActivity().getIntent().getStringExtra(RESTAURANT);
         binding = FragmentOrderCreatedBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -37,7 +41,7 @@ public class OrderCreatedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((OrderCreatedActivity)requireActivity()).startService(tablePath);
+        ((OrderCreatedActivity)requireActivity()).startService(tablePath, orderId, restaurantId);
         initButtonOk();
         initBackButton();
         handleBackButtonPressed();

@@ -2,14 +2,20 @@ package com.example.myapplication.data.dto.user;
 
 public class HistoryQueueDto {
 
-    private String date;
-    private String name;
-    private String time;
+    private final String date;
+    private final String service;
+    private final String name;
+    private final String time;
 
-    public HistoryQueueDto(String date,String name, String time) {
+    public HistoryQueueDto(String date, String service, String name, String time) {
         this.date = date;
+        this.service = service;
         this.name = name;
         this.time = time;
+    }
+
+    public String getService() {
+        return service;
     }
 
     public String getTime() {

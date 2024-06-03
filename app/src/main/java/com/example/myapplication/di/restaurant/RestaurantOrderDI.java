@@ -1,6 +1,7 @@
 package com.example.myapplication.di.restaurant;
 
 import com.example.myapplication.data.repository.restaurant.RestaurantOrderRepository;
+import com.example.myapplication.domain.usecase.restaurant.order.AddOrderToHistoryUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.AddReadyDishesSnapshotUseCase;
 import com.example.myapplication.domain.usecase.restaurant.menu.images.GetDishesImagesByIdsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.AddDishToCartUseCase;
@@ -30,6 +31,7 @@ public class RestaurantOrderDI {
 
     public static RestaurantOrderRepository restaurantOrderRepository = new RestaurantOrderRepository();
 
+    public static AddOrderToHistoryUseCase addOrderToHistoryUseCase = new AddOrderToHistoryUseCase();
     public static OnOrderFinishedUseCase onOrderFinishedUseCase = new OnOrderFinishedUseCase();
     public static AddTableSnapshotUseCase addTableSnapshotUseCase = new AddTableSnapshotUseCase();
     public static GetRestaurantIdByTablePathUseCase getRestaurantIdByTablePathUseCase = new GetRestaurantIdByTablePathUseCase();

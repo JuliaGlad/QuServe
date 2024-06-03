@@ -30,8 +30,8 @@ public class OrderCartViewModel extends ViewModel {
     private final MutableLiveData<Integer> _price = new MutableLiveData<>(0);
     LiveData<Integer> price = _price;
 
-    private final MutableLiveData<Boolean> _isOrdered = new MutableLiveData<>(false);
-    LiveData<Boolean> isOrdered = _isOrdered;
+    private final MutableLiveData<String> _isOrdered = new MutableLiveData<>(null);
+    LiveData<String> isOrdered = _isOrdered;
 
     private final MutableLiveData<OrderCartState> _state = new MutableLiveData<>(new OrderCartState.Loading());
     LiveData<OrderCartState> state = _state;
@@ -97,7 +97,7 @@ public class OrderCartViewModel extends ViewModel {
 
                     @Override
                     public void onComplete() {
-                        _isOrdered.postValue(true);
+                        _isOrdered.postValue(orderId);
                     }
 
                     @Override

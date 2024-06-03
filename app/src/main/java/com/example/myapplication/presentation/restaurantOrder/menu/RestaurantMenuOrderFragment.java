@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.databinding.FragmentRestaurantMenuOrderBinding;
 import com.example.myapplication.presentation.dialogFragments.tableAlreadyHaveOrder.TableAlreadyHaveOrderDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.unableToTakeOrderRightNow.UnableToTakeOrderDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
@@ -118,10 +119,24 @@ public class RestaurantMenuOrderFragment extends Fragment {
 
     private void setupObserves() {
 
+        viewModel.haveEmployees.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (aBoolean){
+                    viewModel.getMenuCategories(restaurantId);
+                } else {
+                    UnableToTakeOrderDialogFragment dialogFragment = new UnableToTakeOrderDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "UNABLE_TO_TAKE_ORDER_DIALOG");
+                    dialogFragment.onDismissListener(bundle -> {
+                        requireActivity().finish();
+                    });
+                }
+            }
+        });
+
         viewModel.isChecked.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean != null){
                 if (!aBoolean){
-                    viewModel.getMenuCategories(restaurantId);
+                    viewModel.checkEmployees(tablePath);
                 } else {
                     TableAlreadyHaveOrderDialogFragment dialogFragment = new TableAlreadyHaveOrderDialogFragment();
                     dialogFragment.show(requireActivity().getSupportFragmentManager(), "TABLE_ALREADY_HAVE_ORDER");

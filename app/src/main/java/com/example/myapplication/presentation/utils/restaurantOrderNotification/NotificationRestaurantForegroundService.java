@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.utils.restaurantOrderNotification;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
@@ -24,12 +26,16 @@ import com.example.myapplication.R;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.queue.QueueModel;
 import com.example.myapplication.presentation.common.waitingInQueue.WaitingActivity;
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -40,12 +46,14 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class NotificationRestaurantForegroundService extends Service {
 
-    String tablePath;
+    String tablePath, orderId, restaurantId, restaurantName;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         setupNotification();
         tablePath = intent.getStringExtra(PATH);
+        orderId = intent.getStringExtra(ORDER_ID);
+        restaurantId = intent.getStringExtra(RESTAURANT);
         addSnapshot(tablePath);
         return super.onStartCommand(intent, flags, startId);
     }
@@ -57,7 +65,10 @@ public class NotificationRestaurantForegroundService extends Service {
     }
 
     private void addSnapshot(String path) {
-        RestaurantOrderDI.addTableSnapshotUseCase.invoke(path)
+        RestaurantUserDI.getRestaurantNameByIdsUseCase.invoke(restaurantId)
+                .flatMapObservable(name -> {
+                    restaurantName = name;
+                    return RestaurantOrderDI.addTableSnapshotUseCase.invoke(path);})
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
@@ -85,7 +96,14 @@ public class NotificationRestaurantForegroundService extends Service {
     }
 
     private void updateVisitor() {
+
+        String month = new SimpleDateFormat("MMM", Locale.getDefault()).format(new Date());
+        String date = new SimpleDateFormat("dd", Locale.getDefault()).format(new Date());
+        String dateFull = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(new Date());
+        String time = date.concat(" ").concat(month.concat(" ").concat(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date())));
+
         ProfileDI.updateRestaurantVisitorUseCase.invoke(NOT_RESTAURANT_VISITOR)
+                .concatWith(RestaurantOrderDI.restaurantOrderRepository.addOrderToHistory(orderId, restaurantName, time, dateFull))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override

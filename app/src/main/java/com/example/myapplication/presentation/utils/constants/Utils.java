@@ -2,6 +2,9 @@ package com.example.myapplication.presentation.utils.constants;
 
 public class Utils {
     public static final int WRONG_CODE = -1;
+    public static final String PLACE_NAME = "Name";
+    public static final String SERVICE = "Service";
+    public static final String QUEUE = "Queue";
     public static final String DEFAULT_DRAWABLES = "defaultDrawables/";
     public static final String IMAGE = "Image";
     public static final String EMPTY = "Empty";
