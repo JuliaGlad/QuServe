@@ -1,6 +1,8 @@
 package com.example.myapplication.data.repository.restaurant;
 
 import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.NO_COOK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.NO_WAITER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_LIST;
@@ -46,6 +48,8 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.myapplication.data.dto.restaurant.ActiveOrderDishDto;
 import com.example.myapplication.data.dto.restaurant.DishShortInfoDto;
 import com.example.myapplication.data.dto.restaurant.OrderDto;
@@ -59,6 +63,7 @@ import com.example.myapplication.data.providers.CartProvider;
 import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.example.myapplication.presentation.restaurantOrder.VariantCartModel;
 import com.example.myapplication.presentation.restaurantOrder.restaurantCart.model.OrderDishesModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -67,6 +72,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -96,7 +102,7 @@ public class RestaurantOrderRepository {
             docRef.set(hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -304,16 +310,19 @@ public class RestaurantOrderRepository {
             DocumentReference orderDoc = docLocation.collection(ACTIVE_ORDERS).document(orderId);
 
             orderDoc.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot snapshot = task.getResult();
-                    List<DishShortInfoDto> dtos = new ArrayList<>();
-                    String cook = getCook(snapshot.getString(COOK), docLocation);
-                    String waiter = getWaiter(snapshot.getString(WAITER), docLocation);
-                    getDishesShortInfo(dtos, orderDoc);
-                    getCook(snapshot.getString(COOK), docLocation);
-                    emitter.onSuccess(new OrderTableDetailsDto(waiter, cook, dtos));
-                }
-            });
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot snapshot = task.getResult();
+                            List<DishShortInfoDto> dtos = new ArrayList<>();
+                            String cook = getCook(snapshot.getString(COOK), docLocation);
+                            String waiter = getWaiter(snapshot.getString(WAITER), docLocation);
+                            if (waiter != null) {
+                                getDishesShortInfo(dtos, orderDoc);
+                                emitter.onSuccess(new OrderTableDetailsDto(waiter, cook, dtos));
+                            } else {
+                                emitter.onSuccess(new OrderTableDetailsDto(NO_WAITER, NO_COOK, Collections.emptyList()));
+                            }
+                        }
+                    });
         });
     }
 
@@ -638,21 +647,29 @@ public class RestaurantOrderRepository {
 
     private String getWaiter(String waiterId, DocumentReference locationDoc) {
         final String[] name = new String[1];
-        locationDoc.collection(WAITERS).document(waiterId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                name[0] = task.getResult().getString(USER_NAME_KEY);
-            }
-        });
+        try {
+            locationDoc.collection(WAITERS).document(waiterId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    name[0] = task.getResult().getString(USER_NAME_KEY);
+                }
+            });
+        } catch (NullPointerException e){
+            name[0] = null;
+        }
         return name[0];
     }
 
     private String getCook(String cookId, DocumentReference locationDoc) {
         final String[] name = new String[1];
-        locationDoc.collection(COOKS).document(cookId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                name[0] = task.getResult().getString(USER_NAME_KEY);
-            }
-        });
+        try {
+            locationDoc.collection(COOKS).document(cookId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    name[0] = task.getResult().getString(USER_NAME_KEY);
+                }
+            });
+        } catch (NullPointerException e){
+            name[0] = NO_COOK;
+        }
         return name[0];
     }
 

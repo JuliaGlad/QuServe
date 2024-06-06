@@ -86,10 +86,16 @@ public class TableOrderDetailsFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof TableOrderDetailsState.Success) {
                 TableOrderDetailsStateModel model = ((TableOrderDetailsState.Success) state).data;
-                binding.cookName.setText(model.getCookName());
-                binding.waiterName.setText(model.getWaiterName());
-                binding.number.setText(tableNumber);
-                initRecycler(model.getDishes());
+                if (model != null) {
+                    binding.cookName.setText(model.getCookName());
+                    binding.waiterName.setText(model.getWaiterName());
+                    binding.number.setText(tableNumber);
+                    initRecycler(model.getDishes());
+                } else {
+                    binding.errorLayout.getRoot().setVisibility(View.GONE);
+                    binding.progressBar.getRoot().setVisibility(View.GONE);
+                    initEmpty();
+                }
 
             } else if (state instanceof TableOrderDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
@@ -97,6 +103,13 @@ public class TableOrderDetailsFragment extends Fragment {
                 setErrorLayout();
             }
         });
+    }
+
+    private void initEmpty() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.there_is_no_order_on_this_table_yet));
+        binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_anybody_creates_an_order_and_then_come_back));
+        binding.emptyLayout.buttonAdd.setVisibility(View.GONE);
     }
 
     private void setErrorLayout() {
@@ -114,6 +127,7 @@ public class TableOrderDetailsFragment extends Fragment {
             items.add(new DishTableDetailsItemModel(i, current.getName(), current.getCount()));
         }
         adapter.submitList(items);
+        binding.emptyLayout.getRoot().setVisibility(View.GONE);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
     }

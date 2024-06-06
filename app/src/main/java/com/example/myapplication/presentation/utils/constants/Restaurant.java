@@ -1,6 +1,9 @@
 package com.example.myapplication.presentation.utils.constants;
 
 public class Restaurant {
+    public static final String NO_DISHES = "NoDishes";
+    public static final String NO_WAITER = "NoWaiter";
+    public static final String NO_COOK= "NoCook";
     public static final String WAITER = "Waiter";
     public static final String IS_WORKING = "IsWorking";
     public static final String ACTIVE_ORDERS_COUNT = "ActiveOrdersCount";

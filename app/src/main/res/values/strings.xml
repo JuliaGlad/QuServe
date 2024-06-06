@@ -1,4 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
+    <string name="this_table_does_not_have_order_yet">There no order at this table yet!</string>
+    <string name="wait_until_anybody_make_an_order_and_then_come_back">Wait until anybody make an order at this table and then come back!</string>
     <string name="looks_like_you_have_active_actions">Looks like you have active actions</string>
     <string name="order_is_cooking">Order is cooking</string>
     <string name="order_is_finished">Order is finished</string>

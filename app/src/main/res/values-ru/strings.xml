@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="this_table_does_not_have_order_yet">На этом столике пока что нет заказа!</string>
+    <string name="wait_until_anybody_make_an_order_and_then_come_back">Подождите пока кто-нибудь из ваших посетителей сделает заказ и затем возвращайтесь!</string>
     <string name="looks_like_you_have_active_actions">Похоже у вас есть активные действия</string>
     <string name="you_have_to_wait_until_they_finished_before_log_in_or_creating_account">Вам нужно подождать их завершения перед тем, как входить или создавать аккаунт!</string>
     <string name="you_are_next">Приготовьтесь! Вы следующий!</string>
