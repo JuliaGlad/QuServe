@@ -251,6 +251,7 @@
     <string name="hours">Hours</string>
     <string name="hours_description">hours</string>
     <string name="minutes_description">minutes</string>
+    <string name="seconds_description">seconds</string>
     <string name="minutes">Minutes</string>
     <string name="seconds">Seconds</string>
     <string name="pause">Pause</string>
@@ -456,4 +457,5 @@
     <string name="looks_like_you_have_scanned_wrong_qr_code_please_try_again_with_the_different_one">Looks like you have scanned wrong QR-code! Please, try again with the different one!</string>
     <string name="unable_to_take_order">Unable to take order!</string>
     <string name="this_restaurant_can_t_accept_your_order_right_now_please_wait_or_visit_another_location">This restaurant can`t accept your order right now! Please, wait or visit another location!</string>
+    <string name="question" translatable="false">\?</string>
 </resources>

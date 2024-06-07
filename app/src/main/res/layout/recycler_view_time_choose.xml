@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <NumberPicker
+        android:id="@+id/hours_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:theme="@style/NumberPickerTheme"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_hours" />
+
+    <NumberPicker
+        android:id="@+id/minutes_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:theme="@style/NumberPickerTheme"
+        app:layout_constraintEnd_toStartOf="@+id/second_picker"
+        app:layout_constraintStart_toEndOf="@+id/hours_picker"
+        app:layout_constraintTop_toBottomOf="@+id/title_minutes" />
+
+    <NumberPicker
+        android:id="@+id/second_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:padding="16dp"
+        android:theme="@style/NumberPickerTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_seconds" />
+
+    <TextView
+        android:id="@+id/colon_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:fontFamily="@font/bold_roboto"
+        android:textSize="32sp"
+        android:textColor="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/minutes_picker"
+        app:layout_constraintEnd_toStartOf="@+id/minutes_picker"
+        app:layout_constraintStart_toEndOf="@+id/hours_picker"
+        app:layout_constraintTop_toTopOf="@+id/minutes_picker" />
+
+    <TextView
+        android:id="@+id/colon_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:fontFamily="@font/bold_roboto"
+        android:textSize="32sp"
+        android:textColor="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/minutes_picker"
+        app:layout_constraintEnd_toStartOf="@+id/second_picker"
+        app:layout_constraintStart_toEndOf="@+id/minutes_picker"
+        app:layout_constraintTop_toTopOf="@+id/minutes_picker" />
+
+    <TextView
+        android:id="@+id/title_hours"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/hours"
+        app:layout_constraintEnd_toEndOf="@+id/hours_picker"
+        app:layout_constraintStart_toStartOf="@+id/hours_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+    <TextView
+        android:id="@+id/title_minutes"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/minutes"
+        app:layout_constraintEnd_toEndOf="@+id/minutes_picker"
+        app:layout_constraintStart_toStartOf="@+id/minutes_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+    <TextView
+        android:id="@+id/title_seconds"
+        style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/seconds"
+        app:layout_constraintEnd_toEndOf="@+id/second_picker"
+        app:layout_constraintStart_toStartOf="@+id/second_picker"
+        app:layout_constraintTop_toBottomOf="@+id/pause_queue_header" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

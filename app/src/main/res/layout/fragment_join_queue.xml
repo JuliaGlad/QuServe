@@ -16,7 +16,6 @@
             android:id="@+id/qr_code_image"
             android:layout_width="wrap_content"
             android:layout_height="300dp"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -26,6 +25,7 @@
             style="@style/TextAppearance.Material3.TitleMedium.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="@string/do_you_want_to_join"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -152,6 +152,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/question"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/question"
+            app:layout_constraintBottom_toBottomOf="@+id/queue_name"
+            app:layout_constraintStart_toEndOf="@+id/queue_name"
+            app:layout_constraintTop_toBottomOf="@+id/header_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

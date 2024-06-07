@@ -79,7 +79,7 @@ public class AddLocationFragment extends Fragment {
 
     private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
+            requireActivity().finish();
         });
     }
 
@@ -123,6 +123,7 @@ public class AddLocationFragment extends Fragment {
         }
         itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
         itemList.add(new LocationDelegateItem(new LocationModel(2, location, () -> {
+
             if (checkSelfMapPermission()) {
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, LOCATION);

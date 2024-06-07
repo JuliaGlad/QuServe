@@ -9,6 +9,8 @@ import static com.example.myapplication.presentation.restaurantMenu.addDish.Dish
 import static com.example.myapplication.presentation.restaurantMenu.addDish.DishArguments.weightCount;
 import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.HOURS;
+import static com.example.myapplication.presentation.utils.constants.Utils.MINUTES;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_2;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_3;
@@ -16,6 +18,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_5;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_6;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.SECONDS;
 import static com.example.myapplication.presentation.utils.constants.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.DISH_ID;
@@ -43,6 +46,9 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddDishBinding;
+import com.example.myapplication.presentation.restaurantMenu.addDish.recycler.NumberPickerDelegate;
+import com.example.myapplication.presentation.restaurantMenu.addDish.recycler.NumberPickerDelegateItem;
+import com.example.myapplication.presentation.restaurantMenu.addDish.recycler.NumberPickerModel;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegate;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
 import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;
@@ -72,6 +78,7 @@ public class AddDishFragment extends Fragment {
     private MainAdapter mainAdapter = new MainAdapter();
     private List<DelegateItem> items = new ArrayList<>();
     private ActivityResultLauncher<Intent> launcher;
+    List<DelegateItem> list = new ArrayList<>();
     private String page, restaurantId, categoryId;
 
     @Override
@@ -134,6 +141,7 @@ public class AddDishFragment extends Fragment {
         mainAdapter.addDelegate(new TextViewHeaderDelegate());
         mainAdapter.addDelegate(new DishItemDelegate());
         mainAdapter.addDelegate(new PriceWithCurrencyDelegate());
+        mainAdapter.addDelegate(new NumberPickerDelegate());
 
         binding.recyclerView.setAdapter(mainAdapter);
     }
@@ -165,7 +173,7 @@ public class AddDishFragment extends Fragment {
     }
 
     private void buildList(DelegateItem[] items) {
-        List<DelegateItem> list = new ArrayList<>(Arrays.asList(items));
+       list.addAll(Arrays.asList(items));
         mainAdapter.submitList(list);
     }
 
@@ -307,10 +315,30 @@ public class AddDishFragment extends Fragment {
             case PAGE_5:
                 binding.companyProgressBar.setProgress(70, true);
                 buildList(new DelegateItem[]{
-                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.estimated_time_cooking, 24)),
-                        new EditTextDelegateItem(new EditTextModel(3, R.string.time, timeCooking, InputType.TYPE_CLASS_TEXT, true, string -> {
-                            timeCooking = string;
-                        }))
+                        new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.estimated_time_cooking, 24)),
+                        new NumberPickerDelegateItem(new NumberPickerModel(2, DishArguments.bundle,
+                                bundle -> {
+                                    String text = "";
+                                    String hours = ((Bundle) bundle).getString(HOURS);
+                                    String minutes = ((Bundle) bundle).getString(MINUTES);
+                                    String seconds = ((Bundle) bundle).getString(SECONDS);
+
+                                    DishArguments.bundle.putString(HOURS, hours);
+                                    DishArguments.bundle.putString(MINUTES, minutes);
+                                    DishArguments.bundle.putString(SECONDS, seconds);
+
+                                    if (!hours.equals("0")) {
+                                        text = text.concat(hours.concat(getString(R.string.hours_description)).concat(" "));
+                                    }
+                                    if (!minutes.equals("0")){
+                                        text = text.concat(minutes.concat(getString(R.string.minutes_description)).concat(" "));
+                                    }
+                                    if (!seconds.equals("0")){
+                                        text = text.concat(seconds.concat(getString(R.string.minutes_description)));
+                                    }
+                                    timeCooking = text;
+                                }))
+
                 });
                 break;
             case PAGE_6:

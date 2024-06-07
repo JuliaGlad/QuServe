@@ -248,6 +248,7 @@
     <string name="you_need_account">Вам необходим аккаунт!</string>
     <string name="hours">Часы</string>
     <string name="hours_description">час(-а)</string>
+    <string name="seconds_description">секунд(-а)</string>
     <string name="minutes_description">минут(-ы)</string>
     <string name="minutes">минуты</string>
     <string name="seconds">Секунды</string>

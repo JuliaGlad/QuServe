@@ -46,11 +46,11 @@
         android:id="@+id/loader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/button_add"
         app:layout_constraintEnd_toEndOf="@id/button_add"
         app:layout_constraintStart_toStartOf="@id/button_add"
         app:layout_constraintTop_toTopOf="@id/button_add"
-        android:visibility="gone"
         app:mk_color="?colorPrimary"
         app:mk_type="FishSpinner" />
 

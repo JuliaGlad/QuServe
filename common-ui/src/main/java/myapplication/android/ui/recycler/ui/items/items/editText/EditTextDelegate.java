@@ -49,22 +49,26 @@ public class EditTextDelegate implements AdapterDelegate {
                 binding.editLayout.setCursorVisible(false);
             }
 
-            binding.editLayout.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (model.resultListener != null) {
+                binding.editLayout.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
+                    }
 
-                @Override
-                public void onTextChanged(CharSequence text, int start, int before, int count) {
-                    model.resultListener.getResult(text.toString());
-                }
+                    @Override
+                    public void onTextChanged(CharSequence text, int start, int before, int count) {
+                        if (text != null) {
+                            model.resultListener.getResult(text.toString());
+                        }
+                    }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 }

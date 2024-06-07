@@ -17,7 +17,6 @@
             android:id="@+id/qr_code_image"
             android:layout_width="wrap_content"
             android:layout_height="300dp"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -27,6 +26,7 @@
             style="@style/TextAppearance.Material3.TitleMedium.Medium.QuServe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
             android:text="@string/do_you_want_to_become_cook"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,10 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Title"
             app:layout_constraintEnd_toEndOf="@+id/header_title"
             app:layout_constraintStart_toStartOf="@+id/header_title"
-            app:layout_constraintTop_toBottomOf="@+id/header_title" />
+            app:layout_constraintTop_toBottomOf="@+id/header_title"
+            tools:text="Title" />
 
 
         <androidx.cardview.widget.CardView
@@ -94,8 +94,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            app:cardElevation="0dp"
             app:cardBackgroundColor="@color/transparent"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -131,25 +131,38 @@
 
         </androidx.cardview.widget.CardView>
 
-        <include layout="@layout/something_went_wrong_layout"
+        <include
             android:id="@+id/error_layout"
-            android:layout_height="match_parent"
+            layout="@layout/something_went_wrong_layout"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <include layout="@layout/loading_layout"
+        <include
             android:id="@+id/progress_layout"
+            layout="@layout/loading_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/question"
+            style="@style/TextAppearance.Material3.TitleMedium.Bold.QuServe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/question"
+            app:layout_constraintBottom_toBottomOf="@+id/company_name"
+            app:layout_constraintStart_toEndOf="@+id/company_name"
+            app:layout_constraintTop_toBottomOf="@+id/header_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
