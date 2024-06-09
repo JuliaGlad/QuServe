@@ -54,10 +54,8 @@ public class ChooseCityFullScreenDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         return dialog;
     }
 
@@ -97,7 +95,6 @@ public class ChooseCityFullScreenDialog extends DialogFragment {
                     dismiss();
                 }));
             }
-
             adapter.submitList(cities);
             binding.recyclerView.setAdapter(adapter);
 
@@ -132,16 +129,18 @@ public class ChooseCityFullScreenDialog extends DialogFragment {
     }
 
     private void filterList(String newText) {
-        List<CityItemModel> filteredList = new ArrayList<>();
+        if (!newText.isEmpty()) {
+            List<CityItemModel> filteredList = new ArrayList<>();
 
-        for (CityItemModel model : cities) {
-            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                filteredList.add(model);
+            for (CityItemModel model : cities) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
             }
+            setFilteredList(filteredList);
+        } else {
+            adapter.submitList(cities);
         }
-
-        setFilteredList(filteredList);
-
     }
 
     private void setFilteredList(List<CityItemModel> models) {

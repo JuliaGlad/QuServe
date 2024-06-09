@@ -15,6 +15,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -24,6 +25,8 @@ import com.example.myapplication.presentation.dialogFragments.unableToTakeOrderR
 import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
+import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemDelegateItem;
+import com.example.myapplication.presentation.restaurantMenu.dishItem.DishItemModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderItemAdapter;
 import com.example.myapplication.presentation.restaurantOrder.menu.recycler.DishOrderModel;
 import com.example.myapplication.presentation.restaurantOrder.menu.state.RestaurantMenuOrderState;
@@ -92,8 +95,40 @@ public class RestaurantMenuOrderFragment extends Fragment {
         setupObserves();
         initButtonBack();
         initButtonCart();
+        initSearchView();
         setGridAdapters();
         setHorizontalAdapter();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+        });
+    }
+
+    private void filterList(String key) {
+        if (!key.isEmpty()) {
+            List<DishOrderModel> modelList = gridAdapter.getCurrentList();
+            List<DishOrderModel> filteredList = new ArrayList<>();
+            for (int i = 0; i < modelList.size(); i++) {
+                DishOrderModel dish = modelList.get(i);
+                if (dish.getName().toLowerCase().contains(key.toLowerCase())) {
+                    filteredList.add(modelList.get(i));
+                }
+            }
+            gridAdapter.submitList(filteredList);
+        } else {
+            gridAdapter.submitList(dishes);
+        }
     }
 
     private void initButtonCart() {
@@ -120,8 +155,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
     private void setupObserves() {
 
         viewModel.haveEmployees.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null){
-                if (aBoolean){
+            if (aBoolean != null) {
+                if (aBoolean) {
                     viewModel.getMenuCategories(restaurantId);
                 } else {
                     UnableToTakeOrderDialogFragment dialogFragment = new UnableToTakeOrderDialogFragment();
@@ -134,8 +169,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
         });
 
         viewModel.isChecked.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null){
-                if (!aBoolean){
+            if (aBoolean != null) {
+                if (!aBoolean) {
                     viewModel.checkEmployees(tablePath);
                 } else {
                     TableAlreadyHaveOrderDialogFragment dialogFragment = new TableAlreadyHaveOrderDialogFragment();

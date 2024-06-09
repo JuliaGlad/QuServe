@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue;
 
+import static com.example.myapplication.presentation.utils.constants.Utils.CITY_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_EMPLOYEE;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_NAME;
@@ -14,12 +15,17 @@ import android.view.ViewGroup;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentAddQueueBinding;
+import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
+import com.example.myapplication.presentation.dialogFragments.chooseCity.ChooseCityFullScreenDialog;
 import com.example.myapplication.presentation.employee.main.ActiveQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.model.AddQueueModel;
 import com.example.myapplication.presentation.employee.main.queueAdminFragment.workerManager.addQueue.recycler.AddQueueItemAdapter;
@@ -37,7 +43,8 @@ public class AddQueueFragment extends Fragment {
     private String companyId, employeeName, employeeId;
     private final AddQueueItemAdapter adapter = new AddQueueItemAdapter();
     private final List<String> ids = new ArrayList<>();
-    private final List<ActiveQueueModel> chosen = new ArrayList();
+    private final List<ActiveQueueModel> chosen = new ArrayList<>();
+    private final List<AddQueueItemModel> models = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +74,74 @@ public class AddQueueFragment extends Fragment {
         setupObserves();
         initButtonBack();
         handleBackButtonPressed();
+        initChooseCity();
         initButtonOk();
+        initSearchView();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterListBySearchView(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void initChooseCity() {
+
+        binding.chooseCityLayout.setOnClickListener(v -> {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            ChooseCityFullScreenDialog dialogFragment = new ChooseCityFullScreenDialog();
+
+            fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .add(R.id.queue_manager_container, dialogFragment)
+                    .addToBackStack(null)
+                    .commit();
+
+            dialogFragment.onDismissListener(bundle -> {
+                String city = bundle.getString(CITY_KEY);
+                assert city != null;
+                filterList(city);
+            });
+        });
+
+    }
+
+    private void filterList(String city) {
+        List<AddQueueItemModel> newList = new ArrayList<>();
+
+        if (city.equals(getResources().getString(R.string.all_cities))) {
+            adapter.submitList(models);
+            binding.chooseCity.setText(getResources().getString(R.string.all_cities));
+        } else {
+            binding.chooseCity.setText(city);
+            for (int i = 0; i < models.size(); i++) {
+                if (models.get(i).getCity().equals(city)) {
+                    newList.add(models.get(i));
+                }
+            }
+            adapter.submitList(newList);
+        }
+    }
+
+    private void filterListBySearchView(String key) {
+        List<AddQueueItemModel> modelList = adapter.getCurrentList();
+        List<AddQueueItemModel> filteredList = new ArrayList<>();
+        for (AddQueueItemModel model : modelList) {
+            if (model.getCity().toLowerCase().contains(key.toLowerCase()) || model.getLocation().contains(key.toLowerCase())) {
+                filteredList.add(model);
+            }
+        }
+        adapter.submitList(filteredList);
     }
 
     private void handleBackButtonPressed() {
@@ -139,7 +213,6 @@ public class AddQueueFragment extends Fragment {
     }
 
     private void initRecycler(List<AddQueueModel> queues) {
-        List<AddQueueItemModel> models = new ArrayList<>();
         for (int i = 0; i < queues.size(); i++) {
             AddQueueModel current = queues.get(i);
             models.add(new AddQueueItemModel(

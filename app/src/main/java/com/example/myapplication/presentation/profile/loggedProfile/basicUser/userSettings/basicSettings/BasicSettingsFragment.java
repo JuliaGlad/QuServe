@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.APP_P
 import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -117,6 +118,7 @@ public class BasicSettingsFragment extends Fragment {
                             sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
                             sharedPreferences.edit().putString(COMPANY_ID, null).apply();
 
+                            requireActivity().setResult(Activity.RESULT_OK);
                             requireActivity().finish();
                         };
                         dialogFragment.onDismissListener(listener);

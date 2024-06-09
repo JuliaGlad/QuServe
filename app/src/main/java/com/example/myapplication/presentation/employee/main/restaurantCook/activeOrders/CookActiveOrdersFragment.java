@@ -52,24 +52,7 @@ public class CookActiveOrdersFragment extends Fragment {
         initLauncher();
     }
 
-    private void initLauncher() {
-        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                       String tableNumber = result.getData().getStringExtra(TABLE_NUMBER);
-                        for (int i = 0; i < itemModels.size(); i++) {
-                            if (Integer.parseInt(itemModels.get(i).getTableNumber()) == Integer.parseInt(tableNumber)){
-                                itemModels.remove(i);
-                                adapter.notifyItemRemoved(i);
-                                if (itemModels.isEmpty()){
-                                    initEmptyLayout();
-                                }
-                                break;
-                            }
-                        }
-                    }
-                });
-    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -83,6 +66,25 @@ public class CookActiveOrdersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initBackButton();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String tableNumber = result.getData().getStringExtra(TABLE_NUMBER);
+                        for (int i = 0; i < itemModels.size(); i++) {
+                            if (Integer.parseInt(itemModels.get(i).getTableNumber()) == Integer.parseInt(tableNumber)){
+                                itemModels.remove(i);
+                                adapter.notifyItemRemoved(i);
+                                if (itemModels.isEmpty()){
+                                    initEmptyLayout();
+                                }
+                                break;
+                            }
+                        }
+                    }
+                });
     }
 
     private void initBackButton() {

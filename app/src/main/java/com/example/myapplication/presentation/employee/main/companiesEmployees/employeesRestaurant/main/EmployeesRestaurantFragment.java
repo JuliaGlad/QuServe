@@ -20,8 +20,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentEmployeesRestaurantBinding;
 import com.example.myapplication.presentation.dialogFragments.deleteRestaurantEmployee.DeleteRestaurantEmployeeDialogFragment;
+import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.chooseLocation.ChooseLocationFragment;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler.RestaurantEmployeeItemAdapter;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler.RestaurantEmployeeItemModel;
 import com.example.myapplication.presentation.employee.main.companiesEmployees.model.EmployeeModel;
@@ -46,7 +48,7 @@ public class EmployeesRestaurantFragment extends Fragment {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(EmployeesRestaurantViewModel.class);
         restaurantId = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE).getString(COMPANY_ID, null);
-        locationId = getArguments().getString(LOCATION_ID);
+        locationId = requireArguments().getString(LOCATION_ID);
         viewModel.getEmployees(restaurantId, locationId);
     }
 
@@ -62,7 +64,17 @@ public class EmployeesRestaurantFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initTabLayout();
+        initBackButton();
         initSearchView();
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.employee_nav_container, ChooseLocationFragment.class, null)
+                    .commit();
+        });
     }
 
     private void initSearchView() {
@@ -82,29 +94,43 @@ public class EmployeesRestaurantFragment extends Fragment {
     }
 
     private void filterList(String newText) {
+        boolean isEmpty = !newText.isEmpty();
         List<RestaurantEmployeeItemModel> filteredList = new ArrayList<>();
 
         if (binding.tabLayout.getTabAt(0).isSelected()) {
-            for (RestaurantEmployeeItemModel model : basicList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+            if (!isEmpty) {
+                for (RestaurantEmployeeItemModel model : basicList) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
                 }
+            } else {
+                adapter.submitList(basicList);
             }
         } else if (binding.tabLayout.getTabAt(1).isSelected()) {
-            for (RestaurantEmployeeItemModel model : cooksList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+            if (!isEmpty) {
+                for (RestaurantEmployeeItemModel model : cooksList) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
                 }
+            } else {
+                adapter.submitList(cooksList);
             }
         } else {
-            for (RestaurantEmployeeItemModel model : waiterList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+            if (!isEmpty) {
+                for (RestaurantEmployeeItemModel model : waiterList) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
                 }
+            } else {
+                adapter.submitList(waiterList);
             }
         }
-
-        setFilteredList(filteredList);
+        if (!isEmpty) {
+            setFilteredList(filteredList);
+        }
     }
 
     private void setFilteredList(List<RestaurantEmployeeItemModel> models) {

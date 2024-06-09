@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentQueueManagerBinding;
+import com.example.myapplication.presentation.companyQueue.queueDetails.editQueue.addWorkersFragment.recycler.AddWorkerRecyclerModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.model.QueueManagerModel;
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemAdapter;
 import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
@@ -55,6 +57,37 @@ public class QueueManagerFragment extends Fragment {
         setupObserves();
         initChooseCity();
         initBackButton();
+        initSearchView();
+    }
+
+    private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterListBySearchView(newText);
+                return true;
+            }
+
+        });
+    }
+
+    private void filterListBySearchView(String key) {
+        if (!key.isEmpty()) {
+            List<ManagerItemModel> filteredList = new ArrayList<>();
+            for (ManagerItemModel model : models) {
+                if (model.getCity().toLowerCase().contains(key.toLowerCase()) || model.getLocation().toLowerCase().contains(key.toLowerCase())) {
+                    filteredList.add(model);
+                }
+            }
+            adapter.submitList(filteredList);
+        } else {
+            adapter.submitList(models);
+        }
     }
 
     private void initBackButton() {

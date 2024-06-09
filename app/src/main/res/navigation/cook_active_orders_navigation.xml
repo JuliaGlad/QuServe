@@ -11,7 +11,11 @@
         android:label="CookActiveOrdersFragment" >
         <action
             android:id="@+id/action_cookActiveOrdersFragment_to_orderDetailsWithIndicatorsFragment"
-            app:destination="@id/orderDetailsWithIndicatorsFragment" />
+            app:destination="@id/orderDetailsWithIndicatorsFragment"
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
 
 
@@ -20,11 +24,19 @@
         tools:layout="com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.OrderDetailsWithIndicatorsFragment">
         <action
             android:id="@+id/action_orderDetailsWithIndicatorsFragment_to_cookOrderIsFinishedFragment"
-            app:destination="@id/cookOrderIsFinishedFragment" />
+            app:destination="@id/cookOrderIsFinishedFragment"
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
     <fragment
         android:id="@+id/cookOrderIsFinishedFragment"
         android:name="com.example.myapplication.presentation.employee.main.restaurantCook.activeOrders.orderDetails.orderIsFinishedCook.CookOrderIsFinishedFragment"
-        android:label="CookOrderIsFinishedFragment" />
+        android:label="CookOrderIsFinishedFragment"
+        app:enterAnim="@anim/slide_in_fast_anim"
+        app:exitAnim="@anim/slide_out_fast_anim"
+        app:popEnterAnim="@anim/slide_in_fast_anim"
+        app:popExitAnim="@anim/slide_out_fast_anim"/>
 
 </navigation>

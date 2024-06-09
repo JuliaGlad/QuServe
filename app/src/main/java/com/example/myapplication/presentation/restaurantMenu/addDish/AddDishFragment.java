@@ -102,7 +102,9 @@ public class AddDishFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentAddDishBinding.inflate(inflater, container, false);
         onPageInit(page);
+        initCloseButton();
         initBackButtonPressed();
+        initBackButton();
         return binding.getRoot();
     }
 

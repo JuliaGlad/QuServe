@@ -123,12 +123,16 @@ public class DifferentRolesEmployeeFragment extends Fragment {
                             case WORKER:
                                 fragmentManager
                                         .beginTransaction()
+                                        .setReorderingAllowed(true)
+                                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                         .replace(R.id.employee_nav_container, QueueWorkerFragment.class, bundle)
                                         .commit();
                                 break;
                             case ADMIN:
                                 fragmentManager
                                         .beginTransaction()
+                                        .setReorderingAllowed(true)
+                                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                         .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
                                         .commit();
                                 break;
@@ -136,12 +140,16 @@ public class DifferentRolesEmployeeFragment extends Fragment {
                                 bundle.putString(LOCATION_ID, current.getLocationId());
                                 fragmentManager
                                         .beginTransaction()
+                                        .setReorderingAllowed(true)
+                                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                         .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
                                         .commit();
                             case WAITER:
                                 bundle.putString(LOCATION_ID, current.getLocationId());
                                 fragmentManager
                                         .beginTransaction()
+                                        .setReorderingAllowed(true)
+                                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                         .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                                         .commit();
                         }

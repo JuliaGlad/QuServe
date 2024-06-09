@@ -95,28 +95,30 @@ public class CreateCompanyAccountFragment extends Fragment {
 
         setupObserves();
         initMainAdapter();
+        initNextButton();
+        initBackButton();
+        handleBackButtonPressed();
+    }
 
-        switch (page) {
-            case PAGE_2:
-                binding.companyProgressBar.setProgress(25);
-                break;
-            case PAGE_3:
-                binding.companyProgressBar.setProgress(50);
-                break;
-            case PAGE_4:
-                binding.companyProgressBar.setProgress(75);
-                binding.buttonNext.setText(getString(R.string.finish));
-                break;
-        }
-
-        binding.buttonNext.setOnClickListener(v -> {
-            navigateNext(page);
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateBack(page);
+            }
         });
+    }
 
+    private void initBackButton() {
         binding.buttonBack.setOnClickListener(v -> {
             navigateBack(page);
         });
+    }
 
+    private void initNextButton() {
+        binding.buttonNext.setOnClickListener(v -> {
+            navigateNext(page);
+        });
     }
 
     @Override
@@ -150,7 +152,6 @@ public class CreateCompanyAccountFragment extends Fragment {
                 bundle.putString(COMPANY_NAME, name);
                 bundle.putString(COMPANY_SERVICE, state);
                 bundle.putString(COMPANY_ID, companyId);
-                Log.e("Data", name + state + companyId);
 
                 viewModel.setArgumentsNull();
                 binding.loader.setVisibility(View.GONE);

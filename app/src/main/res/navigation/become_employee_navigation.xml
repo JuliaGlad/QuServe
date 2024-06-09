@@ -12,8 +12,10 @@
         <action
             android:id="@+id/action_becomeEmployeeFragment_to_successfullyBecomeEmployeeFragment"
             app:destination="@id/successfullyBecomeEmployeeFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
 
     <fragment

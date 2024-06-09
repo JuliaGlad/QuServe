@@ -44,18 +44,20 @@ public class ServiceFragment extends Fragment {
     }
 
     private void setView() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         String type = sharedPreferences.getString(APP_STATE, ANONYMOUS);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
-        switch (type){
+        switch (type) {
             case ANONYMOUS:
             case BASIC:
-                fragmentManager.beginTransaction()
-                    .replace(R.id.service_container, BasicUserServiceFragment.class, null)
-                    .setReorderingAllowed(true)
-                    .commit();
+                fragmentManager
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                        .replace(R.id.service_container, BasicUserServiceFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
                 break;
             case COMPANY:
                 String companyId = sharedPreferences.getString(COMPANY_ID, null);
@@ -66,6 +68,7 @@ public class ServiceFragment extends Fragment {
                 fragmentManager.beginTransaction()
                         .replace(R.id.service_container, CompanyQueueServiceFragment.class, bundle)
                         .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .commit();
                 break;
             case RESTAURANT:
@@ -73,6 +76,7 @@ public class ServiceFragment extends Fragment {
                 fragmentManager.beginTransaction()
                         .replace(R.id.service_container, ServiceRestaurant.class, null)
                         .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .commit();
 
                 break;

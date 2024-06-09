@@ -37,6 +37,7 @@ import com.example.myapplication.presentation.profile.loggedProfile.delegates.ma
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegate;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegateItem;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemModel;
+import com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class BasicUserFragment extends Fragment {
     private final MainAdapter mainAdapter = new MainAdapter();
     private boolean companyExist = false;
     String companyId = null;
-    private ActivityResultLauncher<Intent> activityResultLauncher, chooseCompanyLauncher, createCompanyLauncher;
+    private ActivityResultLauncher<Intent> activityResultLauncher, chooseCompanyLauncher, createCompanyLauncher, settingsLauncher;
     private List<DelegateItem> list = new ArrayList<>();
 
     @Override
@@ -68,6 +69,7 @@ public class BasicUserFragment extends Fragment {
         setActivityResultLauncher();
         setChooseCompanyLauncher();
         setCreateCompanyLauncher();
+        setSettingsLauncher();
         viewModel.retrieveUserNameData(connected);
         viewModel.setBackground();
     }
@@ -97,7 +99,7 @@ public class BasicUserFragment extends Fragment {
 
     private void initSettingButton() {
         binding.buttonSettings.setOnClickListener(v -> {
-            ((MainActivity) requireActivity()).openBasicSettingsActivity();
+            ((MainActivity) requireActivity()).openBasicSettingsActivity(settingsLauncher);
         });
     }
 
@@ -223,6 +225,20 @@ public class BasicUserFragment extends Fragment {
                 });
     }
 
+    private void setSettingsLauncher() {
+        settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        requireActivity().getSupportFragmentManager()
+                                .beginTransaction()
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                                .replace(R.id.logged_container, ProfileLoginFragment.class, null)
+                                .commit();
+                    }
+                });
+    }
+
     private void setChooseCompanyLauncher() {
         chooseCompanyLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -231,6 +247,7 @@ public class BasicUserFragment extends Fragment {
                         fragmentManager
                                 .beginTransaction()
                                 .setReorderingAllowed(true)
+                                .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                 .replace(R.id.logged_container, CompanyUserFragment.class, null)
                                 .commit();
                     }

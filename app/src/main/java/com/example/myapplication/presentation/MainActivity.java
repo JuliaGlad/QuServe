@@ -160,14 +160,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openCreateCompanyActivity(){
-        Intent intent = new Intent(this, CreateCompanyActivity.class);
-        intent.putExtra(PAGE_KEY, PAGE_1);
-        startActivity(intent);
-    }
-    public void openBasicSettingsActivity(){
+    public void openBasicSettingsActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, BasicSettingsActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openEditCompanyActivity(String companyId) {

@@ -14,27 +14,39 @@
             android:id="@+id/action_createCompanyQueueFragment_self"
             app:destination="@id/createCompanyQueueFragment"
             app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
             app:popExitAnim="@anim/slide_out_anim"/>
         <action
             android:id="@+id/action_createCompanyQueueFragment_to_finishedQueueCreationFragment"
-            app:destination="@id/finishedQueueCreationFragment" />
+            app:destination="@id/finishedQueueCreationFragment"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
 
         <argument android:name="page"
             app:argType="string"/>
         <action
             android:id="@+id/action_createCompanyQueueFragment_to_mapFragment"
             app:destination="@id/mapFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
         <action
             android:id="@+id/action_createCompanyQueueFragment_to_chooseWorkersFragment"
             app:destination="@id/chooseWorkersFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
         <action
             android:id="@+id/action_createCompanyQueueFragment_self2"
             app:destination="@id/createCompanyQueueFragment"
             app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
             app:popExitAnim="@anim/slide_out_anim"/>
     </fragment>
     <fragment
@@ -50,8 +62,10 @@
         <action
             android:id="@+id/action_mapFragment_to_createCompanyQueueFragment"
             app:destination="@id/createCompanyQueueFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
     <fragment
         android:id="@+id/chooseWorkersFragment"
@@ -60,8 +74,10 @@
         <action
             android:id="@+id/action_chooseWorkersFragment_to_createCompanyQueueFragment"
             app:destination="@id/createCompanyQueueFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
 
 </navigation>

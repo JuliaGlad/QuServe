@@ -59,24 +59,8 @@ public class ProfileLoggedFragment extends Fragment {
         setView();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (!viewModel.checkAuth() || viewModel.isNull()) {
-            type = ANONYMOUS;
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-            fragmentManager
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .replace(R.id.logged_container, ProfileLoginFragment.class, null)
-                    .commit();
-        }
-
-    }
-
     private void setView() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         if (type != null) {
             switch (type) {
                 case BASIC:
@@ -88,6 +72,7 @@ public class ProfileLoggedFragment extends Fragment {
                     fragmentManager
                             .beginTransaction()
                             .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                             .replace(R.id.logged_container, CompanyUserFragment.class, null)
                             .commit();
                     break;
@@ -96,6 +81,7 @@ public class ProfileLoggedFragment extends Fragment {
                     fragmentManager
                             .beginTransaction()
                             .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                             .replace(R.id.logged_container, ProfileLoginFragment.class, null)
                             .commit();
             }
@@ -106,6 +92,7 @@ public class ProfileLoggedFragment extends Fragment {
         fragmentManager
                 .beginTransaction()
                 .setReorderingAllowed(true)
+                .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                 .replace(R.id.logged_container, BasicUserFragment.class, null)
                 .commit();
     }

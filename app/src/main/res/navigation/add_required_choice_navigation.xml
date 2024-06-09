@@ -14,7 +14,9 @@
             android:id="@+id/action_addRequiredChoiceFragment_self"
             app:destination="@id/addRequiredChoiceFragment"
             app:enterAnim="@anim/slide_in_anim"
-            app:exitAnim="@anim/slide_out_anim"/>
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
         <argument android:name="dishId"
             app:argType="string"/>
 
@@ -26,7 +28,10 @@
         <action
             android:id="@+id/action_addRequiredChoiceFragment_to_requiredChoiceSuccessfullyAdded"
             app:destination="@id/requiredChoiceSuccessfullyAdded"
-            app:enterAnim="@anim/slide_in_anim" />
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
     </fragment>
     <fragment
         android:id="@+id/requiredChoiceSuccessfullyAdded"

@@ -29,6 +29,7 @@ import com.example.myapplication.databinding.DialogHaveAnonymousActionsBinding;
 import com.example.myapplication.databinding.FragmentCreateAccountBinding;
 import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verification.VerificationDialogFragment;
+import com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -63,7 +64,12 @@ public class CreateAccountFragment extends Fragment {
 
     private void initButtonBack() {
         binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                    .replace(R.id.logged_container, ProfileLoginFragment.class, null)
+                    .commit();
         });
     }
 

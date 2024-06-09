@@ -45,8 +45,8 @@ public class EditQueueFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(EditQueueViewModel.class);
-        companyId = getArguments().getString(COMPANY_ID);
-        queueId = getArguments().getString(QUEUE_ID);
+        companyId = requireArguments().getString(COMPANY_ID);
+        queueId = requireArguments().getString(QUEUE_ID);
         viewModel.getQueueData(companyId, queueId);
     }
 
@@ -59,18 +59,20 @@ public class EditQueueFragment extends Fragment {
             List<AddWorkerModel> models = new Gson().fromJson(workers,
                     new TypeToken<List<AddWorkerModel>>() {
                     }.getType());
-            for (int i = 0; i < models.size(); i++) {
-                AddWorkerModel current = models.get(i);
-                list.add(new QueueEmployeeModel(
-                        i,
-                        current.getId(),
-                        current.getName(),
-                        current.getRole(),
-                        () -> {
-                            showDeleteDialog(companyId, queueId, current.getId());
-                        }
-                ));
-                adapter.notifyItemInserted(list.size() - 1);
+            if (models != null) {
+                for (int i = 0; i < models.size(); i++) {
+                    AddWorkerModel current = models.get(i);
+                    list.add(new QueueEmployeeModel(
+                            i,
+                            current.getId(),
+                            current.getName(),
+                            current.getRole(),
+                            () -> {
+                                showDeleteDialog(companyId, queueId, current.getId());
+                            }
+                    ));
+                    adapter.notifyItemInserted(list.size() - 1);
+                }
             }
         }
         binding = FragmentEditQueueBinding.inflate(inflater, container, false);
@@ -82,8 +84,15 @@ public class EditQueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
         initAddButton();
+        initBackButton();
         initSaveButton();
         handleBackButtonPressed();
+    }
+
+    private void initBackButton() {
+        binding.imageButtonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void handleBackButtonPressed() {

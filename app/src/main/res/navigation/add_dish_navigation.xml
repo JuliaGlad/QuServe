@@ -13,7 +13,9 @@
             android:id="@+id/action_addDishFragment_self"
             app:destination="@id/addDishFragment"
             app:enterAnim="@anim/slide_in_anim"
-            app:exitAnim="@anim/slide_out_anim"/>
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
 
         <argument android:name="page"
             app:argType="string"/>

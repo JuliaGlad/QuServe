@@ -458,4 +458,5 @@
     <string name="unable_to_take_order">Unable to take order!</string>
     <string name="this_restaurant_can_t_accept_your_order_right_now_please_wait_or_visit_another_location">This restaurant can`t accept your order right now! Please, wait or visit another location!</string>
     <string name="question" translatable="false">\?</string>
+    <string name="you_don_t_have_a_history_of_your_previous_action_yet">You don`t have a history of your previous action yet!</string>
 </resources>

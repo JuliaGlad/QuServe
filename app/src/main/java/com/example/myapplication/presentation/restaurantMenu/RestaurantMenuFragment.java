@@ -32,11 +32,13 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentRestaurantMenuBinding;
+import com.example.myapplication.presentation.companyQueue.queueManager.recycler_view.ManagerItemModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.AddMenuCategoryActivity;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.CategoryMenuModel;
 import com.example.myapplication.presentation.restaurantMenu.AddCategory.model.DishMenuModel;
@@ -173,7 +175,7 @@ public class RestaurantMenuFragment extends Fragment {
                         Uri uri = Uri.EMPTY;
                         try {
                             uri = Uri.parse(result.getData().getStringExtra(URI));
-                        } catch (NullPointerException e){
+                        } catch (NullPointerException e) {
                             image = result.getData().getStringExtra(IMAGE);
                         }
                         int position = categories.size() - 1;
@@ -206,7 +208,7 @@ public class RestaurantMenuFragment extends Fragment {
                     model.setChosen(false);
                     horizontalAdapter.notifyItemChanged(j);
                 }
-                if (model.getCategoryId().equals(categoryId)){
+                if (model.getCategoryId().equals(categoryId)) {
                     position = j;
                 }
             }
@@ -224,7 +226,36 @@ public class RestaurantMenuFragment extends Fragment {
     }
 
     private void initSearchView() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterList(newText);
+                return true;
+            }
+        });
+    }
+
+    private void filterList(String key) {
+        if (!key.isEmpty()) {
+            List<DelegateItem> modelList = gridAdapter.getCurrentList();
+            List<DelegateItem> filteredList = new ArrayList<>();
+            for (int i = 0; i < modelList.size(); i++) {
+                if (modelList.get(i) instanceof DishItemDelegateItem) {
+                    DishItemModel dish = ((DishItemDelegateItem) modelList.get(i)).content();
+                    if (dish.getName().toLowerCase().contains(key.toLowerCase())) {
+                        filteredList.add(modelList.get(i));
+                    }
+                }
+            }
+            gridAdapter.submitList(filteredList);
+        } else {
+            gridAdapter.submitList(dishes);
+        }
     }
 
     private void initBackButton() {
@@ -279,14 +310,14 @@ public class RestaurantMenuFragment extends Fragment {
         });
 
         viewModel.addedUri.observe(getViewLifecycleOwner(), bundle -> {
-            if (bundle != null){
+            if (bundle != null) {
                 int position = bundle.getInt(POSITION);
                 String name = bundle.getString(COMPANY_NAME);
                 String categoryId = bundle.getString(COMPANY_ID);
                 Uri uri = Uri.parse(bundle.getString(URI));
 
                 for (int i = 0; i < categories.size(); i++) {
-                    if (categories.get(i) instanceof CategoryItemDelegateItem){
+                    if (categories.get(i) instanceof CategoryItemDelegateItem) {
                         CategoryItemModel current = ((CategoryItemDelegateItem) categories.get(i)).content();
                         current.setChosen(false);
                         horizontalAdapter.notifyItemChanged(i);
@@ -294,7 +325,7 @@ public class RestaurantMenuFragment extends Fragment {
                 }
 
                 categories.add(new CategoryItemDelegateItem(new CategoryItemModel(
-                        position, categoryId, name, null,  uri, 0, false, true, true,
+                        position, categoryId, name, null, uri, 0, false, true, true,
                         view -> {
                             PopupMenu popupMenu = new PopupMenu(requireContext(), (View) view);
                             popupMenu.getMenuInflater().inflate(R.menu.delete_category_menu, popupMenu.getMenu());
@@ -303,9 +334,9 @@ public class RestaurantMenuFragment extends Fragment {
                             popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
                                 int positionCurrent = 0;
                                 for (int j = 0; j < categories.size(); j++) {
-                                    if (categories.get(j) instanceof CategoryItemDelegateItem){
+                                    if (categories.get(j) instanceof CategoryItemDelegateItem) {
                                         CategoryItemModel currentModel = ((CategoryItemDelegateItem) categories.get(j)).content();
-                                        if (currentModel.getCategoryId().equals(categoryId)){
+                                        if (currentModel.getCategoryId().equals(categoryId)) {
                                             positionCurrent = j;
                                         }
                                     }
@@ -322,10 +353,10 @@ public class RestaurantMenuFragment extends Fragment {
         });
 
         viewModel.categoryDeleted.observe(getViewLifecycleOwner(), position -> {
-            if (position != null){
+            if (position != null) {
                 categories.remove(position.intValue());
                 horizontalAdapter.notifyItemRemoved(position);
-                if (!categories.isEmpty()){
+                if (!categories.isEmpty()) {
                     if (categories.get(0) instanceof CategoryItemDelegateItem) {
                         CategoryItemModel model = (CategoryItemModel) categories.get(0).content();
                         model.setChosen(true);
@@ -445,7 +476,7 @@ public class RestaurantMenuFragment extends Fragment {
                         isDefault,
                         isDefault,
                         true,
-                         view -> {
+                        view -> {
                             deleteCategory((View) view, current);
                         },
                         () -> {
@@ -457,7 +488,7 @@ public class RestaurantMenuFragment extends Fragment {
                                         model.setChosen(false);
                                         horizontalAdapter.notifyItemChanged(j);
                                     }
-                                    if (model.getCategoryId().equals(current.getCategoryId())){
+                                    if (model.getCategoryId().equals(current.getCategoryId())) {
                                         position = j;
                                     }
                                 }
@@ -498,9 +529,9 @@ public class RestaurantMenuFragment extends Fragment {
         popupMenu.getMenu().getItem(0).setOnMenuItemClickListener(item -> {
             int position = 0;
             for (int j = 0; j < categories.size(); j++) {
-                if (categories.get(j) instanceof CategoryItemDelegateItem){
+                if (categories.get(j) instanceof CategoryItemDelegateItem) {
                     CategoryItemModel currentModel = ((CategoryItemDelegateItem) categories.get(j)).content();
-                    if (currentModel.getCategoryId().equals(current.getCategoryId())){
+                    if (currentModel.getCategoryId().equals(current.getCategoryId())) {
                         position = j;
                     }
                 }

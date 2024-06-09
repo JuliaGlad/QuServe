@@ -111,7 +111,10 @@ public class ProfileLoginFragment extends Fragment {
 
                     FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
-                    fragmentManager.beginTransaction()
+                    fragmentManager
+                            .beginTransaction()
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                            .setReorderingAllowed(true)
                             .replace(R.id.logged_container, BasicUserFragment.class, null)
                             .commit();
 

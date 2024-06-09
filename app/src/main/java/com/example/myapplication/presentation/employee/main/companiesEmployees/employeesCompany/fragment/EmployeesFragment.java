@@ -82,28 +82,42 @@ public class EmployeesFragment extends Fragment {
 
     private void filterList(String newText) {
         List<EmployeeItemModel> filteredList = new ArrayList<>();
+        boolean isEmpty = newText.isEmpty();
 
         if (binding.tabLayout.getTabAt(0).isSelected()) {
-            for (EmployeeItemModel model : basicList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+            if (!isEmpty) {
+                for (EmployeeItemModel model : basicList) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
                 }
+            } else {
+                employeeItemAdapter.submitList(basicList);
             }
         } else if (binding.tabLayout.getTabAt(1).isSelected()) {
-            for (EmployeeItemModel model : adminList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+            if (!isEmpty) {
+                for (EmployeeItemModel model : adminList) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
                 }
+            } else {
+                employeeItemAdapter.submitList(adminList);
             }
         } else {
             for (EmployeeItemModel model : workerList) {
-                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                    filteredList.add(model);
+                if (!isEmpty) {
+                    if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                        filteredList.add(model);
+                    }
+                } else {
+                    employeeItemAdapter.submitList(workerList);
                 }
             }
         }
-
-        setFilteredList(filteredList);
+        if (!isEmpty) {
+            setFilteredList(filteredList);
+        }
     }
 
     private void setFilteredList(List<EmployeeItemModel> models) {
@@ -164,7 +178,7 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < basicList.size(); i++) {
             if (basicList.get(i).getEmployeeId().equals(userId)) {
                 basicList.remove(i);
-                if (binding.tabLayout.getTabAt(0).isSelected()){
+                if (binding.tabLayout.getTabAt(0).isSelected()) {
                     employeeItemAdapter.notifyItemRemoved(i);
                 }
                 break;
@@ -176,7 +190,7 @@ public class EmployeesFragment extends Fragment {
                 for (int i = 0; i < adminList.size(); i++) {
                     if (adminList.get(i).getEmployeeId().equals(userId)) {
                         adminList.remove(i);
-                        if (binding.tabLayout.getTabAt(1).isSelected()){
+                        if (binding.tabLayout.getTabAt(1).isSelected()) {
                             employeeItemAdapter.notifyItemRemoved(i);
                         }
                         break;
@@ -187,7 +201,7 @@ public class EmployeesFragment extends Fragment {
                 for (int i = 0; i < workerList.size(); i++) {
                     if (workerList.get(i).getEmployeeId().equals(userId)) {
                         workerList.remove(i);
-                        if (binding.tabLayout.getTabAt(2).isSelected()){
+                        if (binding.tabLayout.getTabAt(2).isSelected()) {
                             employeeItemAdapter.notifyItemRemoved(i);
                         }
                         break;
@@ -201,11 +215,11 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < workerList.size(); i++) {
             if (Objects.equals(workerList.get(i).getEmployeeId(), id)) {
                 adminList.add(workerList.get(i));
-                if (currentList.equals(adminList)){
+                if (currentList.equals(adminList)) {
                     employeeItemAdapter.notifyItemInserted(adminList.size() - 1);
                 }
                 workerList.remove(i);
-                if (currentList.equals(workerList)){
+                if (currentList.equals(workerList)) {
                     employeeItemAdapter.notifyItemRemoved(i);
                 }
                 break;
@@ -217,11 +231,11 @@ public class EmployeesFragment extends Fragment {
         for (int i = 0; i < adminList.size(); i++) {
             if (adminList.get(i).getEmployeeId().equals(id)) {
                 workerList.add(adminList.get(i));
-                if (currentList.equals(workerList)){
+                if (currentList.equals(workerList)) {
                     employeeItemAdapter.notifyItemInserted(workerList.size() - 1);
                 }
                 adminList.remove(i);
-                if (currentList.equals(adminList)){
+                if (currentList.equals(adminList)) {
                     employeeItemAdapter.notifyItemRemoved(i);
                 }
                 break;
@@ -243,7 +257,7 @@ public class EmployeesFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof EmployeeState.Success) {
                 List<EmployeeModel> models = ((EmployeeState.Success) state).data;
-                if (!models.isEmpty()){
+                if (!models.isEmpty()) {
                     initBasicList(models);
                     initSubLists();
                     initRecycler();

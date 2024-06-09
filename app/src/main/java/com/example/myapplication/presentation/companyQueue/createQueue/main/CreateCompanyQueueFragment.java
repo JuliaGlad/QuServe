@@ -102,7 +102,6 @@ public class CreateCompanyQueueFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(CreateCompanyQueueViewModel.class);
         binding = FragmentCreateCompanyQueueBinding.inflate(inflater, container, false);
         onPageInit(page, getResources().getStringArray(R.array.lifetime));
-
         initBackButtonPressed();
 
         return binding.getRoot();

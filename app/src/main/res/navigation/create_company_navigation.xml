@@ -14,7 +14,9 @@
             android:id="@+id/action_createCompanyAccountFragment_self"
             app:destination="@id/createCompanyAccountFragment"
             app:enterAnim="@anim/slide_in_anim"
-            app:exitAnim="@anim/slide_out_anim"/>
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
 
         <argument
             android:name="page"
@@ -23,8 +25,10 @@
         <action
             android:id="@+id/action_createCompanyAccountFragment_to_approvalFragment"
             app:destination="@id/approvalFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
     </fragment>
     <fragment
         android:id="@+id/approvalFragment"

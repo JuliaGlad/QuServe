@@ -150,6 +150,7 @@ public class CompanyUserFragment extends Fragment {
                 fragmentManager
                         .beginTransaction()
                         .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.logged_container, BasicUserFragment.class, null)
                         .commit();
             }
@@ -190,6 +191,7 @@ public class CompanyUserFragment extends Fragment {
             fragmentManager
                     .beginTransaction()
                     .setReorderingAllowed(true)
+                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                     .replace(R.id.logged_container, BasicUserFragment.class, null)
                     .commit();
         })));

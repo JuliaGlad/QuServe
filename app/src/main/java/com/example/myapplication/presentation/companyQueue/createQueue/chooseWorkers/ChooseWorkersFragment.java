@@ -5,6 +5,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.COMPA
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_CHOSEN;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_4;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.PNG;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_LIST;
 
@@ -49,17 +50,31 @@ public class ChooseWorkersFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        companyId = getArguments().getString(COMPANY_ID);
-
+        companyId = requireArguments().getString(COMPANY_ID);
         try {
-            chosen = new Gson().fromJson(getArguments().getString(WORKERS_LIST), new TypeToken<List<EmployeeModel>>() {
+            chosen = new Gson().fromJson(requireArguments().getString(WORKERS_LIST), new TypeToken<List<EmployeeModel>>() {
             }.getType());
         } catch (NullPointerException e) {
             Log.d("Chosen is null", e.getMessage());
         }
+    }
 
 
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(this).get(ChooseWorkersViewModel.class);
+        binding = FragmentChooseWorkersBinding.inflate(inflater, container, false);
+
+        viewModel.getEmployees(companyId);
+
+        initOkButton();
+        initBackButtonPressed();
+        initBackButton();
+        initSearchView();
+
+        return binding.getRoot();
     }
 
     private void initSearchView() {
@@ -79,30 +94,19 @@ public class ChooseWorkersFragment extends Fragment {
     }
 
     private void filterList(String newText) {
-        List<WorkerItemModel> filteredList = new ArrayList<>();
+        if (!newText.isEmpty()) {
+            List<WorkerItemModel> filteredList = new ArrayList<>();
 
-        for (WorkerItemModel model : workerItems) {
-            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                filteredList.add(model);
+            for (WorkerItemModel model : workerItems) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
             }
+
+            adapter.submitList(filteredList);
+        } else {
+            adapter.submitList(workerItems);
         }
-
-        adapter.submitList(filteredList);
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(this).get(ChooseWorkersViewModel.class);
-        binding = FragmentChooseWorkersBinding.inflate(inflater, container, false);
-
-        viewModel.getEmployees(companyId);
-
-        initOkButton();
-        initBackButtonPressed();
-        initBackButton();
-        initSearchView();
-        return binding.getRoot();
     }
 
     private void initBackButton() {

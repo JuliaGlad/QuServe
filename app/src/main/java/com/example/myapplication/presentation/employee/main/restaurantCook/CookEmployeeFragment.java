@@ -27,8 +27,8 @@ public class CookEmployeeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CookEmployeeViewModel.class);
-        locationId = getArguments().getString(LOCATION_ID);
-        restaurantId =  getArguments().getString(COMPANY_ID);
+        locationId = requireArguments().getString(LOCATION_ID);
+        restaurantId =  requireArguments().getString(COMPANY_ID);
         viewModel.getRestaurantName(restaurantId);
     }
 

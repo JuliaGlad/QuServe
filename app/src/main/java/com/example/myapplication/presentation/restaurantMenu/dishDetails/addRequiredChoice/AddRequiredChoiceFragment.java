@@ -76,9 +76,11 @@ public class  AddRequiredChoiceFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRequiredChoiceBinding.inflate(inflater, container, false);
         onPageInit();
+
         initBackButtonPressed();
         return binding.getRoot();
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -86,7 +88,15 @@ public class  AddRequiredChoiceFragment extends Fragment {
         setAdapter();
         setupObserves();
         initNextButton();
+        initCloseButton();
         initButtonBack();
+    }
+
+    private void initCloseButton() {
+        binding.buttonClose.setOnClickListener(v -> {
+            requireActivity().finish();
+            viewModel.setArgumentsNull();
+        });
     }
 
     private void initButtonBack() {

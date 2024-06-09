@@ -40,10 +40,10 @@ public class TableOrderDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(TableOrderDetailsViewModel.class);
-        orderId = getArguments().getString(ORDER_ID);
-        locationId = getArguments().getString(LOCATION_ID);
-        restaurantId = getArguments().getString(COMPANY_ID);
-        tableNumber = getArguments().getString(TABLE_NUMBER);
+        orderId = requireArguments().getString(ORDER_ID);
+        locationId = requireArguments().getString(LOCATION_ID);
+        restaurantId = requireArguments().getString(COMPANY_ID);
+        tableNumber = requireArguments().getString(TABLE_NUMBER);
 
     }
 
@@ -68,17 +68,13 @@ public class TableOrderDetailsFragment extends Fragment {
     }
 
     private void initButtonBack() {
-        binding.buttonBack.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
-        });
+        binding.buttonBack.setOnClickListener(v -> NavHostFragment.findNavController(this).popBackStack());
     }
 
     private void initEmptyLayout() {
         binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
         binding.emptyLayout.title.setText(getString(R.string.there_is_no_order_on_this_table_yet));
-        binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this).popBackStack();
-        });
+        binding.emptyLayout.buttonAdd.setOnClickListener(v -> NavHostFragment.findNavController(this).popBackStack());
         binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_anybody_creates_an_order_and_then_come_back));
     }
 
@@ -114,9 +110,7 @@ public class TableOrderDetailsFragment extends Fragment {
 
     private void setErrorLayout() {
         binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getTableOrderData(restaurantId, locationId, orderId);
-        });
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getTableOrderData(restaurantId, locationId, orderId));
     }
 
     private void initRecycler(List<TableDetailsDishModel> models) {

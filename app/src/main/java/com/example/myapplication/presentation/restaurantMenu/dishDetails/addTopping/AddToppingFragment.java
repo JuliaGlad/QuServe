@@ -102,6 +102,22 @@ public class AddToppingFragment extends Fragment {
         setAdapter();
         setupObserves();
         initNextButton();
+        initBackButton();
+        initCloseButton();
+        initBackButtonPressed();
+    }
+
+    private void initCloseButton() {
+        binding.buttonClose.setOnClickListener(v -> {
+            requireActivity().finish();
+            viewModel.setArgumentsNull();
+        });
+    }
+
+    private void initBackButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            navigateBack();
+        });
     }
 
     @Override

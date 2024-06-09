@@ -92,20 +92,22 @@ public class HomeFragment extends Fragment {
     }
 
     private void setView() {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         String type = sharedPreferences.getString(APP_STATE, ANONYMOUS);
         String companyId;
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
 
         switch (type) {
             case ANONYMOUS:
                 fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.home_container, AnonymousUserFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
                 break;
             case BASIC:
                 fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.home_container, HomeBasisUserFragment.class, null)
                         .setReorderingAllowed(true)
                         .commit();
@@ -117,6 +119,7 @@ public class HomeFragment extends Fragment {
                 bundle.putString(COMPANY_ID, companyId);
 
                 fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.home_container, HomeQueueCompanyUserFragment.class, bundle)
                         .setReorderingAllowed(true)
                         .commit();
@@ -129,6 +132,7 @@ public class HomeFragment extends Fragment {
 
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.home_container, RestaurantHomeFragment.class, bundleRestaurant)
                         .commit();
                 break;

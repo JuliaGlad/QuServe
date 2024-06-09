@@ -32,6 +32,10 @@ public class AddQueueItemModel {
         this.removeListener = removeListener;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public String getCity() {
         return city;
     }

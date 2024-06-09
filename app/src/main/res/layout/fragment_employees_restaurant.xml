@@ -7,17 +7,33 @@
     android:paddingTop="20dp"
     tools:context=".presentation.employee.main.companiesEmployees.employeesRestaurant.main.EmployeesRestaurantFragment">
 
-    <ImageButton
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:background="@color/transparent"
-        android:src="@drawable/ic_arrow_back"
-        app:layout_constraintBottom_toBottomOf="@+id/search_view"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/search_view"
-        app:tint="?colorPrimary" />
+        app:layout_constraintTop_toBottomOf="@id/search_view"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextColor="?android:textColorHint">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/you_don_t_have_a_history_of_your_previous_action_yet" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cooks" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/waiters" />
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
@@ -34,33 +50,17 @@
         app:searchIcon="@drawable/search_icon"
         app:tint="?colorPrimary" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@+id/search_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/colorPrimary"
-        app:tabTextColor="?android:textColorHint">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/all" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cooks" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/waiters" />
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintTop_toTopOf="@+id/search_view"
+        app:tint="?colorPrimary" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

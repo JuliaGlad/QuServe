@@ -13,7 +13,11 @@
 
         <action
             android:id="@+id/action_addLocationFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
     </fragment>
 
     <fragment
@@ -23,7 +27,11 @@
         tools:layout="@layout/fragment_map" >
         <action
             android:id="@+id/action_mapFragment_to_addLocationFragment"
-            app:destination="@id/addLocationFragment" />
+            app:destination="@id/addLocationFragment"
+            app:enterAnim="@anim/slide_in_anim"
+            app:exitAnim="@anim/slide_out_anim"
+            app:popEnterAnim="@anim/slide_in_anim"
+            app:popExitAnim="@anim/slide_out_anim"/>
     </fragment>
 
 </navigation>

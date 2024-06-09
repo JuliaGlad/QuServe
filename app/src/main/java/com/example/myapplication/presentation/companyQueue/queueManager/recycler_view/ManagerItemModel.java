@@ -21,6 +21,10 @@ public class ManagerItemModel {
         this.listener = listener;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
     public String getCity() {
         return city;
     }

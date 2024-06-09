@@ -91,13 +91,17 @@ public class WorkerManagerFragment extends Fragment {
     }
 
     private void filterList(String newText) {
-        List<WorkerManagerModel> filteredList = new ArrayList<>();
-        for (WorkerManagerModel model : models) {
-            if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
-                filteredList.add(model);
+        if (!newText.isEmpty()) {
+            List<WorkerManagerModel> filteredList = new ArrayList<>();
+            for (WorkerManagerModel model : models) {
+                if (model.getName().toLowerCase().contains(newText.toLowerCase())) {
+                    filteredList.add(model);
+                }
             }
+            adapter.submitList(filteredList);
+        } else {
+            adapter.submitList(models);
         }
-        adapter.submitList(filteredList);
     }
 
     private void setupObserves() {

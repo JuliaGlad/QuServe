@@ -74,6 +74,8 @@ public class EmployeeNavigationFragment extends Fragment {
             case ANONYMOUS:
                 fragmentManager
                         .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                        .setReorderingAllowed(true)
                         .replace(R.id.employee_nav_container, NotEmployeeYetFragment.class, null)
                         .commit();
                 break;
@@ -83,11 +85,16 @@ public class EmployeeNavigationFragment extends Fragment {
                 break;
             case COMPANY:
                 fragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                        .setReorderingAllowed(true)
                         .replace(R.id.employee_nav_container, EmployeesFragment.class, null)
                         .commit();
                 break;
             case RESTAURANT:
-                fragmentManager.beginTransaction()
+                fragmentManager
+                        .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.employee_nav_container, ChooseLocationFragment.class, null)
                         .commit();
                 break;
@@ -107,6 +114,8 @@ public class EmployeeNavigationFragment extends Fragment {
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.employee_nav_container, NotEmployeeYetFragment.class, null)
                         .commit();
             } else if (aBoolean != null){
@@ -121,11 +130,15 @@ public class EmployeeNavigationFragment extends Fragment {
                 if (isWorking) {
                     requireActivity().getSupportFragmentManager()
                             .beginTransaction()
+                            .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                             .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                             .commit();
                 } else {
                     requireActivity().getSupportFragmentManager()
                             .beginTransaction()
+                            .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                             .replace(R.id.employee_nav_container, StartWorkFragment.class, bundle)
                             .commit();
                 }
@@ -146,6 +159,8 @@ public class EmployeeNavigationFragment extends Fragment {
                     bundle.putString(EMPLOYEE_ROLE, new Gson().toJson(roles));
                     fragmentManager
                             .beginTransaction()
+                            .setReorderingAllowed(true)
+                            .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                             .replace(R.id.employee_nav_container, DifferentRolesEmployeeFragment.class, bundle)
                             .commit();
                 } else if (roles.size() == 1) {
@@ -159,12 +174,16 @@ public class EmployeeNavigationFragment extends Fragment {
                         case WORKER:
                             fragmentManager
                                     .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                     .replace(R.id.employee_nav_container, QueueWorkerFragment.class, bundle)
                                     .commit();
                             break;
                         case ADMIN:
                             fragmentManager
                                     .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                     .replace(R.id.employee_nav_container, QueueAdminFragment.class, bundle)
                                     .commit();
                             break;
@@ -172,6 +191,8 @@ public class EmployeeNavigationFragment extends Fragment {
                             bundle.putString(LOCATION_ID, employeeRoleModel.getLocationId());
                             fragmentManager
                                     .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                                     .replace(R.id.employee_nav_container, CookEmployeeFragment.class, bundle)
                                     .commit();
                         case WAITER:

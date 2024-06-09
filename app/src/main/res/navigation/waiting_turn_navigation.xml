@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_waiting" >
         <action
             android:id="@+id/action_waitingFragment_to_yourTurnFragment"
-            app:destination="@id/yourTurnFragment" />
+            app:destination="@id/yourTurnFragment"
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
     <fragment
         android:id="@+id/yourTurnFragment"

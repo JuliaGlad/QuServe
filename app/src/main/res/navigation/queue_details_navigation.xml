@@ -11,12 +11,14 @@
         android:label="fragment_queue_details"
         tools:layout="@layout/fragment_queue_details">
 
-
-
         <action
             android:id="@+id/action_queueDetailsFragment_to_participantsListFragment"
             android:defaultValue="@null"
-            app:destination="@id/participantsListFragment" />
+            app:destination="@id/participantsListFragment"
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
 
         <action
             android:id="@+id/action_queueDetailsFragment_to_pausedQueueFragment"
@@ -25,8 +27,10 @@
             app:popUpTo="@+id/detailsQueueFragment"
             app:destination="@id/pausedQueueFragment"
             app:nullable="true"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim">
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim">
         </action>
 
     </fragment>
@@ -39,8 +43,10 @@
         <action
             android:id="@+id/action_participantsListFragment_to_detailsQueueFragment"
             app:destination="@id/detailsQueueFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
 
     </fragment>
     <fragment
@@ -51,7 +57,9 @@
         <action
             android:id="@+id/action_pausedQueueFragment_to_detailsQueueFragment"
             app:destination="@id/detailsQueueFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:popExitAnim="@anim/nav_default_exit_anim"/>
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim"/>
     </fragment>
 </navigation>

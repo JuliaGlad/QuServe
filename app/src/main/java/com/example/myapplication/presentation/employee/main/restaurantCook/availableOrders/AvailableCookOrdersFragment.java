@@ -30,15 +30,15 @@ public class AvailableCookOrdersFragment extends Fragment {
     private AvailableCookOrdersViewModel viewModel;
     private FragmentAvailableCookOrdersBinding binding;
     private String restaurantId, locationId;
-    private List<AvailableOrdersModel> items = new ArrayList<>();
+    private final List<AvailableOrdersModel> items = new ArrayList<>();
     private final AvailableOrdersAdapter adapter = new AvailableOrdersAdapter();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AvailableCookOrdersViewModel.class);
-        restaurantId = getActivity().getIntent().getStringExtra(COMPANY_ID);
-        locationId = getActivity().getIntent().getStringExtra(LOCATION_ID);
+        restaurantId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
+        locationId = requireActivity().getIntent().getStringExtra(LOCATION_ID);
         viewModel.getOrders(restaurantId, locationId);
     }
 

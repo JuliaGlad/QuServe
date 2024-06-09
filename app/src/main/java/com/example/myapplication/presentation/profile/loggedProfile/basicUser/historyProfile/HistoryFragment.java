@@ -48,7 +48,6 @@ public class HistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         viewModel.getHistoryData();
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
@@ -57,45 +56,64 @@ public class HistoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setAdapter();
         setupObserves();
+        initCloseButton();
+    }
+
+    private void initCloseButton() {
+        binding.buttonBack.setOnClickListener(v -> {
+            requireActivity().finish();
+        });
     }
 
     private void setupObserves() {
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof HistoryState.Success){
-               List<HistoryItemModel> model = ((HistoryState.Success) state).data;
+            if (state instanceof HistoryState.Success) {
+                List<HistoryItemModel> models = ((HistoryState.Success) state).data;
 
-                for (int i = 0; i < model.size(); i++) {
-                    String date = model.get(i).getDate();
-                    if (!dates.contains(date))
-                        dates.add(date);
-                }
+                if (!models.isEmpty()) {
 
-                for (int i = 0; i < dates.size(); i++) {
-                    String currentDate = dates.get(i);
-                    delegates.add(new DateDelegateItem(new DateModel(i, currentDate)));
-                    for (int j = 0; j < model.size(); j++) {
-                        if (currentDate.equals(model.get(j).getDate())){
-                            delegates.add(new HistoryDelegateItem(new HistoryDelegateModel(
-                                    j,
-                                    model.get(j).getName(),
-                                    model.get(j).getTime(),
-                                    model.get(j).getService()
-                            )));
+                    for (int i = 0; i < models.size(); i++) {
+                        String date = models.get(i).getDate();
+                        if (!dates.contains(date))
+                            dates.add(date);
+                    }
+
+                    for (int i = 0; i < dates.size(); i++) {
+                        String currentDate = dates.get(i);
+                        delegates.add(new DateDelegateItem(new DateModel(i, currentDate)));
+                        for (int j = 0; j < models.size(); j++) {
+                            if (currentDate.equals(models.get(j).getDate())) {
+                                delegates.add(new HistoryDelegateItem(new HistoryDelegateModel(
+                                        j,
+                                        models.get(j).getName(),
+                                        models.get(j).getTime(),
+                                        models.get(j).getService()
+                                )));
+                            }
                         }
                     }
+                    adapter.submitList(delegates);
+                } else {
+                   initEmptyLayout();
                 }
-                adapter.submitList(delegates);
                 binding.errorLayout.getRoot().setVisibility(View.GONE);
                 binding.progressBar.getRoot().setVisibility(View.GONE);
 
-            } else if (state instanceof HistoryState.Loading){
+            } else if (state instanceof HistoryState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
-            } else if (state instanceof HistoryState.Error){
+            } else if (state instanceof HistoryState.Error) {
                 binding.errorLayout.getRoot().setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void initEmptyLayout() {
+        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+        binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_a_history_of_your_previous_action_yet));
+        binding.emptyLayout.infoBox.getRoot().setVisibility(View.GONE);
+        binding.emptyLayout.buttonAdd.setVisibility(View.GONE);
     }
 
     private void setAdapter() {

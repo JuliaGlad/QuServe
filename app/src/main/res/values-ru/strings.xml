@@ -449,4 +449,5 @@
     <string name="looks_like_you_have_scanned_wrong_qr_code_please_try_again_with_the_different_one">Похоже вы отсканировали неверный QR-код! Пожалуйста, попробуйте снова с другим QR-кодом</string>
     <string name="unable_to_take_order">Не можем принять заказ!</string>
     <string name="this_restaurant_can_t_accept_your_order_right_now_please_wait_or_visit_another_location">Этот ресторан сейчас не может принять заказ! Пожалуйста, подождите, либо посетите другую локацию!</string>
+    <string name="you_don_t_have_a_history_of_your_previous_action_yet">У вас пока что нет истории прошлых действий!</string>
 </resources>

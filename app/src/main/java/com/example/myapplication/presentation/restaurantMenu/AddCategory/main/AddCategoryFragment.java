@@ -77,21 +77,7 @@ public class AddCategoryFragment extends Fragment {
         setLauncher();
     }
 
-    private void setLauncher() {
-        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            ArgumentsCategory.chosenImage = data.getData();
-                            imageUri = data.getData();
-                            ChooseCategoryImageModel model = (ChooseCategoryImageModel) items.get(items.size() - 1).content();
-                            model.setUri(imageUri);
-                            mainAdapter.notifyItemChanged(items.size() - 1);
-                        }
-                    }
-                });
-    }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -114,7 +100,17 @@ public class AddCategoryFragment extends Fragment {
         initNextButton();
         initCloseButton();
         initBackButton();
+        handleBackButtonPressed();
         setupObserves();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateBack(page);
+            }
+        });
     }
 
     @Override
@@ -122,6 +118,21 @@ public class AddCategoryFragment extends Fragment {
         super.onDestroy();
         mainAdapter = null;
         viewModel.setArgumentsNull();
+    }
+    private void setLauncher() {
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            ArgumentsCategory.chosenImage = data.getData();
+                            imageUri = data.getData();
+                            ChooseCategoryImageModel model = (ChooseCategoryImageModel) items.get(items.size() - 1).content();
+                            model.setUri(imageUri);
+                            mainAdapter.notifyItemChanged(items.size() - 1);
+                        }
+                    }
+                });
     }
 
     private void onPageInit(String page) {
