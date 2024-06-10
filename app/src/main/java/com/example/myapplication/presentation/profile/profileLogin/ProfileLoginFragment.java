@@ -26,6 +26,7 @@ import com.example.myapplication.databinding.FragmentProfileBinding;
 import com.example.myapplication.presentation.dialogFragments.checkEmail.CheckEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.resetPassword.ResetPasswordDialogFragment;
+import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -58,8 +59,12 @@ public class ProfileLoginFragment extends Fragment {
 
     private void initSignUpButton() {
         binding.textActionCreateAccount.setOnClickListener(v -> {
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_profileLoggedFragment_to_createAccount);
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                    .replace(R.id.logged_container, CreateAccountFragment.class, null)
+                    .commit();
         });
     }
 
