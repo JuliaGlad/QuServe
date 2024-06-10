@@ -30,6 +30,8 @@ import static com.example.myapplication.presentation.utils.constants.Utils.USER_
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_COUNT;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_LIST;
 
+import android.util.Log;
+
 import com.example.myapplication.data.dto.company.CompanyQueueDto;
 import com.example.myapplication.data.dto.company.WorkerDto;
 import com.example.myapplication.presentation.companyQueue.models.EmployeeModel;
@@ -480,13 +482,15 @@ public class CompanyQueueRepository {
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<String> participants = (List<String>) task.getResult().get(QUEUE_PARTICIPANTS_LIST);
-                assert participants != null;
-                for (String participant : participants) {
-                    service.fireStore
-                            .collection(USER_LIST)
-                            .document(participant)
-                            .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
+                if (participants != null) {
+                    for (String participant : participants) {
+                        service.fireStore
+                                .collection(USER_LIST)
+                                .document(participant)
+                                .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
+                    }
                 }
+                emitter.onComplete();
             } else {
                 emitter.onError(new Throwable(task.getException()));
             }

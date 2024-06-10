@@ -36,7 +36,7 @@ public class QueueWorkerFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(QueueWorkerViewModel.class);
-        companyId = getArguments().getString(COMPANY_ID);
+        companyId = requireArguments().getString(COMPANY_ID);
     }
 
     @Override

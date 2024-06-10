@@ -10,7 +10,7 @@
     <string name="no_estimated_time_yet">Приблизительного времени ожидания пока что нет!</string>
     <string name="restaurant_title">Ресторан</string>
     <string name="account_with_this_email_is_already_exist">Аккаунт с этими данными уже существует!</string>
-    <string name="wrong_email">Неверный email</string>
+    <string name="wrong_email">Такая почта не существует!</string>
     <string name="order_is_cooking">Заказ готовится</string>
     <string name="order_is_finished">Заказ готов!</string>
     <string name="select_time">Выберите время</string>
@@ -241,6 +241,8 @@
     <string name="serves_customers">Обслуживайте посетителей</string>
     <string name="change">Изменить</string>
     <string name="statistics">Статистика</string>
+    <string name="this_password_is_too_short">Этот пароль слишком короткий(меньше 6 символов)</string>
+    <string name="timer">Таймер</string>
     <string name="all_cities">Все города</string>
     <string name="choose_city">Выберите город</string>
     <string name="ooops">Упс! Что-то пошло не так!</string>
@@ -452,4 +454,5 @@
     <string name="unable_to_take_order">Не можем принять заказ!</string>
     <string name="this_restaurant_can_t_accept_your_order_right_now_please_wait_or_visit_another_location">Этот ресторан сейчас не может принять заказ! Пожалуйста, подождите, либо посетите другую локацию!</string>
     <string name="you_don_t_have_a_history_of_your_previous_action_yet">У вас пока что нет истории прошлых действий!</string>
+    <string name="add_background">Добавить фон</string>
 </resources>

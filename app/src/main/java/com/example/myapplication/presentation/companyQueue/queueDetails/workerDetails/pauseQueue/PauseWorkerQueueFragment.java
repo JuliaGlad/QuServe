@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.workerD
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.CURRENT_TIMER_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_HOURS;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_MINUTES;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAUSED_SECONDS;
@@ -18,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
@@ -43,20 +45,27 @@ public class PauseWorkerQueueFragment extends Fragment {
     private PauseWorkerQueueViewModel viewModel;
     private long timeMillis;
     private String timeLeft, queueId, companyId;
+    private boolean isStopped = false;
+    private boolean isSend = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(this).get(PauseWorkerQueueViewModel.class);
         binding = FragmentPauseQueueBinding.inflate(inflater, container, false);
         if (getArguments() != null) {
             queueId = getArguments().getString(QUEUE_ID);
             companyId = getArguments().getString(COMPANY_ID);
-            long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
-            long minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
-            long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
+            if (requireArguments().getBoolean(IS_DEFAULT)) {
+                long hours = getArguments().getInt(PAUSED_HOURS) * 3600000L;
+                long minutes = getArguments().getInt(PAUSED_MINUTES) * 60000L;
+                long seconds = getArguments().getInt(PAUSED_SECONDS) * 1000L;
 
-            timeMillis = hours + minutes + seconds;
-            PROGRESS = (int) timeMillis;
+                timeMillis = hours + minutes + seconds;
+                PROGRESS = (int) timeMillis;
+            } else {
+                timeMillis = CURRENT_TIMER_TIME;
+            }
         } else {
             timeMillis = CURRENT_TIMER_TIME;
         }
@@ -88,7 +97,17 @@ public class PauseWorkerQueueFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!checkForegroundServiceRunning()) {
+        if (!checkForegroundServiceRunning() && !isStopped && !isSend) {
+            isSend = true;
+            ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, companyId, PROGRESS, COMPANY);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!checkForegroundServiceRunning() && !isStopped && !isSend) {
+            isSend = true;
             ((WorkerQueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, companyId, PROGRESS, COMPANY);
         }
     }
@@ -100,7 +119,7 @@ public class PauseWorkerQueueFragment extends Fragment {
     }
 
     private void initBox() {
-        binding.layoutBox.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sparkles, getActivity().getTheme()));
+        binding.layoutBox.icon.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_sparkles, requireActivity().getTheme()));
         binding.layoutBox.body.setText(R.string.have_a_little_rest_and_then_come_back);
     }
 
@@ -115,13 +134,12 @@ public class PauseWorkerQueueFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                PROGRESS = 0;
                 viewModel.continueQueue(queueId, companyId);
             }
         }.start();
     }
 
-    private void updateTimer(){
+    private void updateTimer() {
         long hours = (timeMillis / 1000) / 3600;
         long minutes = ((timeMillis / 1000) % 3600) / 60;
         long seconds = (timeMillis / 1000) % 60;
@@ -135,7 +153,9 @@ public class PauseWorkerQueueFragment extends Fragment {
             StopPauseDialogFragment dialogFragment = new StopPauseDialogFragment(queueId, companyId, COMPANY);
             dialogFragment.show(requireActivity().getSupportFragmentManager(), "STOP_PAUSE_DIALOG");
             dialogFragment.onDismissListener(bundle -> {
-                NavHostFragment.findNavController(this).popBackStack();
+                isStopped = true;
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_pauseWorkerQueueFragment_to_workerQueueDetailsFragment);
             });
         });
     }
@@ -174,9 +194,13 @@ public class PauseWorkerQueueFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.isContinued.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
-                ((WorkerQueueDetailsActivity)requireActivity()).startNotificationForegroundService(COMPANY);
-                initNotificationWorker();
+            if (aBoolean != null) {
+                if (aBoolean) {
+                    ((WorkerQueueDetailsActivity) requireActivity()).startNotificationForegroundService(COMPANY);
+                    initNotificationWorker();
+                    NavHostFragment.findNavController(this)
+                            .navigate(R.id.action_pauseWorkerQueueFragment_to_workerQueueDetailsFragment);
+                }
             }
         });
     }

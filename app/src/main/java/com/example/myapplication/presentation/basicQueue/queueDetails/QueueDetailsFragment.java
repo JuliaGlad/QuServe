@@ -179,7 +179,7 @@ public class QueueDetailsFragment extends Fragment {
                 new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.here_you_can_see_queue_details)),
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, R.drawable.ic_qrcode,
-                        () -> { viewModel.getQrCodePdf(); })),
+                        () -> viewModel.getQrCodePdf())),
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue,
                         R.string.pause_queue_description, R.drawable.ic_time, () -> {

@@ -84,26 +84,37 @@ public class CreateAccountFragment extends Fragment {
             email = binding.editLayoutEmail.getText().toString().trim();
             password = binding.editLayoutPassword.getText().toString().trim();
 
+            boolean isEnough = true;
+            boolean isCorrect = true;
+
             if (userName.isEmpty()) {
                 viewModel.sendNameError(getResources().getString(R.string.user_name_is_required));
             }
             if (email.isEmpty()) {
                 viewModel.sendEmailError(getResources().getString(R.string.email_is_required));
             }
+            if (!email.contains("@")){
+                isCorrect = false;
+                Snackbar.make(requireView(), getString(R.string.wrong_email), Snackbar.LENGTH_LONG).show();
+            }
             if (password.isEmpty()) {
                 viewModel.sendPasswordError(getResources().getString(R.string.password_is_required));
             }
+            if (password.length() < 6){
+                isEnough = false;
+                Snackbar.make(requireView(), getString(R.string.this_password_is_too_short), Snackbar.LENGTH_LONG).show();
+            }
 
             if (viewModel.checkAnonymousActions()) {
-                if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty()) {
+                if (!email.isEmpty() && !password.isEmpty() && !userName.isEmpty() && isEnough && isCorrect) {
                     viewModel.createUserWithEmailAndPassword(email, password, userName, imageUri);
                 } else {
-                    binding.loader.setVisibility(View.VISIBLE);
-                    binding.buttonSignUp.setEnabled(false);
+                    binding.loader.setVisibility(View.GONE);
+                    binding.buttonSignUp.setEnabled(true);
                 }
             } else {
-                binding.loader.setVisibility(View.VISIBLE);
-                binding.buttonSignUp.setEnabled(false);
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonSignUp.setEnabled(true);
                 HaveAnonymousActionsDialogFragment dialogFragment = new HaveAnonymousActionsDialogFragment();
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ANONYMOUS_ACTIONS_DIALOG");
             }

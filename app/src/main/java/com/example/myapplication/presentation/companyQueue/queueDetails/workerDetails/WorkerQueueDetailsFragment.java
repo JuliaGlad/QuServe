@@ -3,6 +3,7 @@ package com.example.myapplication.presentation.companyQueue.queueDetails.workerD
 import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
 import android.net.Uri;
@@ -104,6 +105,7 @@ public class WorkerQueueDetailsFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putString(QUEUE_ID, queueId);
                     bundle.putString(COMPANY_ID, companyId);
+                    bundle.putBoolean(IS_DEFAULT, false);
                     NavHostFragment.findNavController(this)
                             .navigate(R.id.action_workerQueueDetailsFragment_to_pauseWorkerQueueFragment, bundle);
                 }
@@ -170,16 +172,10 @@ public class WorkerQueueDetailsFragment extends Fragment {
         dialogFragment.onDismissListener(bundle -> {
             bundle.putString(QUEUE_ID, queueId);
             bundle.putString(COMPANY_ID, companyId);
+            bundle.putBoolean(IS_DEFAULT, true);
+            Log.i("Company id", companyId);
             NavHostFragment.findNavController(this)
                     .navigate(R.id.action_workerQueueDetailsFragment_to_pauseWorkerQueueFragment, bundle);
-        });
-    }
-
-    private void showFinishQueueDialog() {
-        final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, COMPANY, companyId);
-        dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
-        dialogFragment.onDismissListener(bundle -> {
-            requireActivity().finish();
         });
     }
 

@@ -103,7 +103,7 @@ public class AddQueueFragment extends Fragment {
 
             fragmentManager.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .add(R.id.queue_manager_container, dialogFragment)
+                    .add(R.id.worker_manager_container, dialogFragment)
                     .addToBackStack(null)
                     .commit();
 
@@ -134,14 +134,18 @@ public class AddQueueFragment extends Fragment {
     }
 
     private void filterListBySearchView(String key) {
-        List<AddQueueItemModel> modelList = adapter.getCurrentList();
-        List<AddQueueItemModel> filteredList = new ArrayList<>();
-        for (AddQueueItemModel model : modelList) {
-            if (model.getCity().toLowerCase().contains(key.toLowerCase()) || model.getLocation().contains(key.toLowerCase())) {
-                filteredList.add(model);
+        if (!key.isEmpty()) {
+            List<AddQueueItemModel> modelList = adapter.getCurrentList();
+            List<AddQueueItemModel> filteredList = new ArrayList<>();
+            for (AddQueueItemModel model : modelList) {
+                if (model.getCity().toLowerCase().contains(key.toLowerCase()) || model.getLocation().contains(key.toLowerCase())) {
+                    filteredList.add(model);
+                }
             }
+            adapter.submitList(filteredList);
+        } else {
+            adapter.submitList(models);
         }
-        adapter.submitList(filteredList);
     }
 
     private void handleBackButtonPressed() {

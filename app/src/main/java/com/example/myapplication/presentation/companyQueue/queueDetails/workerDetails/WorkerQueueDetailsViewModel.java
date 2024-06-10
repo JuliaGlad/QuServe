@@ -55,7 +55,7 @@ public class WorkerQueueDetailsViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Log.e("Error", e.getMessage());
+                        Log.i("Error worker details", e.getMessage());
                         _state.postValue(new WorkerQueueDetailsState.Error());
                     }
                 });

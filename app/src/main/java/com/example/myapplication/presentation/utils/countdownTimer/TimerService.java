@@ -58,9 +58,9 @@ public class TimerService extends Service {
         timeLeft = intent.getStringExtra(TIME_LEFT);
         timeMillis = intent.getLongExtra(TIME_MILLIS, 0);
         queueId = intent.getStringExtra(QUEUE_ID);
-        try{
+        try {
             companyId = intent.getStringExtra(COMPANY_ID);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Log.d("NullPointerPauseNotificationException", e.getMessage());
         }
         type = intent.getStringExtra(STATE);
@@ -71,7 +71,7 @@ public class TimerService extends Service {
     }
 
     private void addSnapshot() {
-        if (companyId != null){
+        if (companyId != null) {
             CompanyQueueDI.addCompanyQueueInProgressSnapshotUseCase.invoke(queueId, companyId)
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Observer<String>() {
@@ -82,7 +82,7 @@ public class TimerService extends Service {
 
                         @Override
                         public void onNext(@NonNull String s) {
-                            if (!s.contains(PAUSED)){
+                            if (!s.contains(PAUSED)) {
                                 stopForeground(true);
                                 stopSelf();
                             }
@@ -109,7 +109,7 @@ public class TimerService extends Service {
 
                         @Override
                         public void onNext(@NonNull String s) {
-                            if (!s.contains(PAUSED)){
+                            if (!s.contains(PAUSED)) {
                                 stopForeground(true);
                                 stopSelf();
                             }
@@ -135,28 +135,36 @@ public class TimerService extends Service {
     }
 
     private Notification setupNotification() {
-        Intent intent = null;
-        switch (type){
+        NotificationCompat.Builder builder = null;
+        switch (type) {
             case BASIC:
-                intent = new Intent(this, QueueDetailsActivity.class);
+                Intent intent = new Intent(this, QueueDetailsActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+                builder = new NotificationCompat.Builder(this, "TIMER_NOTIFICATION")
+                        .setSmallIcon(R.drawable.baseline_hourglass_bottom_24)
+                        .setContentTitle(getString(R.string.timer))
+                        .setContentText(timeLeft)
+                        .setOnlyAlertOnce(true)
+                        .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                createNotificationChannel(builder);
+
                 break;
             case COMPANY:
-                intent = new Intent(this, WorkerQueueDetailsActivity.class);
+                builder = new NotificationCompat.Builder(this, "TIMER_NOTIFICATION")
+                        .setSmallIcon(R.drawable.baseline_hourglass_bottom_24)
+                        .setContentTitle(getString(R.string.timer))
+                        .setContentText(timeLeft)
+                        .setOnlyAlertOnce(true)
+                        .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+                createNotificationChannel(builder);
                 break;
         }
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "TIMER_NOTIFICATION")
-                .setSmallIcon(R.drawable.baseline_hourglass_bottom_24)
-                .setContentTitle("Timer")
-                .setContentText(timeLeft)
-                .setOnlyAlertOnce(true)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
-                .setContentIntent(pendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
-        createNotificationChannel(builder);
-
+        assert builder != null;
         return builder.build();
     }
 

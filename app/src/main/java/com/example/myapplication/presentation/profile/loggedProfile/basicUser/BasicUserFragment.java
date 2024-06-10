@@ -88,7 +88,6 @@ public class BasicUserFragment extends Fragment {
         setupObserves();
         setAdapter();
         initSettingButton();
-        initBackground();
     }
 
     private void initBackground() {
@@ -123,9 +122,15 @@ public class BasicUserFragment extends Fragment {
         });
 
         viewModel.uri.observe(getViewLifecycleOwner(), uri -> {
-            Glide.with(this)
-                    .load(uri)
-                    .into(binding.background);
+            if (!uri.equals(Uri.EMPTY)) {
+                Glide.with(this)
+                        .load(uri)
+                        .into(binding.background);
+                binding.addBackground.setVisibility(View.GONE);
+                initBackground();
+            } else {
+                initAddBackgroundButton();
+            }
         });
 
         viewModel.companyExist.observe(getViewLifecycleOwner(), aBoolean -> {
@@ -149,6 +154,12 @@ public class BasicUserFragment extends Fragment {
 
         viewModel.companyId.observe(getViewLifecycleOwner(), s -> {
             companyId = s;
+        });
+    }
+
+    private void initAddBackgroundButton() {
+        binding.addBackground.setOnClickListener(v -> {
+            initImagePicker();
         });
     }
 
@@ -264,6 +275,8 @@ public class BasicUserFragment extends Fragment {
                             viewModel.uploadToFireStorage(imageUri);
                             Glide.with(this).load(imageUri)
                                     .into(binding.background);
+                            binding.addBackground.setVisibility(View.GONE);
+                            initBackground();
                         }
                     }
                 });
