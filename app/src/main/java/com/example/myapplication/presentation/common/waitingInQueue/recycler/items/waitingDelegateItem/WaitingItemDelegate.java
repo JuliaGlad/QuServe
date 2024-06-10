@@ -104,20 +104,24 @@ public class WaitingItemDelegate implements AdapterDelegate {
 
         private void setTime(String descriptionText) {
             int midTime = Integer.parseInt(descriptionText);
-            if (midTime >= 60) {
-                double time = midTime / 60.0;
-                String timeFormatted = new DecimalFormat("#0.00").format(time);
-                int pointIndex = timeFormatted.indexOf(",");
-                String hours = timeFormatted.substring(0, pointIndex);
-                String minutes = timeFormatted.substring(pointIndex + 1);
-                if (minutes.endsWith("0")) {
-                    minutes = minutes.substring(0, minutes.length() - 1);
-                }
-                String text = hours.concat(itemView.getResources().getString(R.string.hours_description)).concat(" ").concat(minutes).concat(itemView.getResources().getString(R.string.minutes_description));
-                binding.description.setText(text);
+            if (midTime != 0) {
+                if (midTime >= 60) {
+                    double time = midTime / 60.0;
+                    String timeFormatted = new DecimalFormat("#0.00").format(time);
+                    int pointIndex = timeFormatted.indexOf(",");
+                    String hours = timeFormatted.substring(0, pointIndex);
+                    String minutes = timeFormatted.substring(pointIndex + 1);
+                    if (minutes.endsWith("0")) {
+                        minutes = minutes.substring(0, minutes.length() - 1);
+                    }
+                    String text = hours.concat(itemView.getResources().getString(R.string.hours_description)).concat(" ").concat(minutes).concat(itemView.getResources().getString(R.string.minutes_description));
+                    binding.description.setText(text);
 
-            } else if (midTime >= 0) {
-                binding.description.setText(descriptionText.concat(itemView.getResources().getString(R.string.minutes_description)));
+                } else if (midTime >= 0) {
+                    binding.description.setText(descriptionText.concat(itemView.getResources().getString(R.string.minutes_description)));
+                }
+            } else {
+                binding.description.setText(itemView.getResources().getString(R.string.no_estimated_time_yet));
             }
         }
     }

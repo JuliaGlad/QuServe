@@ -4,6 +4,8 @@
     <string name="looks_like_you_have_active_actions">Looks like you have active actions</string>
     <string name="order_is_cooking">Order is cooking</string>
     <string name="order_is_finished">Order is finished</string>
+    <string name="time_to_go_back_to_work">Time to go back to work!</string>
+    <string name="rest_come_to_end">Your rest has come to end! It`s time to work!</string>
     <string name="you_have_to_wait_until_they_finished_before_log_in_or_creating_account">You have to wait until they finished before log in or creating account!</string>
     <string name="you_are_next">Get ready! You are next!</string>
     <string name="wrong_credentials">Wrong credentials</string>

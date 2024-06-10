@@ -109,9 +109,6 @@ public class SettingCompanyFragment extends Fragment {
 
     private void initRecycler(String name, String email, Uri uri){
         delegates.add(new SettingsUserItemDelegateItem(new SettingsUserItemModel(0, name, email, uri)));
-        delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(1, R.drawable.ic_shield_person, R.string.change_owner, () -> {
-
-        })));
         delegates.add( new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
 
             HelpDialogFragment dialogFragment = new HelpDialogFragment();

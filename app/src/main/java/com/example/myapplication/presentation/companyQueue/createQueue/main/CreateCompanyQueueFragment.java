@@ -87,7 +87,7 @@ public class CreateCompanyQueueFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        page = getArguments().getString(PAGE_KEY);
+        page = requireArguments().getString(PAGE_KEY);
         companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
 
         if (page == null){
@@ -149,7 +149,7 @@ public class CreateCompanyQueueFragment extends Fragment {
                 case PAGE_2:
                     binding.companyProgressBar.setProgress(25, true);
                     itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(2, R.string.set_queue_life_time, 24)));
-                    itemList.add(new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.no_set_lifetime, stringTime -> {
+                    itemList.add(new AutoCompleteTextDelegateItem(new AutoCompleteTextModel(3, R.array.lifetime, R.string.choose_time, stringTime -> {
                         for (int i = 0; i < array.length; i++) {
                             if (array[i].equals(stringTime)) {
                                 queueTime = stringsTimeArray[i];
@@ -160,9 +160,9 @@ public class CreateCompanyQueueFragment extends Fragment {
 
                 case PAGE_3:
                     binding.companyProgressBar.setProgress(50, true);
-                    if (getArguments().getString(QUEUE_LOCATION_KEY) != null) {
-                        queueLocation = getArguments().getString(QUEUE_LOCATION_KEY);
-                        city = getArguments().getString(CITY_KEY);
+                    if (requireArguments().getString(QUEUE_LOCATION_KEY) != null) {
+                        queueLocation = requireArguments().getString(QUEUE_LOCATION_KEY);
+                        city = requireArguments().getString(CITY_KEY);
                     }
                     itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
                     itemList.add(new LocationDelegateItem(new LocationModel(2, queueLocation, () -> {

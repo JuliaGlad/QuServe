@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.di.profile.ProfileDI;
 
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.CompletableObserver;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -19,15 +20,16 @@ public class VerifyBeforeUpdateDialogViewModel extends ViewModel {
         ProfileDI.signOutUseCase.invoke();
         ProfileDI.signInWithEmailAndPasswordUseCase.invoke(email, password)
                 .andThen(ProfileDI.checkVerificationUseCase.invoke())
+                .flatMapCompletable(aBoolean -> ProfileDI.profileRepository.updateEmailField(email))
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleObserver<Boolean>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(@NonNull Boolean aBoolean) {
+                    public void onComplete() {
                         _isVerified.postValue(true);
                     }
 

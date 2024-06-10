@@ -140,12 +140,7 @@ public class WaitingFragment extends Fragment {
     private void initRecycler(String path, int peopleBeforeSize, int midTime, int startMidTime) {
         String estimatedTime;
 
-        if (midTime != 0){
-            estimatedTime = String.valueOf(midTime);
-        } else {
-            estimatedTime = getString(R.string.no_estimated_time_yet);
-        }
-
+        estimatedTime = String.valueOf(midTime);
         buildList(new DelegateItem[]{
                 new WaitingItemDelegateItem(new WaitingItemModel(2, startMidTime, path, peopleBeforeSize, requireContext().getString(R.string.estimated_waiting_time), estimatedTime, R.drawable.ic_time, true, EDIT_ESTIMATED_TIME)),
                 new WaitingItemDelegateItem(new WaitingItemModel(3, startMidTime, path, peopleBeforeSize, requireContext().getString(R.string.people_before_you), String.valueOf(peopleBeforeSize), R.drawable.ic_queue_filled_24, true, EDIT_PEOPLE_BEFORE_YOU)),

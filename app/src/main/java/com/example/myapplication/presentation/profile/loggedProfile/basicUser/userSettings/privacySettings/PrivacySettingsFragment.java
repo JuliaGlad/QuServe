@@ -23,6 +23,7 @@ import com.example.myapplication.databinding.FragmentPrivacySettingsBinding;
 import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.deleteAccount.DeleteAccountDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.passwordUpdateSuccessful.PasswordUpdateSuccessfulDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.updatePasswordDialog.UpdatePasswordDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.delegates.serviceItem.ServiceItemDelegate;
@@ -89,7 +90,7 @@ public class PrivacySettingsFragment extends Fragment {
             UpdatePasswordDialogFragment dialogFragment = new UpdatePasswordDialogFragment();
             dialogFragment.show(requireActivity().getSupportFragmentManager(), "UPDATE_PASSWORD_DIALOG");
             DialogDismissedListener listener = bundle -> {
-                EmailUpdateSuccessfulDialogFragment successDialog = new EmailUpdateSuccessfulDialogFragment();
+                PasswordUpdateSuccessfulDialogFragment successDialog = new PasswordUpdateSuccessfulDialogFragment();
                 successDialog.show(requireActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
             };
             dialogFragment.onDismissListener(listener);

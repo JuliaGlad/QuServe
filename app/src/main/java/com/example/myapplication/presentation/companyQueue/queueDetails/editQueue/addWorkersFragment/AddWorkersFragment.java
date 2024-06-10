@@ -110,6 +110,8 @@ public class AddWorkersFragment extends Fragment {
 
     private void initOkButton() {
         binding.buttonOk.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonOk.setEnabled(false);
             viewModel.addEmployees(chosen, companyId, queueId);
         });
     }
@@ -132,6 +134,8 @@ public class AddWorkersFragment extends Fragment {
                     adapter.submitList(recyclerItems);
                 } else {
                     binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                    binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_any_employees_yet));
+                    binding.emptyLayout.infoBox.body.setText(getString(R.string.wait_until_any_new_employees_will_join_your_company));
                     binding.emptyLayout.buttonAdd.setOnClickListener(v -> {
                         navigateBack();
                     });

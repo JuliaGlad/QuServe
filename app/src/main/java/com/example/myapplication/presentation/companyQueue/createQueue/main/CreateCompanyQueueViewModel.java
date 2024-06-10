@@ -162,7 +162,7 @@ public class CreateCompanyQueueViewModel extends ViewModel {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
 
-        File file = new File(folder.getAbsolutePath() + "/" + "QR-CODE.pdf");
+        File file = new File(folder.getAbsolutePath() + "/" + queueName + "QR-CODE.pdf");
 
         try {
             FileOutputStream fos = new FileOutputStream(file);

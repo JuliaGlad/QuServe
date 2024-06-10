@@ -53,14 +53,14 @@ public class ChooseFragment extends Fragment {
                         sharedPreferences.edit().putString(APP_STATE, state).apply();
                         sharedPreferences.edit().putString(COMPANY_ID, companyId).apply();
 
-                        NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_chooseFragment_to_profileLoggedFragment);
+                        requireActivity().setResult(RESULT_OK);
+                        requireActivity().finish();
                     }
                 });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         initBackButtonPressed();
         binding = FragmentChooseBinding.inflate(inflater, container, false);
@@ -79,8 +79,8 @@ public class ChooseFragment extends Fragment {
         binding.forYourselfLayout.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             sharedPreferences.edit().putString(APP_STATE, BASIC).apply();
-            NavHostFragment.findNavController(this)
-                    .navigate(R.id.action_chooseFragment_to_profileLoggedFragment);
+            requireActivity().setResult(RESULT_OK);
+            requireActivity().finish();
         });
     }
 

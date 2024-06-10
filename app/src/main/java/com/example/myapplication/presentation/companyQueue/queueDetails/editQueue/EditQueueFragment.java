@@ -117,6 +117,8 @@ public class EditQueueFragment extends Fragment {
 
     private void initSaveButton() {
         binding.buttonSave.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSave.setEnabled(false);
             location = binding.locationEdit.getText().toString();
             name = binding.header.getText().toString();
 
@@ -134,16 +136,21 @@ public class EditQueueFragment extends Fragment {
                 binding.locationEdit.setText(model.getLocation());
                 binding.recyclerView.setAdapter(adapter);
                 if (list.isEmpty()) {
-                    for (int i = 0; i < employees.size(); i++) {
-                        EmployeeModel current = employees.get(i);
-                        list.add(new QueueEmployeeModel(
-                                i,
-                                current.getId(),
-                                current.getName(),
-                                current.getRole(),
-                                () -> {
-                                    showDeleteDialog(companyId, queueId, current.getId());
-                                }));
+                    if (!employees.isEmpty()) {
+                        for (int i = 0; i < employees.size(); i++) {
+                            EmployeeModel current = employees.get(i);
+                            list.add(new QueueEmployeeModel(
+                                    i,
+                                    current.getId(),
+                                    current.getName(),
+                                    current.getRole(),
+                                    () -> showDeleteDialog(companyId, queueId, current.getId())));
+                        }
+                    } else {
+                        binding.emptyLayout.getRoot().setVisibility(View.VISIBLE);
+                        binding.emptyLayout.infoBox.getRoot().setVisibility(View.GONE);
+                        binding.emptyLayout.title.setText(getString(R.string.you_don_t_have_any_employees_yet));
+                        binding.emptyLayout.buttonAdd.setVisibility(View.GONE);
                     }
                 }
                 adapter.submitList(list);

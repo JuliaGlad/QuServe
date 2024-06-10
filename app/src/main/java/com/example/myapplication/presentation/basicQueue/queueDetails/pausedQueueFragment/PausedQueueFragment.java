@@ -45,6 +45,7 @@ public class PausedQueueFragment extends Fragment {
     private long timeMillis;
     private String timeLeft, queueId;
     private boolean isStopped = false;
+    private boolean isSend = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,6 +109,7 @@ public class PausedQueueFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (!isStopped) {
+            isSend = false;
             ((QueueDetailsActivity) requireActivity()).stopServiceForeground();
         }
     }
@@ -115,8 +117,18 @@ public class PausedQueueFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (!checkForegroundServiceRunning() && timeMillis != 0) {
+        if (!checkForegroundServiceRunning() && timeMillis != 0 && !isStopped && !isSend) {
+            isSend = true;
            ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, BASIC);
+        }
+    }
+
+        @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (!checkForegroundServiceRunning() && timeMillis != 0 && !isStopped && !isSend) {
+            isSend = true;
+            ((QueueDetailsActivity) requireActivity()).startTimerForegroundService(timeMillis, timeLeft, queueId, BASIC);
         }
     }
 
@@ -182,6 +194,7 @@ public class PausedQueueFragment extends Fragment {
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (NotificationForegroundService.class.getName().equals(service.service.getClassName())) {
                 if (service.foreground) {
+                    isSend = true;
                     return true;
                 }
             }

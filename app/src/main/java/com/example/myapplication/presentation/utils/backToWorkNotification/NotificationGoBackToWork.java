@@ -54,8 +54,8 @@ public class NotificationGoBackToWork extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, YOUR_TURN_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentTitle("Time to go back to work!")
-                .setContentText("Your rest has come to end! It`s time to work!")
+                .setContentTitle(getResources().getString(R.string.time_to_go_back_to_work))
+                .setContentText(getResources().getString(R.string.rest_come_to_end))
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);

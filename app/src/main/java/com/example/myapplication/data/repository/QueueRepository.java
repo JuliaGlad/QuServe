@@ -27,6 +27,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -249,6 +250,7 @@ public class QueueRepository {
                     docRef.delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
+                            Log.i("Completed finish queue", "completed");
                         }
                     });
                 }else {
@@ -292,8 +294,9 @@ public class QueueRepository {
                 List<String> newParticipants;
                 if (value != null) {
                     newParticipants = (List<String>) value.get(QUEUE_PARTICIPANTS_LIST);
-                    assert newParticipants != null;
-                    emitter.onNext(newParticipants.size());
+                    if (newParticipants != null) {
+                        emitter.onNext(newParticipants.size());
+                    }
                 } else {
                     emitter.onError(new Throwable("Value is null"));
                 }
@@ -305,7 +308,6 @@ public class QueueRepository {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(queueId);
         return Observable.create(emitter -> {
             docRef.addSnapshotListener((value, error) -> {
-                int size = 0;
                 if (value != null) {
                     String inProgress = value.getString(QUEUE_IN_PROGRESS);
                     emitter.onNext(inProgress);

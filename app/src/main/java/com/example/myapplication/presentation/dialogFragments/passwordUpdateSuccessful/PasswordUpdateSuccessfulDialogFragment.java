@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.myapplication.databinding.DialogPasswordUpdateSuccessfulBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class PasswordUpdateSuccessful extends DialogFragment {
+public class PasswordUpdateSuccessfulDialogFragment extends DialogFragment {
 
     @NonNull
     @Override

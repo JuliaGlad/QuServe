@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="this_table_does_not_have_order_yet">На этом столике пока что нет заказа!</string>
     <string name="wait_until_anybody_make_an_order_and_then_come_back">Подождите пока кто-нибудь из ваших посетителей сделает заказ и затем возвращайтесь!</string>
     <string name="looks_like_you_have_active_actions">Похоже у вас есть активные действия</string>
     <string name="you_have_to_wait_until_they_finished_before_log_in_or_creating_account">Вам нужно подождать их завершения перед тем, как входить или создавать аккаунт!</string>
     <string name="you_are_next">Приготовьтесь! Вы следующий!</string>
+    <string name="time_to_go_back_to_work">Пора вернуться к работе!</string>
+    <string name="rest_come_to_end">Ваш перерыв закончился! Пора вернуться к работе!</string>
     <string name="no_estimated_time_yet">Приблизительного времени ожидания пока что нет!</string>
     <string name="restaurant_title">Ресторан</string>
     <string name="account_with_this_email_is_already_exist">Аккаунт с этими данными уже существует!</string>
@@ -19,7 +21,7 @@
     <string name="this_data_is_required">Эти данные необходимы!</string>
     <string name="restaurant_visitor">Заказ в ресторане</string>
     <string name="name_cannot_be_null">Имя не может быть пустым!</string>
-    <string name="estimated_time_waiting">Estimated time waiting</string>
+    <string name="estimated_time_waiting">Время ожида</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>
     <string name="title_queue">Сервис</string>

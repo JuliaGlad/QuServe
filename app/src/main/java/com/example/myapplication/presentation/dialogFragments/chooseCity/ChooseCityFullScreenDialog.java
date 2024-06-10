@@ -69,7 +69,8 @@ public class ChooseCityFullScreenDialog extends DialogFragment {
         if (listener != null && name != null) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(CITY_KEY, name);;
+            bundle.putString(CITY_KEY, name);
+            ;
             listener.handleDialogClose(bundle);
         }
     }
@@ -86,7 +87,10 @@ public class ChooseCityFullScreenDialog extends DialogFragment {
 
             json = new String(buffer, StandardCharsets.UTF_8);
             JSONArray jsonArray = new JSONArray(json);
-
+            cities.add(new CityItemModel(0, getString(R.string.all_cities), () -> {
+                this.name = getString(R.string.all_cities);
+                dismiss();
+            }));
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("name");

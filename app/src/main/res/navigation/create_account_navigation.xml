@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/create_account_navigation.xml"
+    app:startDestination="@id/createAccount">
+
+    <fragment
+        android:id="@+id/createAccount"
+        android:name="com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment"
+        android:label="@string/create_account"
+        tools:layout="@layout/fragment_create_account">
+        <action
+            android:id="@+id/action_createAccount_to_chooseFragment"
+            app:destination="@id/chooseFragment"
+            app:enterAnim="@anim/slide_in_fast_anim"
+            app:exitAnim="@anim/slide_out_fast_anim"
+            app:popEnterAnim="@anim/slide_in_fast_anim"
+            app:popExitAnim="@anim/slide_out_fast_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chooseFragment"
+        android:name="com.example.myapplication.presentation.profile.createAccount.chooseFragment.ChooseFragment"
+        android:label="fragment_choose"
+        tools:layout="@layout/fragment_choose" />
+
+</navigation>

@@ -21,6 +21,10 @@ public class ManagerItemModel {
         this.listener = listener;
     }
 
+    public String getQueueName() {
+        return queueName;
+    }
+
     public String getLocation() {
         return location;
     }

@@ -58,6 +58,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.tuyenmonkey.mkloader.MKLoader
+        android:id="@+id/loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/button_ok"
+        app:layout_constraintEnd_toEndOf="@id/button_ok"
+        app:layout_constraintStart_toStartOf="@id/button_ok"
+        app:layout_constraintTop_toTopOf="@id/button_ok"
+        android:visibility="gone"
+        app:mk_color="?colorPrimary"
+        app:mk_type="FishSpinner" />
+
     <include
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

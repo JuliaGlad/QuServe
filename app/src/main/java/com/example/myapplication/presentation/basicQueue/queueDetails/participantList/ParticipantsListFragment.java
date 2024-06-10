@@ -130,6 +130,8 @@ public class ParticipantsListFragment extends Fragment {
             for (int i = 0; i < queueLength; i++) {
                 itemsList.add(new ParticipantListDelegateItem(new ParticipantListModel(i, requireContext().getString(R.string.participant), i + 1)));
             }
+        } else {
+            binding.noParticipants.setVisibility(View.VISIBLE);
         }
     }
 }

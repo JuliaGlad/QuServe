@@ -188,12 +188,18 @@ public class NotificationForegroundService extends Service {
 
         Intent intent = new Intent(this, WaitingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
+        String contentText;
+        if (Integer.parseInt(time) != 0) {
+            contentText = getString(R.string.estimated_waiting_time) + " " + time;
+        } else {
+            contentText = getResources().getString(R.string.no_estimated_time_yet);
+        }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
-                .setContentText(getString(R.string.estimated_waiting_time) + " " + time)
+                .setContentText(contentText)
                 .setContentTitle(name)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+//                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setStyle(new NotificationCompat.BigTextStyle())
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 

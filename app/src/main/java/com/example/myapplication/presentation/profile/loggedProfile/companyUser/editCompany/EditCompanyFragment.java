@@ -8,6 +8,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.APP_S
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE;
 
 import android.content.Context;
 import android.content.Intent;
@@ -149,8 +150,16 @@ public class EditCompanyFragment extends Fragment {
                 binding.editLayoutCompanyName.setText(model.getName());
                 binding.editLayoutCompanyEmail.setText(model.getEmail());
                 binding.editLayoutCompanyPhone.setText(model.getPhone());
-                binding.editLayoutService.setText(model.getService());
-
+                String service = model.getService();
+                switch (service){
+                    case QUEUE:
+                        binding.editLayoutService.setText(getString(R.string.queue));
+                        break;
+                    case RESTAURANT:
+                        binding.editLayoutService.setText(getString(R.string.restaurant));
+                        break;
+                }
+               
                 Uri uri = model.getUri();
                 if (uri != Uri.EMPTY) {
                     Glide.with(this)

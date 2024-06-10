@@ -59,17 +59,12 @@ public class CreateAccountFragment extends Fragment {
         initSignUpButton();
         initEditText();
         initAddPhoto();
-        initButtonBack();
+       initButtonBack();
     }
 
     private void initButtonBack() {
         binding.buttonBack.setOnClickListener(v -> {
-            requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
-                    .replace(R.id.logged_container, ProfileLoginFragment.class, null)
-                    .commit();
+           requireActivity().finish();
         });
     }
 
@@ -80,7 +75,6 @@ public class CreateAccountFragment extends Fragment {
     }
 
     private void initSignUpButton() {
-
         binding.buttonSignUp.setOnClickListener(v -> {
 
             binding.loader.setVisibility(View.VISIBLE);

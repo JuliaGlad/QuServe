@@ -4,6 +4,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.CITY_
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class QueueManagerFragment extends Fragment {
         if (!key.isEmpty()) {
             List<ManagerItemModel> filteredList = new ArrayList<>();
             for (ManagerItemModel model : models) {
-                if (model.getCity().toLowerCase().contains(key.toLowerCase()) || model.getLocation().toLowerCase().contains(key.toLowerCase())) {
+                if (model.getQueueName().toLowerCase().contains(key.toLowerCase())) {
                     filteredList.add(model);
                 }
             }
@@ -126,7 +127,7 @@ public class QueueManagerFragment extends Fragment {
         } else {
             binding.chooseCity.setText(city);
             for (int i = 0; i < models.size(); i++) {
-                if (models.get(i).getCity().equals(city)) {
+                if (models.get(i).getCity().equals(city) || models.get(i).getLocation().toLowerCase().contains(city.toLowerCase())) {
                     newList.add(models.get(i));
                 }
             }

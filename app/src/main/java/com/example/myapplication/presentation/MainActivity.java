@@ -1,8 +1,10 @@
 package com.example.myapplication.presentation;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
 import static com.example.myapplication.presentation.utils.constants.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.DRAWABLES;
+import static com.example.myapplication.presentation.utils.constants.Utils.FINE_PERMISSION_CODE;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_1;
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
@@ -11,15 +13,20 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -37,6 +44,7 @@ import com.example.myapplication.presentation.employee.main.restaurantCook.activ
 import com.example.myapplication.presentation.employee.main.restaurantCook.availableOrders.AvailableCookOrdersActivity;
 import com.example.myapplication.presentation.home.stories.StoriesActivity;
 import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.CreateCompanyActivity;
+import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.chooseCompany.ChooseCompanyActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.editProfile.EditProfileActivity;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.historyProfile.HistoryActivity;
@@ -53,14 +61,17 @@ import com.example.myapplication.presentation.common.waitingInQueue.WaitingActiv
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        com.example.myapplication.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, FINE_PERMISSION_CODE);
+        }
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_queue, R.id.navigation_profile)
@@ -91,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         recreate();
+    }
+
+    public void openCreateAccountActivity(ActivityResultLauncher<Intent> launcher){
+        Intent intent = new Intent(this, CreateAccountActivity.class);
+        launcher.launch(intent);
     }
 
     public void openOrderDetailsActivity(String path, ActivityResultLauncher<Intent> launcher){
