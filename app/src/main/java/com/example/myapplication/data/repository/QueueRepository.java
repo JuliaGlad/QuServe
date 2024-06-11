@@ -69,7 +69,7 @@ public class QueueRepository {
             docRef.set(hashMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -125,7 +125,7 @@ public class QueueRepository {
                         emitter.onError(new Throwable(task.getException()));
                     }
                 });
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 emitter.onError(new Throwable(e.getMessage()));
             }
         });
@@ -207,7 +207,7 @@ public class QueueRepository {
             docRef.update(QUEUE_IN_PROGRESS, "").addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -225,8 +225,8 @@ public class QueueRepository {
             docRef.update(QUEUE_PARTICIPANTS_LIST, FieldValue.arrayRemove(service.auth.getCurrentUser().getUid()))
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            service.auth.getCurrentUser().delete().addOnCompleteListener(task1 -> emitter.onComplete());
-                        }else {
+                            emitter.onComplete();
+                        } else {
                             emitter.onError(new Throwable(task.getException()));
                         }
                     });
@@ -253,7 +253,7 @@ public class QueueRepository {
                             Log.i("Completed finish queue", "completed");
                         }
                     });
-                }else {
+                } else {
                     emitter.onError(new Throwable(taskGet.getException()));
                 }
             });
@@ -266,7 +266,7 @@ public class QueueRepository {
                     .delete().addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             emitter.onComplete();
-                        }else {
+                        } else {
                             emitter.onError(new Throwable(task.getException()));
                         }
                     });
@@ -280,7 +280,7 @@ public class QueueRepository {
             docRef.addSnapshotListener((value, error) -> {
                 if (value != null && !value.get(QUEUE_PARTICIPANTS_LIST).toString().contains(userId) && !value.getString(QUEUE_IN_PROGRESS).contains(userId)) {
                     emitter.onComplete();
-                } else if (value == null){
+                } else if (value == null) {
                     emitter.onError(new Throwable("Value is null"));
                 }
             });
@@ -351,7 +351,7 @@ public class QueueRepository {
             docRef.set(userQueue).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(path);
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -383,7 +383,7 @@ public class QueueRepository {
             reference.putBytes(data).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -406,7 +406,7 @@ public class QueueRepository {
             local.getDownloadUrl().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onSuccess(new ImageDto(task.getResult()));
-                }else {
+                } else {
                     emitter.onSuccess(new ImageDto(Uri.EMPTY));
                 }
             });

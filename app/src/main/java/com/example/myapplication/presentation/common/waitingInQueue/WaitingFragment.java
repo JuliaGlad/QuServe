@@ -2,14 +2,19 @@ package com.example.myapplication.presentation.common.waitingInQueue;
 
 import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_ESTIMATED_TIME;
 import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_PEOPLE_BEFORE_YOU;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -41,6 +46,7 @@ public class WaitingFragment extends Fragment {
     private WaitingViewModel viewModel;
     private FragmentWaitingBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
+    private String name;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,6 +64,16 @@ public class WaitingFragment extends Fragment {
         setupObserves();
         setMainAdapter();
         initCloseButton();
+        handleBackButtonPressed();
+    }
+
+    private void handleBackButtonPressed() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        });
     }
 
     private void sendNotification() {
@@ -67,7 +83,16 @@ public class WaitingFragment extends Fragment {
     }
 
     private void initCloseButton() {
-        binding.buttonBack.setOnClickListener(v -> requireActivity().finish());
+        binding.buttonBack.setOnClickListener(v -> {
+            finish();
+        });
+    }
+
+    private void finish() {
+        Intent intent = new Intent();
+        intent.putExtra(QUEUE_NAME_KEY, name);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
     }
 
     private void setMainAdapter() {
@@ -81,6 +106,7 @@ public class WaitingFragment extends Fragment {
         LeaveQueueDialogFragment dialogFragment = new LeaveQueueDialogFragment();
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "LEAVE_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
+            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         });
     }
@@ -98,7 +124,8 @@ public class WaitingFragment extends Fragment {
             if (state instanceof WaitingState.Success) {
                 WaitingModel model = ((WaitingState.Success) state).data;
                 List<String> participantsList = model.getParticipants();
-                binding.queueName.setText(model.getName());
+                name = model.getName();
+                binding.queueName.setText(name);
                 int peopleBeforeSize = 0, midTime = 0, startMidTime = Integer.parseInt(model.getMidTime());
                 for (int i = 0; i < participantsList.size(); i++) {
                     if (viewModel.checkParticipantsIndex(participantsList, i)) {

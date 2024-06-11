@@ -68,7 +68,10 @@ public class HomeBasisUserFragment extends Fragment {
     private HomeBasisUserViewModel viewModel;
     private FragmentHomeBasisUserBinding binding;
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
-    private ActivityResultLauncher<Intent> openMenuLauncher, orderDetailsLauncher, createQueueLauncher, queueDetailsLauncher;
+    private ActivityResultLauncher<Intent>
+            openMenuLauncher, orderDetailsLauncher,
+            createQueueLauncher, queueDetailsLauncher,
+            joinLauncher, waitingLauncher;
     private final List<DelegateItem> delegates = new ArrayList<>();
     private final MainAdapter adapter = new MainAdapter();
     private QueueBasicUserHomeModel participate, own, visitor;
@@ -83,8 +86,66 @@ public class HomeBasisUserFragment extends Fragment {
         initOrderDetailsLauncher();
         initCreateQueueLauncher();
         initQueueDetailsLauncher();
+        initJoinLauncher();
+        initWaitingLauncher();
     }
 
+    private void initWaitingLauncher() {
+        waitingLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data == null) {
+                            removeParticipateQueue();
+                        }
+                    }
+                });
+    }
+
+    private void removeParticipateQueue() {
+        for (int i = 0; i < delegates.size(); i++) {
+            if (delegates.get(i) instanceof HomeActionButtonDelegateItem) {
+                HomeActionButtonModel model = ((HomeActionButtonDelegateItem) delegates.get(i)).content();
+                if (model.getType().equals(PARTICIPANT)) {
+                    if (delegates.size() > 3) {
+                        delegates.remove(i);
+                        adapter.notifyItemRemoved(i);
+                        break;
+                    } else {
+                        int size = delegates.size();
+                        delegates.clear();
+                        adapter.notifyItemRangeRemoved(0, size);
+                        initUserNoActionsRecycler(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private void initJoinLauncher() {
+        joinLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String name = data.getStringExtra(QUEUE_NAME_KEY);
+                            if (!delegates.isEmpty()) {
+                                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, name, R.string.queue_participant, PARTICIPANT,
+                                        () -> ((MainActivity) requireActivity()).launchQueueWaitingActivity(waitingLauncher))));
+                                adapter.notifyItemInserted(delegates.size() - 1);
+                            } else {
+                                addBasicActionsDelegates();
+                                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, name, R.string.queue_participant, PARTICIPANT,
+                                        () -> ((MainActivity) requireActivity()).launchQueueWaitingActivity(waitingLauncher))));
+                                adapter.submitList(delegates);
+                                adapter.onCurrentListChanged(adapter.getCurrentList(), delegates);
+                            }
+                        } else {
+                            removeParticipateQueue();
+                        }
+                    }
+                });
+    }
 
 
     @Override
@@ -325,15 +386,14 @@ public class HomeBasisUserFragment extends Fragment {
                         })));
             }
         }
-
-        if (participate != null) {
-            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, participate.getName(), R.string.queue_participant, PARTICIPANT,
-                    () -> ((MainActivity) requireActivity()).openQueueWaitingActivity())));
+        if (own != null) {
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, own.getName(), R.string.queue_owner, OWNER,
+                    () -> ((MainActivity) requireActivity()).launchQueueWaitingActivity(queueDetailsLauncher))));
         }
 
-        if (own != null) {
-            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, own.getName(), R.string.queue_owner, OWNER,
-                    () -> ((MainActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher))));
+        if (participate != null) {
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, participate.getName(), R.string.queue_participant, PARTICIPANT,
+                    () -> ((MainActivity) requireActivity()).launchQueueWaitingActivity(waitingLauncher))));
         }
 
         if (restaurantVisitor != null) {
@@ -359,7 +419,7 @@ public class HomeBasisUserFragment extends Fragment {
             if (result.getContents() != null) {
                 Intent intent = new Intent(requireContext(), JoinQueueActivity.class);
                 intent.putExtra(QUEUE_DATA, result.getContents());
-                requireActivity().startActivity(intent);
+                joinLauncher.launch(intent);
             }
         });
     }

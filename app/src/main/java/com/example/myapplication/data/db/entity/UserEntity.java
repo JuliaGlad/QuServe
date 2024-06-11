@@ -30,4 +30,8 @@ public class UserEntity {
         this.participateInQueue = participateInQueue;
         this.restaurantVisitor = restaurantVisitor;
     }
+
+    public void setParticipateInQueue(String participateInQueue) {
+        this.participateInQueue = participateInQueue;
+    }
 }

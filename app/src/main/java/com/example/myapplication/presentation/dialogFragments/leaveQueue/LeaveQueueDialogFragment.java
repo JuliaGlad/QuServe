@@ -35,6 +35,7 @@ public class LeaveQueueDialogFragment extends DialogFragment {
         binding.buttonLeave.setOnClickListener(v -> {
             binding.loader.setVisibility(View.VISIBLE);
             binding.buttonLeave.setEnabled(false);
+            binding.buttonLeave.setText("");
             viewModel.leaveQueue();
         });
 

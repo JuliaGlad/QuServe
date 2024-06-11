@@ -1,6 +1,6 @@
 package com.example.myapplication.data.repository.profile;
 
- import static com.example.myapplication.di.DI.service;
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.constants.Utils.ACTIVE_QUEUES_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.BACKGROUND_IMAGE;
 import static com.example.myapplication.presentation.utils.constants.Utils.BIRTHDAY_KEY;
@@ -18,15 +18,15 @@ import static com.example.myapplication.presentation.utils.constants.Utils.NOT_R
 import static com.example.myapplication.presentation.utils.constants.Utils.OWN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.PHONE_NUMBER_KEY;
- import static com.example.myapplication.presentation.utils.constants.Utils.PLACE_NAME;
- import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_IMAGES;
+import static com.example.myapplication.presentation.utils.constants.Utils.PLACE_NAME;
+import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_IMAGES;
 import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_PHOTO;
 import static com.example.myapplication.presentation.utils.constants.Utils.PROFILE_UPDATED_AT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_PARTICIPANTS_LIST;
- import static com.example.myapplication.presentation.utils.constants.Utils.SERVICE;
- import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.SERVICE;
+import static com.example.myapplication.presentation.utils.constants.Utils.TIME;
 import static com.example.myapplication.presentation.utils.constants.Utils.URI;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.USER_NAME_KEY;
@@ -34,11 +34,12 @@ import static com.example.myapplication.presentation.utils.constants.Utils.WORKE
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_EMPLOYEE;
 
- import android.net.Uri;
+import android.net.Uri;
+import android.util.Log;
 
- import androidx.annotation.NonNull;
+import androidx.annotation.NonNull;
 
- import com.example.myapplication.App;
+import com.example.myapplication.App;
 import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.dto.user.AnonymousUserDto;
 import com.example.myapplication.data.dto.user.HistoryQueueDto;
@@ -49,7 +50,7 @@ import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
- import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -69,14 +70,14 @@ import io.reactivex.rxjava3.core.Single;
 
 public class ProfileRepository {
 
-    public void CheckAnonymousUserActionsUseCase(){
+    public void CheckAnonymousUserActionsUseCase() {
         AnonymousUserDto anonymous = AnonymousUserProvider.getUser();
 
     }
 
-    public boolean isAnonymous(){
+    public boolean isAnonymous() {
         boolean isAnonymous = false;
-        if (service.auth.getCurrentUser() != null){
+        if (service.auth.getCurrentUser() != null) {
             isAnonymous = service.auth.getCurrentUser().isAnonymous();
         }
         return isAnonymous;
@@ -84,12 +85,12 @@ public class ProfileRepository {
 
     public Single<AnonymousUserDto> getAnonymousUser() {
         return Single.create(emitter -> {
-            AnonymousUserDto dto =AnonymousUserProvider.getUser();
+            AnonymousUserDto dto = AnonymousUserProvider.getUser();
             if (dto != null) {
                 emitter.onSuccess(dto);
             } else {
                 service.auth.signInAnonymously().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         AnonymousUserDto newUser = new AnonymousUserDto(
                                 task.getResult().getUser().getUid(),
                                 NOT_PARTICIPATE_IN_QUEUE,
@@ -289,7 +290,7 @@ public class ProfileRepository {
             CompanyUserProvider.deleteAll();
             UserDatabaseProvider.deleteUser();
             service.auth.signInAnonymously().addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     AnonymousUserProvider.insertUser(new AnonymousUserDto(
                             service.auth.getCurrentUser().getUid(),
                             NOT_PARTICIPATE_IN_QUEUE,
@@ -358,7 +359,7 @@ public class ProfileRepository {
     }
 
     @NonNull
-    private  Map<String, Object> getUserMap(String email, String userName) {
+    private Map<String, Object> getUserMap(String email, String userName) {
         Map<String, Object> user = new HashMap<>();
 
         user.put(OWN_QUEUE, NOT_QUEUE_OWNER);
@@ -426,8 +427,9 @@ public class ProfileRepository {
 
     public Single<UserDto> getUserData() {
         UserDto localUser = UserDatabaseProvider.getUser();
-        if (localUser != null ) {
+        if (localUser != null) {
             return Single.create(emitter -> {
+                Log.i("Success", "get user data");
                 emitter.onSuccess(localUser);
             });
         } else {
@@ -449,6 +451,7 @@ public class ProfileRepository {
                                             document.getString(IS_RESTAURANT_VISITOR)
                                     );
                                     UserDatabaseProvider.insertUser(userDto);
+                                    Log.i("Success", "get user data");
                                     emitter.onSuccess(userDto);
                                 }
                             });
@@ -510,17 +513,20 @@ public class ProfileRepository {
     }
 
     public Completable updateParticipateInQueue(String path) {
-        DocumentReference docRef = service.fireStore.collection(USER_LIST).document(service.auth.getCurrentUser().getUid());
+        DocumentReference docRef = service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid());
         if (!service.auth.getCurrentUser().isAnonymous()) {
             return Completable.create(emitter -> {
-                docRef.update(PARTICIPATE_IN_QUEUE, path).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        UserDatabaseProvider.updateParticipateInQueue(path);
-                        emitter.onComplete();
-                    } else {
-                        emitter.onError(new Throwable(task.getException()));
-                    }
-                });
+                docRef.update(PARTICIPATE_IN_QUEUE, path)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                UserDatabaseProvider.updateParticipateInQueue(path);
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
+                            }
+                        });
             });
         } else {
             return Completable.create(emitter -> {
@@ -689,21 +695,21 @@ public class ProfileRepository {
 
         public Single<ImageDto> getProfileImage() {
             return Single.create(emitter -> {
-                        StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
-                        try {
-                            local.getDownloadUrl().addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    Uri uri = task.getResult();
-                                    emitter.onSuccess(new ImageDto(uri));
-                                } else {
-                                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
-                                }
-                            });
-                        } catch (RuntimeExecutionException e) {
+                StorageReference local = service.storageReference.child(PROFILE_IMAGES).child(PROFILE_PHOTO + service.auth.getCurrentUser().getUid());
+                try {
+                    local.getDownloadUrl().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Uri uri = task.getResult();
+                            emitter.onSuccess(new ImageDto(uri));
+                        } else {
                             emitter.onSuccess(new ImageDto(Uri.EMPTY));
                         }
-
                     });
+                } catch (RuntimeExecutionException e) {
+                    emitter.onSuccess(new ImageDto(Uri.EMPTY));
+                }
+
+            });
         }
 
         public Completable uploadProfileImageToFireStorage(Uri imageUri) {

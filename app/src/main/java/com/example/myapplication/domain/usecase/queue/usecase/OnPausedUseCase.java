@@ -7,6 +7,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 public class OnPausedUseCase {
     public boolean invoke(DocumentSnapshot value){
-        return !value.getString(QUEUE_IN_PROGRESS).contains(PAUSED);
+        if (value != null){
+            String inProgress = value.getString(QUEUE_IN_PROGRESS);
+            if (inProgress != null) {
+                return !inProgress.contains(PAUSED);
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+
     }
 }

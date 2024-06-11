@@ -1,12 +1,18 @@
 package com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -18,22 +24,47 @@ import com.example.myapplication.presentation.common.JoinQueueFragment.JoinQueue
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.model.JoinQueueModel;
 import com.example.myapplication.presentation.common.JoinQueueFragment.joinQueue.state.JoinQueueState;
 import com.example.myapplication.presentation.dialogFragments.wronQrCode.WrongQrCodeDialogFragment;
+import com.journeyapps.barcodescanner.ScanContract;
 
 public class JoinQueueFragment extends Fragment {
 
     private JoinQueueViewModel viewModel;
     private FragmentJoinQueueBinding binding;
     private String queueData;
+    private ActivityResultLauncher<Intent> launcher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(JoinQueueViewModel.class);
+        queueData = requireActivity().getIntent().getStringExtra(QUEUE_DATA);
+        viewModel.getQueueData(queueData);
+        initLauncher();
+    }
+
+    private void initLauncher() {
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Intent intent = new Intent();
+                            String name = data.getStringExtra(QUEUE_NAME_KEY);
+                            intent.putExtra(QUEUE_NAME_KEY, name);
+                            requireActivity().setResult(RESULT_OK, intent);
+                            requireActivity().finish();
+                        } else {
+                            requireActivity().setResult(RESULT_OK);
+                            requireActivity().finish();
+                        }
+                    }
+                });
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-
-        viewModel = new ViewModelProvider(this).get(JoinQueueViewModel.class);
-
         binding = FragmentJoinQueueBinding.inflate(inflater, container, false);
-        queueData = requireActivity().getIntent().getStringExtra(QUEUE_DATA);
-        viewModel.getQueueData(queueData);
         return binding.getRoot();
     }
 
@@ -94,8 +125,7 @@ public class JoinQueueFragment extends Fragment {
 
         viewModel.isUpdated.observe(getViewLifecycleOwner(), aBoolean -> {
             if (aBoolean){
-                requireActivity().finish();
-                ((JoinQueueActivity)requireActivity()).openWaitingActivity();
+                ((JoinQueueActivity)requireActivity()).openWaitingActivity(launcher);
             }
         });
 

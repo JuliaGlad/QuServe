@@ -1,5 +1,7 @@
 package com.example.myapplication.data.providers;
 
+import static com.example.myapplication.di.DI.service;
+
 import android.util.Log;
 
 import com.example.myapplication.App;
@@ -88,7 +90,7 @@ public class UserDatabaseProvider {
         List<UserEntity> entities = App.getInstance().getDatabase().userDao().getUser();
         if (!entities.isEmpty()) {
             UserEntity entity = entities.get(0);
-            entity.participateInQueue = path;
+            entity.setParticipateInQueue(path);
             App.getInstance().getDatabase().userDao().update(entity);
         }
     }

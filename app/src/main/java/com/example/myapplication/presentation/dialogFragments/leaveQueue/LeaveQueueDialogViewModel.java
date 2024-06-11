@@ -1,11 +1,15 @@
 package com.example.myapplication.presentation.dialogFragments.leaveQueue;
 
+import static com.example.myapplication.di.DI.service;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
+
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.myapplication.data.providers.UserDatabaseProvider;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 
