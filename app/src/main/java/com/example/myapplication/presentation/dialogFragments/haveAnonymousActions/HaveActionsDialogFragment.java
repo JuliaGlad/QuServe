@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.myapplication.databinding.DialogHaveAnonymousActionsBinding;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class HaveAnonymousActionsDialogFragment extends DialogFragment {
+public class HaveActionsDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

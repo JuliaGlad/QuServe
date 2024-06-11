@@ -23,6 +23,7 @@ import com.example.myapplication.databinding.FragmentPrivacySettingsBinding;
 import com.example.myapplication.presentation.dialogFragments.changeEmail.ChangeEmailDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.deleteAccount.DeleteAccountDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.emailUpdateSuccessful.EmailUpdateSuccessfulDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.passwordUpdateSuccessful.PasswordUpdateSuccessfulDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.updatePasswordDialog.UpdatePasswordDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verifyBeforeUpdateDialogFragment.VerifyBeforeUpdateDialogFragment;
@@ -97,15 +98,7 @@ public class PrivacySettingsFragment extends Fragment {
 
         })));
         delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(3, R.drawable.ic_delete, R.string.delete_account, () -> {
-
-            DeleteAccountDialogFragment dialogFragment = new DeleteAccountDialogFragment();
-            dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_ACCOUNT_DIALOG");
-            DialogDismissedListener listener = bundle -> {
-                SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
-                requireActivity().finish();
-            };
-            dialogFragment.onDismissListener(listener);
+            viewModel.getUserActions();
 
         })));
         mainAdapter.submitList(delegates);
@@ -123,6 +116,24 @@ public class PrivacySettingsFragment extends Fragment {
             if (aBoolean){
                 EmailUpdateSuccessfulDialogFragment dialogFragment = new EmailUpdateSuccessfulDialogFragment();
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "SUCCESS_DIALOG");
+            }
+        });
+
+        viewModel.haveActions.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (!aBoolean){
+                    DeleteAccountDialogFragment dialogFragment = new DeleteAccountDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_ACCOUNT_DIALOG");
+                    DialogDismissedListener listener = bundle -> {
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
+                        requireActivity().finish();
+                    };
+                    dialogFragment.onDismissListener(listener);
+                }else {
+                    HaveActionsDialogFragment dialogFragment = new HaveActionsDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ACTIONS_DIALOG");
+                }
             }
         });
 

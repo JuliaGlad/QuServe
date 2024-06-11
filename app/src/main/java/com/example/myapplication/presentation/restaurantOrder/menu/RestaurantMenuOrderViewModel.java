@@ -45,6 +45,7 @@ public class RestaurantMenuOrderViewModel extends ViewModel {
     LiveData<RestaurantMenuOrderState> state = _state;
 
     public String getRestaurantId(String tablePath) {
+
         return RestaurantOrderDI.getRestaurantIdByTablePathUseCase.invoke(tablePath);
     }
 

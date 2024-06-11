@@ -51,10 +51,12 @@ public class NotificationRestaurantForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         setupNotification();
-        tablePath = intent.getStringExtra(PATH);
-        orderId = intent.getStringExtra(ORDER_ID);
-        restaurantId = intent.getStringExtra(RESTAURANT);
-        addSnapshot(tablePath);
+        if (intent != null) {
+            tablePath = intent.getStringExtra(PATH);
+            orderId = intent.getStringExtra(ORDER_ID);
+            restaurantId = intent.getStringExtra(RESTAURANT);
+            addSnapshot(tablePath);
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 

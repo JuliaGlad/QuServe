@@ -16,6 +16,7 @@ import com.example.myapplication.domain.usecase.restaurant.order.GetCartUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderByIdsUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderModelByPathUseCase;
+import com.example.myapplication.domain.usecase.restaurant.order.GetOrderPathByTablePathAndOrderIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderRestaurantIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetOrderWithNotTakenDishesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.order.GetReadyDishesToWaiterUseCase;
@@ -31,6 +32,7 @@ public class RestaurantOrderDI {
 
     public static RestaurantOrderRepository restaurantOrderRepository = new RestaurantOrderRepository();
 
+    public static GetOrderPathByTablePathAndOrderIdUseCase getOrderPathByTablePathAndOrderIdUseCase = new GetOrderPathByTablePathAndOrderIdUseCase();
     public static AddOrderToHistoryUseCase addOrderToHistoryUseCase = new AddOrderToHistoryUseCase();
     public static OnOrderFinishedUseCase onOrderFinishedUseCase = new OnOrderFinishedUseCase();
     public static AddTableSnapshotUseCase addTableSnapshotUseCase = new AddTableSnapshotUseCase();

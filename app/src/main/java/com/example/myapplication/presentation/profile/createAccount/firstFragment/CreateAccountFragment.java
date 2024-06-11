@@ -25,11 +25,9 @@ import com.example.myapplication.R;
 
 import myapplication.android.ui.listeners.DialogDismissedListener;
 
-import com.example.myapplication.databinding.DialogHaveAnonymousActionsBinding;
 import com.example.myapplication.databinding.FragmentCreateAccountBinding;
-import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.verification.VerificationDialogFragment;
-import com.example.myapplication.presentation.profile.profileLogin.ProfileLoginFragment;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -115,7 +113,7 @@ public class CreateAccountFragment extends Fragment {
             } else {
                 binding.loader.setVisibility(View.GONE);
                 binding.buttonSignUp.setEnabled(true);
-                HaveAnonymousActionsDialogFragment dialogFragment = new HaveAnonymousActionsDialogFragment();
+                HaveActionsDialogFragment dialogFragment = new HaveActionsDialogFragment();
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ANONYMOUS_ACTIONS_DIALOG");
             }
         });

@@ -1,7 +1,10 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart.orderCreated;
 
 import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LIST;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_LOCATION;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 
@@ -74,7 +77,9 @@ public class OrderCreatedFragment extends Fragment {
     }
 
     private void navigateBack() {
-        requireActivity().setResult(Activity.RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra(ORDER_ID, orderId);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
         requireActivity().finish();
     }
 }

@@ -17,6 +17,7 @@ import com.example.myapplication.presentation.common.orderDetails.state.OrderDet
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsState;
 import com.example.myapplication.presentation.common.orderDetails.state.OrderDetailsStateModel;
 import com.example.myapplication.presentation.restaurantOrder.dishDetails.state.RestaurantOrderDishDetailsState;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.CompletableObserver;
+import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.core.SingleObserver;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -74,8 +76,8 @@ public class OrderDetailsViewModel extends ViewModel {
                             ));
                         }
 
-                        if (type.equals(VISITOR)){
-                            addSnapshot();
+                        if (type.equals(VISITOR)) {
+                            addSnapshot(path, tableId);
                         }
 
                         _state.postValue(new OrderDetailsState.Success(new OrderDetailsStateModel(
@@ -93,22 +95,30 @@ public class OrderDetailsViewModel extends ViewModel {
                 });
     }
 
-    private void addSnapshot() {
-        ProfileDI.addOrderIsFinishedSnapshot.invoke()
+    private void addSnapshot(String orderPath, String tableId) {
+        String tablePath = RestaurantTableDI.tableIdByOrderPathAndTableIdUseCase.invoke(orderPath, tableId);
+        RestaurantOrderDI.addTableSnapshotUseCase.invoke(tablePath)
                 .subscribeOn(Schedulers.io())
-                .subscribe(new CompletableObserver() {
+                .subscribe(new Observer<DocumentSnapshot>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
 
                     }
 
                     @Override
-                    public void onComplete() {
-                        _state.postValue(new OrderDetailsState.OrderIsFinished());
+                    public void onNext(@NonNull DocumentSnapshot documentSnapshot) {
+                        if (RestaurantOrderDI.onOrderFinishedUseCase.invoke(documentSnapshot)) {
+                            _state.postValue(new OrderDetailsState.OrderIsFinished());
+                        }
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
 
                     }
                 });

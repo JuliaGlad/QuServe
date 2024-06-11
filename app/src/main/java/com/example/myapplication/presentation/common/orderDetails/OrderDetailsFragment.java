@@ -42,7 +42,6 @@ public class OrderDetailsFragment extends Fragment {
     private OrderDetailsViewModel viewModel;
     private FragmentOrderDetailsBinding binding;
     private String state, path, tableId;
-    private ActivityResultLauncher<Intent> launcher;
     private final OrderDetailsAdapter adapter = new OrderDetailsAdapter();
 
     @Override
@@ -52,17 +51,6 @@ public class OrderDetailsFragment extends Fragment {
         path = requireActivity().getIntent().getStringExtra(PATH);
         state = requireActivity().getIntent().getStringExtra(STATE);
         viewModel.getOrder(path, state);
-        initLauncher();
-    }
-
-    private void initLauncher() {
-        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK) {
-                        requireActivity().setResult(RESULT_OK);
-                        requireActivity().finish();
-                    }
-                });
     }
 
     @Override

@@ -1,8 +1,15 @@
 package com.example.myapplication.presentation.home.basicUser;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
+import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_OWNER;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Utils.OWNER;
@@ -10,7 +17,9 @@ import static com.example.myapplication.presentation.utils.constants.Utils.PARTI
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +44,7 @@ import com.example.myapplication.presentation.home.basicUser.model.CompanyBasicU
 import com.example.myapplication.presentation.home.basicUser.model.HomeBasicUserModel;
 import com.example.myapplication.presentation.home.basicUser.model.QueueBasicUserHomeModel;
 import com.example.myapplication.presentation.home.basicUser.state.HomeBasicUserState;
+import com.example.myapplication.presentation.home.companyUser.HomeQueueCompanyUserFragment;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegate;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonDelegateItem;
 import com.example.myapplication.presentation.home.recycler.homeDelegates.actionButton.HomeActionButtonModel;
@@ -90,6 +100,21 @@ public class HomeBasisUserFragment extends Fragment {
         initWaitingLauncher();
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        viewModel.getUserBooleanData();
+        binding = FragmentHomeBasisUserBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setAdapter();
+        setupObserves();
+    }
+
     private void initWaitingLauncher() {
         waitingLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -110,13 +135,13 @@ public class HomeBasisUserFragment extends Fragment {
                     if (delegates.size() > 3) {
                         delegates.remove(i);
                         adapter.notifyItemRemoved(i);
-                        break;
                     } else {
                         int size = delegates.size();
                         delegates.clear();
                         adapter.notifyItemRangeRemoved(0, size);
                         initUserNoActionsRecycler(false);
                     }
+                    break;
                 }
             }
         }
@@ -147,22 +172,6 @@ public class HomeBasisUserFragment extends Fragment {
                 });
     }
 
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        viewModel.getUserBooleanData();
-        binding = FragmentHomeBasisUserBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setAdapter();
-        setupObserves();
-    }
-
     private void initQueueDetailsLauncher() {
         queueDetailsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -183,13 +192,13 @@ public class HomeBasisUserFragment extends Fragment {
                     if (delegates.size() > 3) {
                         delegates.remove(i);
                         adapter.notifyItemRemoved(i);
-                        break;
                     } else {
                         int size = delegates.size();
                         delegates.clear();
                         adapter.notifyItemRangeRemoved(0, size);
                         initUserNoActionsRecycler(false);
                     }
+                    break;
                 }
             }
         }
@@ -238,11 +247,13 @@ public class HomeBasisUserFragment extends Fragment {
                             if (delegates.get(i) instanceof HomeActionButtonDelegateItem) {
                                 HomeActionButtonModel model = ((HomeActionButtonDelegateItem) delegates.get(i)).content();
                                 if (model.getType().equals(VISITOR)) {
-                                    delegates.remove(i);
-                                    adapter.notifyItemRemoved(i);
-                                    if (delegates.size() == 2) {
+                                    if (delegates.size() > 3) {
+                                        delegates.remove(i);
+                                        adapter.notifyItemRemoved(i);
+                                    } else {
+                                        int size = delegates.size();
                                         delegates.clear();
-                                        adapter.notifyItemRangeRemoved(0, 2);
+                                        adapter.notifyItemRangeRemoved(0, size);
                                         initUserNoActionsRecycler(false);
                                     }
                                     break;
@@ -259,10 +270,34 @@ public class HomeBasisUserFragment extends Fragment {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-
+                            String id = data.getStringExtra(RESTAURANT);
+                            String path = data.getStringExtra(PATH);
+                            viewModel.getRestaurantNameById(id, path);
+                        } else {
+                            removeRestaurantVisitor();
                         }
                     }
                 });
+    }
+
+    private void removeRestaurantVisitor() {
+        for (int i = 0; i < delegates.size(); i++) {
+            if (delegates.get(i) instanceof HomeActionButtonDelegateItem) {
+                HomeActionButtonModel model = ((HomeActionButtonDelegateItem) delegates.get(i)).content();
+                if (model.getType().equals(VISITOR)) {
+                    if (delegates.size() > 3) {
+                        delegates.remove(i);
+                        adapter.notifyItemRemoved(i);
+                    } else {
+                        int size = delegates.size();
+                        delegates.clear();
+                        adapter.notifyItemRangeRemoved(0, size);
+                        initUserNoActionsRecycler(false);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     private void initRestaurantOrderLauncher() {
@@ -297,6 +332,25 @@ public class HomeBasisUserFragment extends Fragment {
         viewModel.queueIdOwner.observe(getViewLifecycleOwner(), queueId -> {
             if (queueId != null) {
                 showAlreadyOwnDialog(queueId);
+            }
+        });
+
+        viewModel.restaurantName.observe(getViewLifecycleOwner(), bundle -> {
+            if (bundle != null){
+                String name = bundle.getString(RESTAURANT_NAME);
+                String path = bundle.getString(PATH);
+
+                if (!delegates.isEmpty()) {
+                    delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(delegates.size(), name, R.string.restaurant_visitor, VISITOR,
+                            () -> ((MainActivity) requireActivity()).openOrderDetailsActivity(path, orderDetailsLauncher))));
+                    adapter.notifyItemInserted(delegates.size() - 1);
+                } else {
+                    addBasicActionsDelegates();
+                    delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(delegates.size(), name, R.string.restaurant_visitor, VISITOR,
+                            () -> ((MainActivity) requireActivity()).openOrderDetailsActivity(path, orderDetailsLauncher))));
+                    adapter.submitList(delegates);
+                    adapter.onCurrentListChanged(adapter.getCurrentList(), delegates);
+                }
             }
         });
 
@@ -379,16 +433,25 @@ public class HomeBasisUserFragment extends Fragment {
             for (CompanyBasicUserModel current : companies) {
                 delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, COMPANY_OWNER,
                         () -> {
+                            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                            sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
+                            sharedPreferences.edit().putString(COMPANY_ID, current.getId()).apply();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(COMPANY_ID, current.getId());
+
                             requireActivity().getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.nav_host_fragment_activity_main, CompanyUserFragment.class, null)
+                                    .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
+                                    .replace(R.id.home_container, HomeQueueCompanyUserFragment.class, bundle)
+                                    .setReorderingAllowed(true)
                                     .commit();
                         })));
             }
         }
         if (own != null) {
             delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, own.getName(), R.string.queue_owner, OWNER,
-                    () -> ((MainActivity) requireActivity()).launchQueueWaitingActivity(queueDetailsLauncher))));
+                    () -> ((MainActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher))));
         }
 
         if (participate != null) {

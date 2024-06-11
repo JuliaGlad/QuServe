@@ -7,9 +7,6 @@ import static com.example.myapplication.presentation.utils.constants.Utils.APP_P
 import static com.example.myapplication.presentation.utils.constants.Utils.APP_STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
-import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
-import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_QUEUE;
-import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_SERVICE;
 import static com.example.myapplication.presentation.utils.constants.Utils.SIGNED_IN;
 
 import android.content.Context;
@@ -18,7 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +26,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentProfileBinding;
 import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.dialogFragments.checkEmail.CheckEmailDialogFragment;
-import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveAnonymousActionsDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.resetPassword.ResetPasswordDialogFragment;
-import com.example.myapplication.presentation.profile.createAccount.firstFragment.CreateAccountFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.BasicUserFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.companyUser.CompanyUserFragment;
 import com.google.android.material.snackbar.Snackbar;
@@ -148,7 +142,7 @@ public class ProfileLoginFragment extends Fragment {
             } else {
                 binding.buttonSignIn.setEnabled(true);
                 binding.loader.setVisibility(View.GONE);
-                HaveAnonymousActionsDialogFragment dialogFragment = new HaveAnonymousActionsDialogFragment();
+                HaveActionsDialogFragment dialogFragment = new HaveActionsDialogFragment();
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ACTIONS_DIALOG");
             }
         });

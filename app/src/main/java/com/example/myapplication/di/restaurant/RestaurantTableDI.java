@@ -6,6 +6,7 @@ import com.example.myapplication.domain.usecase.restaurant.tables.CheckTableOrde
 import com.example.myapplication.domain.usecase.restaurant.tables.DeleteTableUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.GetRestaurantTablesUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.GetSingleTableByIdUseCase;
+import com.example.myapplication.domain.usecase.restaurant.tables.GetTableIdByOrderPathAndTableIdUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.GetTableIdByPathUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.images.DeleteTableQrCodeJpgUseCase;
 import com.example.myapplication.domain.usecase.restaurant.tables.images.DeleteTableQrCodePdfUseCase;
@@ -19,6 +20,7 @@ public class RestaurantTableDI {
     public static RestaurantTablesRepository restaurantTablesRepository = new RestaurantTablesRepository();
     public static RestaurantTablesRepository.TableImages tableImages = new RestaurantTablesRepository.TableImages();
 
+    public static GetTableIdByOrderPathAndTableIdUseCase tableIdByOrderPathAndTableIdUseCase = new GetTableIdByOrderPathAndTableIdUseCase();
     public static GetTableIdByPathUseCase getTableIdByPathUseCase = new GetTableIdByPathUseCase();
     public static CheckTableOrderUseCase checkTableOrderUseCase = new CheckTableOrderUseCase();
     public static AddRestaurantTablesUseCase addRestaurantTablesUseCase = new AddRestaurantTablesUseCase();

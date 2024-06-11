@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.restaurantOrder.menu;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 
 import android.content.Intent;
@@ -75,7 +77,10 @@ public class RestaurantMenuOrderFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         if (result.getData() != null) {
-                            requireActivity().setResult(RESULT_OK);
+                            Intent intent = new Intent();
+                            intent.putExtra(PATH, result.getData().getStringExtra(PATH));
+                            intent.putExtra(RESTAURANT, restaurantId);
+                            requireActivity().setResult(RESULT_OK, intent);
                             requireActivity().finish();
                         }
                     }
@@ -246,10 +251,8 @@ public class RestaurantMenuOrderFragment extends Fragment {
                         current.getPrice(),
                         null,
                         current.getTask(),
-                        () -> {
-                            ((RestaurantOrderMenuActivity) requireActivity())
-                                    .openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId(), launcher);
-                        }
+                        () -> ((RestaurantOrderMenuActivity) requireActivity())
+                                .openRestaurantOrderDishDetailsActivity(restaurantId, tablePath, categoryId, current.getDishId(), launcher)
                 ));
             }
             if (!isDefault) {

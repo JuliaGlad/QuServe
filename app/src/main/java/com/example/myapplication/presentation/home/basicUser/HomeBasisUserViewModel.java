@@ -1,9 +1,13 @@
 package com.example.myapplication.presentation.home.basicUser;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_QUEUE_OWNER;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -14,6 +18,7 @@ import com.example.myapplication.di.company.CommonCompanyDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.common.CommonCompanyModel;
 import com.example.myapplication.domain.model.queue.QueueIdAndNameModel;
 import com.example.myapplication.domain.model.queue.QueueModel;
@@ -44,6 +49,9 @@ public class HomeBasisUserViewModel extends ViewModel {
     QueueBasicUserHomeModel restaurantVisitor = null;
     List<CompanyBasicUserModel> companies = new ArrayList<>();
 
+    private final MutableLiveData<Bundle> _restaurantName = new MutableLiveData<>(null);
+    LiveData<Bundle> restaurantName = _restaurantName;
+
     private final MutableLiveData<String> _queueIdOwner = new MutableLiveData<>(null);
     LiveData<String> queueIdOwner = _queueIdOwner;
 
@@ -58,6 +66,31 @@ public class HomeBasisUserViewModel extends ViewModel {
 
     private final MutableLiveData<HomeBasicUserState> _state = new MutableLiveData<>(new HomeBasicUserState.Loading());
     LiveData<HomeBasicUserState> state = _state;
+
+    public void getRestaurantNameById(String id, String path){
+        RestaurantUserDI.getRestaurantNameByIdsUseCase.invoke(id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull String s) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(RESTAURANT, id);
+                        bundle.putString(RESTAURANT_NAME, s);
+                        bundle.putString(PATH, path);
+                        _restaurantName.postValue(bundle);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
 
     public void getUserBooleanData() {
         CommonCompanyDI.checkAnyCompanyExistUseCase.invoke()

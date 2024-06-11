@@ -207,11 +207,6 @@ public class MainActivity extends AppCompatActivity {
         launcher.launch(intent);
     }
 
-    public void openQueueWaitingActivity() {
-        Intent intent = new Intent(this, WaitingActivity.class);
-        startActivity(intent);
-    }
-
     public void openCreateQueueActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, CreateQueueActivity.class);
         intent.putExtra(PAGE_KEY, PAGE_1);

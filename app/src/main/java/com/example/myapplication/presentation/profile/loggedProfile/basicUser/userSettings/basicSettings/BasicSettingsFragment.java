@@ -9,6 +9,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.COMPA
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentBasicSettingsBinding;
 import com.example.myapplication.presentation.dialogFragments.aboutUs.AboutUsDialogFragment;
+import com.example.myapplication.presentation.dialogFragments.haveAnonymousActions.HaveActionsDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.help.HelpDialogFragment;
 import com.example.myapplication.presentation.dialogFragments.logout.LogoutDialogFragment;
 import com.example.myapplication.presentation.profile.loggedProfile.basicUser.userSettings.basicSettings.model.SettingsUserModel;
@@ -94,39 +96,7 @@ public class BasicSettingsFragment extends Fragment {
             if (state instanceof BasicSettingsState.Success) {
                 if (delegates.isEmpty()) {
                     SettingsUserModel model = ((BasicSettingsState.Success) state).data;
-
-                    delegates.add(new SettingsUserItemDelegateItem(new SettingsUserItemModel(1, model.getName(), model.getEmail(), model.getUri())));
-                    delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_shield_person, R.string.privacy_and_security, () -> {
-                        NavHostFragment.findNavController(this)
-                                .navigate(R.id.action_basicSettingsFragment_to_privacySettingsFragment);
-                    })));
-                    delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
-                        HelpDialogFragment dialogFragment = new HelpDialogFragment();
-                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "HELP_DIALOG");
-                    })));
-                    delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_group, R.string.about_us, () -> {
-                        AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
-                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
-                    })));
-
-                    delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(5, R.drawable.ic_logout, R.string.logout, () -> {
-                        LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
-                        dialogFragment.show(requireActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
-                        DialogDismissedListener listener = bundle -> {
-
-                            SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-                            sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
-                            sharedPreferences.edit().putString(COMPANY_ID, null).apply();
-
-                            requireActivity().setResult(Activity.RESULT_OK);
-                            requireActivity().finish();
-                        };
-                        dialogFragment.onDismissListener(listener);
-                    })));
-
-                    mainAdapter.submitList(delegates);
-                    binding.progressLayout.getRoot().setVisibility(View.GONE);
-                    binding.errorLayout.errorLayout.setVisibility(View.GONE);
+                    initRecycler(model);
                 }
             } else if (state instanceof BasicSettingsState.Loading) {
                 binding.progressLayout.getRoot().setVisibility(View.VISIBLE);
@@ -135,6 +105,53 @@ public class BasicSettingsFragment extends Fragment {
             }
         });
 
+        viewModel.haveActions.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (aBoolean != null){
+                if (!aBoolean){
+                    LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
+                    DialogDismissedListener listener = bundle -> {
+
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                        sharedPreferences.edit().putString(APP_STATE, ANONYMOUS).apply();
+                        sharedPreferences.edit().putString(COMPANY_ID, null).apply();
+
+                        requireActivity().setResult(Activity.RESULT_OK);
+                        requireActivity().finish();
+                    };
+                    dialogFragment.onDismissListener(listener);
+                } else {
+                    HaveActionsDialogFragment dialogFragment = new HaveActionsDialogFragment();
+                    dialogFragment.show(requireActivity().getSupportFragmentManager(), "HAVE_ACTIONS_DIALOG");
+                }
+            }
+        });
+
+    }
+
+    private void initRecycler(SettingsUserModel model) {
+        delegates.add(new SettingsUserItemDelegateItem(new SettingsUserItemModel(1, model.getName(), model.getEmail(), model.getUri())));
+        delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(2, R.drawable.ic_shield_person, R.string.privacy_and_security, () -> {
+            viewModel.setArgumentsNull();
+            NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_basicSettingsFragment_to_privacySettingsFragment);
+        })));
+        delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(3, R.drawable.ic_help, R.string.help, () -> {
+            HelpDialogFragment dialogFragment = new HelpDialogFragment();
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "HELP_DIALOG");
+        })));
+        delegates.add(new ServiceItemDelegateItem(new ServiceItemModel(4, R.drawable.ic_group, R.string.about_us, () -> {
+            AboutUsDialogFragment dialogFragment = new AboutUsDialogFragment();
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), "ABOUT_US_DIALOG");
+        })));
+
+        delegates.add(new ServiceRedItemDelegateItem(new ServiceRedItemModel(5, R.drawable.ic_logout, R.string.logout, () -> {
+            viewModel.getUserActions();
+        })));
+
+        mainAdapter.submitList(delegates);
+        binding.progressLayout.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private void setErrorLayout() {

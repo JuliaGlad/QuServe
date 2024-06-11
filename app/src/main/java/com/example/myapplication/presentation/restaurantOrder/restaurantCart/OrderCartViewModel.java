@@ -128,4 +128,8 @@ public class OrderCartViewModel extends ViewModel {
     public String getTableId(String path) {
         return RestaurantTableDI.getTableIdByPathUseCase.invoke(path);
     }
+
+    public String getOrderPath(String tablePath, String orderId) {
+        return RestaurantOrderDI.getOrderPathByTablePathAndOrderIdUseCase.invoke(tablePath, orderId);
+    }
 }

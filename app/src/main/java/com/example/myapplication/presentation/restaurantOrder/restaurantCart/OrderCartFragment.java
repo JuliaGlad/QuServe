@@ -1,6 +1,8 @@
 package com.example.myapplication.presentation.restaurantOrder.restaurantCart;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.ORDER_ID;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.IS_DONE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.TABLE_PATH;
@@ -8,6 +10,7 @@ import static com.example.myapplication.presentation.utils.constants.Restaurant.
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +62,14 @@ public class OrderCartFragment extends Fragment {
         launcherCreated = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        Intent intent = new Intent();
-                        intent.putExtra(IS_DONE, true);
-                        requireActivity().setResult(RESULT_OK, intent);
-                        requireActivity().finish();
+                        if (result.getData() != null) {
+                            String orderId = result.getData().getStringExtra(ORDER_ID);
+                            String orderPath = viewModel.getOrderPath(path, orderId);
+                            Intent intent = new Intent();
+                            intent.putExtra(PATH, orderPath);
+                            requireActivity().setResult(RESULT_OK, intent);
+                            requireActivity().finish();
+                        }
                     }
                 });
     }

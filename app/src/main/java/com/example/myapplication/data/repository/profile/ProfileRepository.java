@@ -138,15 +138,21 @@ public class ProfileRepository {
 
     public Completable deleteRestaurantVisitor() {
         return Completable.create(emitter -> {
-            service.fireStore.collection(USER_LIST)
-                    .document(service.auth.getCurrentUser().getUid())
-                    .update(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            emitter.onComplete();
-                        } else {
-                            emitter.onError(new Throwable(task.getException()));
-                        }
-                    });
+            if (!service.auth.getCurrentUser().isAnonymous()) {
+                service.fireStore.collection(USER_LIST)
+                        .document(service.auth.getCurrentUser().getUid())
+                        .update(IS_RESTAURANT_VISITOR, NOT_RESTAURANT_VISITOR).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                UserDatabaseProvider.updateRestaurantVisitor(NOT_RESTAURANT_VISITOR);
+                                emitter.onComplete();
+                            } else {
+                                emitter.onError(new Throwable(task.getException()));
+                            }
+                        });
+            } else {
+                AnonymousUserProvider.updateRestaurantVisitor(NOT_RESTAURANT_VISITOR);
+                emitter.onComplete();
+            }
         });
     }
 
@@ -552,7 +558,7 @@ public class ProfileRepository {
             });
         } else {
             return Completable.create(emitter -> {
-                AnonymousUserProvider.updateParticipateInQueue(path);
+                AnonymousUserProvider.updateRestaurantVisitor(path);
                 emitter.onComplete();
             });
 

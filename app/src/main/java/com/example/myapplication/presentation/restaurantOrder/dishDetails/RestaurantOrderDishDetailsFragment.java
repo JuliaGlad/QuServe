@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.restaurantOrder.dishDetails;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.CATEGORY_ID;
@@ -86,8 +87,9 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         if (result.getData() != null){
+                            String path = result.getData().getStringExtra(PATH);
                             Intent intent = new Intent();
-                            intent.putExtra(IS_DONE, true);
+                            intent.putExtra(PATH, path);
                             requireActivity().setResult(RESULT_OK, intent);
                             requireActivity().finish();
                         }else {

@@ -1,7 +1,12 @@
 package com.example.myapplication.presentation.home.anonymousUser;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.PATH;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
+
+import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.myapplication.di.QueueDI;
 import com.example.myapplication.di.profile.ProfileDI;
 import com.example.myapplication.di.restaurant.RestaurantOrderDI;
+import com.example.myapplication.di.restaurant.RestaurantUserDI;
 import com.example.myapplication.domain.model.profile.AnonymousUserModel;
 import com.example.myapplication.domain.model.queue.QueueNameModel;
 import com.example.myapplication.domain.model.restaurant.order.OrderDetailsModel;
@@ -22,6 +28,9 @@ import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class AnonymousUserViewModel extends ViewModel {
+
+    private final MutableLiveData<Bundle> _restaurantName = new MutableLiveData<>(null);
+    LiveData<Bundle> restaurantName = _restaurantName;
 
     private final MutableLiveData<AnonymousUserState> _state = new MutableLiveData<>(new AnonymousUserState.Loading());
     LiveData<AnonymousUserState> state = _state;
@@ -99,5 +108,30 @@ public class AnonymousUserViewModel extends ViewModel {
         } else {
             _state.postValue(new AnonymousUserState.RestaurantDataGot(path));
         }
+    }
+
+    public void getRestaurantNameById(String id, String path) {
+        RestaurantUserDI.getRestaurantNameByIdsUseCase.invoke(id)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<String>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull String s) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(RESTAURANT, id);
+                        bundle.putString(RESTAURANT_NAME, s);
+                        bundle.putString(PATH, path);
+                        _restaurantName.postValue(bundle);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 }
