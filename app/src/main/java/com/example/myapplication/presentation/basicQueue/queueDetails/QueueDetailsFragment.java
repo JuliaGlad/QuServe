@@ -4,10 +4,13 @@ import static com.example.myapplication.presentation.utils.constants.Utils.APP_S
 import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +50,9 @@ public class QueueDetailsFragment extends Fragment {
 
     private QueueDetailsViewModel viewModel;
     private FragmentQueueDetailsBinding binding;
-    private String queueId;
-    private List<DelegateItem> list = new ArrayList<>();;
+    private String queueId, queueName;
+    private List<DelegateItem> list = new ArrayList<>();
+    ;
     private final MainAdapter mainAdapter = new MainAdapter();
 
     @Override
@@ -75,14 +79,21 @@ public class QueueDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+                navigateBack();
             }
         });
     }
 
+    private void navigateBack() {
+        Intent intent = new Intent();
+        intent.putExtra(QUEUE_NAME_KEY, queueName);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
+    }
+
     private void setupObserves() {
         viewModel.isPaused.observe(getViewLifecycleOwner(), queueId -> {
-            if (queueId != null){
+            if (queueId != null) {
                 Bundle bundle = new Bundle();
                 bundle.putString(QUEUE_ID, queueId);
                 bundle.putBoolean(IS_DEFAULT, false);
@@ -92,19 +103,20 @@ public class QueueDetailsFragment extends Fragment {
         });
 
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof QueueDetailsState.Success){
+            if (state instanceof QueueDetailsState.Success) {
                 if (list.isEmpty()) {
                     QueueDetailsModel model = ((QueueDetailsState.Success) state).data;
-                    binding.queueName.setText(model.getName());
+                    queueName = model.getName();
+                    binding.queueName.setText(queueName);
                     Uri uri = model.getUri();
                     queueId = model.getId();
                     initRecycler(uri, queueId);
                 }
 
-            } else if (state instanceof QueueDetailsState.Loading){
+            } else if (state instanceof QueueDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
-            } else if (state instanceof QueueDetailsState.Error){
+            } else if (state instanceof QueueDetailsState.Error) {
                 setErrorLayout();
             }
         });
@@ -138,7 +150,7 @@ public class QueueDetailsFragment extends Fragment {
 
     private void initBackButton() {
         binding.imageButton.setOnClickListener(v -> {
-            requireActivity().finish();
+            navigateBack();
         });
     }
 
@@ -168,6 +180,7 @@ public class QueueDetailsFragment extends Fragment {
         final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, BASIC, null);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
+            requireActivity().setResult(Activity.RESULT_OK);
             requireActivity().finish();
         });
     }
@@ -183,8 +196,8 @@ public class QueueDetailsFragment extends Fragment {
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue,
                         R.string.pause_queue_description, R.drawable.ic_time, () -> {
-                            showTimePickerDialog(queueId);
-                        })),
+                    showTimePickerDialog(queueId);
+                })),
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(5, R.string.participants_list, R.string.participants_list_description, R.drawable.ic_group, () -> {
                     NavHostFragment.findNavController(this)

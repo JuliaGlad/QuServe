@@ -21,13 +21,11 @@ import com.example.myapplication.presentation.utils.countdownTimer.TimerService;
 
 public class QueueDetailsActivity extends AppCompatActivity {
 
-    private ActivityQueueDetailsBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityQueueDetailsBinding.inflate(getLayoutInflater());
+        com.example.myapplication.databinding.ActivityQueueDetailsBinding binding = ActivityQueueDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbarQueueDetails);

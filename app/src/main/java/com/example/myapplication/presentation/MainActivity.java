@@ -197,9 +197,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openQueueDetailsActivity() {
+    public void openQueueDetailsActivity(ActivityResultLauncher<Intent> launcher) {
         Intent intent = new Intent(this, QueueDetailsActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openQueueWaitingActivity() {
@@ -207,10 +207,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openCreateQueueActivity(){
+    public void openCreateQueueActivity(ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, CreateQueueActivity.class);
         intent.putExtra(PAGE_KEY, PAGE_1);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
     public void openQueueManagerActivity(String companyId){

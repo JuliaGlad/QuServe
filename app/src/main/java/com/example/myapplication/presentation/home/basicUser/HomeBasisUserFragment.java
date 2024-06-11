@@ -1,15 +1,18 @@
 package com.example.myapplication.presentation.home.basicUser;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.VISITOR;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_OWNER;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPANT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
-import static com.example.myapplication.presentation.utils.constants.Restaurant.RESTAURANT_DATA;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,9 +68,10 @@ public class HomeBasisUserFragment extends Fragment {
     private HomeBasisUserViewModel viewModel;
     private FragmentHomeBasisUserBinding binding;
     private ActivityResultLauncher<ScanOptions> joinQueueLauncher, restaurantOrderLauncher;
-    private ActivityResultLauncher<Intent> openMenuLauncher, orderDetailsLauncher;
+    private ActivityResultLauncher<Intent> openMenuLauncher, orderDetailsLauncher, createQueueLauncher, queueDetailsLauncher;
     private final List<DelegateItem> delegates = new ArrayList<>();
     private final MainAdapter adapter = new MainAdapter();
+    private QueueBasicUserHomeModel participate, own, visitor;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +81,11 @@ public class HomeBasisUserFragment extends Fragment {
         initRestaurantOrderLauncher();
         initOpenMenuLauncher();
         initOrderDetailsLauncher();
+        initCreateQueueLauncher();
+        initQueueDetailsLauncher();
     }
+
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -90,7 +98,75 @@ public class HomeBasisUserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setAdapter();
         setupObserves();
+    }
+
+    private void initQueueDetailsLauncher() {
+        queueDetailsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data == null) {
+                            removeOwnQueue();
+                        }
+                    }
+                });
+    }
+
+    private void removeOwnQueue() {
+        for (int i = 0; i < delegates.size(); i++) {
+            if (delegates.get(i) instanceof HomeActionButtonDelegateItem) {
+                HomeActionButtonModel model = ((HomeActionButtonDelegateItem) delegates.get(i)).content();
+                if (model.getType().equals(OWNER)) {
+                    if (delegates.size() > 3) {
+                        delegates.remove(i);
+                        adapter.notifyItemRemoved(i);
+                        break;
+                    } else {
+                        int size = delegates.size();
+                        delegates.clear();
+                        adapter.notifyItemRangeRemoved(0, size);
+                        initUserNoActionsRecycler(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private void initCreateQueueLauncher() {
+        createQueueLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            String name = data.getStringExtra(QUEUE_NAME_KEY);
+                            if (!delegates.isEmpty()) {
+                                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, name, R.string.queue_owner, OWNER,
+                                        () -> ((MainActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher))));
+                                adapter.notifyItemInserted(delegates.size() - 1);
+                            } else {
+
+                                addBasicActionsDelegates();
+                                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, name, R.string.queue_owner, OWNER,
+                                        () -> ((MainActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher))));
+                                adapter.submitList(delegates);
+                                adapter.onCurrentListChanged(adapter.getCurrentList(), delegates);
+                            }
+                        } else {
+                            removeOwnQueue();
+                        }
+                    }
+                });
+    }
+
+    private void setAdapter() {
+        adapter.addDelegate(new SquareButtonDelegate());
+        adapter.addDelegate(new HomeActionButtonDelegate());
+        adapter.addDelegate(new RestaurantOrderButtonDelegate());
+        adapter.addDelegate(new AdviseBoxDelegate());
+        adapter.addDelegate(new ButtonWithDescriptionDelegate());
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void initOrderDetailsLauncher() {
@@ -98,12 +174,12 @@ public class HomeBasisUserFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         for (int i = 0; i < delegates.size(); i++) {
-                            if (delegates.get(i) instanceof  HomeActionButtonDelegateItem){
+                            if (delegates.get(i) instanceof HomeActionButtonDelegateItem) {
                                 HomeActionButtonModel model = ((HomeActionButtonDelegateItem) delegates.get(i)).content();
-                                if (model.getType().equals(VISITOR)){
+                                if (model.getType().equals(VISITOR)) {
                                     delegates.remove(i);
                                     adapter.notifyItemRemoved(i);
-                                    if (delegates.size() == 2){
+                                    if (delegates.size() == 2) {
                                         delegates.clear();
                                         adapter.notifyItemRangeRemoved(0, 2);
                                         initUserNoActionsRecycler(false);
@@ -166,8 +242,12 @@ public class HomeBasisUserFragment extends Fragment {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
             if (state instanceof HomeBasicUserState.Success) {
                 HomeBasicUserModel model = ((HomeBasicUserState.Success) state).data;
+
                 if (model != null) {
-                    initUserRecycler(model.getModels(), model.getParticipateQueue(), model.getOwnQueue(), model.getRestaurantVisitor());
+                    participate = model.getParticipateQueue();
+                    own = model.getOwnQueue();
+                    visitor = model.getRestaurantVisitor();
+                    initUserRecycler(model.getModels());
                 } else {
                     initUserNoActionsRecycler(true);
                 }
@@ -185,9 +265,7 @@ public class HomeBasisUserFragment extends Fragment {
     private void setErrorLayout() {
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.errorLayout.setVisibility(View.VISIBLE);
-        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> {
-            viewModel.getUserBooleanData();
-        });
+        binding.errorLayout.buttonTryAgain.setOnClickListener(v -> viewModel.getUserBooleanData());
     }
 
     private void setScanOptions(ActivityResultLauncher<ScanOptions> launcher) {
@@ -199,8 +277,17 @@ public class HomeBasisUserFragment extends Fragment {
         launcher.launch(scanOptions);
     }
 
-    private void initUserRecycler(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own, QueueBasicUserHomeModel restaurantVisitor) {
+    private void initUserRecycler(List<CompanyBasicUserModel> companies) {
 
+        addBasicActionsDelegates();
+        getActionDelegates(companies, participate, own, visitor);
+
+        adapter.submitList(delegates);
+        binding.progressBar.getRoot().setVisibility(View.GONE);
+        binding.errorLayout.errorLayout.setVisibility(View.GONE);
+    }
+
+    private void addBasicActionsDelegates() {
         delegates.add(new SquareButtonDelegateItem(new SquareButtonModel(1, R.string.join_queue, R.string.create_queue, R.drawable.qr_code, R.drawable.ic_add_queue,
                 () -> {
                     if (participate == null) {
@@ -211,34 +298,25 @@ public class HomeBasisUserFragment extends Fragment {
                 },
                 () -> {
                     if (own == null) {
-                        ((MainActivity) requireActivity()).openCreateQueueActivity();
+                        ((MainActivity) requireActivity()).openCreateQueueActivity(createQueueLauncher);
                     } else {
                         viewModel.getQueueData();
                     }
                 })));
         delegates.add(new RestaurantOrderDelegateItem(new RestaurantOrderButtonModel(3, () -> {
-            if (restaurantVisitor == null || restaurantVisitor.getName().equals(NOT_RESTAURANT_VISITOR)) {
+            if (visitor == null || visitor.getName().equals(NOT_RESTAURANT_VISITOR)) {
                 setScanOptions(restaurantOrderLauncher);
             } else {
                 AlreadyHaveOrderDialogFragment dialogFragment = new AlreadyHaveOrderDialogFragment();
                 dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_HAVE_ORDER_DIALOG");
             }
         })));
-        getActionDelegates(companies, participate, own, restaurantVisitor);
-
-        adapter.addDelegate(new SquareButtonDelegate());
-        adapter.addDelegate(new HomeActionButtonDelegate());
-        adapter.addDelegate(new RestaurantOrderButtonDelegate());
-        binding.recyclerView.setAdapter(adapter);
-        adapter.submitList(delegates);
-        binding.progressBar.getRoot().setVisibility(View.GONE);
-        binding.errorLayout.errorLayout.setVisibility(View.GONE);
     }
 
     private void getActionDelegates(List<CompanyBasicUserModel> companies, QueueBasicUserHomeModel participate, QueueBasicUserHomeModel own, QueueBasicUserHomeModel restaurantVisitor) {
         if (companies != null && !companies.isEmpty()) {
             for (CompanyBasicUserModel current : companies) {
-                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, OWNER,
+                delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, COMPANY_OWNER,
                         () -> {
                             requireActivity().getSupportFragmentManager()
                                     .beginTransaction()
@@ -249,21 +327,18 @@ public class HomeBasisUserFragment extends Fragment {
         }
 
         if (participate != null) {
-            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, participate.getName(), R.string.queue_participant, PARTICIPANT, () -> {
-                ((MainActivity) requireActivity()).openQueueWaitingActivity();
-            })));
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(2, participate.getName(), R.string.queue_participant, PARTICIPANT,
+                    () -> ((MainActivity) requireActivity()).openQueueWaitingActivity())));
         }
 
         if (own != null) {
-            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, own.getName(), R.string.queue_owner, OWNER, () -> {
-                ((MainActivity) requireActivity()).openQueueDetailsActivity();
-            })));
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, own.getName(), R.string.queue_owner, OWNER,
+                    () -> ((MainActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher))));
         }
 
         if (restaurantVisitor != null) {
-            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(4, restaurantVisitor.getName(), R.string.restaurant_visitor, VISITOR, () -> {
-                ((MainActivity) requireActivity()).openOrderDetailsActivity(restaurantVisitor.getId(), orderDetailsLauncher);
-            })));
+            delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(4, restaurantVisitor.getName(), R.string.restaurant_visitor, VISITOR,
+                    () -> ((MainActivity) requireActivity()).openOrderDetailsActivity(restaurantVisitor.getId(), orderDetailsLauncher))));
         }
     }
 
@@ -271,9 +346,8 @@ public class HomeBasisUserFragment extends Fragment {
         buildList(new DelegateItem[]{
                 new AdviseBoxDelegateItem(new AdviseBoxModel(1, R.string.home_advise_box_text)),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.join_queue), getString(R.string.scan_queue_s_qr_code_and_join_it), R.drawable.qr_code, this::setJoinQueueScanOptions)),
-                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.create_queue), getString(R.string.create_your_own_queue_so_people_can_join_it), R.drawable.ic_add_queue, () -> {
-                    ((MainActivity) requireActivity()).openCreateQueueActivity();
-                })),
+                new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.create_queue), getString(R.string.create_your_own_queue_so_people_can_join_it), R.drawable.ic_add_queue,
+                        () -> ((MainActivity) requireActivity()).openCreateQueueActivity(createQueueLauncher))),
                 new ButtonWithDescriptionDelegateItem(new ButtonWithDescriptionModel(2, getString(R.string.order_in_restaurant), getString(R.string.scan_table_s_qr_code_open_restaurant_menu_and_create_order), R.drawable.ic_create_restaurant_order,
                         () -> setScanOptions(restaurantOrderLauncher)))
         }, isDefault);
@@ -310,23 +384,17 @@ public class HomeBasisUserFragment extends Fragment {
     private void showAlreadyOwnDialog(String queueId) {
         AlreadyOwnQueueDialogFragment dialogFragment = new AlreadyOwnQueueDialogFragment(queueId);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "ALREADY_OWN_QUEUE_DIALOG");
-        dialogFragment.onDismissListener(bundle -> {
-            ((MainActivity) requireActivity()).openCreateQueueActivity();
-        });
+        dialogFragment.onDismissListener(bundle -> ((MainActivity) requireActivity()).openCreateQueueActivity(createQueueLauncher));
     }
 
     private void buildList(DelegateItem[] items, boolean isDefault) {
         List<DelegateItem> list = Arrays.asList(items);
-        adapter.addDelegate(new AdviseBoxDelegate());
-        adapter.addDelegate(new ButtonWithDescriptionDelegate());
-        if (isDefault){
-        binding.recyclerView.setAdapter(adapter);
-        binding.progressBar.getRoot().setVisibility(View.GONE);
-        binding.errorLayout.errorLayout.setVisibility(View.GONE);
-        }
         adapter.submitList(list);
-        if (!isDefault){
+        if (!isDefault) {
             adapter.onCurrentListChanged(delegates, list);
+        } else {
+            binding.progressBar.getRoot().setVisibility(View.GONE);
+            binding.errorLayout.errorLayout.setVisibility(View.GONE);
         }
     }
 }

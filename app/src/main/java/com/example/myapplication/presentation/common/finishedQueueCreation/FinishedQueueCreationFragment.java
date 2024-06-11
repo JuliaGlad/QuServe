@@ -58,7 +58,7 @@ public class FinishedQueueCreationFragment extends Fragment {
     private FinishedQueueCreationViewModel viewModel;
     private FragmentFinishedQueueCreationBinding binding;
     private String type, companyId, queueId;
-    private ActivityResultLauncher<Intent> companyQueueDetailsLauncher;
+    private ActivityResultLauncher<Intent> queueDetailsLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class FinishedQueueCreationFragment extends Fragment {
     }
 
     private void setLauncher() {
-        companyQueueDetailsLauncher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+        queueDetailsLauncher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
@@ -114,6 +114,9 @@ public class FinishedQueueCreationFragment extends Fragment {
                             intent.putExtra(QUEUE_NAME_KEY, data.getStringExtra(QUEUE_NAME_KEY));
                             intent.putExtra(QUEUE_ID, queueId);
                             requireActivity().setResult(RESULT_OK, intent);
+                            requireActivity().finish();
+                        } else {
+                            requireActivity().setResult(RESULT_OK);
                             requireActivity().finish();
                         }
                     }
@@ -173,11 +176,10 @@ public class FinishedQueueCreationFragment extends Fragment {
 
             switch (type) {
                 case BASIC:
-                    requireActivity().finish();
-                    ((CreateQueueActivity) requireActivity()).openQueueDetailsActivity();
+                    ((CreateQueueActivity) requireActivity()).openQueueDetailsActivity(queueDetailsLauncher);
                     break;
                 case COMPANY:
-                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, queueId, companyQueueDetailsLauncher);
+                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, queueId, queueDetailsLauncher);
                     break;
             }
         });

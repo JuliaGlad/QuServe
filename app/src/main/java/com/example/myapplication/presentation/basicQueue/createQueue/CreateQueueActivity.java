@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.basicQueue.createQueue;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,8 +35,8 @@ public class CreateQueueActivity extends AppCompatActivity {
         }
     }
 
-    public void openQueueDetailsActivity() {
+    public void openQueueDetailsActivity(ActivityResultLauncher<Intent> launcher) {
         Intent intent = new Intent(this, QueueDetailsActivity.class);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 }
