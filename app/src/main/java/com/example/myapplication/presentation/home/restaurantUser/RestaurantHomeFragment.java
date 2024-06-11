@@ -76,9 +76,7 @@ public class RestaurantHomeFragment extends Fragment {
                         for (int i = 0; i < recyclerItems.size(); i++) {
                             if (recyclerItems.get(i) instanceof HomeRestaurantLocationDelegateItem) {
                                 HomeRestaurantLocationModel model = (HomeRestaurantLocationModel)recyclerItems.get(i).content();
-                                Log.d("LocationId" + i, model.getLocationId());
                                 if (model.getLocationId().equals(locationId)) {
-                                    Log.d("Index recycler", i + "");
                                     recyclerItems.remove(i);
                                     adapter.notifyItemRemoved(i);
                                     break;

@@ -226,16 +226,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void openCompanyQueueDetailsActivity(String companyId, String queueId){
+    public void launchCreateCompanyQueueActivity(String companyId, ActivityResultLauncher<Intent> launcher){
+        Intent intent = new Intent(this, CreateCompanyQueueActivity.class);
+        intent.putExtra(PAGE_KEY, PAGE_1);
+        intent.putExtra(COMPANY_ID, companyId);
+        launcher.launch(intent);
+    }
+
+    public void openCompanyQueueDetailsActivity(String companyId, String queueId, ActivityResultLauncher<Intent> launcher){
         Intent intent = new Intent(this, CompanyQueueDetailsActivity.class);
         intent.putExtra(COMPANY_ID, companyId);
         intent.putExtra(QUEUE_ID, queueId);
-        startActivity(intent);
+        launcher.launch(intent);
     }
 
-    public void openChooseCompanyActivity(String state){
-        Intent intent = new Intent(this, ChooseCompanyActivity.class);
-        intent.putExtra(STATE, state);
-        startActivity(intent);
-    }
 }

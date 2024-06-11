@@ -29,6 +29,13 @@ public class AnonymousUserProvider {
                 ));
     }
 
+    public static void updateUserId(String id){
+        AnonymousUserDao userDao = App.getInstance().getDatabase().anonymousUserDao();
+        AnonymousUserEntity entity = userDao.getUser();
+        entity.setUserId(id);
+        userDao.update(entity);
+    }
+
     public static void updateParticipateInQueue(String participateInQueue){
         AnonymousUserDao userDao = App.getInstance().getDatabase().anonymousUserDao();
         AnonymousUserEntity entity = userDao.getUser();

@@ -19,6 +19,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_
 import static com.example.myapplication.presentation.utils.constants.Utils.PAGE_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_LOCATION_KEY;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKERS_LIST;
 import static com.example.myapplication.presentation.utils.constants.Utils.stringsTimeArray;
@@ -45,9 +46,11 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyQueueBinding;
+
 import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationDelegate;
 import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationDelegateItem;
 import myapplication.android.ui.recycler.ui.items.items.chooseLocation.LocationModel;
+
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegate;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerDelegateItem;
 import com.example.myapplication.presentation.companyQueue.createQueue.delegates.workers.WorkerModel;
@@ -90,7 +93,7 @@ public class CreateCompanyQueueFragment extends Fragment {
         page = requireArguments().getString(PAGE_KEY);
         companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
 
-        if (page == null){
+        if (page == null) {
             page = requireActivity().getIntent().getStringExtra(PAGE_KEY);
         }
     }
@@ -297,15 +300,16 @@ public class CreateCompanyQueueFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.isComplete.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
                 Bundle bundle = new Bundle();
                 bundle.putString(STATE, COMPANY);
                 bundle.putString(COMPANY_ID, companyId);
                 bundle.putString(QUEUE_ID, queueId);
-                bundle.putString(COMPANY_NAME, queueName);
+                bundle.putString(QUEUE_NAME_KEY, queueName);
 
                 binding.loader.setVisibility(View.GONE);
                 binding.buttonNext.setEnabled(true);
+                viewModel.setArgumentsNull();
 
                 NavHostFragment.findNavController(this)
                         .navigate(R.id.action_createCompanyQueueFragment_to_finishedQueueCreationFragment, bundle);
@@ -334,7 +338,6 @@ public class CreateCompanyQueueFragment extends Fragment {
                     requireActivity().startActivity(intent);
 
                 } catch (Exception e) {
-
                     Intent intent = new Intent();
                     intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
                     requireActivity().startActivity(intent);

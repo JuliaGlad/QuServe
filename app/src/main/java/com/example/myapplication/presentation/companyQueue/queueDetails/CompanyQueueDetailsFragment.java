@@ -2,9 +2,11 @@ package com.example.myapplication.presentation.companyQueue.queueDetails;
 
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,7 +47,7 @@ import myapplication.android.ui.recycler.ui.items.items.queueDetailsButton.Queue
 
 public class CompanyQueueDetailsFragment extends Fragment {
 
-    private String companyId, queueId;
+    private String companyId, queueId, queueName;
     private CompanyQueueDetailsViewModel viewModel;
     private FragmentCompanyQueueDetailsBinding binding;
     private List<DelegateItem> list = new ArrayList<>();
@@ -118,6 +120,10 @@ public class CompanyQueueDetailsFragment extends Fragment {
         final FinishQueueDialogFragment dialogFragment = new FinishQueueDialogFragment(queueId, COMPANY, companyId);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "FINISH_QUEUE_DIALOG");
         dialogFragment.onDismissListener(bundle -> {
+            Intent intent = new Intent();
+            intent.putExtra(IS_DEFAULT, false);
+            intent.putExtra(QUEUE_ID, queueId);
+            requireActivity().setResult(Activity.RESULT_OK, intent);
             requireActivity().finish();
         });
     }
@@ -144,8 +150,17 @@ public class CompanyQueueDetailsFragment extends Fragment {
 
     private void initBackButton() {
         binding.imageButton.setOnClickListener(v -> {
-            requireActivity().finish();
+            navigateBack();
         });
+    }
+
+    private void navigateBack() {
+        Intent intent = new Intent();
+        intent.putExtra(QUEUE_NAME_KEY, queueName);
+        intent.putExtra(QUEUE_ID, queueId);
+        intent.putExtra(IS_DEFAULT, true);
+        requireActivity().setResult(Activity.RESULT_OK, intent);
+        requireActivity().finish();
     }
 
     private void openEditQueueFragment() {
@@ -173,7 +188,8 @@ public class CompanyQueueDetailsFragment extends Fragment {
             if (state instanceof CompanyQueueDetailsState.Success) {
                 if (list.isEmpty()) {
                     CompanyQueueDetailModel model = ((CompanyQueueDetailsState.Success) state).data;
-                    binding.queueName.setText(model.getName());
+                    queueName = model.getName();
+                    binding.queueName.setText(queueName);
                     initRecyclerView(queueId, model.getUri());
                 }
             } else if (state instanceof CompanyQueueDetailsState.Loading) {
@@ -202,7 +218,7 @@ public class CompanyQueueDetailsFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                requireActivity().finish();
+              navigateBack();
             }
         });
     }

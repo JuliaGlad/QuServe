@@ -490,7 +490,6 @@ public class CompanyQueueRepository {
                                 .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
                     }
                 }
-                emitter.onComplete();
             } else {
                 emitter.onError(new Throwable(task.getException()));
             }

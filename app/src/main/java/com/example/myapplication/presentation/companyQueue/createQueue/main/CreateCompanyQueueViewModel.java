@@ -135,7 +135,6 @@ public class CreateCompanyQueueViewModel extends ViewModel {
 
                         @Override
                         public void onComplete() {
-                            setArgumentsNull();
                             _isComplete.postValue(true);
                         }
 
@@ -146,7 +145,7 @@ public class CreateCompanyQueueViewModel extends ViewModel {
                     });
 
         } catch (WriterException e) {
-            e.printStackTrace();
+            Log.e("WriterException", e.getMessage());
         }
     }
 

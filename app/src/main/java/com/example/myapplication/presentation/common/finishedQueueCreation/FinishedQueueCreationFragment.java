@@ -1,12 +1,15 @@
 package com.example.myapplication.presentation.common.finishedQueueCreation;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 import static com.example.myapplication.presentation.utils.constants.Utils.STATE;
 import static com.example.myapplication.presentation.utils.constants.Utils.stringsTimeArray;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -28,34 +33,42 @@ import androidx.work.WorkManager;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentFinishedQueueCreationBinding;
+import com.example.myapplication.presentation.MainActivity;
 import com.example.myapplication.presentation.basicQueue.createQueue.CreateQueueActivity;
 import com.example.myapplication.presentation.common.finishedQueueCreation.state.FinishedQueueState;
 import com.example.myapplication.presentation.companyQueue.createQueue.CreateCompanyQueueActivity;
+import com.example.myapplication.presentation.home.companyUser.models.QueueCompanyHomeModel;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate.HomeCompanyQueueDelegateItem;
+import com.example.myapplication.presentation.home.recycler.homeDelegates.homeQueueCompanyDelegate.HomeCompanyQueueModel;
 import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
 import com.example.myapplication.presentation.utils.workers.BasicQueueMidTimeWorker;
 import com.example.myapplication.presentation.utils.workers.CompanyQueueFinishWorker;
 import com.example.myapplication.presentation.utils.workers.CompanyQueueMidTimeWorker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import myapplication.android.ui.recycler.ui.items.items.adviseBox.AdviseBoxDelegateItem;
 
 public class FinishedQueueCreationFragment extends Fragment {
 
     private FinishedQueueCreationViewModel viewModel;
     private FragmentFinishedQueueCreationBinding binding;
-    private String type;
-    private String companyId;
-    private String queueId;
+    private String type, companyId, queueId;
+    private ActivityResultLauncher<Intent> companyQueueDetailsLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        type = getArguments().getString(STATE);
-        queueId = getArguments().getString(QUEUE_ID);
+        type = requireArguments().getString(STATE);
+        queueId = requireArguments().getString(QUEUE_ID);
         if (type.equals(COMPANY)) {
             companyId = requireActivity().getIntent().getStringExtra(COMPANY_ID);
         }
+        setLauncher();
     }
 
     @Override
@@ -91,6 +104,21 @@ public class FinishedQueueCreationFragment extends Fragment {
         }
     }
 
+    private void setLauncher() {
+        companyQueueDetailsLauncher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Intent intent = new Intent();
+                            intent.putExtra(QUEUE_NAME_KEY, data.getStringExtra(QUEUE_NAME_KEY));
+                            intent.putExtra(QUEUE_ID, queueId);
+                            requireActivity().setResult(RESULT_OK, intent);
+                            requireActivity().finish();
+                        }
+                    }
+                });
+    }
 
     private void setMainObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
@@ -149,8 +177,7 @@ public class FinishedQueueCreationFragment extends Fragment {
                     ((CreateQueueActivity) requireActivity()).openQueueDetailsActivity();
                     break;
                 case COMPANY:
-                    requireActivity().finish();
-                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, queueId);
+                    ((CreateCompanyQueueActivity) requireActivity()).openCompanyQueueDetailsActivity(companyId, queueId, companyQueueDetailsLauncher);
                     break;
             }
         });
