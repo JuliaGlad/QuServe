@@ -39,6 +39,7 @@ import com.example.myapplication.data.dto.common.ImageDto;
 import com.example.myapplication.data.providers.CompanyUserProvider;
 import com.google.android.gms.tasks.RuntimeExecutionException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -167,7 +168,7 @@ public class CompanyQueueUserRepository {
             reference.putBytes(data).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     emitter.onComplete();
-                }else {
+                } else {
                     emitter.onError(new Throwable(task.getException()));
                 }
             });
@@ -459,48 +460,69 @@ public class CompanyQueueUserRepository {
                     .collection(COMPANY_LIST)
                     .document(companyId);
 
-            docRef.collection(EMPLOYEES).get().addOnCompleteListener(taskGet -> {
-                if (taskGet.isSuccessful()) {
-                    List<DocumentSnapshot> snapshots = taskGet.getResult().getDocuments();
-                    for (DocumentSnapshot current : snapshots) {
-                        String currentId = current.getId();
-                        service.fireStore
-                                .collection(USER_LIST)
-                                .document(currentId)
-                                .collection(COMPANY_EMPLOYEE)
-                                .document(companyId)
-                                .delete();
-                    }
+            deleteFromOwnerAndEmployees(companyId, emitter, docRef);
+            deleteCompanyQueues(companyId);
+            deleteCompanyDocument(companyId, emitter, docRef);
+        });
+    }
 
-                } else {
-                    emitter.onError(new Throwable(taskGet.getException()));
-                }
-            });
-
-            service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId)
-                    .get().addOnCompleteListener(taskQueues -> {
-                        if (taskQueues.isSuccessful()) {
-                            List<DocumentSnapshot> snapshots = taskQueues.getResult().getDocuments();
-                            for (DocumentSnapshot current : snapshots) {
-                                List<String> participants = (List<String>) current.get(QUEUE_PARTICIPANTS_LIST);
-                                assert participants != null;
-                                for (String participant : participants) {
-                                    service.fireStore
-                                            .collection(USER_LIST)
-                                            .document(participant)
-                                            .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
-                                }
+    private static void deleteCompanyQueues(String companyId) {
+        service.fireStore
+                .collection(QUEUE_LIST)
+                .document(COMPANIES_QUEUES)
+                .collection(companyId)
+                .get().addOnCompleteListener(taskQueues -> {
+                    if (taskQueues.isSuccessful()) {
+                        List<DocumentSnapshot> snapshots = taskQueues.getResult().getDocuments();
+                        for (DocumentSnapshot current : snapshots) {
+                            List<String> participants = (List<String>) current.get(QUEUE_PARTICIPANTS_LIST);
+                            assert participants != null;
+                            for (String participant : participants) {
+                                service.fireStore
+                                        .collection(USER_LIST)
+                                        .document(participant)
+                                        .update(PARTICIPATE_IN_QUEUE, NOT_PARTICIPATE_IN_QUEUE);
                             }
                         }
-                    });
+                    }
+                });
+    }
 
-            docRef.delete().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    CompanyUserProvider.deleteCompany(companyId);
-                    emitter.onComplete();
-                }
-            });
+    private static void deleteCompanyDocument(String companyId, CompletableEmitter emitter, DocumentReference docRef) {
+        docRef.delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                CompanyUserProvider.deleteCompany(companyId);
+                emitter.onComplete();
+            }
         });
+    }
+
+    private static void deleteFromOwnerAndEmployees(String companyId, CompletableEmitter emitter, DocumentReference docRef) {
+        service.fireStore
+                .collection(USER_LIST)
+                .document(service.auth.getCurrentUser().getUid())
+                .collection(COMPANY)
+                .document(companyId)
+                .delete().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        docRef.collection(EMPLOYEES).get().addOnCompleteListener(taskGet -> {
+                            if (taskGet.isSuccessful()) {
+                                List<DocumentSnapshot> snapshots = taskGet.getResult().getDocuments();
+                                for (DocumentSnapshot current : snapshots) {
+                                    String currentId = current.getId();
+                                    service.fireStore
+                                            .collection(USER_LIST)
+                                            .document(currentId)
+                                            .collection(COMPANY_EMPLOYEE)
+                                            .document(companyId)
+                                            .delete();
+                                }
+                            } else {
+                                emitter.onError(new Throwable(taskGet.getException()));
+                            }
+                        });
+                    }
+                });
     }
 
     private void seCompanyUser(String companyID, String name, String email, String phone, String companyService, CompletableEmitter emitter, Task<Void> task) {

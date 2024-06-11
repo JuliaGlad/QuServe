@@ -79,6 +79,20 @@ public class HomeBasisUserFragment extends Fragment {
         initOrderDetailsLauncher();
     }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        viewModel.getUserBooleanData();
+        binding = FragmentHomeBasisUserBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupObserves();
+    }
+
     private void initOrderDetailsLauncher() {
         orderDetailsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -122,20 +136,6 @@ public class HomeBasisUserFragment extends Fragment {
                 openMenuLauncher.launch(intent);
             }
         });
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        viewModel.getUserBooleanData();
-        binding = FragmentHomeBasisUserBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupObserves();
     }
 
     private void setupObserves() {
