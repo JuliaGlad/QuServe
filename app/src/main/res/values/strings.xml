@@ -22,6 +22,7 @@
     <string name="this_data_is_required">This data is required</string>
     <string name="restaurant_visitor">Restaurant visitor</string>
     <string name="name_cannot_be_null">Name can`t be empty!</string>
+    <string name="phone_must_be_full">Phone must be full!</string>
     <string name="current_location">Current Location</string>
     <string name="app_name" translatable="false">QuServe</string>
     <string name="title_home">Home</string>

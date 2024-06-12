@@ -38,6 +38,9 @@ import androidx.work.WorkManager;
 
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentCreateCompanyAccountBinding;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.recycler.PhoneEditTextDelegate;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.recycler.PhoneEditTextDelegateItem;
+import com.example.myapplication.presentation.profile.createAccount.createCompanyAccountFragment.recycler.PhoneEditTextModel;
 import com.example.myapplication.presentation.utils.workers.BasicQueueFinishWorker;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -187,7 +190,7 @@ public class CreateCompanyAccountFragment extends Fragment {
                 binding.companyProgressBar.setProgress(50, true);
                 buildList(new DelegateItem[]{
                         new TextViewHeaderDelegateItem(new TextViewHeaderModel(0, R.string.add_work_phone, 24)),
-                        new EditTextDelegateItem(new EditTextModel(1, R.string.work_phone_number, phoneNumber, InputType.TYPE_CLASS_PHONE, true, stringPhone -> {
+                        new PhoneEditTextDelegateItem(new PhoneEditTextModel(1, R.string.work_phone_number, phoneNumber, InputType.TYPE_CLASS_PHONE, true, stringPhone -> {
                             phoneNumber = stringPhone;
                         }))
                 });
@@ -227,8 +230,12 @@ public class CreateCompanyAccountFragment extends Fragment {
                         .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_3));
                 break;
             case PAGE_3:
-                NavHostFragment.findNavController(this)
-                        .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_4));
+                if (phoneNumber.length() == 18 || phoneNumber.isEmpty() || phoneNumber.length() == 2) {
+                    NavHostFragment.findNavController(this)
+                            .navigate(CreateCompanyAccountFragmentDirections.actionCreateCompanyAccountFragmentSelf(PAGE_4));
+                } else {
+                    Snackbar.make(requireView(), getString(R.string.phone_must_be_full), Snackbar.LENGTH_LONG).show();
+                }
                 break;
 
             case PAGE_4:
@@ -274,6 +281,7 @@ public class CreateCompanyAccountFragment extends Fragment {
         mainAdapter.addDelegate(new RoundImageViewDelegate());
         mainAdapter.addDelegate(new TextViewHeaderDelegate());
         mainAdapter.addDelegate(new EditTextDelegate());
+        mainAdapter.addDelegate(new PhoneEditTextDelegate());
 
         binding.recyclerView.setAdapter(mainAdapter);
     }

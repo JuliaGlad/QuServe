@@ -21,6 +21,7 @@
     <string name="this_data_is_required">Эти данные необходимы!</string>
     <string name="restaurant_visitor">Заказ в ресторане</string>
     <string name="name_cannot_be_null">Имя не может быть пустым!</string>
+    <string name="phone_must_be_full">Номер телефона должен быть полным!</string>
     <string name="estimated_time_waiting">Время ожида</string>
     <string name="current_location">Текущее местоположение</string>
     <string name="title_home">Главная</string>

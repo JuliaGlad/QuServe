@@ -16,6 +16,9 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +83,96 @@ public class EditCompanyFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupObserves();
 
+        initEditTextPhone();
         initChangeLogo();
         initBackButton();
         initSaveButton();
+    }
+
+    private void initEditTextPhone() {
+        setupPhoneEditText();
+    }
+
+    private void setupPhoneEditText() {
+        binding.editLayoutCompanyPhone.setText("+7");
+        binding.editLayoutCompanyPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onPhoneTextChanged(s, count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void onPhoneTextChanged(CharSequence text, int dir) {
+        int size = text.length();
+        int last = size - 1;
+
+        Log.d("Text change test", "Size:" + size + "Dir:" + dir + "Text:" + text);
+
+        StringBuilder t = new StringBuilder(binding.editLayoutCompanyPhone.getText());
+
+        if (size <= 2 && dir == 0) {
+            setTextAndSelection("+7", 2);
+        }
+
+        if (size == 3 && dir == 1) {
+            setTextAndSelection(t.substring(0, last) + " (" + text.charAt(last), 5);
+        }
+
+        if (size == 7 && dir == 1) {
+            setTextAndSelection(t + ")", 8);
+        }
+
+        if ((size == 8 && dir == 1)  && t.charAt(last - 1) != '-') {
+            setTextAndSelection(t.substring(0, 7) + ") " + t.charAt(last), 10);
+        }
+
+        if (size == 9 && dir == 1 && t.charAt(last - 1) != ' ') {
+            setTextAndSelection(t.substring(0, 8) + " " + t.charAt(last), 10);
+        }
+
+        checkZeroOneDirectional(size, 13, '-', last, dir, t.toString());
+
+        if ((size == 16 && dir == 0) || (size == 13 && dir == 0) || (size == 8 && dir == 0)){
+            setTextAndSelection(text.toString().substring(0, text.length() - 1), text.length() - 1);
+        }
+
+        if ((size == 4 && dir == 0)){
+            setTextAndSelection(text.toString().substring(0, text.length() - 2), text.length() - 2);
+        }
+
+        if (size > 18 && dir == 1) {
+            setTextAndSelection(t.substring(0, 18), 18);
+        }
+    }
+
+    private void setTextAndSelection(String text, int selection) {
+        binding.editLayoutCompanyPhone.setText(text);
+        binding.editLayoutCompanyPhone.setSelection(selection);
+    }
+
+    private void checkZeroOneDirectional(int size, int maxSize, char symbol, int lastIndex, int direction, String text) {
+        if ((size == maxSize && direction == 1 && text.charAt(lastIndex - 1) != symbol)   ) {
+            setTextAndSelection(text.substring(0, maxSize - 1) + symbol + text.substring(maxSize - 1), maxSize + 1);
+        }
+
+        if ((size == 15 && direction == 1)){
+            setTextAndSelection( text + symbol, maxSize + 3);
+        }
+
+        if (size == 16 && direction == 1){
+            setTextAndSelection(text.substring(0, text.length() - 1) + symbol + text.substring(text.length() - 1), maxSize + 4);
+        }
     }
 
     private void initChangeLogo() {
@@ -125,10 +215,13 @@ public class EditCompanyFragment extends Fragment {
 
     private void initSaveButton() {
         binding.buttonSave.setOnClickListener(v -> {
+            binding.loader.setVisibility(View.VISIBLE);
+            binding.buttonSave.setEnabled(false);
+
             name = binding.editLayoutCompanyName.getText().toString();
             email = binding.editLayoutCompanyEmail.getText().toString();
             phone = binding.editLayoutCompanyPhone.getText().toString();
-            if (name != null) {
+            if (name != null && (phone.length() == 18 || phone.length() == 2)) {
                 switch (state) {
                     case COMPANY:
                         viewModel.updateData(companyId, name, phone, imageUri);
@@ -137,8 +230,14 @@ public class EditCompanyFragment extends Fragment {
                         viewModel.updateRestaurantData(companyId, email, name, phone, imageUri);
                         break;
                 }
-            } else {
+            } else if (name == null){
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonSave.setEnabled(true);
                 Snackbar.make(requireView(), getString(R.string.name_cannot_be_null), LENGTH_LONG).show();
+            } else {
+                binding.loader.setVisibility(View.GONE);
+                binding.buttonSave.setEnabled(true);
+                Snackbar.make(requireView(), getString(R.string.phone_must_be_full), LENGTH_LONG).show();
             }
         });
     }

@@ -51,6 +51,7 @@ public class BasicSettingsFragment extends Fragment {
     private FragmentBasicSettingsBinding binding;
     private final MainAdapter mainAdapter = new MainAdapter();
     private final List<DelegateItem> delegates = new ArrayList<>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +66,7 @@ public class BasicSettingsFragment extends Fragment {
         return binding.getRoot();
     }
 
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         setupObserves();
         setAdapter();
         initButtonBack();
@@ -106,8 +107,8 @@ public class BasicSettingsFragment extends Fragment {
         });
 
         viewModel.haveActions.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (aBoolean != null){
-                if (!aBoolean){
+            if (aBoolean != null) {
+                if (!aBoolean) {
                     LogoutDialogFragment dialogFragment = new LogoutDialogFragment();
                     dialogFragment.show(requireActivity().getSupportFragmentManager(), "LOGOUT_DIALOG");
                     DialogDismissedListener listener = bundle -> {
