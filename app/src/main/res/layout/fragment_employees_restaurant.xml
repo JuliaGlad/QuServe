@@ -22,7 +22,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/you_don_t_have_a_history_of_your_previous_action_yet" />
+            android:text="@string/all" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"

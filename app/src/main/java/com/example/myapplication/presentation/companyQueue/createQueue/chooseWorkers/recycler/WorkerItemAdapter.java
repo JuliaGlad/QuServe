@@ -54,7 +54,7 @@ public class WorkerItemAdapter extends ListAdapter<WorkerItemModel, RecyclerView
 
                     model.state = CHOSEN;
                     binding.workerItem.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
-                    model.chosen.add(new EmployeeModel(model.workerId, model.name));
+                    model.chosen.add(new EmployeeModel(model.workerId, model.name, model.queueCount));
 
                 } else {
 

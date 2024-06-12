@@ -172,6 +172,7 @@ public class ChooseWorkersFragment extends Fragment {
                                     i,
                                     current.getName(),
                                     current.getId(),
+                                    current.getQueueCount(),
                                     type,
                                     chosen
                             ));

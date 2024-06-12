@@ -8,15 +8,21 @@ public class AddWorkerRecyclerModel {
     private final int id;
     private final String name;
     private final String userId;
+    private final String queueCount;
     String state;
     List<AddWorkerModel> chosen;
 
-    public AddWorkerRecyclerModel(int id, String name, String userId, String state, List<AddWorkerModel> chosen ) {
+    public AddWorkerRecyclerModel(int id, String name, String userId, String queueCount, String state, List<AddWorkerModel> chosen ) {
         this.id = id;
         this.name = name;
+        this.queueCount = queueCount;
         this.userId = userId;
         this.state = state;
         this.chosen = chosen;
+    }
+
+    public String getQueueCount() {
+        return queueCount;
     }
 
     public int getId() {

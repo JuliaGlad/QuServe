@@ -41,10 +41,10 @@ public class ChooseWorkersViewModel extends ViewModel {
                             stateModels.add(new EmployeeStateModel(
                                     current.getName(),
                                     current.getId(),
-                                    current.getRole()
+                                    current.getRole(),
+                                    current.getActiveQueues()
                             ));
                         }
-
                         _state.postValue(new ChooseWorkersState.Success(stateModels));
                     }
 

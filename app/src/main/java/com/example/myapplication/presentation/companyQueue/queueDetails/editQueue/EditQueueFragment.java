@@ -67,9 +67,7 @@ public class EditQueueFragment extends Fragment {
                             current.getId(),
                             current.getName(),
                             current.getRole(),
-                            () -> {
-                                showDeleteDialog(companyId, queueId, current.getId());
-                            }
+                            () -> showDeleteDialog(companyId, queueId, current.getId())
                     ));
                     adapter.notifyItemInserted(list.size() - 1);
                 }
@@ -217,6 +215,4 @@ public class EditQueueFragment extends Fragment {
             }
         }
     }
-
-
 }

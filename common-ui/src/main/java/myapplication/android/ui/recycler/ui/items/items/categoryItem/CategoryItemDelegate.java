@@ -45,7 +45,6 @@ public class CategoryItemDelegate implements AdapterDelegate {
 
             if (!model.isEditable) {
                 binding.buttonMenuDelete.setVisibility(View.GONE);
-
             }
 
             if (model.listenerDelete != null) {

@@ -27,8 +27,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class EditQueueViewModel extends ViewModel {
 
-    private List<QueueEmployeeModel> models = new ArrayList<>();
-
     private final MutableLiveData<EditQueueState> _state = new MutableLiveData<>(new EditQueueState.Loading());
     LiveData<EditQueueState> state = _state;
 

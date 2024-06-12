@@ -49,7 +49,8 @@ public class AddWorkersViewModel extends ViewModel {
                                 models.add(new AddWorkerModel(
                                         current.getName(),
                                         current.getId(),
-                                        current.getRole()
+                                        current.getRole(),
+                                        current.getActiveQueues()
                                 ));
                             }
                         }

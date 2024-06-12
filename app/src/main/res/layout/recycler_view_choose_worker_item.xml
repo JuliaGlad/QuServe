@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/TextAppearance.Material3.BodyLarge.Bold.QuServe"
+            style="@style/TextAppearance.Material3.BodyMedium.Medium.QuServe"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"

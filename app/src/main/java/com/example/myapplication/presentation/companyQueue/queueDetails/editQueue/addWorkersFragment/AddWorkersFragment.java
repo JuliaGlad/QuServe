@@ -166,6 +166,7 @@ public class AddWorkersFragment extends Fragment {
                         i,
                         current.getName(),
                         current.getId(),
+                        current.getActiveQueuesCount(),
                         NOT_CHOSEN,
                         chosen
                 ));

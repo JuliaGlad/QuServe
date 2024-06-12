@@ -110,6 +110,7 @@ public class TableListFragment extends Fragment {
         });
         viewModel.isAdded.observe(getViewLifecycleOwner(), tableId -> {
             if (tableId != null) {
+
                 binding.constraintLayout.setVisibility(View.GONE);
 
                 binding.buttonAdd.setEnabled(true);

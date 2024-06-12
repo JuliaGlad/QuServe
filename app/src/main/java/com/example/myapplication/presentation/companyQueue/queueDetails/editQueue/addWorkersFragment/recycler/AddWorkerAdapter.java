@@ -89,7 +89,7 @@ public class AddWorkerAdapter extends ListAdapter<AddWorkerRecyclerModel, Recycl
 
                     model.state = CHOSEN;
                     binding.item.setStrokeColor(itemView.getResources().getColor(R.color.colorPrimary, itemView.getContext().getTheme()));
-                    model.chosen.add(new AddWorkerModel(model.getName(), model.getUserId(), WORKER));
+                    model.chosen.add(new AddWorkerModel(model.getName(), model.getUserId(), WORKER, model.getQueueCount()));
 
                 } else {
                     model.state = NOT_CHOSEN;
