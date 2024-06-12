@@ -24,7 +24,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WorkerQueueDetailsViewModel extends ViewModel {
 
-    private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>(Uri.EMPTY);
+    private final MutableLiveData<Uri> _pdfUri = new MutableLiveData<>(null);
     LiveData<Uri> pdfUri = _pdfUri;
 
     private final MutableLiveData<WorkerQueueDetailsState> _state = new MutableLiveData<>(new WorkerQueueDetailsState.Loading());

@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler;
 
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -28,15 +29,15 @@ public class RestaurantEmployeeItemAdapter extends ListAdapter<RestaurantEmploye
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new ViewHolder(RecyclerViewEmployeeItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+        ((ViewHolder) holder).bind(getItem(position));
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         RecyclerViewEmployeeItemBinding binding;
 
@@ -45,7 +46,7 @@ public class RestaurantEmployeeItemAdapter extends ListAdapter<RestaurantEmploye
             binding = _binding;
         }
 
-        void bind(RestaurantEmployeeItemModel model){
+        void bind(RestaurantEmployeeItemModel model) {
             binding.employeeName.setText(model.name);
             binding.role.setText(model.role);
 

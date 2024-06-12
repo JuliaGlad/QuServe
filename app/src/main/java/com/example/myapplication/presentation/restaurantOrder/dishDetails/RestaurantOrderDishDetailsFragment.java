@@ -117,6 +117,7 @@ public class RestaurantOrderDishDetailsFragment extends Fragment {
     private void initOrderButton(String name, String weight) {
         binding.buttonOrder.setOnClickListener(v -> {
             String price = String.valueOf(totalPrice);
+            Log.i("Weight dish details", weight);
             CartDishModel model = new CartDishModel(
                     dishId, categoryId, name, weight, price,
                     String.valueOf(1), chosenToppings, Arrays.asList(chosenRequireChoices), chosenRemove

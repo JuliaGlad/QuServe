@@ -386,9 +386,9 @@ public class RestaurantOrderRepository {
     private void getDishes(String path, SingleEmitter<OrderDto> emitter, CollectionReference dishes, DocumentReference parentDoc, DocumentSnapshot snapshot) {
         dishes.get().addOnCompleteListener(taskDishes -> {
             List<ActiveOrderDishDto> dtos = new ArrayList<>();
-            List<DocumentSnapshot> dishesShapshot = taskDishes.getResult().getDocuments();
+            List<DocumentSnapshot> dishesSnapshot = taskDishes.getResult().getDocuments();
 
-            addDishesDtos(dishesShapshot, dtos);
+            addDishesDtos(dishesSnapshot, dtos);
             assert parentDoc != null;
             getParentDocument(path, emitter, parentDoc, snapshot, dtos);
         });
@@ -631,7 +631,7 @@ public class RestaurantOrderRepository {
             }
 
             HashMap<String, Object> dishDocument = new HashMap<>();
-            dishDocument.put(DISH_WEIGHT_OR_COUNT, current.getAmount());
+            dishDocument.put(DISH_WEIGHT_OR_COUNT, current.getWeight());
             dishDocument.put(DISH_NAME, current.getName());
             dishDocument.put(IS_DONE, false);
             dishDocument.put(DISH_ID, current.getDishId());

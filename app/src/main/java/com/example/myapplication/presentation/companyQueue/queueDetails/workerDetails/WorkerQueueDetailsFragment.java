@@ -6,6 +6,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.COMPA
 import static com.example.myapplication.presentation.utils.constants.Utils.IS_DEFAULT;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_ID;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,8 +95,8 @@ public class WorkerQueueDetailsFragment extends Fragment {
 
     private void setupObserves() {
         viewModel.state.observe(getViewLifecycleOwner(), state -> {
-            if (state instanceof WorkerQueueDetailsState.Success){
-                WorkerQueueDetailsModel model = ((WorkerQueueDetailsState.Success)state).data;
+            if (state instanceof WorkerQueueDetailsState.Success) {
+                WorkerQueueDetailsModel model = ((WorkerQueueDetailsState.Success) state).data;
 
                 if (!model.isPaused()) {
                     binding.queueName.setText(model.getName());
@@ -110,11 +111,18 @@ public class WorkerQueueDetailsFragment extends Fragment {
                             .navigate(R.id.action_workerQueueDetailsFragment_to_pauseWorkerQueueFragment, bundle);
                 }
 
-            } else if (state instanceof WorkerQueueDetailsState.Loading){
+            } else if (state instanceof WorkerQueueDetailsState.Loading) {
                 binding.progressBar.getRoot().setVisibility(View.VISIBLE);
 
-            } else if (state instanceof WorkerQueueDetailsState.Error){
+            } else if (state instanceof WorkerQueueDetailsState.Error) {
                 setErrorLayout();
+            }
+        });
+
+        viewModel.pdfUri.observe(getViewLifecycleOwner(), uri -> {
+            if (uri != null) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                requireActivity().startActivity(intent);
             }
         });
     }
@@ -144,7 +152,9 @@ public class WorkerQueueDetailsFragment extends Fragment {
                 new AdviseBoxDelegateItem(new AdviseBoxModel(2, R.string.here_you_can_see_queue_details)),
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(3, R.string.download_pdf, R.string.dowload_pdf_description, R.drawable.ic_qrcode,
-                        () -> { viewModel.getQrCodePdf(queueId); })),
+                        () -> {
+                            viewModel.getQrCodePdf(queueId);
+                        })),
 
                 new QueueDetailsButtonDelegateItem(new QueueDetailButtonModel(4, R.string.pause_queue,
                         R.string.pause_queue_description, R.drawable.ic_time, () -> {

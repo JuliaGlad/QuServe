@@ -165,7 +165,6 @@ public class TableListViewModel extends ViewModel {
     }
 
     private void createPdfDocument(Bitmap qrCode, String tableId) {
-
         PdfDocument pdfDocument = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(qrCode.getWidth(), qrCode.getHeight(), 1).create();
         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
@@ -176,7 +175,9 @@ public class TableListViewModel extends ViewModel {
 
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
+
         File file = new File(folder.getAbsolutePath() + "/" + "Table.pdf");
+
         try {
             FileOutputStream fos = new FileOutputStream(file);
             pdfDocument.writeTo(fos);
@@ -184,8 +185,6 @@ public class TableListViewModel extends ViewModel {
             fos.close();
 
             uploadPdfToFireStorage(file, tableId);
-
-            Log.e("File", file.getName() + tableId);
 
         } catch (FileNotFoundException e) {
             Log.e("FileNotFoundException", e.getMessage());

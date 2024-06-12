@@ -14,6 +14,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.COMPA
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_RESTAURANT_VISITOR;
 import static com.example.myapplication.presentation.utils.constants.Utils.OWNER;
 import static com.example.myapplication.presentation.utils.constants.Utils.PARTICIPANT;
+import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_DATA;
 import static com.example.myapplication.presentation.utils.constants.Utils.QUEUE_NAME_KEY;
 
@@ -434,7 +435,11 @@ public class HomeBasisUserFragment extends Fragment {
                 delegates.add(new HomeActionButtonDelegateItem(new HomeActionButtonModel(3, current.getName(), R.string.company_owner, COMPANY_OWNER,
                         () -> {
                             SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-                            sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
+                            if (current.getService().equals(QUEUE)) {
+                                sharedPreferences.edit().putString(APP_STATE, COMPANY).apply();
+                            } else {
+                                sharedPreferences.edit().putString(APP_STATE, RESTAURANT).apply();
+                            }
                             sharedPreferences.edit().putString(COMPANY_ID, current.getId()).apply();
 
                             Bundle bundle = new Bundle();

@@ -336,7 +336,7 @@ public class AddDishFragment extends Fragment {
                                         text = text.concat(minutes.concat(getString(R.string.minutes_description)).concat(" "));
                                     }
                                     if (!seconds.equals("0")){
-                                        text = text.concat(seconds.concat(getString(R.string.minutes_description)));
+                                        text = text.concat(seconds.concat(getString(R.string.seconds_description)));
                                     }
                                     timeCooking = text;
                                 }))

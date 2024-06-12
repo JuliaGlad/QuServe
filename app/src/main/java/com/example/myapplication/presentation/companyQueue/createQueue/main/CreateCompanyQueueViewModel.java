@@ -123,7 +123,7 @@ public class CreateCompanyQueueViewModel extends ViewModel {
             BarcodeEncoder encoder = new BarcodeEncoder();
             Bitmap qrCode = encoder.createBitmap(bitMatrix);
 
-            createPdfDocument(qrCode, path);
+            createPdfDocument(qrCode, queueId);
 
             uploadImageToFireStorage(qrCode, queueId)
                     .subscribeOn(Schedulers.io())
@@ -161,7 +161,7 @@ public class CreateCompanyQueueViewModel extends ViewModel {
         File root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File folder = new File(root.getAbsolutePath());
 
-        File file = new File(folder.getAbsolutePath() + "/" + queueName + "QR-CODE.pdf");
+        File file = new File(folder.getAbsolutePath() + "/" + "QR-CODE.pdf");
 
         try {
             FileOutputStream fos = new FileOutputStream(file);

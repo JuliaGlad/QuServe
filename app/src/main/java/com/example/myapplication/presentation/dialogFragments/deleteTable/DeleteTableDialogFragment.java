@@ -61,7 +61,7 @@ public class DeleteTableDialogFragment extends DialogFragment {
     }
 
     private void setupObserves() {
-        viewModel.isDeleted.observe(getViewLifecycleOwner(), aBoolean -> {
+        viewModel.isDeleted.observe(this, aBoolean -> {
             if (aBoolean){
                 isDeleted = true;
                 dismiss();

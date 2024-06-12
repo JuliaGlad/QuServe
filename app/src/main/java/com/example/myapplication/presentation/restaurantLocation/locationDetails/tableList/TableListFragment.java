@@ -1,18 +1,27 @@
 package com.example.myapplication.presentation.restaurantLocation.locationDetails.tableList;
 
+import static android.os.Build.VERSION.SDK_INT;
 import static com.example.myapplication.presentation.utils.constants.Utils.APP_PREFERENCES;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.LOCATION_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.FINE_PERMISSION_CODE;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -77,7 +86,7 @@ public class TableListFragment extends Fragment {
 
     private void initAddButton() {
         binding.buttonAdd.setOnClickListener(v -> {
-            if (lastTableNumber != null) {
+            if (lastTableNumber != null && askPermission()) {
                 binding.buttonAdd.setEnabled(false);
                 binding.loader.setVisibility(View.VISIBLE);
                 viewModel.addTable(restaurantId, locationId, String.valueOf(lastTableNumber + 1));
@@ -156,5 +165,38 @@ public class TableListFragment extends Fragment {
         adapter.submitList(delegates);
         binding.progressBar.getRoot().setVisibility(View.GONE);
         binding.errorLayout.getRoot().setVisibility(View.GONE);
+    }
+
+    private boolean askPermission() {
+        boolean permission = false;
+        if (SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", requireContext().getApplicationContext().getPackageName())));
+                    requireActivity().startActivity(intent);
+
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    requireActivity().startActivity(intent);
+
+                }
+
+            } else {
+                permission = true;
+            }
+        } else {
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, FINE_PERMISSION_CODE);
+            }
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, FINE_PERMISSION_CODE);
+            }
+            permission = true;
+        }
+        return permission;
     }
 }

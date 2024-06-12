@@ -147,8 +147,6 @@ public class RestaurantEmployeesRepository {
                             .document(locationId);
             List<EmployeeRestaurantDto> employees = new ArrayList<>();
             getCooks(employees, docRef, emitter);
-            getWaiters(employees, docRef, emitter);
-            emitter.onSuccess(employees);
         });
     }
 
@@ -393,6 +391,7 @@ public class RestaurantEmployeesRepository {
                             WAITER
                     ));
                 }
+                emitter.onSuccess(employees);
             } else {
                 emitter.onError(new Throwable(task.getException()));
             }
@@ -410,6 +409,7 @@ public class RestaurantEmployeesRepository {
                             COOK
                     ));
                 }
+                getWaiters(employees, docRef, emitter);
             } else {
                 emitter.onError(new Throwable(task.getException()));
             }

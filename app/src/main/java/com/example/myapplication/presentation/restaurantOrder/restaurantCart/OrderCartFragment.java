@@ -247,6 +247,7 @@ public class OrderCartFragment extends Fragment {
             binding.buttonOrder.setEnabled(false);
             if (!items.isEmpty()) {
                 List<OrderDishesModel> models = new ArrayList<>();
+
                 for (CartDishItemModel current : items) {
                     models.add(new OrderDishesModel(
                             current.getDishId(),
