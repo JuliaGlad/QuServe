@@ -28,16 +28,12 @@ public class RestaurantTableDetailsViewModel extends ViewModel {
 
     public void getTableData(String restaurantId, String locationId, String tableId) {
         RestaurantTableDI.getSingleTableByIdUseCase.invoke(restaurantId, locationId, tableId)
-                .zipWith(RestaurantTableDI.getTableQrCodeJpgUseCase.invoke(tableId), new BiFunction<TableModel, Uri, TableDetailsStateModel>() {
-                    @Override
-                    public TableDetailsStateModel apply(TableModel tableModel, Uri uri) throws Throwable {
-                        return new TableDetailsStateModel(
-                                tableModel.getNumber(),
-                                tableModel.getOrderId(),
-                                uri
-                        );
-                    }
-                })
+                .zipWith(RestaurantTableDI.getTableQrCodeJpgUseCase.invoke(tableId), (tableModel, uri) ->
+                        new TableDetailsStateModel(
+                        tableModel.getNumber(),
+                        tableModel.getOrderId(),
+                        uri
+                ))
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<TableDetailsStateModel>() {
                     @Override

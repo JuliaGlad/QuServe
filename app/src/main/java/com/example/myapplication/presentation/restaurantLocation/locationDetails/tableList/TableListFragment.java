@@ -132,7 +132,6 @@ public class TableListFragment extends Fragment {
                 }
                 delegates.add(new TableListDelegateItem(new TableListModel(position, String.valueOf(lastTableNumber), () -> {
                     ((TableListActivity) requireActivity()).openRestaurantTableDetailsActivity(tableId, locationId);
-                    requireActivity().finish();
                 }
                 )));
                 if (position != 0) {

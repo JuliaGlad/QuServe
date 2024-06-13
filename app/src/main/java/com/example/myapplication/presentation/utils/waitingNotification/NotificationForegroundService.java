@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.utils.waitingNotification;
 
+import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_ESTIMATED_TIME;
+import static com.example.myapplication.presentation.utils.constants.Utils.EDIT_PEOPLE_BEFORE_YOU;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_ID;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOTIFICATION_CHANNEL_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.NOT_PARTICIPATE_IN_QUEUE;
@@ -25,6 +27,7 @@ import com.example.myapplication.presentation.common.waitingInQueue.WaitingActiv
 import com.example.myapplication.presentation.utils.queuePausedNotification.NotificationQueuePaused;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +44,9 @@ public class NotificationForegroundService extends Service {
     private String name = null;
     private String time = null;
     private String queueId = null;
+    private String path = null;
+    private int size = 0;
+    private int startValue = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -145,6 +151,7 @@ public class NotificationForegroundService extends Service {
     private void getQueueByParticipantId() {
         ProfileDI.getParticipantQueuePathUseCase.invoke()
                 .flatMap(path -> {
+                    this.path = path;
                     addSnapshot(path);
                     return QueueDI.getQueueByParticipantPathUseCase.invoke(path);
                 })
@@ -159,6 +166,8 @@ public class NotificationForegroundService extends Service {
                     public void onSuccess(@NonNull QueueModel queueModel) {
                         int before = 0;
                         List<String> participants = queueModel.getParticipants();
+                        size = participants.size();
+                        addPeopleBeforeSnapshot(path);
                         for (int i = 0; i < participants.size(); i++) {
                             if (checkParticipantsIndex(participants, i)) {
                                 before = i + 1;
@@ -168,6 +177,7 @@ public class NotificationForegroundService extends Service {
 
                         name = queueModel.getName();
                         queueId = queueModel.getId();
+                        startValue = Integer.parseInt(queueModel.getMidTime());
                         time = String.valueOf(Integer.parseInt(queueModel.getMidTime()) * before);
                         setupNotification();
 
@@ -180,25 +190,48 @@ public class NotificationForegroundService extends Service {
                 });
     }
 
+    private void addPeopleBeforeSnapshot(String path) {
+        QueueDI.addPeopleBeforeYouSnapshot.invoke(path, size)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull Integer integer) {
+                        if (integer != 0) {
+                            time = String.valueOf(Integer.parseInt(time) - startValue);
+                            setupNotification();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public boolean checkParticipantsIndex(List<String> participants, int index) {
         return QueueDI.checkParticipantIndexUseCase.invoke(participants, index);
     }
 
     private void setupNotification() {
-
         Intent intent = new Intent(this, WaitingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        String contentText;
-        if (Integer.parseInt(time) != 0) {
-            contentText = getString(R.string.estimated_waiting_time) + " " + time;
-        } else {
-            contentText = getResources().getString(R.string.no_estimated_time_yet);
-        }
+        String contentText = setTime(time);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentText(contentText)
                 .setContentTitle(name)
-//                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setOnlyAlertOnce(true)
                 .setStyle(new NotificationCompat.BigTextStyle())
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
@@ -214,6 +247,30 @@ public class NotificationForegroundService extends Service {
             notificationManager.createNotificationChannel(channel);
             Notification notification = builder.build();
             startForeground(1, notification);
+        }
+    }
+
+    private String setTime(String descriptionText) {
+        int midTime = Integer.parseInt(descriptionText);
+        if (midTime != 0) {
+            if (midTime >= 60) {
+                double time = midTime / 60.0;
+                String timeFormatted = new DecimalFormat("#0.00").format(time);
+                int pointIndex = timeFormatted.indexOf(",");
+                String hours = timeFormatted.substring(0, pointIndex);
+                String minutes = timeFormatted.substring(pointIndex + 1);
+                if (minutes.endsWith("0")) {
+                    minutes = minutes.substring(0, minutes.length() - 1);
+                }
+                return hours.concat(getResources().getString(R.string.hours_description)).concat(" ").concat(minutes).concat(getResources().getString(R.string.minutes_description));
+
+            } else if (midTime >= 0) {
+                return descriptionText.concat(getResources().getString(R.string.minutes_description));
+            } else {
+                return String.valueOf(midTime);
+            }
+        } else {
+            return getResources().getString(R.string.no_estimated_time_yet);
         }
     }
 
