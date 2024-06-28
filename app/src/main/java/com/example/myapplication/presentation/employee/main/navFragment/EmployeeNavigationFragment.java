@@ -7,6 +7,7 @@ import static com.example.myapplication.presentation.utils.constants.Utils.APP_S
 import static com.example.myapplication.presentation.utils.constants.Utils.BASIC;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY;
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
 import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
@@ -180,6 +181,7 @@ public class EmployeeNavigationFragment extends Fragment {
                                     .commit();
                             break;
                         case ADMIN:
+                            bundle.putString(COMPANY_NAME, employeeRoleModel.getCompanyName());
                             fragmentManager
                                     .beginTransaction()
                                     .setReorderingAllowed(true)

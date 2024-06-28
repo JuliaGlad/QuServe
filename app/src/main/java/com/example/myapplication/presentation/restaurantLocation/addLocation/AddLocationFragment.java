@@ -56,7 +56,7 @@ public class AddLocationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(AddLocationViewModel.class);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
         restaurantId = sharedPreferences.getString(COMPANY_ID, null);
     }
 
@@ -121,7 +121,7 @@ public class AddLocationFragment extends Fragment {
         } catch (NullPointerException e){
             Log.i("NullPointerException", e.getMessage());
         }
-        itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_queue_location, 24)));
+        itemList.add(new TextViewHeaderDelegateItem(new TextViewHeaderModel(1, R.string.choose_location, 24)));
         itemList.add(new LocationDelegateItem(new LocationModel(2, location, () -> {
 
             if (checkSelfMapPermission()) {

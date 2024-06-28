@@ -190,9 +190,8 @@ public class EmployeesRestaurantFragment extends Fragment {
     private void initBasicList(List<EmployeeModel> employees) {
         for (int i = 0; i < employees.size(); i++) {
             EmployeeModel current = employees.get(i);
-            basicList.add(new RestaurantEmployeeItemModel(i, current.getName(), current.getRole(), current.getId(), () -> {
-                showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole());
-            }));
+            basicList.add(new RestaurantEmployeeItemModel(i, current.getName(), current.getRole(), current.getId(),
+                    () -> showDeleteRestaurantEmployeeDialog(current.getId(), current.getRole())));
         }
     }
 
@@ -207,9 +206,7 @@ public class EmployeesRestaurantFragment extends Fragment {
     private void showDeleteRestaurantEmployeeDialog(String userId, String role) {
         DeleteRestaurantEmployeeDialogFragment dialogFragment = new DeleteRestaurantEmployeeDialogFragment(restaurantId, locationId, userId, role);
         dialogFragment.show(requireActivity().getSupportFragmentManager(), "DELETE_RESTAURANT_EMPLOYEE_DIALOG");
-        dialogFragment.onDialogDismissedListener(bundle -> {
-            removeItemFromList(userId, role);
-        });
+        dialogFragment.onDialogDismissedListener(bundle -> removeItemFromList(userId, role));
     }
 
     private void removeItemFromList(String userId, String role) {

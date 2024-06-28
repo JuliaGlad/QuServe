@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.main.queueAdminFragment;
 
 import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_ID;
+import static com.example.myapplication.presentation.utils.constants.Utils.COMPANY_NAME;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,21 +19,28 @@ import com.example.myapplication.presentation.MainActivity;
 public class QueueAdminFragment extends Fragment {
 
     FragmentQueueAdminBinding binding;
-    String companyId;
+    String companyId, companyName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentQueueAdminBinding.inflate(inflater, container, false);
+        assert getArguments() != null;
         companyId = getArguments().getString(COMPANY_ID);
+        companyName = getArguments().getString(COMPANY_NAME);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setCompanyName();
         initQueueManagerButton();
         initCompanyWorkersButton();
+    }
+
+    private void setCompanyName() {
+        binding.title.setText(companyName);
     }
 
     private void initCompanyWorkersButton() {

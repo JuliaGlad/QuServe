@@ -434,7 +434,7 @@
     <string name="view_available_orders_in_your_restaurant_and_select_them_and_then_come_back">Посмотрите доступные заказы в вашем ресторане, примите хотя бы 1 и возвращайтесь!</string>
     <string name="create_new_queues_in_your_company_and_then_come_back">Создайте новые очереди в компании и затем возвращайтесь!</string>
     <string name="wait_until_any_new_employees_will_join_your_company">Подождите пока кто-нибудь станет сотрудником в вашей компании!</string>
-    <string name="choose_location">Выберите локацию</string>
+    <string name="choose_location">Выберите локацию:</string>
     <string name="new_dish_was_added_to_your_restaurant_menu">Новое блюдо было добавлено в меню вашего ресторана!</string>
     <string name="there_is_no_categories_in_this_menu_yet">В этом меню пока что нет категорий!</string>
     <string name="there_are_no_workers_in_this_company_yet">В этой компании пока что нет работников!</string>

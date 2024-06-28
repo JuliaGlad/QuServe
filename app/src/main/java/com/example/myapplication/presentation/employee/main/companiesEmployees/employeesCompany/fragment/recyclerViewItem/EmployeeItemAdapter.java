@@ -1,6 +1,7 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesCompany.fragment.recyclerViewItem;
 
 import static com.example.myapplication.presentation.utils.constants.Utils.EMPLOYEE_ROLE;
+import static com.example.myapplication.presentation.utils.constants.Utils.WORKER;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
                 binding.loader.setVisibility(View.VISIBLE);
             }
             binding.employeeName.setText(model.getName());
-            binding.role.setText(model.role);
+            setRole(model.role);
 
             CompanyQueueUserDI.getEmployeePhotoUseCase.invoke(model.employeeId)
                     .subscribeOn(Schedulers.io())
@@ -111,7 +112,8 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
 
                         @Override
                         public void onNext(@io.reactivex.rxjava3.annotations.NonNull DocumentSnapshot documentSnapshot) {
-                            binding.role.setText(documentSnapshot.getString(EMPLOYEE_ROLE));
+                            String role = documentSnapshot.getString(EMPLOYEE_ROLE);
+                            setRole(role);
                             model.role = documentSnapshot.getString(EMPLOYEE_ROLE);
                         }
 
@@ -125,6 +127,14 @@ public class EmployeeItemAdapter extends ListAdapter<EmployeeItemModel, Recycler
 
                         }
                     });
+        }
+
+        private void setRole(String role) {
+            if (role.equals(WORKER)) {
+                binding.role.setText(itemView.getResources().getString(R.string.worker));
+            } else {
+                binding.role.setText(itemView.getResources().getString(R.string.admin));
+            }
         }
     }
 }

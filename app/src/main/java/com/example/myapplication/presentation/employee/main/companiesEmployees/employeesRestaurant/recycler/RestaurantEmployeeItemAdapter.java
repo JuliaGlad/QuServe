@@ -1,5 +1,7 @@
 package com.example.myapplication.presentation.employee.main.companiesEmployees.employeesRestaurant.recycler;
 
+import static com.example.myapplication.presentation.utils.constants.Restaurant.COOK;
+
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,8 +50,7 @@ public class RestaurantEmployeeItemAdapter extends ListAdapter<RestaurantEmploye
 
         void bind(RestaurantEmployeeItemModel model) {
             binding.employeeName.setText(model.name);
-            binding.role.setText(model.role);
-
+            setRole(model);
 
             CompanyQueueUserDI.getEmployeePhotoUseCase.invoke(model.employeeId)
                     .subscribeOn(Schedulers.io())
@@ -81,9 +82,17 @@ public class RestaurantEmployeeItemAdapter extends ListAdapter<RestaurantEmploye
                     });
 
             binding.buttonDelete.setOnClickListener(v -> {
-
+                model.deleteListener.onClick();
             });
 
+        }
+
+        private void setRole(RestaurantEmployeeItemModel model) {
+            if (model.role.equals(COOK)){
+                binding.role.setText(itemView.getResources().getString(R.string.cooker));
+            } else {
+                binding.role.setText(itemView.getResources().getString(R.string.waiter));
+            }
         }
     }
 }

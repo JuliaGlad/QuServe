@@ -80,6 +80,8 @@ public class StartWorkFragment extends Fragment {
 
                 requireActivity().getSupportFragmentManager()
                         .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .setCustomAnimations(R.anim.slide_in_fast_anim, R.anim.slide_out_fast_anim)
                         .replace(R.id.employee_nav_container, MainWaiterFragment.class, bundle)
                         .commit();
             }
