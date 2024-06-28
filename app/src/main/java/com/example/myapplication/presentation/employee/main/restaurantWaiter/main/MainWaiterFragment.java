@@ -117,6 +117,7 @@ public class MainWaiterFragment extends Fragment {
                 viewModel.getOrders(restaurantId, locationId);
             } else if (aBoolean != null) {
                 navigateToStartWorking();
+                viewModel.setIsWorkingNull();
             }
         });
 

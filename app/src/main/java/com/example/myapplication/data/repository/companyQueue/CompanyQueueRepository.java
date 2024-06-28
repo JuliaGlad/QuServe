@@ -239,11 +239,9 @@ public class CompanyQueueRepository {
     public Single<String> createCompanyQueueDocument(String queueID, String city, String disableTime, String queueName, String location, String companyId, List<EmployeeModel> workers) {
         DocumentReference docRef = service.fireStore.collection(QUEUE_LIST).document(COMPANIES_QUEUES).collection(companyId).document(queueID);
         String path = docRef.getPath();
-        ArrayList<String> arrayList = new ArrayList<>();
-
         Map<String, Object> companyQueue = new HashMap<>();
-
-        initCompanyQueue(city, disableTime, queueName, location, companyId, workers, companyQueue, arrayList);
+        Log.d("Workers size", String.valueOf(workers.size()));
+        initCompanyQueue(city, disableTime, queueName, location, companyId, workers, companyQueue, new ArrayList<>());
 
         return Single.create(emitter -> {
             docRef.set(companyQueue).addOnCompleteListener(task -> {

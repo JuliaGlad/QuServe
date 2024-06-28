@@ -176,4 +176,7 @@ public class MainWaiterViewModel extends ViewModel {
                 });
     }
 
+    public void setIsWorkingNull() {
+        _isWorking.postValue(null);
+    }
 }
